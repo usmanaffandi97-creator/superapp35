@@ -1,0 +1,19 @@
+{
+  "name": "super-app-sekolah-terpadu",
+  "version": "1.0.0",
+  "description": "Super App Sekolah Terpadu: Presensi Harian, Presensi Ekstra, Nilai Ulangan, Kelulusan, 7 Kebiasaan, dan Tata Tertib Siswa",
+  "scripts": {
+    "start": "serve ."
+  },
+  "keywords": [
+    "sekolah",
+    "super-app",
+    "presensi",
+    "7kebiasaan",
+    "pelanggaran",
+    "pwa",
+    "vercel"
+  ],
+  "author": "Tim IT Sekolah",
+  "license": "MIT"
+}
