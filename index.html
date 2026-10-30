@@ -49,6 +49,7 @@
         visibility: visible !important;
       }
       #printArea {
+        display: block !important;
         position: absolute !important;
         left: 0 !important;
         top: 0 !important;
@@ -433,12 +434,15 @@
             </button>
           </div>
 
-          <form onsubmit="handleKirim7Kebiasaan(event)" class="mt-6 space-y-6">
+          <form id="formInput7Kebiasaan" onsubmit="handleKirim7Kebiasaan(event)" class="mt-6 space-y-6">
             
+            <!-- Banner Status Validasi / Perbaikan Laporan -->
+            <div id="bannerStatusKebiasaanHariIni" class="hidden"></div>
+
             <!-- Tanggal Jurnal -->
             <div>
               <label class="block text-xs font-bold text-slate-700 uppercase mb-1">Tanggal Laporan</label>
-              <input type="date" id="formKebiasaanTgl" required class="w-full max-w-xs px-3.5 py-2 bg-slate-50 border border-slate-200 rounded-xl text-sm font-semibold text-slate-800">
+              <input type="date" id="formKebiasaanTgl" onchange="checkKebiasaanHariIniState()" required class="w-full max-w-xs px-3.5 py-2 bg-slate-50 border border-slate-200 rounded-xl text-sm font-semibold text-slate-800">
             </div>
 
             <!-- Grid 7 Pilar Kebiasaan -->
@@ -595,6 +599,7 @@
                   <th class="py-3 px-3">Tidur</th>
                   <th class="py-3 px-3 text-center">Foto Bukti</th>
                   <th class="py-3 px-3 text-center">Validasi Guru Wali</th>
+                  <th class="py-3 px-3 text-center">Aksi</th>
                 </tr>
               </thead>
               <tbody id="tableRekap7KebiasaanSiswa" class="divide-y divide-slate-100 font-medium">
@@ -856,7 +861,7 @@
             <div id="metricSiswaRombel" class="text-2xl font-black text-slate-900 mt-1">0 Siswa</div>
             <p class="text-[11px] text-blue-600 font-semibold mt-1">Kelas Binaan Walas</p>
           </div>
-          <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-xs">
+          <div id="cardMetricAnggotaEkskul" class="bg-white p-5 rounded-2xl border border-slate-200 shadow-xs">
             <div class="text-xs font-semibold text-slate-500">Anggota Ekskul</div>
             <div id="metricAnggotaEkskul" class="text-2xl font-black text-slate-900 mt-1">0 Siswa</div>
             <p class="text-[11px] text-emerald-600 font-semibold mt-1">Cabang Binaannya</p>
@@ -1057,9 +1062,18 @@
             </div>
 
             <div>
-              <label class="block text-xs font-bold text-slate-700 uppercase mb-1">Area Paste Excel (Format: NISN [Tab] Nilai [Tab] Catatan Guru)</label>
-              <textarea id="pasteExcelTextarea" rows="6" oninput="parsePastedExcel()" placeholder="0081234567	88	Sangat aktif dalam KBM
-0082345678	92	Pemahaman konsep sangat baik" class="w-full p-4 bg-slate-50 border border-slate-200 rounded-2xl text-xs font-mono font-medium focus:bg-white focus:ring-2 focus:ring-purple-500 focus:outline-none"></textarea>
+              <div class="flex items-center justify-between mb-1">
+                <label class="block text-xs font-bold text-slate-700 uppercase">Area Tempel / Paste Excel Leger</label>
+                <button type="button" onclick="parsePastedExcel()" class="px-3 py-1 bg-purple-600 hover:bg-purple-700 text-white rounded-lg text-xs font-bold transition flex items-center gap-1 shadow-xs">
+                  <i data-lucide="check" class="w-3.5 h-3.5"></i>
+                  <span>Ekstraksi Data Paste</span>
+                </button>
+              </div>
+              <textarea id="pasteExcelTextarea" rows="6" oninput="parsePastedExcel()" onpaste="setTimeout(parsePastedExcel, 50)" placeholder="Salin langsung kolom dari Excel atau Google Sheets. Format yang didukung:
+• NISN [Tab] Nilai [Tab] Catatan
+• NISN [Tab] Nama Siswa [Tab] Nilai [Tab] Catatan
+• No [Tab] NISN [Tab] Nama [Tab] Nilai
+• Format CSV (NISN;Nilai atau NISN,Nilai)" class="w-full p-4 bg-slate-50 border border-slate-200 rounded-2xl text-xs font-mono font-medium focus:bg-white focus:ring-2 focus:ring-purple-500 focus:outline-none"></textarea>
             </div>
 
             <!-- Preview Tabel Terurai -->
@@ -1736,7 +1750,7 @@
 
     // TIPS: Tempelkan URL Web App Google Apps Script (/exec) Anda di sini
     // agar SEMUA pengunjung website Vercel otomatis tersambung ke Google Spreadsheet sekolah tanpa perlu input manual di tiap HP!
-    const DEFAULT_BACKEND_URL = "https://script.google.com/macros/s/AKfycbyd3DDzkWtGAgy8zeSkYSihuNJzo1IulGOq1fOmTjIyCVpMtijWJ_Wk3Mq31DENQBxaJA/exec";
+    const DEFAULT_BACKEND_URL = "https://script.google.com/macros/s/AKfycbwTjBnjT7zGPX506oNpQUpk-cUfGFJUIHIKfsvgsXIeyOXn8iejd-kZDWJG64FZ71HKLQ/exec";
 
     function getBackendUrl() {
       const urlParam = new URLSearchParams(window.location.search).get('api');
@@ -2135,6 +2149,7 @@
                 currentUser.nama = me.nama;
                 currentUser.kelas = me.kelas;
                 currentUser.nipGuruWali = me.nipGuruWali;
+                if (me.noHpOrtu) currentUser.noHpOrtu = me.noHpOrtu;
               }
               setupSiswaUi();
 
@@ -2147,6 +2162,7 @@
                 else if (tabId === 'tabContentSiswa_presensi') renderPresensiSiswa();
                 else if (tabId === 'tabContentSiswa_tatatertib') renderBukuSakuSiswa();
                 else if (tabId === 'tabContentSiswa_ekskul') { renderKatalogEkskulSiswa(); renderEkskulSayaSiswa(); }
+                else if (tabId === 'tabContentSiswa_kebiasaan') { renderRekap7KebiasaanSiswa(); checkKebiasaanHariIniState(); }
                 else if (tabId === 'tabContentSiswa_beranda') { renderPresensiSiswa(); renderBukuSakuSiswa(); }
               }
             } else if (currentUser.role === 'ADMIN') {
@@ -2522,7 +2538,12 @@
 
       setupGuruUi();
       showView('viewGuru');
-      switchTabGuru('beranda');
+      const isCoach = (currentUser.role === 'PELATIH_EKSKUL' || currentUser.peran === 'PELATIH_EKSKUL' || String(currentUser.nip).toUpperCase().startsWith('PELATIH-') || (currentUser.cabangEkskul && !currentUser.rombelWali && !currentUser.mapel));
+      if (isCoach) {
+        switchTabGuru('absenEkskul');
+      } else {
+        switchTabGuru('beranda');
+      }
       playBeepSuccess();
 
       Swal.fire({
@@ -2574,6 +2595,7 @@
       renderBukuSakuSiswa();
       renderPresensiSiswa();
       renderRekap7KebiasaanSiswa();
+      checkKebiasaanHariIniState();
     }
 
     function switchTabSiswa(tabName) {
@@ -2606,6 +2628,7 @@
       // Refresh data tampilan tab yang dibuka
       if (tabName === 'kebiasaan') {
         renderRekap7KebiasaanSiswa();
+        checkKebiasaanHariIniState();
       } else if (tabName === 'nilai') {
         renderNilaiSiswa();
         fetchNilaiSiswaOnline();
@@ -2740,6 +2763,137 @@
       }
     }
 
+    function checkKebiasaanHariIniState() {
+      if (!currentUser || currentUser.role !== 'SISWA') return;
+      const tglInput = document.getElementById('formKebiasaanTgl');
+      if (!tglInput) return;
+      const selectedTgl = tglInput.value;
+
+      const banner = document.getElementById('bannerStatusKebiasaanHariIni');
+      const submitBtn = document.getElementById('btnSubmitKebiasaan');
+      if (!banner || !submitBtn) return;
+
+      const existing = log7Kebiasaan.find(k => k.nisn === currentUser.nisn && k.tanggal === selectedTgl);
+
+      if (!existing) {
+        banner.innerHTML = '';
+        banner.className = 'hidden';
+        submitBtn.disabled = false;
+        submitBtn.className = "w-full py-3.5 bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 text-white font-bold rounded-xl shadow-md shadow-emerald-200 transition flex items-center justify-center gap-2";
+        submitBtn.innerHTML = `<i data-lucide="send" class="w-4 h-4"></i><span>Kirim Jurnal 7 Kebiasaan Hari Ini</span>`;
+        safeCreateIcons();
+        return;
+      }
+
+      const status = String(existing.statusValidasi || '').toUpperCase().trim();
+
+      if (status === 'VALID') {
+        banner.className = 'p-4 bg-emerald-50 border border-emerald-200 rounded-2xl flex items-start gap-3';
+        banner.innerHTML = `
+          <div class="p-2 bg-emerald-100 rounded-xl text-emerald-700 shrink-0"><i data-lucide="check-check" class="w-5 h-5"></i></div>
+          <div>
+            <h5 class="text-xs font-bold text-emerald-900 uppercase">Laporan Telah Divalidasi Resmi (Terkunci)</h5>
+            <p class="text-xs text-emerald-700 mt-0.5">Jurnal 7 Kebiasaan ananda untuk tanggal <b>${selectedTgl}</b> telah disetujui oleh Guru Wali. Data terkunci dan tidak dapat diubah lagi.</p>
+          </div>
+        `;
+        submitBtn.disabled = true;
+        submitBtn.className = "w-full py-3.5 bg-slate-200 text-slate-400 font-bold rounded-xl cursor-not-allowed flex items-center justify-center gap-2";
+        submitBtn.innerHTML = `<i data-lucide="lock" class="w-4 h-4"></i><span>Laporan Sudah Divalidasi (Terkunci)</span>`;
+      } else if (status === 'DITOLAK') {
+        banner.className = 'p-4 bg-rose-50 border border-rose-200 rounded-2xl flex items-start justify-between gap-3';
+        banner.innerHTML = `
+          <div class="flex items-start gap-3">
+            <div class="p-2 bg-rose-100 rounded-xl text-rose-700 shrink-0"><i data-lucide="alert-triangle" class="w-5 h-5"></i></div>
+            <div>
+              <h5 class="text-xs font-bold text-rose-900 uppercase">Laporan Ditolak / Perlu Perbaikan</h5>
+              <p class="text-xs text-rose-700 mt-0.5">Catatan Guru Wali: <i>"${existing.catatanGuru || 'Mohon periksa kembali isian dan foto bukti.'}"</i></p>
+            </div>
+          </div>
+          <button type="button" onclick="muatUlangData7Kebiasaan('${selectedTgl}')" class="px-3 py-1.5 bg-rose-600 hover:bg-rose-700 text-white rounded-lg text-xs font-bold whitespace-nowrap shadow-xs">
+            Muat Isian Lama
+          </button>
+        `;
+        submitBtn.disabled = false;
+        submitBtn.className = "w-full py-3.5 bg-gradient-to-r from-rose-600 to-amber-600 hover:from-rose-700 hover:to-amber-700 text-white font-bold rounded-xl shadow-md transition flex items-center justify-center gap-2";
+        submitBtn.innerHTML = `<i data-lucide="refresh-cw" class="w-4 h-4"></i><span>Kirim Ulang Laporan Perbaikan</span>`;
+      } else {
+        // PENDING / MENUNGGU
+        banner.className = 'p-4 bg-amber-50 border border-amber-200 rounded-2xl flex items-start justify-between gap-3';
+        banner.innerHTML = `
+          <div class="flex items-start gap-3">
+            <div class="p-2 bg-amber-100 rounded-xl text-amber-700 shrink-0"><i data-lucide="clock" class="w-5 h-5"></i></div>
+            <div>
+              <h5 class="text-xs font-bold text-amber-900 uppercase">Menunggu Validasi Guru Wali</h5>
+              <p class="text-xs text-amber-700 mt-0.5">Ananda sudah mengisi laporan tanggal <b>${selectedTgl}</b>. Ananda masih dapat mengedit atau memperbarui data ini selama belum divalidasi.</p>
+            </div>
+          </div>
+          <button type="button" onclick="muatUlangData7Kebiasaan('${selectedTgl}')" class="px-3 py-1.5 bg-amber-600 hover:bg-amber-700 text-white rounded-lg text-xs font-bold whitespace-nowrap shadow-xs">
+            Muat Isian Saya
+          </button>
+        `;
+        submitBtn.disabled = false;
+        submitBtn.className = "w-full py-3.5 bg-gradient-to-r from-amber-600 to-indigo-600 hover:from-amber-700 hover:to-indigo-700 text-white font-bold rounded-xl shadow-md transition flex items-center justify-center gap-2";
+        submitBtn.innerHTML = `<i data-lucide="save" class="w-4 h-4"></i><span>Simpan Perubahan Laporan</span>`;
+      }
+
+      safeCreateIcons();
+    }
+
+    function muatUlangData7Kebiasaan(tgl) {
+      const existing = log7Kebiasaan.find(k => k.nisn === currentUser.nisn && k.tanggal === tgl);
+      if (!existing) return;
+
+      document.getElementById('formKebiasaanTgl').value = existing.tanggal;
+      if (existing.bangunPagi) setJamBangun(existing.bangunPagi);
+      if (existing.tidurMalam) setJamTidur(existing.tidurMalam);
+      if (existing.olahraga) document.getElementById('kbOlahraga').value = existing.olahraga;
+      if (existing.makanSehat) document.getElementById('kbMakan').value = existing.makanSehat;
+      if (existing.gemarBelajar) document.getElementById('kbBelajar').value = existing.gemarBelajar;
+      if (existing.gotongRoyong) document.getElementById('kbBantuOrtu').value = existing.gotongRoyong;
+
+      // Shalat
+      const ibadahStr = existing.beribadah || '';
+      ['shSubuh', 'shDzuhur', 'shAshar', 'shMaghrib', 'shIsya'].forEach(id => {
+        const nameMap = { shSubuh: 'Subuh', shDzuhur: 'Dzuhur', shAshar: 'Ashar', shMaghrib: 'Maghrib', shIsya: 'Isya' };
+        const chk = document.getElementById(id);
+        if (chk) chk.checked = ibadahStr.includes(nameMap[id]);
+      });
+      updateShalatUi();
+
+      if (existing.fotoBase64) {
+        capturedWatermarkBase64 = existing.fotoBase64;
+        const canvas = document.getElementById('watermarkCanvas');
+        if (canvas) {
+          const img = new Image();
+          img.onload = () => {
+            canvas.width = img.width;
+            canvas.height = img.height;
+            const ctx = canvas.getContext('2d');
+            ctx.drawImage(img, 0, 0);
+          };
+          img.src = existing.fotoBase64;
+        }
+        document.getElementById('previewWatermarkArea').classList.remove('hidden');
+        document.getElementById('cameraStatusText').innerText = "✓ Menggunakan foto bukti sebelumnya.";
+        document.getElementById('cameraStatusText').className = "text-xs text-blue-600 font-bold";
+      }
+
+      checkKebiasaanHariIniState();
+      const formEl = document.getElementById('formInput7Kebiasaan');
+      if (formEl) {
+        window.scrollTo({ top: formEl.offsetTop - 80, behavior: 'smooth' });
+      }
+
+      Swal.fire({
+        toast: true,
+        position: 'top-end',
+        icon: 'info',
+        title: `Data laporan tanggal ${tgl} berhasil dimuat ke formulir!`,
+        showConfirmButton: false,
+        timer: 2000
+      });
+    }
+
     function renderRekap7KebiasaanSiswa() {
       const tbody = document.getElementById('tableRekap7KebiasaanSiswa');
       if (!tbody || !currentUser || currentUser.role !== 'SISWA') return;
@@ -2747,19 +2901,33 @@
       const myLogs = log7Kebiasaan.filter(k => k.nisn === currentUser.nisn).sort((a, b) => (b.tanggal || '').localeCompare(a.tanggal || ''));
 
       if (myLogs.length === 0) {
-        tbody.innerHTML = `<tr><td colspan="10" class="py-6 text-center text-slate-400">Belum ada riwayat pengisian jurnal 7 Kebiasaan. Silakan isi formulir di atas.</td></tr>`;
+        tbody.innerHTML = `<tr><td colspan="11" class="py-6 text-center text-slate-400">Belum ada riwayat pengisian jurnal 7 Kebiasaan. Silakan isi formulir di atas.</td></tr>`;
         return;
       }
 
       tbody.innerHTML = myLogs.map(k => {
-        const isValid = k.statusValidasi === 'VALID';
-        const badgeValidasi = isValid
-          ? `<span class="px-2.5 py-1 bg-emerald-100 text-emerald-800 rounded-lg font-bold text-[10px] inline-flex items-center gap-1">✓ Terverifikasi</span>`
-          : `<span class="px-2.5 py-1 bg-amber-100 text-amber-800 rounded-lg font-bold text-[10px] inline-flex items-center gap-1">⏳ Menunggu Validasi</span>`;
+        const status = String(k.statusValidasi || '').toUpperCase();
+        let badgeValidasi = '';
+        if (status === 'VALID') {
+          badgeValidasi = `<span class="px-2.5 py-1 bg-emerald-100 text-emerald-800 rounded-lg font-bold text-[10px] inline-flex items-center gap-1">✓ Terverifikasi</span>`;
+        } else if (status === 'DITOLAK') {
+          badgeValidasi = `
+            <div>
+              <span class="px-2.5 py-1 bg-rose-100 text-rose-800 rounded-lg font-bold text-[10px] inline-flex items-center gap-1">✕ Perlu Revisi</span>
+              ${k.catatanGuru ? `<div class="text-[10px] text-rose-600 mt-0.5 italic max-w-xs text-center">${k.catatanGuru}</div>` : ''}
+            </div>
+          `;
+        } else {
+          badgeValidasi = `<span class="px-2.5 py-1 bg-amber-100 text-amber-800 rounded-lg font-bold text-[10px] inline-flex items-center gap-1">⏳ Menunggu Validasi</span>`;
+        }
 
         const fotoBtn = k.fotoBase64
           ? `<button onclick="lihatFotoBuktiModal('${k.fotoBase64}')" class="px-2.5 py-1 bg-blue-50 hover:bg-blue-100 text-blue-700 rounded-lg text-[11px] font-bold border border-blue-200 inline-flex items-center gap-1 shadow-xs"><i data-lucide="image" class="w-3 h-3"></i><span>Lihat</span></button>`
           : `<span class="text-slate-400 text-[11px] italic">Tidak ada</span>`;
+
+        const aksiBtn = status === 'VALID'
+          ? `<span class="text-slate-400 text-xs font-semibold">🔒 Terkunci</span>`
+          : `<button onclick="muatUlangData7Kebiasaan('${k.tanggal}')" class="px-2.5 py-1 bg-amber-50 hover:bg-amber-100 text-amber-800 border border-amber-200 rounded-lg text-xs font-bold transition flex items-center justify-center gap-1 shadow-xs mx-auto"><i data-lucide="edit-3" class="w-3 h-3"></i><span>Edit</span></button>`;
 
         return `
           <tr class="hover:bg-slate-50/70 transition">
@@ -2773,13 +2941,14 @@
             <td class="py-3 px-3 font-mono text-slate-700">${k.tidurMalam || '-'}</td>
             <td class="py-3 px-3 text-center">${fotoBtn}</td>
             <td class="py-3 px-3 text-center">${badgeValidasi}</td>
+            <td class="py-3 px-3 text-center">${aksiBtn}</td>
           </tr>
         `;
       }).join('');
       safeCreateIcons();
     }
 
-    // Kamera Langsung & Canvas Watermark
+    // Kamera Langsung & Canvas Watermark (Super Ringan & Terkompresi ~20 KB)
     function handleLiveCameraCapture(e) {
       const file = e.target.files[0];
       if (!file) return;
@@ -2791,37 +2960,51 @@
           const canvas = document.getElementById('watermarkCanvas');
           const ctx = canvas.getContext('2d');
 
-          // Resize ke maks 800px lebar
-          const maxWidth = 800;
-          const scale = maxWidth / img.width;
-          canvas.width = maxWidth;
-          canvas.height = img.height * scale;
+          // Resize ke maks 420px lebar/tinggi (sangat ringan ~20KB agar tidak memberatkan database Google Sheets)
+          const maxDim = 420;
+          let width = img.width;
+          let height = img.height;
+          if (width > height) {
+            if (width > maxDim) {
+              height = Math.round((height * maxDim) / width);
+              width = maxDim;
+            }
+          } else {
+            if (height > maxDim) {
+              width = Math.round((width * maxDim) / height);
+              height = maxDim;
+            }
+          }
+
+          canvas.width = width;
+          canvas.height = height;
 
           // Gambar foto
-          ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+          ctx.drawImage(img, 0, 0, width, height);
 
           // Beri Stempel Watermark Permanen
           const now = new Date();
           const tglStr = now.toLocaleDateString('id-ID', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' });
-          const jamStr = now.toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit', second: '2-digit' }) + ' WIB';
+          const jamStr = now.toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' }) + ' WIB';
           
           // Background banner watermark
-          ctx.fillStyle = 'rgba(0, 0, 0, 0.65)';
-          ctx.fillRect(0, canvas.height - 80, canvas.width, 80);
+          ctx.fillStyle = 'rgba(0, 0, 0, 0.70)';
+          ctx.fillRect(0, height - 52, width, 52);
 
           // Teks Watermark
           ctx.fillStyle = '#facc15'; // Amber
-          ctx.font = 'bold 22px Plus Jakarta Sans, sans-serif';
-          ctx.fillText(`🌟 ${currentUser.nama} (NISN: ${currentUser.nisn})`, 20, canvas.height - 48);
+          ctx.font = 'bold 13px Plus Jakarta Sans, sans-serif';
+          ctx.fillText(`🌟 ${currentUser.nama.slice(0, 24)} (${currentUser.nisn})`, 10, height - 30);
 
           ctx.fillStyle = '#ffffff';
-          ctx.font = '18px Plus Jakarta Sans, sans-serif';
-          ctx.fillText(`📅 ${tglStr} • ⏰ ${jamStr} • Anti-Galeri Live Capture`, 20, canvas.height - 20);
+          ctx.font = '10px Plus Jakarta Sans, sans-serif';
+          ctx.fillText(`📅 ${tglStr} • ⏰ ${jamStr} • Anti-Galeri Live`, 10, height - 12);
 
-          // Export compressed JPEG (~100 KB)
-          capturedWatermarkBase64 = canvas.toDataURL('image/jpeg', 0.75);
+          // Export compressed JPEG (~15-25 KB kualitas 0.58)
+          capturedWatermarkBase64 = canvas.toDataURL('image/jpeg', 0.58);
           document.getElementById('previewWatermarkArea').classList.remove('hidden');
-          document.getElementById('cameraStatusText').innerText = "✓ Foto berhasil dicap watermark otomatis.";
+          const kbSize = Math.round((capturedWatermarkBase64.length * 0.75) / 1024);
+          document.getElementById('cameraStatusText').innerText = `✓ Foto dicap watermark & terkompresi hemat (${kbSize} KB).`;
           document.getElementById('cameraStatusText').className = "text-xs text-emerald-600 font-bold";
         };
         img.src = evt.target.result;
@@ -2831,7 +3014,15 @@
 
     async function handleKirim7Kebiasaan(e) {
       e.preventDefault();
-      if (!capturedWatermarkBase64) {
+      const tglPilihan = document.getElementById('formKebiasaanTgl').value;
+      const existing = log7Kebiasaan.find(k => k.nisn === currentUser.nisn && k.tanggal === tglPilihan);
+
+      if (existing && String(existing.statusValidasi || '').toUpperCase() === 'VALID') {
+        Swal.fire('Laporan Terkunci', 'Laporan pada tanggal ini sudah divalidasi oleh Guru Wali dan tidak dapat diubah.', 'warning');
+        return;
+      }
+
+      if (!capturedWatermarkBase64 && (!existing || !existing.fotoBase64)) {
         Swal.fire('Foto Bukti Wajib', 'Mohon buka kamera HP untuk mengambil foto bukti pembiasaan hari ini.', 'warning');
         return;
       }
@@ -2844,7 +3035,7 @@
       if (document.getElementById('shIsya').checked) shalatList.push('Isya');
 
       const laporan = {
-        tanggal: document.getElementById('formKebiasaanTgl').value,
+        tanggal: tglPilihan,
         nisn: currentUser.nisn,
         nama: currentUser.nama,
         kelas: currentUser.kelas,
@@ -2855,12 +3046,19 @@
         gemarBelajar: document.getElementById('kbBelajar').value,
         gotongRoyong: document.getElementById('kbBantuOrtu').value,
         tidurMalam: document.getElementById('kbTidurJam').value,
-        fotoBase64: capturedWatermarkBase64,
-        watermarkInfo: `${currentUser.nama} - ${document.getElementById('formKebiasaanTgl').value}`
+        fotoBase64: capturedWatermarkBase64 || (existing ? existing.fotoBase64 : null),
+        watermarkInfo: `${currentUser.nama} - ${tglPilihan}`,
+        statusValidasi: 'PENDING'
       };
 
-      // Simpan lokal
-      log7Kebiasaan.push(laporan);
+      // Simpan / update di memori lokal
+      const existIdx = log7Kebiasaan.findIndex(k => k.nisn === currentUser.nisn && k.tanggal === tglPilihan);
+      if (existIdx !== -1) {
+        log7Kebiasaan[existIdx] = Object.assign(log7Kebiasaan[existIdx], laporan);
+      } else {
+        log7Kebiasaan.push(laporan);
+      }
+
       document.getElementById('snapshotKebiasaanSiswa').innerText = "Sudah Lapor ✓";
       document.getElementById('snapshotKebiasaanSiswa').className = "text-lg font-bold text-emerald-600 mt-2";
 
@@ -2877,20 +3075,20 @@
         laporan: laporan
       });
 
-      resetForm7Kebiasaan();
       renderRekap7KebiasaanSiswa();
+      checkKebiasaanHariIniState();
 
       if (res && res.success) {
         Swal.fire({
           title: 'Alhamdulillah! 🟢',
-          text: 'Laporan 7 Kebiasaan ananda berhasil disimpan ke Google Sheets dan foto bukti tersimpan aman di Google Drive.',
+          text: res.message || 'Laporan 7 Kebiasaan ananda berhasil disimpan ke Google Sheets.',
           icon: 'success'
         });
         syncDataFromGoogleSheets(true);
       } else {
         Swal.fire({
           title: 'Tersimpan Lokal',
-          text: 'Laporan tersimpan di memori perangkat. (Info server: ' + (res.error || 'Offline') + ')',
+          text: 'Laporan tersimpan di memori perangkat. (Info server: ' + (res ? res.error : 'Offline') + ')',
           icon: 'info'
         });
       }
@@ -3342,6 +3540,19 @@
       const s = masterSiswa.find(item => item.nisn === currentUser.nisn);
       if (s) s.noHpOrtu = val;
 
+      // Update LocalStorage offline cache
+      try {
+        const cacheRaw = localStorage.getItem("SUPERAPP_DATA_CACHE_V1");
+        if (cacheRaw) {
+          const cacheObj = JSON.parse(cacheRaw);
+          if (cacheObj.siswa) {
+            const cs = cacheObj.siswa.find(item => item.nisn === currentUser.nisn);
+            if (cs) cs.noHpOrtu = val;
+            localStorage.setItem("SUPERAPP_DATA_CACHE_V1", JSON.stringify(cacheObj));
+          }
+        }
+      } catch (err) {}
+
       Swal.fire({
         title: 'Menyimpan ke Google Sheets...',
         didOpen: () => Swal.showLoading(),
@@ -3355,10 +3566,14 @@
       });
 
       if (res && res.success) {
+        if (res.noHpOrtu) {
+          currentUser.noHpOrtu = res.noHpOrtu;
+          if (s) s.noHpOrtu = res.noHpOrtu;
+        }
         Swal.fire('Tersimpan di Google Sheets! 🟢', 'Nomor WhatsApp orang tua berhasil diperbarui.', 'success');
         syncDataFromGoogleSheets(true);
       } else {
-        Swal.fire('Tersimpan Lokal', 'Nomor WhatsApp orang tua disimpan di sesi ini.', 'info');
+        Swal.fire('Tersimpan Lokal', 'Nomor WhatsApp orang tua disimpan di sesi ini. (Koneksi: ' + (res ? res.error : 'Offline') + ')', 'info');
       }
       switchTabSiswa('beranda');
     }
@@ -3378,11 +3593,40 @@
       document.getElementById('badgeGuruTugasKhusus').innerText = currentUser.rombelWali ? `ROMBEL ${currentUser.rombelWali}` : (currentUser.cabangEkskul || "STAFF");
 
       // Cek apakah akun adalah Pelatih Ekskul
-      const isCoach = (currentUser.peran === 'PELATIH_EKSKUL' || !!currentUser.cabangEkskul);
-      const btnAbsenEkskul = document.getElementById('tabBtnGuru_absenEkskul');
-      if (btnAbsenEkskul) {
-        if (isCoach) btnAbsenEkskul.classList.remove('hidden');
-        else btnAbsenEkskul.classList.add('hidden');
+      const isCoach = (currentUser.peran === 'PELATIH_EKSKUL' || currentUser.role === 'PELATIH_EKSKUL' || String(currentUser.nip || '').toUpperCase().startsWith('PELATIH-') || (currentUser.cabangEkskul && !currentUser.rombelWali && !currentUser.mapel));
+
+      const tabBeranda = document.getElementById('tabBtnGuru_beranda');
+      const tabKbm = document.getElementById('tabBtnGuru_presensiKbm');
+      const tabAbsenEkskul = document.getElementById('tabBtnGuru_absenEkskul');
+      const tabRekapWalas = document.getElementById('tabBtnGuru_rekapWalas');
+      const tabNilai = document.getElementById('tabBtnGuru_nilaiUlangan');
+      const tabWali = document.getElementById('tabBtnGuru_guruWali');
+      const tabTibum = document.getElementById('tabBtnGuru_tibum');
+      const cardMetricEkskul = document.getElementById('cardMetricAnggotaEkskul');
+
+      if (isCoach) {
+        // BERANDA PELATIH: HANYA BERISI TAB ABSENSI EKSKUL SAJA
+        if (tabBeranda) tabBeranda.classList.add('hidden');
+        if (tabKbm) tabKbm.classList.add('hidden');
+        if (tabRekapWalas) tabRekapWalas.classList.add('hidden');
+        if (tabNilai) tabNilai.classList.add('hidden');
+        if (tabWali) tabWali.classList.add('hidden');
+        if (tabTibum) tabTibum.classList.add('hidden');
+        if (tabAbsenEkskul) {
+          tabAbsenEkskul.classList.remove('hidden');
+          tabAbsenEkskul.innerText = '⚽ Absensi Ekskul (Pelatih)';
+        }
+        document.getElementById('userRoleBadge').innerText = 'Pelatih Ekstrakurikuler';
+      } else {
+        // BERANDA GURU: HILANGKAN TAB ABSENSI EKSKUL
+        if (tabAbsenEkskul) tabAbsenEkskul.classList.add('hidden');
+        if (cardMetricEkskul) cardMetricEkskul.classList.add('hidden');
+        if (tabBeranda) tabBeranda.classList.remove('hidden');
+        if (tabKbm) tabKbm.classList.remove('hidden');
+        if (tabRekapWalas) tabRekapWalas.classList.remove('hidden');
+        if (tabNilai) tabNilai.classList.remove('hidden');
+        if (tabWali) tabWali.classList.remove('hidden');
+        if (tabTibum) tabTibum.classList.remove('hidden');
       }
 
       // Hitung siswa binaan Guru Wali
@@ -3454,16 +3698,14 @@
       if (tabName === 'nilai-ulangan') tabName = 'nilaiUlangan';
       if (tabName === 'catatan-tibum' || tabName === 'razia-tibum') tabName = 'tibum';
 
-      // Proteksi hak akses absensi ekskul khusus pelatih
-      const isCoach = (currentUser.peran === 'PELATIH_EKSKUL' || !!currentUser.cabangEkskul);
-      if (tabName === 'absenEkskul' && !isCoach) {
-        Swal.fire({
-          icon: 'warning',
-          title: 'Akses Dibatasi',
-          text: 'Presensi latihan ekstrakurikuler hanya dapat diakses oleh Pelatih yang di-SK-kan.'
-        });
-        switchTabGuru('beranda');
-        return;
+      // Proteksi hak akses & pemisahan beranda Pelatih vs Guru
+      const isCoach = (currentUser.peran === 'PELATIH_EKSKUL' || currentUser.role === 'PELATIH_EKSKUL' || String(currentUser.nip || '').toUpperCase().startsWith('PELATIH-') || (currentUser.cabangEkskul && !currentUser.rombelWali && !currentUser.mapel));
+
+      if (isCoach && tabName !== 'absenEkskul') {
+        tabName = 'absenEkskul';
+      }
+      if (!isCoach && tabName === 'absenEkskul') {
+        tabName = 'beranda';
       }
 
       document.querySelectorAll('.tab-guru-btn').forEach(btn => {
@@ -3514,12 +3756,13 @@
           <td class="py-2.5 px-3 font-mono font-bold text-slate-600">${s.nisn}</td>
           <td class="py-2.5 px-3 font-bold text-slate-800">${s.nama}</td>
           <td class="py-2.5 px-3 text-center">
-            <div class="inline-flex rounded-lg border border-slate-200 p-0.5 bg-slate-50 gap-1 text-[11px] font-bold">
-              <label class="cursor-pointer px-2 py-1 rounded has-checked:bg-emerald-600 has-checked:text-white"><input type="radio" name="st_kbm_${s.nisn}" value="HADIR" checked class="hidden"> H</label>
-              <label class="cursor-pointer px-2 py-1 rounded has-checked:bg-amber-500 has-checked:text-white"><input type="radio" name="st_kbm_${s.nisn}" value="SAKIT" class="hidden"> S</label>
-              <label class="cursor-pointer px-2 py-1 rounded has-checked:bg-blue-600 has-checked:text-white"><input type="radio" name="st_kbm_${s.nisn}" value="IZIN" class="hidden"> I</label>
-              <label class="cursor-pointer px-2 py-1 rounded has-checked:bg-rose-600 has-checked:text-white"><input type="radio" name="st_kbm_${s.nisn}" value="ALPHA" class="hidden"> A</label>
-              <label class="cursor-pointer px-2 py-1 rounded has-checked:bg-purple-600 has-checked:text-white"><input type="radio" name="st_kbm_${s.nisn}" value="TERLAMBAT" class="hidden"> T</label>
+            <input type="hidden" id="input_st_kbm_${s.nisn}" value="HADIR">
+            <div class="inline-flex rounded-lg border border-slate-200 p-0.5 bg-slate-100 gap-1 text-[11px] font-bold">
+              <button type="button" onclick="setKbmStatus('${s.nisn}', 'HADIR')" id="btn_kbm_${s.nisn}_HADIR" class="btn-st-kbm-${s.nisn} px-2.5 py-1 rounded transition bg-emerald-600 text-white shadow-xs font-bold">H</button>
+              <button type="button" onclick="setKbmStatus('${s.nisn}', 'SAKIT')" id="btn_kbm_${s.nisn}_SAKIT" class="btn-st-kbm-${s.nisn} px-2.5 py-1 rounded transition text-slate-600 hover:bg-slate-200">S</button>
+              <button type="button" onclick="setKbmStatus('${s.nisn}', 'IZIN')" id="btn_kbm_${s.nisn}_IZIN" class="btn-st-kbm-${s.nisn} px-2.5 py-1 rounded transition text-slate-600 hover:bg-slate-200">I</button>
+              <button type="button" onclick="setKbmStatus('${s.nisn}', 'ALPHA')" id="btn_kbm_${s.nisn}_ALPHA" class="btn-st-kbm-${s.nisn} px-2.5 py-1 rounded transition text-slate-600 hover:bg-slate-200">A</button>
+              <button type="button" onclick="setKbmStatus('${s.nisn}', 'TERLAMBAT')" id="btn_kbm_${s.nisn}_TERLAMBAT" class="btn-st-kbm-${s.nisn} px-2.5 py-1 rounded transition text-slate-600 hover:bg-slate-200">T</button>
             </div>
           </td>
           <td class="py-2.5 px-3">
@@ -3527,6 +3770,26 @@
           </td>
         </tr>
       `).join('');
+    }
+
+    function setKbmStatus(nisn, status) {
+      const input = document.getElementById(`input_st_kbm_${nisn}`);
+      if (input) input.value = status;
+
+      const buttons = document.querySelectorAll(`.btn-st-kbm-${nisn}`);
+      buttons.forEach(btn => {
+        btn.className = `btn-st-kbm-${nisn} px-2.5 py-1 rounded transition text-slate-600 hover:bg-slate-200`;
+      });
+
+      const activeBtn = document.getElementById(`btn_kbm_${nisn}_${status}`);
+      if (activeBtn) {
+        let activeBg = 'bg-emerald-600';
+        if (status === 'SAKIT') activeBg = 'bg-amber-500';
+        else if (status === 'IZIN') activeBg = 'bg-blue-600';
+        else if (status === 'ALPHA') activeBg = 'bg-rose-600';
+        else if (status === 'TERLAMBAT') activeBg = 'bg-purple-600';
+        activeBtn.className = `btn-st-kbm-${nisn} px-2.5 py-1 rounded transition ${activeBg} text-white shadow-xs font-bold`;
+      }
     }
 
     async function simpanPresensiKbmSekelas() {
@@ -3537,7 +3800,8 @@
       const dataAbsen = [];
       rows.forEach(r => {
         const nisn = r.getAttribute('data-nisn');
-        const stElem = r.querySelector(`input[name="st_kbm_${nisn}"]:checked`);
+        if (!nisn) return;
+        const stElem = document.getElementById(`input_st_kbm_${nisn}`);
         const st = stElem ? stElem.value : 'HADIR';
         const ketElem = r.querySelector('.input-ket-kbm');
         const ket = ketElem ? ketElem.value : '';
@@ -3608,11 +3872,12 @@
           <td class="py-2.5 px-3 font-bold text-slate-800">${p.nama}</td>
           <td class="py-2.5 px-3">${p.kelas}</td>
           <td class="py-2.5 px-3 text-center">
-            <div class="inline-flex rounded-lg border border-slate-200 p-0.5 bg-slate-50 gap-1 text-[11px] font-bold">
-              <label class="cursor-pointer px-2.5 py-1 rounded has-checked:bg-emerald-600 has-checked:text-white"><input type="radio" name="st_ekskul_${p.nisn}" value="HADIR" checked class="hidden"> Hadir</label>
-              <label class="cursor-pointer px-2.5 py-1 rounded has-checked:bg-amber-500 has-checked:text-white"><input type="radio" name="st_ekskul_${p.nisn}" value="SAKIT" class="hidden"> Sakit</label>
-              <label class="cursor-pointer px-2.5 py-1 rounded has-checked:bg-blue-600 has-checked:text-white"><input type="radio" name="st_ekskul_${p.nisn}" value="IZIN" class="hidden"> Izin</label>
-              <label class="cursor-pointer px-2.5 py-1 rounded has-checked:bg-rose-600 has-checked:text-white"><input type="radio" name="st_ekskul_${p.nisn}" value="ALPHA" class="hidden"> Alpha</label>
+            <input type="hidden" id="input_st_ekskul_${p.nisn}" value="HADIR">
+            <div class="inline-flex rounded-lg border border-slate-200 p-0.5 bg-slate-100 gap-1 text-[11px] font-bold">
+              <button type="button" onclick="setEkskulStatus('${p.nisn}', 'HADIR')" id="btn_ekskul_${p.nisn}_HADIR" class="btn-st-ekskul-${p.nisn} px-2.5 py-1 rounded transition bg-emerald-600 text-white shadow-xs font-bold">Hadir</button>
+              <button type="button" onclick="setEkskulStatus('${p.nisn}', 'SAKIT')" id="btn_ekskul_${p.nisn}_SAKIT" class="btn-st-ekskul-${p.nisn} px-2.5 py-1 rounded transition text-slate-600 hover:bg-slate-200">Sakit</button>
+              <button type="button" onclick="setEkskulStatus('${p.nisn}', 'IZIN')" id="btn_ekskul_${p.nisn}_IZIN" class="btn-st-ekskul-${p.nisn} px-2.5 py-1 rounded transition text-slate-600 hover:bg-slate-200">Izin</button>
+              <button type="button" onclick="setEkskulStatus('${p.nisn}', 'ALPHA')" id="btn_ekskul_${p.nisn}_ALPHA" class="btn-st-ekskul-${p.nisn} px-2.5 py-1 rounded transition text-slate-600 hover:bg-slate-200">Alpha</button>
             </div>
           </td>
           <td class="py-2.5 px-3">
@@ -3620,6 +3885,25 @@
           </td>
         </tr>
       `).join('');
+    }
+
+    function setEkskulStatus(nisn, status) {
+      const input = document.getElementById(`input_st_ekskul_${nisn}`);
+      if (input) input.value = status;
+
+      const buttons = document.querySelectorAll(`.btn-st-ekskul-${nisn}`);
+      buttons.forEach(btn => {
+        btn.className = `btn-st-ekskul-${nisn} px-2.5 py-1 rounded transition text-slate-600 hover:bg-slate-200`;
+      });
+
+      const activeBtn = document.getElementById(`btn_ekskul_${nisn}_${status}`);
+      if (activeBtn) {
+        let activeBg = 'bg-emerald-600';
+        if (status === 'SAKIT') activeBg = 'bg-amber-500';
+        else if (status === 'IZIN') activeBg = 'bg-blue-600';
+        else if (status === 'ALPHA') activeBg = 'bg-rose-600';
+        activeBtn.className = `btn-st-ekskul-${nisn} px-2.5 py-1 rounded transition ${activeBg} text-white shadow-xs font-bold`;
+      }
     }
 
     async function simpanAbsenPelatihEkskul() {
@@ -3632,7 +3916,29 @@
       rows.forEach(r => {
         const nisn = r.getAttribute('data-nisn');
         if (!nisn) return;
-        const stElem = r.querySelector(`input[name="st_ekskul_${nisn}"]:checked`);
+        const stElem = document.getElementById(`input_st_ekskul_${nisn}`);
+        const st = stElem ? stElem.value : 'HADIR';
+        const ketElem = r.querySelector('.input-ket-ekskul');
+        const ket = ketElem ? ketElem.value : '';
+        const a = anggotaEkskul.find(item => item.nisn === nisn);
+        const existingIdx = logPresensiEkskul.findIndex(p => p.nisn === nisn && p.idEkskul === idEkskul && p.tanggal === tgl);
+        const presensiItem = {
+          tanggal: tgl,
+          idEkskul: idEkskul,
+          nisn: nisn,
+          nama: a ? a.nama : '',
+          kelas: a ? a.kelas : '',
+          status: st,
+          keterangan: ket
+        };
+        if (existingIdx !== -1) {
+          logPresensiEkskul[existingIdx] = presensiItem;
+        } else {
+          logPresensiEkskul.push(presensiItem);
+        }
+        dataAbsen.push(presensiItem);
+        saved++;
+      });
         const st = stElem ? stElem.value : 'HADIR';
         const ketElem = r.querySelector('.input-ket-ekskul');
         const ket = ketElem ? ketElem.value : '';
@@ -3728,38 +4034,133 @@
       const rawText = document.getElementById('pasteExcelTextarea').value.trim();
       if (!rawText) {
         document.getElementById('previewPastedNilaiArea').classList.add('hidden');
+        parsedNilaiCache = [];
         return;
       }
 
-      const lines = rawText.split('\n');
+      const lines = rawText.split(/\r?\n/).map(l => l.trim()).filter(Boolean);
       parsedNilaiCache = [];
       const tbody = document.getElementById('tablePreviewNilai');
       tbody.innerHTML = '';
 
       lines.forEach(line => {
-        const parts = line.split('\t');
-        if (parts.length >= 2) {
-          const nisn = parts[0].trim().padStart(10, "0");
-          const nilai = Number(parts[1].trim());
-          const catatan = parts[2] ? parts[2].trim() : "";
-          const s = masterSiswa.find(item => item.nisn === nisn);
-          const nama = s ? s.nama : "Siswa Tidak Ditemukan";
+        // Deteksi pemisah: tab, titik-koma, pipa, koma (jika bukan desimal), atau spasi ganda
+        let parts = [];
+        if (line.includes('\t')) parts = line.split('\t');
+        else if (line.includes(';')) parts = line.split(';');
+        else if (line.includes('|')) parts = line.split('|');
+        else if (line.includes(',') && !line.match(/\b\d+,\d+\b/)) parts = line.split(',');
+        else parts = line.split(/\s{2,}/);
 
-          parsedNilaiCache.push({ nisn, nama, nilai, catatan });
+        parts = parts.map(p => p.trim().replace(/^["']|["']$/g, '')).filter(p => p !== '');
+        if (parts.length < 2) return;
 
-          const tr = document.createElement('tr');
-          tr.innerHTML = `
-            <td class="py-1.5 px-3 font-mono font-bold">${nisn}</td>
-            <td class="py-1.5 px-3 font-semibold text-slate-800">${nama}</td>
-            <td class="py-1.5 px-3 text-center font-bold text-blue-700">${nilai}</td>
-            <td class="py-1.5 px-3 text-slate-500">${catatan || '-'}</td>
-          `;
-          tbody.appendChild(tr);
+        // Lewati jika ini baris header (misal mengandung kata "nisn", "nama", "nilai")
+        const lowerLine = line.toLowerCase();
+        if ((lowerLine.includes('nisn') || lowerLine.includes('nama siswa')) && (lowerLine.includes('nilai') || lowerLine.includes('mapel') || lowerLine.includes('skor'))) {
+          return;
         }
+
+        // Cari kolom mana yang merupakan NISN
+        let nisn = null;
+        let nisnIdx = -1;
+        let nama = null;
+        let nilai = null;
+        let nilaiIdx = -1;
+        let catatan = "";
+
+        // 1. Cari NISN (kolom dengan 8-10 digit atau yang cocok di masterSiswa)
+        for (let i = 0; i < parts.length; i++) {
+          const cleanDigits = parts[i].replace(/\D/g, '');
+          if (cleanDigits.length >= 8 && cleanDigits.length <= 11) {
+            nisn = cleanDigits.padStart(10, "0");
+            nisnIdx = i;
+            break;
+          }
+        }
+
+        // 2. Jika tidak ditemukan NISN berdigit panjang, coba cocokkan nama di masterSiswa
+        if (!nisn) {
+          for (let i = 0; i < parts.length; i++) {
+            const partStr = parts[i].toLowerCase();
+            const foundSiswa = masterSiswa.find(s => s.nama.toLowerCase() === partStr || s.nama.toLowerCase().includes(partStr));
+            if (foundSiswa && parts[i].length > 3) {
+              nisn = foundSiswa.nisn;
+              nama = foundSiswa.nama;
+              nisnIdx = i;
+              break;
+            }
+          }
+        }
+
+        if (!nisn) {
+          // Fallback: jika parts[0] berisi digit, gunakan parts[0]
+          const p0Digits = parts[0].replace(/\D/g, '');
+          if (p0Digits.length > 0) {
+            nisn = p0Digits.padStart(10, "0");
+            nisnIdx = 0;
+          } else {
+            return; // Abaikan baris tanpa identitas siswa
+          }
+        }
+
+        // Ambil nama dari masterSiswa jika belum dapat
+        const s = masterSiswa.find(item => item.nisn === nisn);
+        if (s) nama = s.nama;
+        else if (!nama) {
+          if (parts[nisnIdx + 1] && isNaN(parts[nisnIdx + 1])) {
+            nama = parts[nisnIdx + 1];
+          } else {
+            nama = "Siswa (" + nisn + ")";
+          }
+        }
+
+        // 3. Cari Nilai (angka antara 0 sampai 100 di kolom yang bukan nisnIdx)
+        for (let i = 0; i < parts.length; i++) {
+          if (i === nisnIdx) continue;
+          const numStr = parts[i].replace(',', '.');
+          const parsedNum = parseFloat(numStr);
+          if (!isNaN(parsedNum) && parsedNum >= 0 && parsedNum <= 100) {
+            nilai = parsedNum;
+            nilaiIdx = i;
+            break;
+          }
+        }
+
+        if (nilai === null) {
+          const fallbackNum = parseFloat(parts[parts.length - 1].replace(',', '.'));
+          if (!isNaN(fallbackNum)) nilai = fallbackNum;
+          else nilai = 0;
+        }
+
+        // 4. Catatan guru: sisa kolom yang bukan NISN, bukan Nama, dan bukan Nilai
+        const textParts = [];
+        for (let i = 0; i < parts.length; i++) {
+          if (i !== nisnIdx && i !== nilaiIdx && parts[i] !== nama) {
+            if (i === 0 && Number(parts[i]) <= 60 && parts.length > 2) continue;
+            textParts.push(parts[i]);
+          }
+        }
+        catatan = textParts.join(' ').trim();
+
+        parsedNilaiCache.push({ nisn, nama, nilai, catatan });
+
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+          <td class="py-1.5 px-3 font-mono font-bold text-slate-700">${nisn}</td>
+          <td class="py-1.5 px-3 font-semibold text-slate-800">${nama}</td>
+          <td class="py-1.5 px-3 text-center font-bold text-blue-700 bg-blue-50/50">${nilai}</td>
+          <td class="py-1.5 px-3 text-slate-500">${catatan || '-'}</td>
+        `;
+        tbody.appendChild(tr);
       });
 
       document.getElementById('countParsedNilai').innerText = parsedNilaiCache.length;
-      document.getElementById('previewPastedNilaiArea').classList.remove('hidden');
+      if (parsedNilaiCache.length > 0) {
+        document.getElementById('previewPastedNilaiArea').classList.remove('hidden');
+      } else {
+        document.getElementById('previewPastedNilaiArea').classList.add('hidden');
+      }
     }
 
     async function simpanNilaiPastedSekelas() {
@@ -3954,12 +4355,16 @@
                 </button>
               </td>
               <td class="py-2.5 px-3">
-                <span class="px-2 py-0.5 ${kb.statusValidasi === 'VALID' ? 'bg-emerald-100 text-emerald-800' : 'bg-amber-100 text-amber-800'} rounded font-bold text-[10px]">
+                <span class="px-2 py-0.5 ${kb.statusValidasi === 'VALID' ? 'bg-emerald-100 text-emerald-800' : (kb.statusValidasi === 'DITOLAK' ? 'bg-rose-100 text-rose-800' : 'bg-amber-100 text-amber-800')} rounded font-bold text-[10px]">
                   ${kb.statusValidasi || 'Menunggu'}
                 </span>
+                ${kb.catatanGuru ? `<div class="text-[10px] text-slate-500 mt-0.5 italic max-w-xs">${kb.catatanGuru}</div>` : ''}
               </td>
               <td class="py-2.5 px-3 text-center">
-                <button onclick="validasiLaporan7K('${kb.nisn}')" class="px-2.5 py-1 bg-emerald-600 text-white rounded-lg text-xs font-bold hover:bg-emerald-700">Validasi ✓</button>
+                <div class="inline-flex items-center gap-1.5">
+                  <button onclick="validasiLaporan7K('${kb.idLog || kb.nisn}', 'VALID')" class="px-2.5 py-1 bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg text-xs font-bold shadow-xs">Setujui ✓</button>
+                  <button onclick="tolakLaporan7K('${kb.idLog || kb.nisn}')" class="px-2 py-1 bg-rose-50 hover:bg-rose-100 text-rose-700 border border-rose-200 rounded-lg text-xs font-bold shadow-xs">Tolak ✕</button>
+                </div>
               </td>
             </tr>
           `).join('');
@@ -3992,9 +4397,12 @@
       });
     }
 
-    async function validasiLaporan7K(nisn) {
-      const kb = log7Kebiasaan.find(k => k.nisn === nisn);
-      if (kb) kb.statusValidasi = 'VALID';
+    async function validasiLaporan7K(idOrNisn, statusValidasi = 'VALID') {
+      const kb = log7Kebiasaan.find(k => k.idLog === idOrNisn || k.nisn === idOrNisn);
+      if (kb) {
+        kb.statusValidasi = statusValidasi;
+        if (statusValidasi === 'VALID') kb.catatanGuru = 'Disetujui Guru Wali';
+      }
 
       playBeepSuccess();
       Swal.fire({
@@ -4005,17 +4413,66 @@
 
       const res = await callBackendPost({
         action: 'validasi7Kebiasaan',
-        idLog: kb ? kb.idLog : '',
-        statusValidasi: 'VALID',
-        catatanGuru: 'Disetujui Guru Wali',
+        idLog: kb ? (kb.idLog || kb.nisn) : idOrNisn,
+        statusValidasi: statusValidasi,
+        catatanGuru: kb ? kb.catatanGuru : 'Disetujui Guru Wali',
         nipValidator: currentUser ? currentUser.nip : ''
       });
 
       if (res && res.success) {
-        Swal.fire('Divalidasi! 🟢', 'Jurnal 7 Kebiasaan siswa telah disetujui di Google Sheets.', 'success');
+        Swal.fire('Berhasil Disetujui! 🟢', 'Laporan 7 Kebiasaan siswa telah disetujui di Google Sheets.', 'success');
         syncDataFromGoogleSheets(true);
       } else {
         Swal.fire('Divalidasi!', 'Jurnal 7 Kebiasaan siswa telah disetujui secara lokal.', 'success');
+      }
+      loadValidasi7Kebiasaan();
+    }
+
+    async function tolakLaporan7K(idOrNisn) {
+      const kb = log7Kebiasaan.find(k => k.idLog === idOrNisn || k.nisn === idOrNisn);
+      const { value: alasan } = await Swal.fire({
+        title: 'Tolak Laporan Siswa? ⚠️',
+        text: 'Masukkan catatan alasan penolakan agar siswa dapat merevisi/memperbaiki laporannya:',
+        input: 'text',
+        inputPlaceholder: 'Contoh: Foto tidak jelas / Jam bangun belum sesuai...',
+        showCancelButton: true,
+        confirmButtonColor: '#e11d48',
+        cancelButtonColor: '#64748b',
+        confirmButtonText: 'Tolak & Minta Perbaikan',
+        cancelButtonText: 'Batal',
+        inputValidator: (value) => {
+          if (!value || !value.trim()) {
+            return 'Mohon tuliskan alasan penolakan!';
+          }
+        }
+      });
+
+      if (!alasan) return;
+
+      if (kb) {
+        kb.statusValidasi = 'DITOLAK';
+        kb.catatanGuru = alasan.trim();
+      }
+
+      Swal.fire({
+        title: 'Mengirim Penolakan ke Sheets...',
+        didOpen: () => Swal.showLoading(),
+        allowOutsideClick: false
+      });
+
+      const res = await callBackendPost({
+        action: 'validasi7Kebiasaan',
+        idLog: kb ? (kb.idLog || kb.nisn) : idOrNisn,
+        statusValidasi: 'DITOLAK',
+        catatanGuru: alasan.trim(),
+        nipValidator: currentUser ? currentUser.nip : ''
+      });
+
+      if (res && res.success) {
+        Swal.fire('Laporan Ditolak', 'Catatan penolakan telah dikirim. Siswa kini dapat merevisi laporannya.', 'info');
+        syncDataFromGoogleSheets(true);
+      } else {
+        Swal.fire('Disimpan Lokal', 'Status penolakan tersimpan di sesi browser.', 'info');
       }
       loadValidasi7Kebiasaan();
     }
@@ -5082,13 +5539,13 @@
 
       const rowsHtml = daysOfWeek.map((d, idx) => {
         const entry = riwayatSiswa[idx];
-        const bangun = entry ? `${entry.bangunPagi} ✓` : `${d.defaultBangun} ✓`;
-        const ibadah = entry ? `${entry.beribadah.slice(0, 15)} ✓` : '5 Waktu ✓';
-        const olahraga = entry ? `${entry.olahraga.slice(0, 15)} ✓` : 'Ya ✓';
-        const makan = entry ? `${entry.makanSehat.slice(0, 15)} ✓` : 'Ya ✓';
-        const belajar = entry ? `${entry.gemarBelajar.slice(0, 15)} ✓` : 'Ya ✓';
-        const gotong = entry ? `${entry.gotongRoyong.slice(0, 15)} ✓` : 'Ya ✓';
-        const tidur = entry ? `${entry.tidurMalam} ✓` : `${d.defaultTidur} ✓`;
+        const bangun = (entry && entry.bangunPagi) ? `${entry.bangunPagi} ✓` : `${d.defaultBangun} ✓`;
+        const ibadah = (entry && entry.beribadah) ? `${String(entry.beribadah).slice(0, 15)} ✓` : '5 Waktu ✓';
+        const olahraga = (entry && entry.olahraga) ? `${String(entry.olahraga).slice(0, 15)} ✓` : 'Ya ✓';
+        const makan = (entry && entry.makanSehat) ? `${String(entry.makanSehat).slice(0, 15)} ✓` : 'Ya ✓';
+        const belajar = (entry && entry.gemarBelajar) ? `${String(entry.gemarBelajar).slice(0, 15)} ✓` : 'Ya ✓';
+        const gotong = (entry && entry.gotongRoyong) ? `${String(entry.gotongRoyong).slice(0, 15)} ✓` : 'Ya ✓';
+        const tidur = (entry && entry.tidurMalam) ? `${entry.tidurMalam} ✓` : `${d.defaultTidur} ✓`;
         return `
           <tr>
             <td style="border: 1px solid #000; padding: 6px; font-weight: bold;">${d.hari}</td>
@@ -5167,7 +5624,7 @@
                 <p style="margin: 0;">( .................................................. )</p>
               </td>
               <td style="width: 50%; text-align: center;">
-                <p style="margin: 0;">${appConfig.KOTA_TITIMANGSA}, ${tglCetak}</p>
+                <p style="margin: 0;">${appConfig.KOTA_TITIMANGSA || 'Kota'}, ${tglCetak}</p>
                 <p style="margin: 0; font-weight: bold;">Guru Wali Pembina,</p>
                 <div style="height: 60px;"></div>
                 <p style="margin: 0; font-weight: bold; text-decoration: underline;">${namaGuruWali}</p>
@@ -5178,7 +5635,11 @@
         </div>
       `;
 
-      window.print();
+      printDiv.classList.remove('hidden');
+      setTimeout(() => {
+        window.print();
+      }, 50);
+    }
     }
 
     function downloadRekapMingguanPdf() {
