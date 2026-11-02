@@ -1,6 +1,8 @@
 {
   "version": 2,
   "name": "super-app-sekolah",
+  "outputDirectory": ".",
+  "buildCommand": "echo 'Static web app ready'",
   "cleanUrls": true,
   "rewrites": [
     {
