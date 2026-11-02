@@ -1592,18 +1592,54 @@
 
       <!-- KONTEN TAB 3 ADMIN: KONEKSI APPS SCRIPT -->
       <div id="tabContentAdmin_koneksi" class="tab-admin-content hidden space-y-6">
-        <div class="bg-white p-6 rounded-3xl border border-slate-200 shadow-xs space-y-4">
-          <h3 class="font-extrabold text-base text-slate-900 border-b border-slate-100 pb-3">Koneksi Google Apps Script</h3>
-          <p class="text-xs text-slate-500 leading-relaxed">
-            Super App ini terhubung ke 1 Google Sheet database melalui Web App URL Google Apps Script.
-          </p>
-          <div>
-            <label class="block text-[11px] font-bold text-slate-700 uppercase mb-1">URL Endpoint Apps Script</label>
-            <input type="text" id="inputBackendUrlConfig" placeholder="https://script.google.com/macros/s/.../exec" class="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs font-mono">
+        <div class="bg-white p-6 rounded-3xl border border-slate-200 shadow-xs space-y-5">
+          <div class="flex items-center justify-between border-b border-slate-100 pb-3">
+            <div>
+              <h3 class="font-extrabold text-base text-slate-900">Integrasi Database Google Sheets</h3>
+              <p class="text-xs text-slate-500">Konfigurasi endpoint API Web App Google Apps Script</p>
+            </div>
+            <div id="adminConnectionStatusBadge" class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-slate-100 text-slate-700 border border-slate-200">
+              <span class="w-2 h-2 rounded-full bg-slate-400"></span>
+              <span id="adminConnectionStatusText">Memeriksa...</span>
+            </div>
           </div>
-          <button onclick="handleSimpanBackendUrl()" class="w-full py-2 bg-slate-900 hover:bg-slate-800 text-white font-bold rounded-xl text-xs transition">
-            Uji & Simpan Endpoint
-          </button>
+
+          <div class="p-4 bg-slate-50 border border-slate-200 rounded-2xl grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
+            <div>
+              <span class="text-slate-500 block text-[11px]">Database Spreadsheet:</span>
+              <span id="adminConnectedSsName" class="font-bold text-slate-800">SMP NEGERI 1 INDONESIA HEBAT</span>
+            </div>
+            <div>
+              <span class="text-slate-500 block text-[11px]">Terakhir Tersinkron:</span>
+              <span id="adminLastSyncTime" class="font-semibold text-slate-700">Belum ada</span>
+            </div>
+          </div>
+
+          <div>
+            <div class="flex items-center justify-between mb-1.5">
+              <label class="block text-xs font-bold text-slate-700 uppercase">URL Endpoint Apps Script (/exec)</label>
+              <button type="button" onclick="resetKeBackendDefault()" class="text-xs text-blue-700 hover:text-blue-900 font-semibold flex items-center gap-1">
+                <i data-lucide="rotate-ccw" class="w-3.5 h-3.5"></i>
+                <span>Gunakan URL Bawaan Server</span>
+              </button>
+            </div>
+            <input type="text" id="inputBackendUrlConfig" placeholder="https://script.google.com/macros/s/.../exec" class="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs font-mono font-medium focus:bg-white focus:ring-2 focus:ring-blue-600 focus:outline-none">
+          </div>
+
+          <div class="grid grid-cols-1 sm:grid-cols-3 gap-2 pt-1">
+            <button type="button" onclick="jalankanDiagnostikKoneksi(document.getElementById('inputBackendUrlConfig').value)" class="py-2.5 px-3 bg-blue-50 hover:bg-blue-100 text-blue-700 border border-blue-200 font-bold rounded-xl text-xs transition flex items-center justify-center gap-1.5">
+              <i data-lucide="activity" class="w-4 h-4"></i>
+              <span>Diagnostik Koneksi</span>
+            </button>
+            <button type="button" onclick="bukaPanduanDeployGas()" class="py-2.5 px-3 bg-slate-100 hover:bg-slate-200 text-slate-800 font-bold rounded-xl text-xs transition flex items-center justify-center gap-1.5">
+              <i data-lucide="book-open" class="w-4 h-4"></i>
+              <span>Panduan Deploy</span>
+            </button>
+            <button type="button" onclick="handleSimpanBackendUrl()" class="py-2.5 px-3 bg-blue-700 hover:bg-blue-800 text-white font-bold rounded-xl text-xs transition flex items-center justify-center gap-1.5 shadow-sm">
+              <i data-lucide="check" class="w-4 h-4"></i>
+              <span>Simpan Endpoint</span>
+            </button>
+          </div>
         </div>
       </div>
     </section>
@@ -1637,32 +1673,49 @@
 
       <div class="space-y-4">
         <div>
-          <label class="block text-xs font-bold text-slate-700 uppercase mb-1">Web App URL Google Apps Script (/exec)</label>
+          <div class="flex items-center justify-between mb-1.5">
+            <label class="block text-xs font-bold text-slate-700 uppercase">Web App URL Google Apps Script (/exec)</label>
+            <button type="button" onclick="resetKeBackendDefault()" class="text-[11px] text-blue-700 hover:text-blue-900 font-semibold flex items-center gap-1">
+              <i data-lucide="rotate-ccw" class="w-3.5 h-3.5"></i>
+              <span>Kembalikan ke URL Bawaan</span>
+            </button>
+          </div>
           <input type="text" id="inputModalBackendUrl" placeholder="https://script.google.com/macros/s/.../exec" class="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs font-mono font-medium focus:bg-white focus:ring-2 focus:ring-blue-600 focus:outline-none">
         </div>
 
         <div class="p-3.5 bg-blue-50 border border-blue-200 rounded-2xl text-[11px] text-blue-900 space-y-1.5">
-          <p class="font-bold">Cara Mendapatkan Web App URL:</p>
-          <ol class="list-decimal pl-4 space-y-0.5 text-blue-800">
-            <li>Buka Spreadsheet &rarr; <b>Ekstensi</b> &rarr; <b>Apps Script</b>.</li>
-            <li>Klik tombol biru <b>Deploy</b> (kanan atas) &rarr; <b>New deployment</b>.</li>
-            <li>Pilih <b>Web app</b> &rarr; pastikan <i>Who has access</i>: <b>Anyone</b>.</li>
-            <li>Klik Deploy dan salin URL yang berakhiran <b><code>/exec</code></b>.</li>
-          </ol>
+          <p class="font-bold flex items-center gap-1.5">
+            <i data-lucide="info" class="w-3.5 h-3.5"></i>
+            <span>Syarat Wajib Deploy Google Apps Script:</span>
+          </p>
+          <ul class="list-disc pl-4 space-y-0.5 text-blue-800">
+            <li><b>Execute as:</b> Me (email Anda).</li>
+            <li><b class="text-rose-700 font-bold">Who has access:</b> Anyone (Siapa saja) &mdash; <i>Jangan pilih 'Only myself' agar koneksi tidak ditolak</i>.</li>
+            <li>Salin URL yang berakhiran <b><code>/exec</code></b> (Bukan link spreadsheet atau /dev).</li>
+          </ul>
         </div>
 
-        <div class="flex items-center gap-2 pt-2">
-          <button type="button" onclick="ujiKoneksiBackendModal()" class="w-1/2 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-800 font-bold rounded-xl text-xs transition flex items-center justify-center gap-1.5">
+        <div class="grid grid-cols-2 gap-2 pt-1">
+          <button type="button" onclick="ujiKoneksiBackendModal()" class="py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-800 font-bold rounded-xl text-xs transition flex items-center justify-center gap-1.5">
             <i data-lucide="wifi" class="w-4 h-4"></i>
-            <span>Uji Respon (Ping)</span>
+            <span>Uji Ping Cepat</span>
           </button>
-          <button type="button" onclick="simpanBackendUrlModal()" class="w-1/2 py-2.5 bg-blue-700 hover:bg-blue-800 text-white font-bold rounded-xl text-xs transition flex items-center justify-center gap-1.5 shadow-sm">
+          <button type="button" onclick="jalankanDiagnostikKoneksi(document.getElementById('inputModalBackendUrl').value)" class="py-2.5 bg-blue-50 hover:bg-blue-100 text-blue-700 border border-blue-200 font-bold rounded-xl text-xs transition flex items-center justify-center gap-1.5">
+            <i data-lucide="activity" class="w-4 h-4"></i>
+            <span>Diagnostik Lengkap</span>
+          </button>
+          <button type="button" onclick="bukaPanduanDeployGas()" class="py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold rounded-xl text-xs transition flex items-center justify-center gap-1.5">
+            <i data-lucide="book-open" class="w-4 h-4"></i>
+            <span>Panduan Deploy</span>
+          </button>
+          <button type="button" onclick="simpanBackendUrlModal()" class="py-2.5 bg-blue-700 hover:bg-blue-800 text-white font-bold rounded-xl text-xs transition flex items-center justify-center gap-1.5 shadow-sm">
             <i data-lucide="check" class="w-4 h-4"></i>
             <span>Simpan URL Ini</span>
           </button>
         </div>
       </div>
     </div>
+  </div>
   </div>
 
   <!-- MODAL ADMIN PIN -->
@@ -1750,7 +1803,7 @@
 
     // TIPS: Tempelkan URL Web App Google Apps Script (/exec) Anda di sini
     // agar SEMUA pengunjung website Vercel otomatis tersambung ke Google Spreadsheet sekolah tanpa perlu input manual di tiap HP!
-    const DEFAULT_BACKEND_URL = "https://script.google.com/macros/s/AKfycbwTjBnjT7zGPX506oNpQUpk-cUfGFJUIHIKfsvgsXIeyOXn8iejd-kZDWJG64FZ71HKLQ/exec";
+    const DEFAULT_BACKEND_URL = "https://script.google.com/macros/s/AKfycbw4946_UzONzK8FYaB2SqMR-7CjAhfjrxnJBGJLHpYmVRXu-Gnhf7HnqNNiJ3XuZSPp1Q/exec";
 
     function getBackendUrl() {
       const urlParam = new URLSearchParams(window.location.search).get('api');
@@ -1849,6 +1902,9 @@
       }
 
       try {
+        const controller = new AbortController();
+        const timeoutId = setTimeout(() => controller.abort(), 28000); // 28s timeout
+
         const res = await fetch(BACKEND_URL, {
           method: 'POST',
           mode: 'cors',
@@ -1856,13 +1912,34 @@
           headers: {
             'Content-Type': 'text/plain;charset=utf-8'
           },
-          body: JSON.stringify(payload)
+          body: JSON.stringify(payload),
+          signal: controller.signal
         });
-        const json = await res.json();
+        clearTimeout(timeoutId);
+
+        const rawText = await res.text();
+        let json = null;
+        try {
+          json = JSON.parse(rawText);
+        } catch (parseErr) {
+          if (rawText.includes("<!DOCTYPE") || rawText.includes("<html") || rawText.includes("ServiceLogin")) {
+            if (rawText.includes("ServiceLogin") || rawText.includes("accounts.google.com")) {
+              throw new Error("Izin akses ditolak Google. Pastikan setelan Deploy Apps Script: 'Who has access: Anyone' (Siapa saja).");
+            }
+            throw new Error("Server Apps Script mengembalikan halaman web HTML. Periksa deployment Web App Apps Script Anda.");
+          }
+          throw new Error("Respon server bukan format JSON yang valid: " + rawText.slice(0, 100));
+        }
         return json;
       } catch (err) {
         console.warn('Gagal call POST backend:', err);
-        return { success: false, error: err.message };
+        let errorMsg = err.message || "Gagal terhubung ke Google Sheets";
+        if (err.name === 'AbortError') {
+          errorMsg = "Koneksi ke Google Sheets timeout (lebih dari 28 detik). Silakan coba lagi.";
+        } else if (errorMsg === 'Failed to fetch') {
+          errorMsg = "Gagal terhubung (Failed to fetch). Periksa izin Web App ('Who has access: Anyone') atau periksa koneksi internet.";
+        }
+        return { success: false, error: errorMsg };
       }
     }
 
@@ -2088,8 +2165,9 @@
         }
 
         // 2. Fallback otomatis via POST jika GET gagal
+        let postResult = null;
         if (!json || !json.success) {
-          const postResult = await callBackendPost({ action: 'getInitialData' });
+          postResult = await callBackendPost({ action: 'getInitialData' });
           if (postResult && postResult.success) {
             json = postResult;
           }
@@ -2138,6 +2216,7 @@
             badge.className = "inline-flex items-center gap-1 px-2 py-0.5 bg-emerald-100 text-emerald-800 rounded-full text-[10px] font-bold border border-emerald-300 hover:bg-emerald-200 transition cursor-pointer";
           }
           if (banner) banner.classList.add('hidden');
+          updateAdminConnectionStatusUi(true);
 
           applyConfigToUi();
 
@@ -2202,16 +2281,45 @@
 
           return true;
         } else {
-          throw new Error(json ? (json.error || 'Respon data gagal') : 'Tidak ada respon dari server Apps Script.');
+          const detailErr = (postResult && postResult.error) ? postResult.error : (json && json.error ? json.error : 'Tidak ada respon dari server Apps Script.');
+          throw new Error(detailErr);
         }
       } catch (err) {
         console.warn('Gagal sinkronisasi data online:', err);
         if (badge) {
-          badge.innerHTML = `<span class="w-1.5 h-1.5 rounded-full bg-rose-500"></span><span>⚠️ Offline / Gagal</span>`;
+          badge.innerHTML = `<span class="w-1.5 h-1.5 rounded-full bg-rose-500"></span><span>❌ Offline / Gagal</span>`;
           badge.className = "inline-flex items-center gap-1 px-2 py-0.5 bg-rose-100 text-rose-800 rounded-full text-[10px] font-bold border border-rose-300 hover:bg-rose-200 transition cursor-pointer";
         }
+        if (banner) {
+          banner.classList.remove('hidden');
+          banner.className = "bg-rose-600 text-white text-xs py-2 px-4 flex items-center justify-between font-semibold shadow-xs";
+          banner.innerHTML = `
+            <div class="flex items-center gap-2">
+              <i data-lucide="alert-triangle" class="w-4 h-4 flex-shrink-0 animate-bounce"></i>
+              <span><b>Koneksi Google Sheets Terkendala:</b> ${escapeHtml(err.message || 'Gagal tersambung')}. Periksa URL atau izin deploy Web App.</span>
+            </div>
+            <button onclick="openModalSetelBackend(event)" class="bg-white text-rose-700 hover:bg-rose-50 font-bold px-3 py-1 rounded-lg text-xs shadow-xs transition flex-shrink-0 ml-3 cursor-pointer">
+              Perbaiki Koneksi
+            </button>
+          `;
+          safeCreateIcons();
+        }
+        updateAdminConnectionStatusUi(false, err.message);
+
         if (!isSilent) {
-          Swal.fire('Gagal Menyinkronkan', 'Tidak dapat mengambil data terbaru dari Google Sheets: ' + err.message, 'warning');
+          Swal.fire({
+            title: 'Gagal Menyinkronkan',
+            text: 'Tidak dapat mengambil data terbaru dari Google Sheets: ' + err.message,
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonText: 'Diagnostik Koneksi',
+            cancelButtonText: 'Tutup',
+            confirmButtonColor: '#1d4ed8'
+          }).then((r) => {
+            if (r.isConfirmed) {
+              jalankanDiagnostikKoneksi();
+            }
+          });
         }
         return false;
       } finally {
@@ -2357,7 +2465,10 @@
         if (document.getElementById('cfgIzinCetakNilai')) {
           document.getElementById('cfgIzinCetakNilai').value = appConfig.IZIN_CETAK_NILAI || "DIBUKA";
         }
-        document.getElementById('inputBackendUrlConfig').value = BACKEND_URL || "";
+        if (document.getElementById('inputBackendUrlConfig')) {
+          document.getElementById('inputBackendUrlConfig').value = BACKEND_URL || "";
+        }
+        updateAdminConnectionStatusUi(Boolean(BACKEND_URL));
       }
     }
 
@@ -5099,9 +5210,38 @@
       reader.readAsDataURL(file);
     }
 
+    function updateAdminConnectionStatusUi(isOnline, errMsg) {
+      const badge = document.getElementById('adminConnectionStatusBadge');
+      const text = document.getElementById('adminConnectionStatusText');
+      const nameEl = document.getElementById('adminConnectedSsName');
+      const timeEl = document.getElementById('adminLastSyncTime');
+
+      if (timeEl) {
+        const d = new Date();
+        timeEl.innerText = d.toLocaleDateString('id-ID', { day: 'numeric', month: 'short' }) + ' ' + d.toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+      }
+
+      if (nameEl && appConfig && appConfig.NAMA_SEKOLAH) {
+        nameEl.innerText = appConfig.NAMA_SEKOLAH;
+      }
+
+      if (badge && text) {
+        if (isOnline) {
+          badge.className = "inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-emerald-100 text-emerald-800 border border-emerald-300";
+          badge.innerHTML = `<span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span><span>Online / Terhubung</span>`;
+        } else {
+          badge.className = "inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-rose-100 text-rose-800 border border-rose-300";
+          badge.innerHTML = `<span class="w-2 h-2 rounded-full bg-rose-500"></span><span>Offline: ${(errMsg || 'Gagal Konek').slice(0, 30)}</span>`;
+        }
+      }
+    }
+
     function openModalSetelBackend(e) {
       if (e) e.stopPropagation();
-      document.getElementById('inputModalBackendUrl').value = getBackendUrl();
+      const current = getBackendUrl();
+      if (document.getElementById('inputModalBackendUrl')) {
+        document.getElementById('inputModalBackendUrl').value = current;
+      }
       document.getElementById('modalSetelBackendGas').classList.remove('hidden');
       safeCreateIcons();
     }
@@ -5110,31 +5250,88 @@
       document.getElementById('modalSetelBackendGas').classList.add('hidden');
     }
 
+    function resetKeBackendDefault() {
+      localStorage.removeItem("SUPERAPP_BACKEND_URL");
+      BACKEND_URL = DEFAULT_BACKEND_URL;
+      if (document.getElementById('inputModalBackendUrl')) document.getElementById('inputModalBackendUrl').value = DEFAULT_BACKEND_URL;
+      if (document.getElementById('inputBackendUrlConfig')) document.getElementById('inputBackendUrlConfig').value = DEFAULT_BACKEND_URL;
+      
+      Swal.fire({
+        title: 'URL Bawaan Dipulihkan! 🟢',
+        text: 'Mengembalikan ke Google Apps Script backend resmi bawaan aplikasi. Menyinkronkan data...',
+        icon: 'success',
+        timer: 1800,
+        showConfirmButton: false
+      });
+      closeModalSetelBackend();
+      syncDataFromGoogleSheets(false, true);
+    }
+
+    function bukaPanduanDeployGas() {
+      Swal.fire({
+        title: 'Panduan Deploy Google Apps Script 🚀',
+        html: `
+          <div class="text-left text-xs space-y-3 text-slate-700 max-h-[70vh] overflow-y-auto pr-1">
+            <div class="p-3 bg-blue-50 border border-blue-200 rounded-xl space-y-1">
+              <p class="font-bold text-blue-900">1. Buka Skrip dari Google Spreadsheet</p>
+              <p class="text-blue-800 text-[11px]">Buka Google Sheet database Anda &rarr; klik menu atas <b>Ekstensi</b> &rarr; pilih <b>Apps Script</b>.</p>
+            </div>
+            <div class="p-3 bg-blue-50 border border-blue-200 rounded-xl space-y-1">
+              <p class="font-bold text-blue-900">2. Tempel Kode Code.gs</p>
+              <p class="text-blue-800 text-[11px]">Hapus seluruh kode lama di Apps Script, salin dan tempelkan seluruh isi file <b>Code.gs</b> terbaru, lalu klik ikon <b>Simpan (Ctrl+S)</b>.</p>
+            </div>
+            <div class="p-3 bg-amber-50 border border-amber-300 rounded-xl space-y-1">
+              <p class="font-bold text-amber-950">3. Deploy Web App (PENTING!)</p>
+              <p class="text-amber-900 text-[11px] leading-relaxed">
+                &bull; Klik tombol biru <b>Deploy</b> (kanan atas) &rarr; pilih <b>Manage deployments</b> (jika sudah ada) atau <b>New deployment</b>.<br>
+                &bull; Tipe: <b>Web app</b>.<br>
+                &bull; Execute as: <b>Me (email Anda)</b>.<br>
+                &bull; <b class="text-rose-700 font-bold underline">Who has access: Anyone (Siapa saja)</b>. <br><i>(Wajib 'Anyone', jangan pilih 'Only myself' agar koneksi frontend tidak ditolak!)</i>
+              </p>
+            </div>
+            <div class="p-3 bg-blue-50 border border-blue-200 rounded-xl space-y-1">
+              <p class="font-bold text-blue-900">4. Salin URL /exec & Tempel</p>
+              <p class="text-blue-800 text-[11px]">Salin Web App URL yang berakhiran <b><code>/exec</code></b>, lalu tempelkan di aplikasi dan klik <b>Simpan</b>.</p>
+            </div>
+          </div>
+        `,
+        confirmButtonText: 'Saya Mengerti',
+        confirmButtonColor: '#1d4ed8'
+      });
+    }
+
+    function tampilkanModalSalahLinkSpreadsheet(rawUrl) {
+      Swal.fire({
+        title: 'Salah Format Link! ⚠️',
+        html: `
+          <div class="text-left text-xs space-y-2 text-slate-700">
+            <p>Link yang Anda tempel adalah <b>Link Google Spreadsheet</b>:</p>
+            <code class="text-rose-600 block bg-slate-100 p-2 rounded text-[10px] break-all">${escapeHtml(rawUrl)}</code>
+            <p class="font-bold text-slate-800 mt-2">Yang dibutuhkan adalah Web App URL Google Apps Script (/exec):</p>
+            <ol class="list-decimal pl-4 space-y-1 text-slate-600">
+              <li>Buka Spreadsheet Anda &gt; <b>Ekstensi</b> &gt; <b>Apps Script</b>.</li>
+              <li>Klik tombol biru <b>Deploy &gt; New deployment</b>.</li>
+              <li>Pilih <b>Web app</b> &gt; pastikan <i>Who has access</i>: <b>Anyone</b>.</li>
+              <li>Salin link berakhiran <b><code>/exec</code></b> lalu tempel di sini.</li>
+            </ol>
+          </div>
+        `,
+        icon: 'warning',
+        confirmButtonColor: '#1d4ed8',
+        confirmButtonText: 'Buka Panduan Lengkap'
+      }).then((r) => {
+        if (r.isConfirmed) bukaPanduanDeployGas();
+      });
+    }
+
     async function ujiKoneksiBackendModal() {
       const raw = document.getElementById('inputModalBackendUrl').value.trim();
       if (!raw) {
         Swal.fire('Perhatian', 'Silakan tempel URL Web App Google Apps Script Anda!', 'warning');
         return;
       }
-
       if (raw.includes('docs.google.com/spreadsheets')) {
-        Swal.fire({
-          title: 'Salah Format Link! ⚠️',
-          html: `
-            <div class="text-left text-xs space-y-2 text-slate-700">
-              <p>Link yang Anda tempel adalah <b>Link Google Spreadsheet</b>:</p>
-              <code class="text-rose-600 block bg-slate-100 p-2 rounded text-[10px] break-all">${raw}</code>
-              <p class="font-bold text-slate-800">Yang dibutuhkan adalah Web App URL Google Apps Script (/exec):</p>
-              <ol class="list-decimal pl-4 space-y-1 text-slate-600">
-                <li>Buka Spreadsheet &gt; <b>Ekstensi</b> &gt; <b>Apps Script</b>.</li>
-                <li>Klik tombol biru <b>Deploy &gt; New deployment</b>.</li>
-                <li>Pilih <b>Web app</b> &gt; pastikan <i>Who has access</i>: <b>Anyone</b>.</li>
-                <li>Salin link berakhiran <b><code>/exec</code></b>.</li>
-              </ol>
-            </div>
-          `,
-          icon: 'warning'
-        });
+        tampilkanModalSalahLinkSpreadsheet(raw);
         return;
       }
 
@@ -5145,12 +5342,13 @@
       }
 
       Swal.fire({
-        title: 'Menguji Koneksi...',
-        text: 'Menghubungkan ke Google Apps Script',
+        title: 'Menguji Ping Respon...',
+        text: 'Mengirim paket uji GET dan POST ke Google Apps Script',
         allowOutsideClick: false,
         didOpen: () => { Swal.showLoading(); }
       });
 
+      const startTime = performance.now();
       try {
         const sep = testUrl.includes('?') ? '&' : '?';
         const pingUrl = `${testUrl}${sep}action=ping&_t=${Date.now()}`;
@@ -5186,30 +5384,312 @@
           }
         }
 
+        const elapsed = Math.round(performance.now() - startTime);
+
         if (json && json.success) {
+          const ssName = json.spreadsheetName ? `\n(Spreadsheet: ${json.spreadsheetName})` : '';
           Swal.fire({
             title: 'Koneksi Berhasil! 🟢',
-            text: 'Backend Apps Script merespons aktif! Silakan klik tombol "Simpan URL Ini".',
-            icon: 'success'
+            text: `Backend Apps Script merespons aktif dalam ${elapsed} ms!${ssName} Silakan klik tombol "Simpan URL Ini".`,
+            icon: 'success',
+            confirmButtonText: 'OK',
+            confirmButtonColor: '#1d4ed8'
           });
         } else {
-          throw new Error('Tidak ada respon aktif dari Apps Script. Pastikan Who has access: Anyone.');
+          throw new Error('Tidak ada respon aktif dari Apps Script. Pastikan opsi Deploy "Who has access" disetel ke "Anyone" (Siapa saja).');
         }
       } catch (err) {
         Swal.fire({
           title: 'Uji Koneksi Gagal 🔴',
           html: `
             <div class="text-left text-xs space-y-2 text-slate-700">
-              <p>Gagal menghubungi Apps Script: <b>${err.message}</b></p>
+              <p>Gagal menghubungi Apps Script: <b>${escapeHtml(err.message)}</b></p>
               <p class="font-semibold text-slate-800">Pastikan 3 hal ini di Google Apps Script Anda:</p>
               <ul class="list-disc pl-4 space-y-1 text-slate-600">
                 <li>Sudah menyalin seluruh kode <code>Code.gs</code> dan klik <b>Simpan</b>.</li>
                 <li>Saat Deploy, opsi <b>"Who has access"</b> wajib dipilih: <b>"Anyone" (Siapa saja)</b>.</li>
                 <li>Jika mengedit kode sebelumnya, buat <b>New Version</b> saat deploy.</li>
               </ul>
+              <div class="pt-2 flex items-center justify-between">
+                <button type="button" onclick="jalankanDiagnostikKoneksi('${testUrl}')" class="px-3 py-1.5 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-lg text-xs transition">
+                  Diagnostik Lengkap
+                </button>
+                <button type="button" onclick="resetKeBackendDefault()" class="px-3 py-1.5 bg-slate-200 hover:bg-slate-300 text-slate-800 font-bold rounded-lg text-xs transition">
+                  Gunakan URL Bawaan
+                </button>
+              </div>
             </div>
           `,
-          icon: 'error'
+          icon: 'error',
+          showConfirmButton: false,
+          showCloseButton: true
+        });
+      }
+    }
+
+    async function jalankanDiagnostikKoneksi(customUrl) {
+      let url = (customUrl || (document.getElementById('inputModalBackendUrl') ? document.getElementById('inputModalBackendUrl').value : '') || (document.getElementById('inputBackendUrlConfig') ? document.getElementById('inputBackendUrlConfig').value : '') || getBackendUrl() || "").trim();
+
+      if (!url) {
+        Swal.fire('Perhatian', 'Silakan masukkan URL Web App Google Apps Script (/exec) terlebih dahulu.', 'warning');
+        return;
+      }
+
+      if (url.includes('docs.google.com/spreadsheets')) {
+        tampilkanModalSalahLinkSpreadsheet(url);
+        return;
+      }
+
+      if (url.endsWith('/dev')) {
+        url = url.slice(0, -4) + '/exec';
+        if (document.getElementById('inputModalBackendUrl')) document.getElementById('inputModalBackendUrl').value = url;
+        if (document.getElementById('inputBackendUrlConfig')) document.getElementById('inputBackendUrlConfig').value = url;
+      }
+
+      Swal.fire({
+        title: 'Menjalankan Diagnostik Koneksi...',
+        html: `
+          <div class="text-left text-xs space-y-3 p-2 font-mono">
+            <div id="diagStep1" class="flex items-center gap-2 text-slate-500">
+              <span class="inline-block w-4 h-4 rounded-full border-2 border-slate-300 border-t-blue-600 animate-spin"></span>
+              <span>1. Validasi Format Endpoint URL...</span>
+            </div>
+            <div id="diagStep2" class="flex items-center gap-2 text-slate-400">
+              <span class="w-4 h-4 rounded-full bg-slate-200 text-center text-[10px] leading-4 text-slate-600 font-bold">2</span>
+              <span>2. Uji HTTP GET Ping & Latensi Server...</span>
+            </div>
+            <div id="diagStep3" class="flex items-center gap-2 text-slate-400">
+              <span class="w-4 h-4 rounded-full bg-slate-200 text-center text-[10px] leading-4 text-slate-600 font-bold">3</span>
+              <span>3. Uji HTTP POST Ping & Respon JSON...</span>
+            </div>
+            <div id="diagStep4" class="flex items-center gap-2 text-slate-400">
+              <span class="w-4 h-4 rounded-full bg-slate-200 text-center text-[10px] leading-4 text-slate-600 font-bold">4</span>
+              <span>4. Pengambilan Data 12 Tab Google Sheets...</span>
+            </div>
+          </div>
+        `,
+        showConfirmButton: false,
+        allowOutsideClick: false
+      });
+
+      const sep = url.includes('?') ? '&' : '?';
+      let report = {
+        url: url,
+        step1: false,
+        step2: false,
+        step3: false,
+        step4: false,
+        latencyGet: 0,
+        latencyPost: 0,
+        ssName: '',
+        siswaCount: 0,
+        guruCount: 0,
+        error: null,
+        suggestion: ''
+      };
+
+      try {
+        // Step 1: Format check
+        await new Promise(r => setTimeout(r, 200));
+        const step1El = document.getElementById('diagStep1');
+        if (!url.startsWith('https://') || !url.includes('/exec')) {
+          if (step1El) step1El.innerHTML = `<span class="text-rose-600 font-bold">❌</span><span class="text-rose-600">1. Format URL Tidak Sesuai (Wajib /exec)</span>`;
+          report.suggestion = "Pastikan URL berakhiran <b>/exec</b> bukan <b>/dev</b> atau link Google Sheets.";
+          throw new Error("Format URL tidak valid. Web App wajib berakhiran /exec.");
+        }
+        report.step1 = true;
+        if (step1El) step1El.innerHTML = `<span class="text-emerald-600 font-bold">✓</span><span class="text-slate-800 font-semibold">1. Format URL Endpoint Valid (/exec)</span>`;
+
+        // Step 2: GET Ping
+        const step2El = document.getElementById('diagStep2');
+        if (step2El) {
+          step2El.className = "flex items-center gap-2 text-slate-600";
+          step2El.innerHTML = `<span class="inline-block w-4 h-4 rounded-full border-2 border-slate-300 border-t-blue-600 animate-spin"></span><span>2. Menguji HTTP GET Ping...</span>`;
+        }
+        const t0 = performance.now();
+        let getResp = null;
+        let getRaw = "";
+        try {
+          const gRes = await fetch(`${url}${sep}action=ping&_t=${Date.now()}`, { method: 'GET', mode: 'cors', redirect: 'follow' });
+          report.latencyGet = Math.round(performance.now() - t0);
+          getRaw = await gRes.text();
+          try { getResp = JSON.parse(getRaw); } catch(e){}
+        } catch(err) {
+          console.warn("GET test failed:", err);
+        }
+
+        if (getResp && getResp.success) {
+          report.step2 = true;
+          if (getResp.spreadsheetName) report.ssName = getResp.spreadsheetName;
+          if (step2El) step2El.innerHTML = `<span class="text-emerald-600 font-bold">✓</span><span class="text-slate-800 font-semibold">2. HTTP GET Aktif (${report.latencyGet} ms)</span>`;
+        } else {
+          if (getRaw.includes("ServiceLogin") || getRaw.includes("accounts.google.com")) {
+            if (step2El) step2El.innerHTML = `<span class="text-rose-600 font-bold">❌</span><span class="text-rose-600">2. Akses Ditolak (Izin Apps Script Bukan 'Anyone')</span>`;
+            report.suggestion = "Izin Web App Apps Script disetel ke <b>'Hanya saya' (Only myself)</b>. Buka Apps Script &gt; Deploy &gt; Manage Deployments &gt; Edit &gt; ubah <b>Who has access</b> ke <b>'Anyone' (Siapa saja)</b>.";
+            throw new Error("Akses Ditolak: 'Who has access' belum disetel ke 'Anyone'.");
+          }
+          if (step2El) step2El.innerHTML = `<span class="text-amber-600 font-bold">⚠️</span><span class="text-amber-800">2. HTTP GET Terhambat, mencoba POST...</span>`;
+        }
+
+        // Step 3: POST Ping
+        const step3El = document.getElementById('diagStep3');
+        if (step3El) {
+          step3El.className = "flex items-center gap-2 text-slate-600";
+          step3El.innerHTML = `<span class="inline-block w-4 h-4 rounded-full border-2 border-slate-300 border-t-blue-600 animate-spin"></span><span>3. Menguji HTTP POST Ping...</span>`;
+        }
+        const t1 = performance.now();
+        let postResp = null;
+        let postRaw = "";
+        try {
+          const pRes = await fetch(url, {
+            method: 'POST',
+            mode: 'cors',
+            redirect: 'follow',
+            headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+            body: JSON.stringify({ action: 'ping' })
+          });
+          report.latencyPost = Math.round(performance.now() - t1);
+          postRaw = await pRes.text();
+          try { postResp = JSON.parse(postRaw); } catch(e){}
+        } catch(err) {
+          console.warn("POST test failed:", err);
+        }
+
+        if (postResp && postResp.success) {
+          report.step3 = true;
+          if (postResp.spreadsheetName && !report.ssName) report.ssName = postResp.spreadsheetName;
+          if (step3El) step3El.innerHTML = `<span class="text-emerald-600 font-bold">✓</span><span class="text-slate-800 font-semibold">3. HTTP POST Berhasil (${report.latencyPost} ms)</span>`;
+        } else {
+          if (postRaw.includes("ServiceLogin") || postRaw.includes("accounts.google.com")) {
+            if (step3El) step3El.innerHTML = `<span class="text-rose-600 font-bold">❌</span><span class="text-rose-600">3. Akses Ditolak (Izin Apps Script Bukan 'Anyone')</span>`;
+            report.suggestion = "Izin Web App Apps Script disetel ke <b>'Hanya saya' (Only myself)</b>. Ubah ke <b>'Anyone' (Siapa saja)</b> pada Deploy &gt; Manage Deployments.";
+            throw new Error("Akses Ditolak: 'Who has access' belum disetel ke 'Anyone'.");
+          }
+          if (!report.step2 && !report.step3) {
+            if (step3El) step3El.innerHTML = `<span class="text-rose-600 font-bold">❌</span><span class="text-rose-600">3. Gagal Terhubung ke Endpoint</span>`;
+            report.suggestion = "Periksa apakah skrip Apps Script sudah di-Deploy sebagai <b>Web App</b> dengan akses <b>Anyone</b>, dan pastikan koneksi internet aktif.";
+            throw new Error("Endpoint Apps Script tidak merespons request GET maupun POST.");
+          } else {
+            if (step3El) step3El.innerHTML = `<span class="text-amber-600 font-bold">⚠️</span><span class="text-slate-700">3. POST Terbatas, tapi GET Aktif</span>`;
+          }
+        }
+
+        // Step 4: Initial Data Verification
+        const step4El = document.getElementById('diagStep4');
+        if (step4El) {
+          step4El.className = "flex items-center gap-2 text-slate-600";
+          step4El.innerHTML = `<span class="inline-block w-4 h-4 rounded-full border-2 border-slate-300 border-t-blue-600 animate-spin"></span><span>4. Mengambil data 12 tab dari Google Sheets...</span>`;
+        }
+
+        let initData = null;
+        try {
+          const resInit = await fetch(`${url}${sep}action=getInitialData&_t=${Date.now()}`, {
+            method: 'GET',
+            mode: 'cors',
+            redirect: 'follow'
+          });
+          if (resInit.ok) {
+            const textInit = await resInit.text();
+            try { initData = JSON.parse(textInit); } catch(e){}
+          }
+        } catch(e){}
+
+        if (!initData || !initData.success) {
+          const pRes = await callBackendPost({ action: 'getInitialData' });
+          if (pRes && pRes.success) initData = pRes;
+        }
+
+        if (initData && initData.success) {
+          report.step4 = true;
+          report.siswaCount = (initData.siswa || []).length;
+          report.guruCount = (initData.guru || []).length;
+          if (initData.config && initData.config.NAMA_SEKOLAH) report.ssName = initData.config.NAMA_SEKOLAH;
+          if (step4El) step4El.innerHTML = `<span class="text-emerald-600 font-bold">✓</span><span class="text-slate-800 font-semibold">4. Database 12 Tab Terhubung (${report.siswaCount} Siswa, ${report.guruCount} Guru)</span>`;
+        } else {
+          const errMsg = (initData && initData.error) ? initData.error : "Gagal membaca tab database";
+          if (errMsg.includes("getSheetByName") || errMsg.includes("Spreadsheet tidak ditemukan")) {
+            if (step4El) step4El.innerHTML = `<span class="text-rose-600 font-bold">❌</span><span class="text-rose-600">4. Skrip Tidak Terikat ke Google Sheets</span>`;
+            report.suggestion = "Skrip Apps Script ini dibuat terpisah (Standalone). Silakan buka file <b>Google Spreadsheet</b> Anda, klik menu <b>Ekstensi &gt; Apps Script</b>, dan pasang kode <code>Code.gs</code> di sana.";
+          } else {
+            if (step4El) step4El.innerHTML = `<span class="text-amber-600 font-bold">⚠️</span><span class="text-amber-700">4. Respon Data: ${escapeHtml(errMsg)}</span>`;
+          }
+        }
+
+        // Tampilkan Hasil Diagnostik
+        await new Promise(r => setTimeout(r, 600));
+        Swal.fire({
+          icon: 'success',
+          title: 'Diagnostik Selesai: Terhubung! 🟢',
+          html: `
+            <div class="text-left text-xs space-y-3 text-slate-700 bg-slate-50 p-4 rounded-2xl border border-slate-200">
+              <div class="flex items-center justify-between pb-2 border-b border-slate-200">
+                <span class="font-bold text-slate-900">Database Sekolah:</span>
+                <span class="font-semibold text-blue-700">${report.ssName || 'Google Sheets Super App'}</span>
+              </div>
+              <div class="grid grid-cols-2 gap-2 text-[11px]">
+                <div class="bg-white p-2.5 rounded-xl border border-slate-200">
+                  <span class="text-slate-500 block">Respon Ping GET:</span>
+                  <span class="font-bold text-emerald-600">${report.latencyGet ? report.latencyGet + ' ms' : 'OK'}</span>
+                </div>
+                <div class="bg-white p-2.5 rounded-xl border border-slate-200">
+                  <span class="text-slate-500 block">Respon Ping POST:</span>
+                  <span class="font-bold text-emerald-600">${report.latencyPost ? report.latencyPost + ' ms' : 'OK'}</span>
+                </div>
+                <div class="bg-white p-2.5 rounded-xl border border-slate-200">
+                  <span class="text-slate-500 block">Master Siswa:</span>
+                  <span class="font-bold text-slate-800">${report.siswaCount} Data Siswa</span>
+                </div>
+                <div class="bg-white p-2.5 rounded-xl border border-slate-200">
+                  <span class="text-slate-500 block">Master Guru / Walas:</span>
+                  <span class="font-bold text-slate-800">${report.guruCount} Data Pendidik</span>
+                </div>
+              </div>
+              <p class="text-slate-600 text-[11px] leading-relaxed">
+                Koneksi Google Apps Script dan Google Spreadsheet berfungsi sempurna! Anda dapat menyimpan endpoint ini.
+              </p>
+            </div>
+          `,
+          showCancelButton: true,
+          confirmButtonText: 'Simpan URL Ini Sekarang',
+          cancelButtonText: 'Tutup',
+          confirmButtonColor: '#1d4ed8'
+        }).then(async (resClick) => {
+          if (resClick.isConfirmed) {
+            BACKEND_URL = url;
+            localStorage.setItem("SUPERAPP_BACKEND_URL", url);
+            if (document.getElementById('inputModalBackendUrl')) document.getElementById('inputModalBackendUrl').value = url;
+            if (document.getElementById('inputBackendUrlConfig')) document.getElementById('inputBackendUrlConfig').value = url;
+            closeModalSetelBackend();
+            await syncDataFromGoogleSheets(false, true);
+          }
+        });
+
+      } catch(err) {
+        Swal.fire({
+          icon: 'error',
+          title: 'Diagnostik: Gagal Terhubung 🔴',
+          html: `
+            <div class="text-left text-xs space-y-3 text-slate-700 bg-rose-50 p-4 rounded-2xl border border-rose-200">
+              <div>
+                <span class="font-bold text-rose-800 block mb-1">Penyebab Kegagalan:</span>
+                <p class="text-rose-700 font-mono text-[11px] bg-white p-2 rounded-lg border border-rose-200">${escapeHtml(err.message)}</p>
+              </div>
+              <div class="p-3 bg-white rounded-xl border border-rose-200 space-y-1.5 text-[11px] text-slate-700">
+                <span class="font-bold text-slate-900 block">💡 Solusi / Cara Mengatasi:</span>
+                <p class="leading-relaxed">${report.suggestion || 'Periksa pengaturan Deploy pada Google Apps Script Anda. Pastikan Who has access: Anyone.'}</p>
+              </div>
+              <div class="pt-2 flex items-center justify-between">
+                <button type="button" onclick="resetKeBackendDefault()" class="px-3 py-1.5 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-lg text-xs transition">
+                  Kembalikan ke URL Bawaan
+                </button>
+                <button type="button" onclick="bukaPanduanDeployGas()" class="px-3 py-1.5 bg-slate-200 hover:bg-slate-300 text-slate-800 font-bold rounded-lg text-xs transition">
+                  Lihat Panduan Deploy
+                </button>
+              </div>
+            </div>
+          `,
+          showConfirmButton: false,
+          showCloseButton: true
         });
       }
     }
@@ -5226,7 +5706,7 @@
       }
 
       if (raw.includes('docs.google.com/spreadsheets')) {
-        Swal.fire('Salah Format Link', 'Link yang ditempel adalah link Spreadsheet, bukan URL Web App (/exec)!', 'warning');
+        tampilkanModalSalahLinkSpreadsheet(raw);
         return;
       }
 
@@ -5240,8 +5720,14 @@
       }
 
       closeModalSetelBackend();
-      Swal.fire('Tersimpan! 🟢', 'URL Google Apps Script berhasil disimpan secara permanen. Memuat data dari Google Spreadsheet...', 'success');
-      loadInitialData();
+      Swal.fire({
+        title: 'Tersimpan! 🟢',
+        text: 'URL Google Apps Script berhasil disimpan secara permanen. Menghubungkan ke Google Spreadsheet...',
+        icon: 'success',
+        timer: 1500,
+        showConfirmButton: false
+      });
+      syncDataFromGoogleSheets(false, true);
     }
 
     function handleSimpanBackendUrl() {
@@ -5255,7 +5741,7 @@
       }
 
       if (url.includes('docs.google.com/spreadsheets')) {
-        Swal.fire('Salah Format Link', 'Link yang ditempel adalah link Spreadsheet, bukan URL Web App (/exec)!', 'warning');
+        tampilkanModalSalahLinkSpreadsheet(url);
         return;
       }
 
@@ -5265,8 +5751,18 @@
       BACKEND_URL = finalUrl;
       localStorage.setItem("SUPERAPP_BACKEND_URL", finalUrl);
       document.getElementById('inputBackendUrlConfig').value = finalUrl;
-      Swal.fire('Endpoint Tersimpan! 🟢', 'URL backend Apps Script tersimpan permanen. Menghubungkan ke Google Sheets...', 'success');
-      loadInitialData();
+      if (document.getElementById('inputModalBackendUrl')) {
+        document.getElementById('inputModalBackendUrl').value = finalUrl;
+      }
+
+      Swal.fire({
+        title: 'Endpoint Tersimpan! 🟢',
+        text: 'URL backend Apps Script tersimpan permanen. Menghubungkan ke Google Sheets...',
+        icon: 'success',
+        timer: 1500,
+        showConfirmButton: false
+      });
+      syncDataFromGoogleSheets(false, true);
     }
 
     // -------------------------------------------------------------
