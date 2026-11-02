@@ -46,7 +46,20 @@ function doGet(e) {
 
     try {
       if (action === "ping") {
-        result = { success: true, message: "Super App Sekolah API Aktif", timestamp: new Date().toISOString() };
+        let ssName = "Tidak Terdeteksi";
+        let ssId = "";
+        try {
+          const targetSs = getSS();
+          ssName = targetSs.getName();
+          ssId = targetSs.getId();
+        } catch(e){}
+        result = { 
+          success: true, 
+          message: "Super App Sekolah API Aktif", 
+          spreadsheetName: ssName,
+          spreadsheetId: ssId,
+          timestamp: new Date().toISOString() 
+        };
       } else if (action === "getInitialData") {
         result = getInitialData();
       } else if (action === "getPresensiHarian") {
@@ -91,16 +104,6 @@ function doGet(e) {
  * Entry Point POST (Menerima Request dari Frontend Vercel)
  */
 function doPost(e) {
-  let lock = LockService.getScriptLock();
-  try {
-    lock.waitLock(15000); // Kunci concurrency 15 detik
-  } catch (lockErr) {
-    return ContentService.createTextOutput(JSON.stringify({ 
-      success: false, 
-      error: "Sistem sedang sibuk memproses data lain, silakan coba 5 detik lagi." 
-    })).setMimeType(ContentService.MimeType.JSON);
-  }
-
   try {
     let payload = {};
     if (e && e.postData && e.postData.contents) {
@@ -113,61 +116,100 @@ function doPost(e) {
       payload = e.parameter;
     }
 
-    const action = payload.action;
+    const action = payload.action || (e && e.parameter && e.parameter.action);
     let response = { success: false, error: "Action tidak ditentukan: " + (action || 'kosong') };
 
+    // -------------------------------------------------------------
+    // OPERASI READ-ONLY (Tanpa LockService agar Respons Cepat & Tidak Antre)
+    // -------------------------------------------------------------
     if (action === "ping") {
-      response = { success: true, message: "Super App Sekolah API Aktif", timestamp: new Date().toISOString() };
+      let ssName = "Tidak Terdeteksi";
+      let ssId = "";
+      try {
+        const targetSs = getSS();
+        ssName = targetSs.getName();
+        ssId = targetSs.getId();
+      } catch(e){}
+      return ContentService.createTextOutput(JSON.stringify({ 
+        success: true, 
+        message: "Super App Sekolah API Aktif", 
+        spreadsheetName: ssName,
+        spreadsheetId: ssId,
+        timestamp: new Date().toISOString() 
+      })).setMimeType(ContentService.MimeType.JSON);
     } else if (action === "getInitialData") {
       response = getInitialData();
+      return ContentService.createTextOutput(JSON.stringify(response))
+        .setMimeType(ContentService.MimeType.JSON);
     } else if (action === "loginUser") {
       response = loginUser(payload.role, payload.identifier, payload.pin);
-    } else if (action === "simpanPresensiHarian") {
-      response = simpanPresensiHarian(payload.tanggal, payload.kelas, payload.dataAbsen, payload.dicatatOleh);
-    } else if (action === "simpanPresensiEkskul") {
-      response = simpanPresensiEkskul(payload.tanggal, payload.idEkskul, payload.dataAbsen, payload.dicatatOleh);
-    } else if (action === "daftarEkskulMandiri") {
-      response = daftarEkskulMandiri(payload.nisn, payload.nama, payload.kelas, payload.idEkskul, payload.namaEkskul);
-    } else if (action === "batalEkskulMandiri") {
-      response = batalEkskulMandiri(payload.nisn, payload.idEkskul);
-    } else if (action === "simpanNilaiUlangan") {
-      response = simpanNilaiUlangan(payload.dataNilai, payload.inputOleh);
-    } else if (action === "simpanKelulusan") {
-      response = simpanKelulusan(payload.dataKelulusan, payload.pin);
-    } else if (action === "simpan7Kebiasaan") {
-      response = simpan7Kebiasaan(payload.laporan);
-    } else if (action === "validasi7Kebiasaan") {
-      response = validasi7Kebiasaan(payload.idLog, payload.statusValidasi, payload.catatanGuru, payload.nipValidator);
-    } else if (action === "simpanPelanggaran") {
-      response = simpanPelanggaran(payload.pelanggaran);
-    } else if (action === "updateStatusBK") {
-      response = updateStatusBK(payload.idLog, payload.statusBK, payload.catatanKasus, payload.sanksi);
-    } else if (action === "simpanPengaturan") {
-      response = simpanPengaturan(payload.config, payload.pin);
-    } else if (action === "simpanMasterSiswa") {
-      response = simpanMasterSiswa(payload.siswaList, payload.pin);
-    } else if (action === "updateGuruWaliSiswa") {
-      response = updateGuruWaliSiswa(payload.assignments, payload.pin);
-    } else if (action === "simpanMasterGuru") {
-      response = simpanMasterGuru(payload.guruList, payload.pin);
-    } else if (action === "simpanMasterEkskul") {
-      response = simpanMasterEkskul(payload.ekskulList, payload.pin);
-    } else if (action === "updateProfilSiswa") {
-      response = updateProfilSiswa(payload.nisn, payload.noHpOrtu);
+      return ContentService.createTextOutput(JSON.stringify(response))
+        .setMimeType(ContentService.MimeType.JSON);
     } else if (action === "verifyAdminPin") {
       response = verifyAdminPin(payload.pin);
+      return ContentService.createTextOutput(JSON.stringify(response))
+        .setMimeType(ContentService.MimeType.JSON);
     }
 
-    return ContentService.createTextOutput(JSON.stringify(response))
-      .setMimeType(ContentService.MimeType.JSON);
+    // -------------------------------------------------------------
+    // OPERASI WRITE / TRANSAKSI DATABASE (Gunakan LockService Concurrency)
+    // -------------------------------------------------------------
+    let lock = LockService.getScriptLock();
+    try {
+      lock.waitLock(15000); // Kunci concurrency 15 detik
+    } catch (lockErr) {
+      return ContentService.createTextOutput(JSON.stringify({ 
+        success: false, 
+        error: "Sistem sedang memproses data lain, silakan coba beberapa saat lagi." 
+      })).setMimeType(ContentService.MimeType.JSON);
+    }
+
+    try {
+      if (action === "simpanPresensiHarian") {
+        response = simpanPresensiHarian(payload.tanggal, payload.kelas, payload.dataAbsen, payload.dicatatOleh);
+      } else if (action === "simpanPresensiEkskul") {
+        response = simpanPresensiEkskul(payload.tanggal, payload.idEkskul, payload.dataAbsen, payload.dicatatOleh);
+      } else if (action === "daftarEkskulMandiri") {
+        response = daftarEkskulMandiri(payload.nisn, payload.nama, payload.kelas, payload.idEkskul, payload.namaEkskul);
+      } else if (action === "batalEkskulMandiri") {
+        response = batalEkskulMandiri(payload.nisn, payload.idEkskul);
+      } else if (action === "simpanNilaiUlangan") {
+        response = simpanNilaiUlangan(payload.dataNilai, payload.inputOleh);
+      } else if (action === "simpanKelulusan") {
+        response = simpanKelulusan(payload.dataKelulusan, payload.pin);
+      } else if (action === "simpan7Kebiasaan") {
+        response = simpan7Kebiasaan(payload.laporan);
+      } else if (action === "validasi7Kebiasaan") {
+        response = validasi7Kebiasaan(payload.idLog, payload.statusValidasi, payload.catatanGuru, payload.nipValidator);
+      } else if (action === "simpanPelanggaran") {
+        response = simpanPelanggaran(payload.pelanggaran);
+      } else if (action === "updateStatusBK") {
+        response = updateStatusBK(payload.idLog, payload.statusBK, payload.catatanKasus, payload.sanksi);
+      } else if (action === "simpanPengaturan") {
+        response = simpanPengaturan(payload.config, payload.pin);
+      } else if (action === "simpanMasterSiswa") {
+        response = simpanMasterSiswa(payload.siswaList, payload.pin);
+      } else if (action === "updateGuruWaliSiswa") {
+        response = updateGuruWaliSiswa(payload.assignments, payload.pin);
+      } else if (action === "simpanMasterGuru") {
+        response = simpanMasterGuru(payload.guruList, payload.pin);
+      } else if (action === "simpanMasterEkskul") {
+        response = simpanMasterEkskul(payload.ekskulList, payload.pin);
+      } else if (action === "updateProfilSiswa") {
+        response = updateProfilSiswa(payload.nisn, payload.noHpOrtu);
+      }
+
+      return ContentService.createTextOutput(JSON.stringify(response))
+        .setMimeType(ContentService.MimeType.JSON);
+    } finally {
+      try { lock.releaseLock(); } catch(e){}
+    }
 
   } catch (err) {
     return ContentService.createTextOutput(JSON.stringify({ 
       success: false, 
       error: "Kesalahan server: " + err.message 
     })).setMimeType(ContentService.MimeType.JSON);
-  } finally {
-    try { lock.releaseLock(); } catch(e){}
   }
 }
 
@@ -196,13 +238,38 @@ function tampilkanUrlService() {
 
 /**
  * Helper: Ambil Spreadsheet Aktif dengan Caching In-Memory Execution
+ * Mendukung Container-Bound Script (Ekstensi > Apps Script) maupun Standalone Script (Script Properties)
  */
 let _cachedSS = null;
 function getSS() {
-  if (!_cachedSS) {
+  if (_cachedSS) return _cachedSS;
+
+  // 1. Coba ambil dari Active Spreadsheet (jika skrip terikat / bound script di dalam Google Sheets)
+  try {
     _cachedSS = SpreadsheetApp.getActiveSpreadsheet();
+    if (_cachedSS) return _cachedSS;
+  } catch (e) {
+    Logger.log("getActiveSpreadsheet error: " + e.message);
   }
-  return _cachedSS;
+
+  // 2. Coba ambil dari Script Properties (jika standalone script atau disetel manual SPREADSHEET_ID / SPREADSHEET_URL)
+  try {
+    const props = PropertiesService.getScriptProperties();
+    const sheetId = props.getProperty("SPREADSHEET_ID") || props.getProperty("SHEET_ID");
+    if (sheetId) {
+      _cachedSS = SpreadsheetApp.openById(sheetId);
+      if (_cachedSS) return _cachedSS;
+    }
+    const sheetUrl = props.getProperty("SPREADSHEET_URL");
+    if (sheetUrl) {
+      _cachedSS = SpreadsheetApp.openByUrl(sheetUrl);
+      if (_cachedSS) return _cachedSS;
+    }
+  } catch (e) {
+    Logger.log("ScriptProperties open spreadsheet error: " + e.message);
+  }
+
+  throw new Error("Spreadsheet tidak ditemukan! Pastikan skrip ini dipasang melalui menu 'Ekstensi > Apps Script' di dalam Google Spreadsheet Anda, atau simpan 'SPREADSHEET_ID' pada Pengaturan Proyek > Script Properties.");
 }
 
 /**
