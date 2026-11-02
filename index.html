@@ -94,9 +94,9 @@
             <h1 id="navSchoolName" class="font-bold text-sm sm:text-base text-slate-900 leading-tight line-clamp-1">SMP NEGERI 1 INDONESIA HEBAT</h1>
             <p class="text-xs text-blue-700 font-medium flex items-center gap-1.5 mt-0.5">
               <span>Super App Sekolah</span>
-              <button id="backendBadge" onclick="openModalSetelBackend(event)" title="Klik untuk Hubungkan Database Google Sheets" class="inline-flex items-center gap-1 px-2 py-0.5 bg-amber-100 text-amber-800 rounded-full text-[10px] font-bold border border-amber-300 hover:bg-amber-200 transition cursor-pointer">
-                <span class="w-1.5 h-1.5 rounded-full bg-amber-500 animate-pulse"></span>
-                <span>Hubungkan Sheets</span>
+              <button id="backendBadge" onclick="openModalSetelBackend(event)" title="Status Database Google Sheets" class="inline-flex items-center gap-1 px-2 py-0.5 bg-blue-100 text-blue-800 rounded-full text-[10px] font-bold border border-blue-300 hover:bg-blue-200 transition cursor-pointer">
+                <span class="w-1.5 h-1.5 rounded-full bg-blue-500 animate-pulse"></span>
+                <span id="backendBadgeText">Menghubungkan...</span>
               </button>
             </p>
           </div>
@@ -141,12 +141,12 @@
   </header>
 
   <!-- BANNER JIKA DATABASE BELUM TERHUBUNG -->
-  <div id="bannerKoneksiDatabase" class="bg-amber-400 text-slate-950 text-xs py-2 px-4 flex items-center justify-between font-semibold shadow-xs">
+  <div id="bannerKoneksiDatabase" class="hidden bg-amber-400 text-slate-950 text-xs py-2 px-4 flex items-center justify-between font-semibold shadow-xs">
     <div class="flex items-center gap-2">
       <i data-lucide="database" class="w-4 h-4 flex-shrink-0 animate-pulse text-amber-900"></i>
-      <span><b>Database Spreadsheet Belum Terhubung:</b> Masih menggunakan data simulasi lokal. Hubungkan Web App Google Apps Script Anda agar data tersimpan online!</span>
+      <span id="bannerKoneksiDatabaseText"><b>Database Spreadsheet Belum Terhubung:</b> Masih menggunakan data simulasi lokal. Hubungkan Web App Google Apps Script Anda agar data tersimpan online!</span>
     </div>
-    <button onclick="openModalSetelBackend(event)" class="bg-slate-900 text-white hover:bg-slate-800 font-bold px-3 py-1 rounded-lg text-xs shadow-xs transition flex-shrink-0 ml-3">
+    <button onclick="openModalSetelBackend(event)" class="bg-slate-900 text-white hover:bg-slate-800 font-bold px-3 py-1 rounded-lg text-xs shadow-xs transition flex-shrink-0 ml-3 cursor-pointer">
       Hubungkan Sekarang
     </button>
   </div>
@@ -1804,6 +1804,7 @@
     // TIPS: Tempelkan URL Web App Google Apps Script (/exec) Anda di sini
     // agar SEMUA pengunjung website Vercel otomatis tersambung ke Google Spreadsheet sekolah tanpa perlu input manual di tiap HP!
     const DEFAULT_BACKEND_URL = "https://script.google.com/macros/s/AKfycbw4946_UzONzK8FYaB2SqMR-7CjAhfjrxnJBGJLHpYmVRXu-Gnhf7HnqNNiJ3XuZSPp1Q/exec";
+    const BACKEND_CONFIG_KEY = "SUPERAPP_CONFIG_VER_20261102_V1";
 
     function getBackendUrl() {
       const urlParam = new URLSearchParams(window.location.search).get('api');
@@ -1813,12 +1814,22 @@
         localStorage.setItem("SUPERAPP_BACKEND_URL", clean);
         return clean;
       }
+
+      // Pastikan semua user yang membuka Vercel otomatis menggunakan backend spreadsheet sekolah terbaru
+      const lastVer = localStorage.getItem("SUPERAPP_CFG_VER");
+      if (lastVer !== BACKEND_CONFIG_KEY) {
+        localStorage.setItem("SUPERAPP_CFG_VER", BACKEND_CONFIG_KEY);
+        localStorage.setItem("SUPERAPP_BACKEND_URL", DEFAULT_BACKEND_URL);
+        return DEFAULT_BACKEND_URL;
+      }
+
       let stored = (localStorage.getItem("SUPERAPP_BACKEND_URL") || "").trim();
       // Validasi URL tersimpan: jika mengarah ke spreadsheet atau bukan URL Apps Script valid / 404 lama, bersihkan
       if (stored && (
         stored.includes("docs.google.com/spreadsheets") ||
         !stored.includes("script.google.com/macros/s/") ||
-        stored.includes("AKfycbz_5qHRJ0Pba2fNwQJDmba3pxwoooRA5GVWHRZelesu0psOTEsYuCDhhHQcQ4D-VHYzHg")
+        stored.includes("AKfycbz_5qHRJ0Pba2fNwQJDmba3pxwoooRA5GVWHRZelesu0psOTEsYuCDhhHQcQ4D-VHYzHg") ||
+        stored.includes("AKfycbwTjBnjT7zGPX506oNpQUpk-cUfGFJUIHIKfsvgsXIeyOXn8iejd-kZDWJG64FZ71HKLQ")
       )) {
         localStorage.removeItem("SUPERAPP_BACKEND_URL");
         stored = "";
@@ -1863,14 +1874,61 @@
     }
 
     // -------------------------------------------------------------
+    // PWA & SERVICE WORKER LIFECYCLE
+    // -------------------------------------------------------------
+    let deferredPrompt = null;
+
+    function initServiceWorker() {
+      if ('serviceWorker' in navigator) {
+        window.addEventListener('load', () => {
+          navigator.serviceWorker.register('/sw.js').then((reg) => {
+            console.log('[SW] ServiceWorker aktif di scope:', reg.scope);
+            try { reg.update(); } catch(e){}
+          }).catch((err) => {
+            console.warn('[SW] ServiceWorker gagal didaftarkan:', err);
+          });
+        });
+      }
+    }
+
+    function initPwaInstall() {
+      window.addEventListener('beforeinstallprompt', (e) => {
+        e.preventDefault();
+        deferredPrompt = e;
+        const btn = document.getElementById('btnInstallPwa');
+        if (btn) btn.classList.remove('hidden');
+      });
+
+      window.addEventListener('appinstalled', () => {
+        deferredPrompt = null;
+        const btn = document.getElementById('btnInstallPwa');
+        if (btn) btn.classList.add('hidden');
+        console.log('[PWA] Aplikasi berhasil dipasang');
+      });
+    }
+
+    async function triggerPwaInstall() {
+      if (!deferredPrompt) {
+        Swal.fire('Pasang di HP', 'Aplikasi ini dapat dipasang langsung melalui menu titik tiga peramban HP Anda lalu pilih "Tambahkan ke Layar Utama" (Add to Home Screen).', 'info');
+        return;
+      }
+      deferredPrompt.prompt();
+      const { outcome } = await deferredPrompt.userChoice;
+      console.log('[PWA] Pilihan user:', outcome);
+      deferredPrompt = null;
+      const btn = document.getElementById('btnInstallPwa');
+      if (btn) btn.classList.add('hidden');
+    }
+
+    // -------------------------------------------------------------
     // INISIALISASI, AUTO-REFRESH & SINKRONISASI ONLINE REAL-TIME
     // -------------------------------------------------------------
     window.addEventListener("DOMContentLoaded", () => {
-      safeCreateIcons();
-      initServiceWorker();
-      initPwaInstall();
-      loadInitialData();
-      startCountdownTimer();
+      try { safeCreateIcons(); } catch(e){}
+      try { initServiceWorker(); } catch(e){}
+      try { initPwaInstall(); } catch(e){}
+      try { loadInitialData(); } catch(e){ console.error('loadInitialData error:', e); }
+      try { startCountdownTimer(); } catch(e){}
 
       // 1. Auto-Sync saat aplikasi dibuka kembali dari background HP / berganti tab browser
       document.addEventListener('visibilitychange', () => {
@@ -2212,8 +2270,9 @@
           }
 
           if (badge) {
-            badge.innerHTML = `<span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span><span>🟢 Sheets Online</span>`;
+            badge.innerHTML = `<span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span><span>🟢 Sheets Online (${masterSiswa.length} Siswa)</span>`;
             badge.className = "inline-flex items-center gap-1 px-2 py-0.5 bg-emerald-100 text-emerald-800 rounded-full text-[10px] font-bold border border-emerald-300 hover:bg-emerald-200 transition cursor-pointer";
+            badge.title = `Tersambung ke Google Spreadsheet: ${appConfig.NAMA_SEKOLAH || 'SMP NEGERI 1 INDONESIA HEBAT'} (${masterSiswa.length} Siswa terdaftar)`;
           }
           if (banner) banner.classList.add('hidden');
           updateAdminConnectionStatusUi(true);
@@ -2565,21 +2624,65 @@
     }
 
     // -------------------------------------------------------------
-    // AUTENTIKASI PENGGUNA (SISWA & GURU)
+    // AUTENTIKASI PENGGUNA (SISWA & GURU) DENGAN ONLINE FALLBACK
     // -------------------------------------------------------------
     async function handleLoginSiswa(e) {
       e.preventDefault();
-      const nisn = document.getElementById('inputNisnSiswa').value.trim().padStart(10, "0");
-      const pin = document.getElementById('inputPinSiswa').value.trim();
+      const nisnInput = document.getElementById('inputNisnSiswa');
+      const pinInput = document.getElementById('inputPinSiswa');
+      if (!nisnInput) return;
 
-      // Cari di data master
-      const s = masterSiswa.find(item => item.nisn === nisn);
+      const rawNisn = nisnInput.value.trim();
+      const nisn = rawNisn.padStart(10, "0");
+      const pin = pinInput ? pinInput.value.trim() : "";
+
+      // 1. Cek di master data lokal
+      let s = masterSiswa.find(item => item.nisn === nisn || item.nisn === rawNisn);
+
+      // 2. Jika belum ada di lokal (misal sync 12 tab masih berjalan di latar belakang), verifikasi langsung secara online ke Google Sheets!
+      if (!s && BACKEND_URL) {
+        Swal.fire({
+          title: 'Memverifikasi ke Database...',
+          text: 'Mencocokkan NISN Anda dengan Google Spreadsheet sekolah...',
+          allowOutsideClick: false,
+          didOpen: () => { Swal.showLoading(); }
+        });
+
+        try {
+          const res = await callBackendPost({
+            action: 'loginUser',
+            role: 'SISWA',
+            identifier: nisn,
+            pin: pin
+          });
+
+          Swal.close();
+
+          if (res && res.success && res.user) {
+            s = res.user;
+            const existingIdx = masterSiswa.findIndex(item => item.nisn === s.nisn);
+            if (existingIdx >= 0) {
+              masterSiswa[existingIdx] = s;
+            } else {
+              masterSiswa.push(s);
+            }
+          } else {
+            Swal.fire('Login Gagal', (res && res.error) ? res.error : 'Nomor NISN Anda tidak tercatat dalam database siswa sekolah.', 'error');
+            return;
+          }
+        } catch (err) {
+          Swal.close();
+          Swal.fire('Koneksi Terkendala', 'Gagal memverifikasi ke database Google Sheets: ' + err.message, 'warning');
+          return;
+        }
+      }
+
       if (!s) {
         Swal.fire('NISN Tidak Ditemukan', 'Nomor NISN Anda tidak tercatat dalam database siswa sekolah.', 'error');
         return;
       }
 
-      const defaultPin = nisn.slice(-4);
+      const defaultPin = s.nisn.slice(-4);
       if (pin && pin !== defaultPin && pin !== (s.pin || defaultPin)) {
         Swal.fire('PIN Salah', 'PIN siswa tidak cocok. Default PIN adalah 4 digit terakhir NISN Anda.', 'error');
         return;
@@ -2589,19 +2692,25 @@
       currentUser = {
         role: 'SISWA',
         nisn: s.nisn,
-        nis: s.nis,
+        nis: s.nis || '',
         nama: s.nama,
         kelas: s.kelas,
         gender: s.gender,
-        tglLahir: s.tglLahir,
-        noHpOrtu: s.noHpOrtu,
-        nipGuruWali: s.nipGuruWali
+        tglLahir: s.tglLahir || '',
+        noHpOrtu: s.noHpOrtu || '',
+        nipGuruWali: s.nipGuruWali || ''
       };
 
       setupSiswaUi();
       showView('viewSiswa');
       switchTabSiswa('beranda');
       playBeepSuccess();
+
+      // Minta data spesifik siswa secara langsung
+      fetchNilaiSiswaOnline(currentUser.nisn);
+      fetchKelulusanSiswaOnline(currentUser.nisn);
+      fetchPresensiHarianOnline(currentUser.nisn);
+      fetchPelanggaranSiswaOnline(currentUser.nisn);
 
       Swal.fire({
         toast: true,
@@ -2619,14 +2728,60 @@
       const pin = document.getElementById('inputPinGuru').value.trim();
 
       // Cek admin
-      if (nip.toUpperCase() === 'ADMIN' && pin === (appConfig.PIN_ADMIN || '123456')) {
-        currentUser = { role: 'ADMIN', nama: 'Administrator Sistem', nip: 'ADMIN' };
-        setupAdminUi();
-        showView('viewAdmin');
-        return;
+      if (nip.toUpperCase() === 'ADMIN') {
+        const adminPin = String(appConfig.PIN_ADMIN || '123456').trim();
+        if (pin === adminPin) {
+          currentUser = { role: 'ADMIN', nama: 'Administrator Sistem', nip: 'ADMIN' };
+          setupAdminUi();
+          showView('viewAdmin');
+          return;
+        } else {
+          Swal.fire('PIN Admin Salah', 'PIN Administrator yang dimasukkan salah.', 'error');
+          return;
+        }
       }
 
-      const g = masterGuru.find(item => item.nip.toLowerCase() === nip.toLowerCase());
+      // 1. Cek di master data guru lokal
+      let g = masterGuru.find(item => item.nip.toLowerCase() === nip.toLowerCase());
+
+      // 2. Jika belum ditemukan di lokal, verifikasi langsung secara online ke Google Sheets!
+      if (!g && BACKEND_URL) {
+        Swal.fire({
+          title: 'Memverifikasi ke Database...',
+          text: 'Mencocokkan NIP/Username dengan Google Spreadsheet sekolah...',
+          allowOutsideClick: false,
+          didOpen: () => { Swal.showLoading(); }
+        });
+
+        try {
+          const res = await callBackendPost({
+            action: 'loginUser',
+            role: 'GURU',
+            identifier: nip,
+            pin: pin
+          });
+
+          Swal.close();
+
+          if (res && res.success && res.user) {
+            g = res.user;
+            const existingIdx = masterGuru.findIndex(item => item.nip.toLowerCase() === g.nip.toLowerCase());
+            if (existingIdx >= 0) {
+              masterGuru[existingIdx] = g;
+            } else {
+              masterGuru.push(g);
+            }
+          } else {
+            Swal.fire('Login Gagal', (res && res.error) ? res.error : 'Akun NIP / Pelatih tidak ditemukan dalam database.', 'error');
+            return;
+          }
+        } catch (err) {
+          Swal.close();
+          Swal.fire('Koneksi Terkendala', 'Gagal memverifikasi ke database: ' + err.message, 'warning');
+          return;
+        }
+      }
+
       if (!g) {
         Swal.fire('Akun Tidak Ditemukan', 'NIP atau Username Pelatih tidak ditemukan dalam daftar guru/pelatih.', 'error');
         return;
@@ -2638,13 +2793,13 @@
       }
 
       currentUser = {
-        role: g.peran || 'GURU',
+        role: g.peran || g.role || 'GURU',
         nip: g.nip,
         nama: g.nama,
-        rombelWali: g.rombelWali,
-        cabangEkskul: g.cabangEkskul,
-        mapel: g.mapel,
-        noHp: g.noHp
+        rombelWali: g.rombelWali || '',
+        cabangEkskul: g.cabangEkskul || '',
+        mapel: g.mapel || '',
+        noHp: g.noHp || ''
       };
 
       setupGuruUi();

@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "Super App Sekolah Terpadu: Presensi Harian, Presensi Ekstra, Nilai Ulangan, Kelulusan, 7 Kebiasaan, dan Tata Tertib Siswa",
   "scripts": {
+    "build": "echo 'Static web app ready'",
     "start": "serve ."
   },
   "keywords": [
