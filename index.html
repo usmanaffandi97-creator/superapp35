@@ -814,7 +814,7 @@
                 <label class="block font-bold text-slate-700">Logo Sebelah Kiri (Pemkot / Pemda / Dinas):</label>
                 <div class="flex items-center space-x-3">
                   <div class="w-16 h-16 bg-white rounded-xl border border-slate-300 p-1 flex items-center justify-center shrink-0 shadow-sm">
-                    <img id="adminPreviewLogoPemkot" src="logo-pemkot.svg" class="w-14 h-14 object-contain" alt="Logo Pemkot">
+                    <img id="adminPreviewLogoPemkot" src="logo-pemkot.svg" onerror="this.onerror=null; this.src='logo-pemkot.svg';" class="w-14 h-14 object-contain" alt="Logo Pemkot">
                   </div>
                   <div class="flex-1 space-y-1">
                     <input type="file" id="adminFileLogoPemkot" accept="image/*" onchange="handleAdminUploadLogo(event, 'pemkot')" class="hidden">
@@ -831,7 +831,7 @@
                 <label class="block font-bold text-slate-700">Logo Sebelah Kanan (Sekolah / Yayasan):</label>
                 <div class="flex items-center space-x-3">
                   <div class="w-16 h-16 bg-white rounded-xl border border-slate-300 p-1 flex items-center justify-center shrink-0 shadow-sm">
-                    <img id="adminPreviewLogoSekolah" src="logo-sekolah.svg" class="w-14 h-14 object-contain" alt="Logo Sekolah">
+                    <img id="adminPreviewLogoSekolah" src="logo-sekolah.svg" onerror="this.onerror=null; this.src='logo-sekolah.svg';" class="w-14 h-14 object-contain" alt="Logo Sekolah">
                   </div>
                   <div class="flex-1 space-y-1">
                     <input type="file" id="adminFileLogoSekolah" accept="image/*" onchange="handleAdminUploadLogo(event, 'sekolah')" class="hidden">
@@ -1099,7 +1099,7 @@
           <!-- 1. KOP SEKOLAH RESMI: LOGO PEMKOT KIRI, LOGO SEKOLAH KANAN -->
           <div class="flex items-center justify-between pb-2 border-b-2 border-black">
             <div class="w-16 h-16 sm:w-20 sm:h-20 flex items-center justify-center shrink-0">
-              <img id="viewLogoPemkot" src="logo-pemkot.svg" class="w-16 h-16 sm:w-20 sm:h-20 object-contain" alt="Logo Pemkot">
+              <img id="viewLogoPemkot" src="logo-pemkot.svg" onerror="this.onerror=null; this.src='logo-pemkot.svg';" class="w-16 h-16 sm:w-20 sm:h-20 object-contain" alt="Logo Pemkot">
             </div>
             <div class="text-center flex-1 px-3 leading-tight">
               <h4 id="viewKopInstansi" class="text-[10px] sm:text-xs font-bold tracking-wider uppercase text-black">PEMERINTAH DAERAH PROVINSI / KABUPATEN</h4>
@@ -1109,7 +1109,7 @@
               <p id="viewKopKontak" class="text-[9px] sm:text-[10px] text-gray-700">Telepon: (021) 1234567 | Website: https://sekolah.sch.id | Email: info@sekolah.sch.id</p>
             </div>
             <div class="w-16 h-16 sm:w-20 sm:h-20 flex items-center justify-center shrink-0">
-              <img id="viewLogoSekolah" src="logo-sekolah.svg" class="w-16 h-16 sm:w-20 sm:h-20 object-contain" alt="Logo Sekolah">
+              <img id="viewLogoSekolah" src="logo-sekolah.svg" onerror="this.onerror=null; this.src='logo-sekolah.svg';" class="w-16 h-16 sm:w-20 sm:h-20 object-contain" alt="Logo Sekolah">
             </div>
           </div>
           <!-- Garis Ganda Kop Surat -->
@@ -1299,8 +1299,10 @@
     // otomatis 100% langsung terhubung ke Google Sheets tanpa perlu setting apa pun!
     // =====================================================================
     const APP_CONFIG = {
-      API_URL: "https://script.google.com/macros/s/AKfycby66N7NuuZu4nm2kAbX-g_YdR8K78Tl4VD3oo-XD4GatRIVamwUbUvhTDAudYMXXnao/exec"
+      API_URL: "https://script.google.com/macros/s/AKfycbxlPjbUUngIDaaG1LNhPoHWyTZOLv1k--qwVvvE_WBXdnkdTAus2YA8vZcNBpLg5WJc/exec"
     };
+
+    const APP_VERSION = "2.4.0"; // Versi rilis terbaru (menghindari user harus reset data manual)
 
     // STATE UTAMA
     let currentUser = null;
@@ -1317,6 +1319,79 @@
       mode: APP_CONFIG.API_URL ? 'LIVE' : (localStorage.getItem('ah_db_mode') || 'LOCAL'),
       apiUrl: APP_CONFIG.API_URL || localStorage.getItem('ah_api_url') || ''
     };
+
+    // Konfigurasi Kop Surat & Logo Sekolah (Tersinkronisasi otomatis antar Admin & Siswa via Spreadsheet)
+    let schoolConfig = {
+      instansi: localStorage.getItem('ah_kop_instansi') || "PEMERINTAH DAERAH PROVINSI / KABUPATEN",
+      dinas: localStorage.getItem('ah_kop_dinas') || "DINAS PENDIDIKAN DAN KEBUDAYAAN",
+      sekolah: localStorage.getItem('ah_kop_sekolah') || "SMP NEGERI INDONESIA HEBAT",
+      alamat: localStorage.getItem('ah_kop_alamat') || "Jl. Pendidikan Karakter Bangsa No. 07, Kode Pos 12345",
+      kontak: localStorage.getItem('ah_kop_kontak') || "Telepon: (021) 1234567 | Website: https://sekolah.sch.id | Email: info@sekolah.sch.id",
+      kota: localStorage.getItem('ah_kop_kota') || "Jakarta",
+      logoPemkot: localStorage.getItem('ah_kop_logo_pemkot') || "logo-pemkot.svg",
+      logoSekolah: localStorage.getItem('ah_kop_logo_sekolah') || "logo-sekolah.svg"
+    };
+
+    function saveLocalKopConfig(cfg) {
+      if (!cfg) return;
+      localStorage.setItem('ah_kop_instansi', cfg.instansi || '');
+      localStorage.setItem('ah_kop_dinas', cfg.dinas || '');
+      localStorage.setItem('ah_kop_sekolah', cfg.sekolah || '');
+      localStorage.setItem('ah_kop_alamat', cfg.alamat || '');
+      localStorage.setItem('ah_kop_kontak', cfg.kontak || '');
+      localStorage.setItem('ah_kop_kota', cfg.kota || '');
+      localStorage.setItem('ah_kop_logo_pemkot', cfg.logoPemkot || 'logo-pemkot.svg');
+      localStorage.setItem('ah_kop_logo_sekolah', cfg.logoSekolah || 'logo-sekolah.svg');
+    }
+
+    function applyKopConfig(kop) {
+      if (!kop) return;
+      if (kop.instansi) schoolConfig.instansi = kop.instansi;
+      if (kop.dinas) schoolConfig.dinas = kop.dinas;
+      if (kop.sekolah) schoolConfig.sekolah = kop.sekolah;
+      if (kop.alamat) schoolConfig.alamat = kop.alamat;
+      if (kop.kontak) schoolConfig.kontak = kop.kontak;
+      if (kop.kota) schoolConfig.kota = kop.kota;
+      if (kop.logoPemkot) schoolConfig.logoPemkot = kop.logoPemkot;
+      if (kop.logoSekolah) schoolConfig.logoSekolah = kop.logoSekolah;
+
+      saveLocalKopConfig(schoolConfig);
+
+      // Sinkronkan ke form Admin jika elemen tersedia
+      const elInstansi = document.getElementById('adminKopInstansi');
+      if (elInstansi) elInstansi.value = schoolConfig.instansi;
+      const elDinas = document.getElementById('adminKopDinas');
+      if (elDinas) elDinas.value = schoolConfig.dinas;
+      const elSekolah = document.getElementById('adminKopSekolah');
+      if (elSekolah) elSekolah.value = schoolConfig.sekolah;
+      const elAlamat = document.getElementById('adminKopAlamat');
+      if (elAlamat) elAlamat.value = schoolConfig.alamat;
+      const elKontak = document.getElementById('adminKopKontak');
+      if (elKontak) elKontak.value = schoolConfig.kontak;
+      const elKota = document.getElementById('adminKopKota');
+      if (elKota) elKota.value = schoolConfig.kota;
+
+      const imgPemkot = document.getElementById('adminPreviewLogoPemkot');
+      if (imgPemkot) imgPemkot.src = schoolConfig.logoPemkot || 'logo-pemkot.svg';
+      const imgSekolah = document.getElementById('adminPreviewLogoSekolah');
+      if (imgSekolah) imgSekolah.src = schoolConfig.logoSekolah || 'logo-sekolah.svg';
+
+      // Sinkronkan ke tampilan Kop Surat PDF
+      const viewLogoPemkot = document.getElementById('viewLogoPemkot');
+      if (viewLogoPemkot) viewLogoPemkot.src = schoolConfig.logoPemkot || 'logo-pemkot.svg';
+      const viewLogoSekolah = document.getElementById('viewLogoSekolah');
+      if (viewLogoSekolah) viewLogoSekolah.src = schoolConfig.logoSekolah || 'logo-sekolah.svg';
+      const viewKopInstansi = document.getElementById('viewKopInstansi');
+      if (viewKopInstansi) viewKopInstansi.textContent = schoolConfig.instansi;
+      const viewKopDinas = document.getElementById('viewKopDinas');
+      if (viewKopDinas) viewKopDinas.textContent = schoolConfig.dinas;
+      const viewKopSekolah = document.getElementById('viewKopSekolah');
+      if (viewKopSekolah) viewKopSekolah.textContent = schoolConfig.sekolah;
+      const viewKopAlamat = document.getElementById('viewKopAlamat');
+      if (viewKopAlamat) viewKopAlamat.textContent = schoolConfig.alamat;
+      const viewKopKontak = document.getElementById('viewKopKontak');
+      if (viewKopKontak) viewKopKontak.textContent = schoolConfig.kontak;
+    }
 
     // Auto-deteksi jika dibuka langsung dari Google Apps Script Web App
     if (window.location.hostname.includes('script.google.com') || window.location.hostname.includes('googleusercontent.com')) {
@@ -1424,9 +1499,32 @@
 
     // Inisialisasi awal
     window.addEventListener('DOMContentLoaded', () => {
-      // Registrasi Service Worker di awal untuk dukungan Notifikasi Android PWA
+      // 1. Cek migrasi versi aplikasi agar pengguna tidak perlu reset data manual
+      const storedVer = localStorage.getItem('ah_app_version');
+      if (storedVer !== APP_VERSION) {
+        localStorage.setItem('ah_app_version', APP_VERSION);
+        if ('caches' in window) {
+          caches.keys().then((names) => {
+            names.forEach((name) => {
+              if (name !== 'anak-hebat-v3') caches.delete(name);
+            });
+          });
+        }
+      }
+
+      // 2. Registrasi Service Worker dengan auto-update detection
       if ('serviceWorker' in navigator) {
-        navigator.serviceWorker.register('./sw.js').catch(err => console.warn('SW err:', err));
+        navigator.serviceWorker.register('./sw.js').then((reg) => {
+          reg.update().catch(() => {});
+        }).catch(err => console.warn('SW err:', err));
+
+        let refreshing = false;
+        navigator.serviceWorker.addEventListener('controllerchange', () => {
+          if (!refreshing) {
+            refreshing = true;
+            window.location.reload();
+          }
+        });
       }
 
       const today = getTanggalHariIniLocal();
@@ -1439,12 +1537,18 @@
       updateModeIndicatorUI();
       updateNotifikasiPeriodik();
 
-      // Sinkronisasi data pengguna terbaru dari Google Sheets di latar belakang
+      // 3. Sinkronisasi data pengguna & kop surat terbaru dari Google Sheets di latar belakang
       if (dbConfig.mode === 'LIVE' && dbConfig.apiUrl) {
         fetch(`${dbConfig.apiUrl}?action=getInitialData`)
           .then(res => res.json())
           .then(json => {
             if (json.success && json.data) {
+              // A. Terapkan Pengaturan Kop & Logo Sekolah dari Server ke seluruh klien
+              if (json.data.kop) {
+                applyKopConfig(json.data.kop);
+              }
+
+              // B. Terapkan Data User Terkini dari Database
               const liveUsers = [
                 { id: "ADM01", nama: "Administrator Sekolah", role: "ADMIN", kelas: "-", guruWaliId: "-", guruWaliNama: "-", pin: "1234", noWa: "-", status: "AKTIF" }
               ];
@@ -1455,6 +1559,17 @@
                 liveUsers.push({ id: s.id, nama: s.nama, role: "ANAK", kelas: s.kelas, guruWaliId: s.guruWaliId, guruWaliNama: s.guruWaliNama, pin: "1234", noWa: s.noWa || "-", status: "AKTIF" });
               });
               saveLocalUsers(liveUsers);
+
+              // C. Perbarui data currentUser jika sedang login tanpa perlu logout / reset data
+              if (currentUser) {
+                const fresh = liveUsers.find(u => normalizeId(u.id) === normalizeId(currentUser.id));
+                if (fresh) {
+                  currentUser = { ...currentUser, ...fresh };
+                  localStorage.setItem('ah_current_user', JSON.stringify(currentUser));
+                  if (currentUser.role === 'ANAK') setupViewAnak(currentUser);
+                  else if (currentUser.role === 'GURU_WALI') setupViewGuruWali(currentUser);
+                }
+              }
             }
           })
           .catch(() => {});
@@ -3462,22 +3577,62 @@
       if (!file) return;
 
       if (!file.type.startsWith('image/')) {
-        alert("Pilih file gambar yang valid (PNG, JPG, SVG)");
+        alert("Pilih file gambar yang valid (PNG, JPG, SVG, WebP)");
         return;
       }
 
       const reader = new FileReader();
       reader.onload = function(e) {
-        const base64Data = e.target.result;
-        if (type === 'pemkot') {
-          schoolConfig.logoPemkot = base64Data;
-          const img = document.getElementById('adminPreviewLogoPemkot');
-          if (img) img.src = base64Data;
-        } else {
-          schoolConfig.logoSekolah = base64Data;
-          const img = document.getElementById('adminPreviewLogoSekolah');
-          if (img) img.src = base64Data;
+        const rawData = e.target.result;
+
+        // Jika SVG, simpan langsung
+        if (file.type.includes('svg')) {
+          if (type === 'pemkot') {
+            schoolConfig.logoPemkot = rawData;
+            const img = document.getElementById('adminPreviewLogoPemkot');
+            if (img) img.src = rawData;
+          } else {
+            schoolConfig.logoSekolah = rawData;
+            const img = document.getElementById('adminPreviewLogoSekolah');
+            if (img) img.src = rawData;
+          }
+          return;
         }
+
+        // Untuk PNG, JPG, WebP: kompresi ke dimensi maksimal 240px menggunakan canvas
+        const img = new Image();
+        img.onload = function() {
+          const maxDim = 240;
+          let w = img.width;
+          let h = img.height;
+          if (w > maxDim || h > maxDim) {
+            if (w > h) {
+              h = Math.round((h * maxDim) / w);
+              w = maxDim;
+            } else {
+              w = Math.round((w * maxDim) / h);
+              h = maxDim;
+            }
+          }
+          const canvas = document.createElement('canvas');
+          canvas.width = w;
+          canvas.height = h;
+          const ctx = canvas.getContext('2d');
+          ctx.drawImage(img, 0, 0, w, h);
+          // Format PNG agar background transparan logo sekolah/pemkot tetap terjaga
+          const compressedBase64 = canvas.toDataURL('image/png');
+
+          if (type === 'pemkot') {
+            schoolConfig.logoPemkot = compressedBase64;
+            const preview = document.getElementById('adminPreviewLogoPemkot');
+            if (preview) preview.src = compressedBase64;
+          } else {
+            schoolConfig.logoSekolah = compressedBase64;
+            const preview = document.getElementById('adminPreviewLogoSekolah');
+            if (preview) preview.src = compressedBase64;
+          }
+        };
+        img.src = rawData;
       };
       reader.readAsDataURL(file);
     }
@@ -3496,8 +3651,15 @@
       }
     }
 
-    function handleSimpanKopAdmin(e) {
+    async function handleSimpanKopAdmin(e) {
       e.preventDefault();
+      const btn = e.target.querySelector('button[type="submit"]');
+      const originalBtnText = btn ? btn.innerHTML : '';
+      if (btn) {
+        btn.disabled = true;
+        btn.innerHTML = `<span class="inline-block animate-spin mr-1.5">⏳</span> Menyimpan & Mensinkronkan...`;
+      }
+
       schoolConfig.instansi = document.getElementById('adminKopInstansi').value.trim() || schoolConfig.instansi;
       schoolConfig.dinas = document.getElementById('adminKopDinas').value.trim() || schoolConfig.dinas;
       schoolConfig.sekolah = document.getElementById('adminKopSekolah').value.trim() || schoolConfig.sekolah;
@@ -3505,16 +3667,50 @@
       schoolConfig.kontak = document.getElementById('adminKopKontak').value.trim() || schoolConfig.kontak;
       schoolConfig.kota = document.getElementById('adminKopKota').value.trim() || schoolConfig.kota;
 
-      localStorage.setItem('ah_kop_instansi', schoolConfig.instansi);
-      localStorage.setItem('ah_kop_dinas', schoolConfig.dinas);
-      localStorage.setItem('ah_kop_sekolah', schoolConfig.sekolah);
-      localStorage.setItem('ah_kop_alamat', schoolConfig.alamat);
-      localStorage.setItem('ah_kop_kontak', schoolConfig.kontak);
-      localStorage.setItem('ah_kop_kota', schoolConfig.kota);
-      localStorage.setItem('ah_kop_logo_pemkot', schoolConfig.logoPemkot);
-      localStorage.setItem('ah_kop_logo_sekolah', schoolConfig.logoSekolah);
+      // Simpan lokal terlebih dahulu
+      saveLocalKopConfig(schoolConfig);
 
-      alert("Pengaturan Kop Surat & Logo Sekolah berhasil disimpan!");
+      // Simpan dan sinkronkan ke database Google Spreadsheet & Google Drive
+      try {
+        if (dbConfig.apiUrl) {
+          const payload = {
+            action: "simpanKop",
+            instansi: schoolConfig.instansi,
+            dinas: schoolConfig.dinas,
+            sekolah: schoolConfig.sekolah,
+            alamat: schoolConfig.alamat,
+            kontak: schoolConfig.kontak,
+            kota: schoolConfig.kota,
+            logoPemkot: schoolConfig.logoPemkot,
+            logoSekolah: schoolConfig.logoSekolah
+          };
+
+          const res = await fetch(dbConfig.apiUrl, {
+            method: 'POST',
+            body: JSON.stringify(payload)
+          });
+          const json = await res.json();
+          if (json.success) {
+            if (json.kop) {
+              applyKopConfig(json.kop);
+            }
+            alert("Alhamdulillah! Pengaturan Kop Surat & Logo Sekolah berhasil disimpan ke database Google Spreadsheet & otomatis langsung muncul di seluruh siswa dan Guru Wali!");
+          } else {
+            throw new Error(json.message || "Gagal menyimpan ke server");
+          }
+        } else {
+          alert("Pengaturan Kop Surat & Logo Sekolah berhasil disimpan secara lokal (Mode Demo).");
+        }
+      } catch (err) {
+        console.error("Gagal simpan kop ke server:", err);
+        alert("Tersimpan secara lokal. Kendala sinkronisasi online: " + err.message);
+      } finally {
+        if (btn) {
+          btn.disabled = false;
+          btn.innerHTML = originalBtnText || `<span>Simpan Kop Surat Sekolah</span>`;
+        }
+        refreshIcons();
+      }
     }
 
     function renderAdminUsersTable() {
@@ -3791,19 +3987,8 @@
     }
 
     // ==============================================================
-    // KONFIGURASI KOP SEKOLAH & REKAP 1 MINGGU (PDF)
+    // REKAP 1 MINGGU (PDF) BER-KOP RESMI & TANDA TANGAN
     // ==============================================================
-    let schoolConfig = {
-      instansi: localStorage.getItem('ah_kop_instansi') || "PEMERINTAH DAERAH PROVINSI / KABUPATEN",
-      dinas: localStorage.getItem('ah_kop_dinas') || "DINAS PENDIDIKAN DAN KEBUDAYAAN",
-      sekolah: localStorage.getItem('ah_kop_sekolah') || "SMP NEGERI INDONESIA HEBAT",
-      alamat: localStorage.getItem('ah_kop_alamat') || "Jl. Pendidikan Karakter Bangsa No. 07, Kode Pos 12345",
-      kontak: localStorage.getItem('ah_kop_kontak') || "Telepon: (021) 1234567 | Website: https://sekolah.sch.id | Email: info@sekolah.sch.id",
-      kota: localStorage.getItem('ah_kop_kota') || "Jakarta",
-      logoPemkot: localStorage.getItem('ah_kop_logo_pemkot') || "logo-pemkot.svg",
-      logoSekolah: localStorage.getItem('ah_kop_logo_sekolah') || "logo-sekolah.svg"
-    };
-
     let activeRekapSiswa = null;
     let activeRekapOffset = 0;
     let activeRekapPekanText = "";
@@ -4097,9 +4282,6 @@
     }
 
     // PWA Prompt
-    if ('serviceWorker' in navigator) {
-      navigator.serviceWorker.register('./sw.js').catch(() => {});
-    }
     window.addEventListener('beforeinstallprompt', (e) => {
       e.preventDefault();
       deferredPrompt = e;
