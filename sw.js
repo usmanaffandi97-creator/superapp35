@@ -1,93 +1,108 @@
-const CACHE_NAME = 'anak-hebat-v3';
-const ASSETS = [
-  './manifest.json',
-  './icon.svg',
-  './logo-pemkot.svg',
-  './logo-sekolah.svg'
+// Service Worker — Super App Sekolah Terpadu (Network-First Navigation & Offline Resilience)
+const CACHE_NAME = 'superapp-sekolah-v5';
+const STATIC_ASSETS = [
+  '/',
+  '/index.html',
+  '/manifest.json',
+  '/icons/icon-192.png',
+  '/icons/icon-512.png',
+  '/icons/icon-maskable.png'
 ];
 
-// 1. Install Event: simpan aset dasar & langsung aktif tanpa menunggu tab ditutup
-self.addEventListener('install', (e) => {
-  e.waitUntil(
-    caches.open(CACHE_NAME).then((cache) => {
-      return cache.addAll(ASSETS).catch(() => {});
+self.addEventListener('install', (event) => {
+  event.waitUntil(
+    caches.open(CACHE_NAME).then(async (cache) => {
+      console.log('[SW] Pre-caching core assets individually...');
+      for (const asset of STATIC_ASSETS) {
+        try {
+          await cache.add(asset);
+        } catch (err) {
+          console.warn('[SW] Optional pre-cache miss for:', asset);
+        }
+      }
     })
   );
   self.skipWaiting();
 });
 
-// 2. Activate Event: bersihkan cache versi lama & langsung klaim semua client
-self.addEventListener('activate', (e) => {
-  e.waitUntil(
+self.addEventListener('activate', (event) => {
+  event.waitUntil(
     caches.keys().then((keys) => {
       return Promise.all(
-        keys.map((k) => {
-          if (k !== CACHE_NAME) {
-            return caches.delete(k);
+        keys.map((key) => {
+          if (key !== CACHE_NAME) {
+            console.log('[SW] Clearing old cache version:', key);
+            return caches.delete(key);
           }
         })
       );
     })
   );
-  self.clients.claim();
+  return self.clients.claim();
 });
 
-// 3. Fetch Event:
-// - Untuk Halaman Web (index.html / root / navigation): STRATEGI NETWORK-FIRST!
-//   Selalu ambil versi terbaru dari server jika online. Jika offline, baru pakai cache!
-//   Dengan cara ini, setiap kali ada update aplikasi, pengguna LANGSUNG mendapatkan versi terbaru
-//   tanpa harus reset data atau bersihkan cache browser!
-self.addEventListener('fetch', (e) => {
-  if (e.request.method !== 'GET') return;
-  const url = new URL(e.request.url);
+self.addEventListener('fetch', (event) => {
+  const req = event.request;
+  const url = new URL(req.url);
 
-  // Jangan sentuh request ke Google Apps Script atau domain eksternal
-  if (url.origin !== self.origin || e.request.url.includes('script.google.com')) {
+  // Jangan sentuh request non-GET atau request ke Google Apps Script / WhatsApp
+  if (req.method !== 'GET' || url.hostname.includes('script.google.com') || url.hostname.includes('script.googleusercontent.com') || url.hostname.includes('api.whatsapp.com')) {
     return;
   }
 
-  // Khusus dokumen HTML / navigasi utama: NETWORK FIRST!
-  const isHtml = e.request.mode === 'navigate' || 
-                 e.request.destination === 'document' || 
-                 url.pathname.endsWith('index.html') || 
-                 url.pathname === '/' || 
-                 url.pathname === '';
+  // Navigasi Halaman HTML: Gunakan Network-First agar pembaruan GitHub / Vercel langsung tampil di HP
+  if (req.mode === 'navigate') {
+    event.respondWith(
+      (async () => {
+        try {
+          // 1. Coba ambil halaman terbaru dari Vercel/Internet dengan batas waktu 3.5 detik
+          const controller = new AbortController();
+          const timer = setTimeout(() => controller.abort(), 3500);
+          const networkRes = await fetch(req, { signal: controller.signal });
+          clearTimeout(timer);
 
-  if (isHtml) {
-    e.respondWith(
-      fetch(e.request)
-        .then((networkRes) => {
           if (networkRes && networkRes.status === 200) {
-            const resClone = networkRes.clone();
-            caches.open(CACHE_NAME).then((cache) => cache.put(e.request, resClone));
+            const clone = networkRes.clone();
+            caches.open(CACHE_NAME).then((cache) => cache.put(req, clone));
+            return networkRes;
           }
-          return networkRes;
-        })
-        .catch(() => {
-          // Offline fallback
-          return caches.match(e.request).then((cached) => cached || caches.match('./index.html'));
-        })
+        } catch (err) {
+          console.warn('[SW] Jaringan lambat/offline, memuat dari cache lokal...', err);
+        }
+
+        // 2. Jika offline atau timeout, buka dari cache lokal
+        const cached = await caches.match(req) || await caches.match('/') || await caches.match('/index.html');
+        if (cached) return cached;
+
+        // 3. Fallback darurat jika benar-benar belum pernah ter-cache
+        return new Response(
+          '<!DOCTYPE html><html><head><meta charset="utf-8"><title>Super App Offline</title></head><body style="font-family:sans-serif;padding:30px;text-align:center;"><h2>Super App Sekolah Terpadu</h2><p>Aplikasi sedang dalam mode offline. Silakan periksa koneksi internet Anda.</p><button onclick="location.reload()" style="padding:10px 20px;border-radius:8px;background:#1e40af;color:white;border:none;cursor:pointer;">Muat Ulang</button></body></html>',
+          { headers: { 'Content-Type': 'text/html;charset=utf-8' } }
+        );
+      })()
     );
     return;
   }
 
-  // Untuk aset statis (gambar, manifest, dll): Stale-While-Revalidate
-  e.respondWith(
-    caches.match(e.request).then((cachedRes) => {
-      const fetchPromise = fetch(e.request).then((networkRes) => {
+  // Untuk aset statis (gambar ikon, manifest): Stale-While-Revalidate
+  event.respondWith(
+    caches.match(req).then((cachedRes) => {
+      const fetchPromise = fetch(req).then((networkRes) => {
         if (networkRes && networkRes.status === 200) {
-          const resClone = networkRes.clone();
-          caches.open(CACHE_NAME).then((cache) => cache.put(e.request, resClone));
+          const clone = networkRes.clone();
+          caches.open(CACHE_NAME).then((cache) => cache.put(req, clone));
         }
         return networkRes;
-      }).catch(() => {});
+      }).catch((err) => {
+        console.warn('[SW] Fetch failed for:', req.url, err);
+      });
 
       return cachedRes || fetchPromise;
     })
   );
 });
 
-// Tangani klik pada notifikasi di bilah notifikasi HP Android
+// Listener notifikasi pengingat
 self.addEventListener('notificationclick', (event) => {
   event.notification.close();
   event.waitUntil(
@@ -98,28 +113,8 @@ self.addEventListener('notificationclick', (event) => {
         }
       }
       if (clients.openWindow) {
-        return clients.openWindow('./');
+        return clients.openWindow('/');
       }
-    })
-  );
-});
-
-// Tangani event push (jika ada pesan push di latar belakang)
-self.addEventListener('push', (event) => {
-  let data = { title: '7 Kebiasaan Anak Hebat', body: 'Waktunya cek pembiasaan karakter hari ini!' };
-  if (event.data) {
-    try {
-      data = event.data.json();
-    } catch (e) {
-      data.body = event.data.text();
-    }
-  }
-  event.waitUntil(
-    self.registration.showNotification(data.title, {
-      body: data.body,
-      icon: './icon.svg',
-      badge: './icon.svg',
-      vibrate: [200, 100, 200]
     })
   );
 });
