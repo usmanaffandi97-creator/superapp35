@@ -1,9 +1,8 @@
 // Service Worker — Super App Sekolah Terpadu (Ultra-Resilient & Instant Launch)
-const CACHE_NAME = 'superapp-sekolah-v4';
+const CACHE_NAME = 'superapp-sekolah-v5';
 const STATIC_ASSETS = [
   '/',
   '/index.html',
-  '/config.js',
   '/manifest.json',
   '/icons/icon-192.png',
   '/icons/icon-512.png',
@@ -46,8 +45,14 @@ self.addEventListener('fetch', (event) => {
   const req = event.request;
   const url = new URL(req.url);
 
-  // Jangan sentuh request non-GET atau request ke Google Apps Script / WhatsApp
-  if (req.method !== 'GET' || url.hostname.includes('script.google.com') || url.hostname.includes('api.whatsapp.com')) {
+  // Jangan sentuh request non-GET, config.js (agar URL selalu fresh), atau request ke Google Apps Script / WhatsApp
+  if (
+    req.method !== 'GET' ||
+    url.pathname.endsWith('config.js') ||
+    url.hostname.includes('script.google.com') ||
+    url.hostname.includes('script.googleusercontent.com') ||
+    url.hostname.includes('api.whatsapp.com')
+  ) {
     return;
   }
 
