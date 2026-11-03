@@ -2928,11 +2928,6 @@
         btnElem.classList.add('bg-blue-600', 'text-white', 'border-blue-600');
       }
     }
-      if (btnElem) {
-        btnElem.classList.remove('bg-white', 'text-slate-700', 'border-slate-200');
-        btnElem.classList.add('bg-blue-600', 'text-white', 'border-blue-600');
-      }
-    }
 
     function toggleShalat(id) {
       const chk = document.getElementById(id);
@@ -4460,7 +4455,6 @@
         nilaiAngka: item.nilai,
         catatan: item.catatan || '',
         catatanGuru: item.catatan || ''
-      }));
       }));
 
       dataNilaiToPost.forEach(item => {
