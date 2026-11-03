@@ -101,7 +101,7 @@
             <h1 id="navSchoolName" class="font-bold text-sm sm:text-base text-slate-900 leading-tight line-clamp-1">SMP NEGERI 1 INDONESIA HEBAT</h1>
             <p class="text-xs text-blue-700 font-medium flex items-center gap-1.5 mt-0.5">
               <span>Super App Sekolah</span>
-              <button id="backendBadge" onclick="openModalSetelBackend(event)" title="Klik untuk Hubungkan Database Google Sheets" class="inline-flex items-center gap-1 px-2 py-0.5 bg-amber-100 text-amber-800 rounded-full text-[10px] font-bold border border-amber-300 hover:bg-amber-200 transition cursor-pointer">
+              <button id="backendBadge" onclick="openModalSetelBackend(event)" title="Koneksi Google Spreadsheet (Akses Kelola: Khusus Admin)" class="inline-flex items-center gap-1 px-2 py-0.5 bg-amber-100 text-amber-800 rounded-full text-[10px] font-bold border border-amber-300 hover:bg-amber-200 transition cursor-pointer">
                 <span class="w-1.5 h-1.5 rounded-full bg-amber-500 animate-pulse"></span>
                 <span>Hubungkan Sheets</span>
               </button>
@@ -153,8 +153,9 @@
       <i data-lucide="database" class="w-4 h-4 flex-shrink-0 animate-pulse text-amber-900"></i>
       <span><b>Database Spreadsheet Belum Terhubung:</b> Masih menggunakan data simulasi lokal. Hubungkan Web App Google Apps Script Anda agar data tersimpan online!</span>
     </div>
-    <button onclick="openModalSetelBackend(event)" class="bg-slate-900 text-white hover:bg-slate-800 font-bold px-3 py-1 rounded-lg text-xs shadow-xs transition flex-shrink-0 ml-3">
-      Hubungkan Sekarang
+    <button onclick="openModalSetelBackend(event)" class="bg-slate-900 text-white hover:bg-slate-800 font-bold px-3 py-1 rounded-lg text-xs shadow-xs transition flex-shrink-0 ml-3 flex items-center gap-1.5 cursor-pointer">
+      <i data-lucide="lock" class="w-3 h-3 text-amber-400"></i>
+      <span>Hubungkan (Khusus Admin)</span>
     </button>
   </div>
 
@@ -177,190 +178,305 @@
     <!-- ========================================================================= -->
     <section id="viewLanding" class="space-y-6">
       
-      <!-- Hero Banner dengan Kop 2 Logo -->
-      <div class="bg-gradient-to-br from-blue-800 via-indigo-900 to-slate-900 rounded-3xl p-6 sm:p-8 text-white shadow-xl relative overflow-hidden">
-        <div class="absolute -right-10 -bottom-10 w-64 h-64 bg-blue-500/10 rounded-full blur-3xl pointer-events-none"></div>
+      <!-- Hero Banner Kop Resmi Sekolah Digital (Modern, Simetris & Responsif) -->
+      <div class="relative overflow-hidden rounded-3xl bg-gradient-to-br from-slate-950 via-slate-900 to-indigo-950 p-6 sm:p-8 text-white shadow-2xl border border-white/10">
+        <!-- High-Tech Ambient Glow Mesh & Cyber Accent -->
+        <div class="absolute -top-24 -left-24 w-80 h-80 bg-blue-600/20 rounded-full blur-3xl pointer-events-none"></div>
+        <div class="absolute -bottom-24 -right-24 w-80 h-80 bg-indigo-600/20 rounded-full blur-3xl pointer-events-none"></div>
+        <div class="absolute inset-0 bg-[radial-gradient(#38bdf8_1px,transparent_1px)] [background-size:24px_24px] opacity-10 pointer-events-none"></div>
         
-        <div class="flex flex-col sm:flex-row items-center justify-between gap-6 relative z-10">
-          <div class="flex items-center gap-4">
-            <img id="landingLogoPemda" src="https://upload.wikimedia.org/wikipedia/commons/thumb/b/be/Coat_of_arms_of_Indonesia.svg/200px-Coat_of_arms_of_Indonesia.svg.png" alt="Logo Pemda" class="w-16 h-16 sm:w-20 sm:h-20 object-contain drop-shadow">
-            <div>
-              <p id="landingInstansi" class="text-xs sm:text-sm font-semibold tracking-wide text-blue-200 uppercase">PEMERINTAH KOTA / KABUPATEN - DINAS PENDIDIKAN</p>
-              <h2 id="landingSchoolTitle" class="text-xl sm:text-2xl lg:text-3xl font-extrabold leading-tight text-white mt-0.5">SMP NEGERI 1 INDONESIA HEBAT</h2>
-              <p id="landingAlamat" class="text-xs sm:text-sm text-slate-300 mt-1 max-w-xl">Jl. Pendidikan Karakter No. 07, Kota Cerdas</p>
+        <!-- Header Grid: Simetris & Proporsional di Semua Ukuran Layar -->
+        <div class="relative z-10 flex flex-col md:flex-row items-center justify-between gap-5 sm:gap-6">
+          
+          <!-- Logo Bar Mobile & Desktop -->
+          <div class="flex items-center justify-between w-full md:w-auto">
+            <!-- Logo Kiri: Pemda / Tut Wuri Handayani (Glass Shield) -->
+            <div class="w-16 h-16 sm:w-20 sm:h-20 rounded-2xl bg-white/10 backdrop-blur-md p-2 flex items-center justify-center border border-white/20 shadow-xl shadow-black/20 flex-shrink-0 group hover:scale-105 transition">
+              <img id="landingLogoPemda" src="https://upload.wikimedia.org/wikipedia/commons/thumb/b/be/Coat_of_arms_of_Indonesia.svg/200px-Coat_of_arms_of_Indonesia.svg.png" alt="Logo Pemda" class="max-w-full max-h-full object-contain filter drop-shadow">
+            </div>
+
+            <!-- Logo Kanan Mobile (Tampil di layar HP < md agar KOP seimbang dan simetris) -->
+            <div class="md:hidden w-16 h-16 sm:w-20 sm:h-20 rounded-2xl bg-white/10 backdrop-blur-md p-2 flex items-center justify-center border border-white/20 shadow-xl shadow-black/20 flex-shrink-0 group hover:scale-105 transition">
+              <img id="landingLogoSekolahMob" src="https://upload.wikimedia.org/wikipedia/commons/thumb/9/9c/Logo_of_Ministry_of_Education_and_Culture_of_Republic_of_Indonesia.svg/200px-Logo_of_Ministry_of_Education_and_Culture_of_Republic_of_Indonesia.svg.png" alt="Logo Sekolah" class="max-w-full max-h-full object-contain filter drop-shadow">
             </div>
           </div>
-          <img id="landingLogoSekolah" src="https://upload.wikimedia.org/wikipedia/commons/thumb/9/9c/Logo_of_Ministry_of_Education_and_Culture_of_Republic_of_Indonesia.svg/200px-Logo_of_Ministry_of_Education_and_Culture_of_Republic_of_Indonesia.svg.png" alt="Logo Sekolah" class="w-16 h-16 sm:w-20 sm:h-20 object-contain drop-shadow">
+
+          <!-- Teks Identitas Resmi Sekolah -->
+          <div class="text-center md:text-left flex-1 min-w-0">
+            <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-cyan-500/10 border border-cyan-400/30 text-cyan-300 text-[10px] sm:text-xs font-extrabold tracking-wider uppercase mb-2 backdrop-blur-md">
+              <span class="w-2 h-2 rounded-full bg-cyan-400 animate-pulse"></span>
+              <span id="landingInstansi">PEMERINTAH KOTA / KABUPATEN - DINAS PENDIDIKAN</span>
+            </div>
+            <h2 id="landingSchoolTitle" class="text-2xl sm:text-3xl lg:text-4xl font-black text-transparent bg-clip-text bg-gradient-to-r from-white via-slate-100 to-cyan-200 tracking-tight leading-tight">
+              SMP NEGERI 1 INDONESIA HEBAT
+            </h2>
+            <div class="flex items-center justify-center md:justify-start gap-2 mt-2 text-xs sm:text-sm text-slate-300">
+              <span class="w-5 h-5 rounded-lg bg-white/10 flex items-center justify-center text-cyan-400 flex-shrink-0"><i data-lucide="map-pin" class="w-3.5 h-3.5"></i></span>
+              <span id="landingAlamat" class="line-clamp-1">Jl. Pendidikan Karakter No. 07, Kota Cerdas</span>
+            </div>
+          </div>
+
+          <!-- Logo Kanan Sekolah Desktop (Tampil di layar Desktop >= md) -->
+          <div class="hidden md:flex w-20 h-20 rounded-2xl bg-white/10 backdrop-blur-md p-2 items-center justify-center border border-white/20 shadow-xl shadow-black/20 flex-shrink-0 group hover:scale-105 transition">
+            <img id="landingLogoSekolah" src="https://upload.wikimedia.org/wikipedia/commons/thumb/9/9c/Logo_of_Ministry_of_Education_and_Culture_of_Republic_of_Indonesia.svg/200px-Logo_of_Ministry_of_Education_and_Culture_of_Republic_of_Indonesia.svg.png" alt="Logo Sekolah" class="max-w-full max-h-full object-contain filter drop-shadow">
+          </div>
         </div>
 
         <!-- Widget Countdown Kelulusan (Kondisional jika aktif) -->
         <div id="landingGraduationWidget" class="mt-6 pt-6 border-t border-white/10 hidden">
-          <div class="bg-white/10 backdrop-blur-md rounded-2xl p-4 flex flex-col md:flex-row items-center justify-between gap-4">
-            <div class="flex items-center gap-3">
-              <div class="w-10 h-10 rounded-xl bg-amber-500 text-slate-900 flex items-center justify-center font-bold">
+          <div class="bg-white/10 backdrop-blur-md rounded-2xl p-4 sm:p-5 flex flex-col md:flex-row items-center justify-between gap-4 border border-white/10">
+            <div class="flex items-center gap-3.5 text-center md:text-left">
+              <div class="w-12 h-12 rounded-2xl bg-gradient-to-tr from-amber-500 to-amber-400 text-slate-950 flex items-center justify-center font-black shadow-lg shadow-amber-500/30 flex-shrink-0">
                 <i data-lucide="graduation-cap" class="w-6 h-6"></i>
               </div>
               <div>
-                <h4 class="font-bold text-sm text-white">Hitung Mundur Pengumuman Kelulusan Kelas 9</h4>
-                <p class="text-xs text-blue-200">Surat Keterangan Lulus (SKL) Resmi akan dibuka serentak:</p>
+                <h4 class="font-extrabold text-sm sm:text-base text-white">Hitung Mundur Pengumuman Kelulusan Kelas 9</h4>
+                <p class="text-xs text-blue-200 mt-0.5">Surat Keterangan Lulus (SKL) Resmi akan dibuka serentak:</p>
               </div>
             </div>
             <div id="countdownBox" class="flex items-center gap-2 font-mono text-center">
-              <div class="bg-slate-900/80 px-3 py-1.5 rounded-lg border border-white/20"><span id="cdDays" class="text-lg font-bold text-amber-400">00</span><p class="text-[9px] text-slate-300">HARI</p></div>
-              <div class="bg-slate-900/80 px-3 py-1.5 rounded-lg border border-white/20"><span id="cdHours" class="text-lg font-bold text-amber-400">00</span><p class="text-[9px] text-slate-300">JAM</p></div>
-              <div class="bg-slate-900/80 px-3 py-1.5 rounded-lg border border-white/20"><span id="cdMins" class="text-lg font-bold text-amber-400">00</span><p class="text-[9px] text-slate-300">MENIT</p></div>
-              <div class="bg-slate-900/80 px-3 py-1.5 rounded-lg border border-white/20"><span id="cdSecs" class="text-lg font-bold text-amber-400">00</span><p class="text-[9px] text-slate-300">DETIK</p></div>
+              <div class="bg-slate-950/80 px-3.5 py-2 rounded-xl border border-white/15 shadow-inner"><span id="cdDays" class="text-lg sm:text-xl font-black text-amber-400">00</span><p class="text-[9px] font-bold text-slate-400 tracking-wider">HARI</p></div>
+              <div class="bg-slate-950/80 px-3.5 py-2 rounded-xl border border-white/15 shadow-inner"><span id="cdHours" class="text-lg sm:text-xl font-black text-amber-400">00</span><p class="text-[9px] font-bold text-slate-400 tracking-wider">JAM</p></div>
+              <div class="bg-slate-950/80 px-3.5 py-2 rounded-xl border border-white/15 shadow-inner"><span id="cdMins" class="text-lg sm:text-xl font-black text-amber-400">00</span><p class="text-[9px] font-bold text-slate-400 tracking-wider">MENIT</p></div>
+              <div class="bg-slate-950/80 px-3.5 py-2 rounded-xl border border-white/15 shadow-inner"><span id="cdSecs" class="text-lg sm:text-xl font-black text-amber-400">00</span><p class="text-[9px] font-bold text-slate-400 tracking-wider">DETIK</p></div>
             </div>
           </div>
         </div>
 
       </div>
 
-      <!-- Status Koneksi Database Google Spreadsheet -->
-      <div id="landingEnvStatusBar" class="flex flex-col sm:flex-row items-center justify-between gap-3 bg-white/95 backdrop-blur-sm rounded-2xl p-4 border border-slate-200 shadow-xs">
+      <!-- Status Koneksi Database Google Spreadsheet (High-Tech Bar) -->
+      <div id="landingEnvStatusBar" class="flex flex-col sm:flex-row items-center justify-between gap-3 bg-gradient-to-r from-slate-900 via-slate-800 to-indigo-950 rounded-2xl p-4 text-white shadow-lg border border-slate-700/60 backdrop-blur-md">
         <div class="flex items-center gap-3">
-          <div id="landingStatusIconCircle" class="w-9 h-9 rounded-xl bg-emerald-100 text-emerald-700 flex items-center justify-center flex-shrink-0">
-            <i data-lucide="database" class="w-4 h-4"></i>
+          <div id="landingStatusIconCircle" class="w-10 h-10 rounded-xl bg-emerald-500/20 text-emerald-400 flex items-center justify-center flex-shrink-0 border border-emerald-500/30">
+            <i data-lucide="database" class="w-5 h-5"></i>
           </div>
           <div>
             <div class="flex items-center gap-2">
-              <span class="text-xs font-bold text-slate-800">Status Database Sekolah:</span>
+              <span class="text-xs font-bold text-slate-200">Sistem Database Terintegrasi:</span>
               <span id="landingEnvBadge"></span>
             </div>
-            <p id="landingStatusDesc" class="text-[11px] text-slate-500 mt-0.5">Memuat status koneksi Google Spreadsheet...</p>
+            <p id="landingStatusDesc" class="text-[11px] text-slate-400 mt-0.5">Memuat status koneksi Google Spreadsheet...</p>
           </div>
         </div>
-        <button type="button" onclick="openModalSetelBackend(event)" class="w-full sm:w-auto px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold rounded-xl text-xs transition flex items-center justify-center gap-1.5 border border-slate-200 cursor-pointer">
-          <i data-lucide="settings" class="w-3.5 h-3.5"></i>
-          <span>Kelola Koneksi Sheets</span>
+        <button type="button" onclick="openModalSetelBackend(event)" class="w-full sm:w-auto px-4 py-2 bg-white/10 hover:bg-white/20 text-white font-bold rounded-xl text-xs transition flex items-center justify-center gap-1.5 border border-white/20 cursor-pointer backdrop-blur-sm">
+          <i data-lucide="lock" class="w-3.5 h-3.5 text-amber-400"></i>
+          <span>Kelola Koneksi (Khusus Admin)</span>
         </button>
       </div>
 
       <!-- Banner Khusus Pasang di HP Android (Siswa & Ortu) -->
-      <div id="landingPwaInstallCard" class="bg-gradient-to-r from-blue-700 via-indigo-700 to-blue-800 rounded-3xl p-5 sm:p-6 text-white shadow-md border border-blue-400/30 flex flex-col sm:flex-row items-center justify-between gap-4">
-        <div class="flex items-center gap-4 text-left">
-          <div class="w-14 h-14 rounded-2xl bg-white/15 backdrop-blur-md flex items-center justify-center flex-shrink-0 border border-white/25 shadow-inner">
+      <div id="landingPwaInstallCard" class="relative overflow-hidden rounded-3xl bg-gradient-to-r from-slate-900 via-indigo-950 to-blue-950 p-5 sm:p-6 text-white shadow-xl border border-indigo-500/30 flex flex-col sm:flex-row items-center justify-between gap-5 group">
+        <!-- Tech glowing accents -->
+        <div class="absolute -top-12 -right-12 w-48 h-48 bg-indigo-500/15 rounded-full blur-2xl pointer-events-none group-hover:bg-indigo-500/25 transition-all"></div>
+        <div class="relative z-10 flex items-center gap-4 text-left w-full sm:w-auto">
+          <div class="w-14 h-14 rounded-2xl bg-white/10 backdrop-blur-md flex items-center justify-center flex-shrink-0 border border-white/20 shadow-inner group-hover:scale-105 transition duration-300">
             <img src="icons/icon-192.png" alt="SuperApp" class="w-10 h-10 rounded-xl object-contain shadow-sm">
           </div>
           <div>
             <div class="flex items-center gap-2">
-              <span class="px-2 py-0.5 bg-amber-400 text-slate-900 rounded-md text-[10px] font-black uppercase tracking-wider">Aplikasi Android</span>
-              <span class="text-xs text-blue-200 font-semibold hidden sm:inline">• Gratis & Ringan</span>
+              <span class="px-2.5 py-0.5 bg-gradient-to-r from-amber-400 to-amber-300 text-slate-950 rounded-full text-[10px] font-black uppercase tracking-wider shadow-sm">Aplikasi Android Resmi</span>
+              <span class="text-xs text-indigo-200 font-semibold hidden sm:inline">• Bebas Kuota & Ringan</span>
             </div>
-            <h3 class="text-base sm:text-lg font-black text-white mt-0.5 leading-tight">Pasang Aplikasi di Layar Utama HP</h3>
-            <p class="text-xs text-blue-100 mt-1 leading-relaxed">Akses instan seperti aplikasi Android, hemat kuota internet, dan tidak perlu membuka browser lagi.</p>
+            <h3 class="text-base sm:text-lg font-black text-white mt-1 leading-tight tracking-tight">Pasang Super App di Layar Utama HP</h3>
+            <p class="text-xs text-slate-300 mt-0.5 leading-relaxed">Akses cepat satu klik langsung ke profil, jurnal harian, & presensi tanpa repot membuka browser.</p>
           </div>
         </div>
-        <button type="button" onclick="triggerPwaInstall()" class="w-full sm:w-auto px-5 py-3 bg-white hover:bg-blue-50 text-blue-800 font-extrabold rounded-2xl text-xs shadow-lg transition transform active:scale-95 flex items-center justify-center gap-2 cursor-pointer flex-shrink-0">
-          <i data-lucide="download" class="w-4 h-4"></i>
+        <button type="button" onclick="triggerPwaInstall()" class="relative z-10 w-full sm:w-auto px-6 py-3.5 bg-gradient-to-r from-white to-slate-100 hover:from-white hover:to-indigo-50 text-slate-950 font-black rounded-2xl text-xs shadow-xl shadow-black/20 hover:shadow-cyan-400/20 transition-all transform active:scale-95 flex items-center justify-center gap-2 cursor-pointer flex-shrink-0 border border-white">
+          <i data-lucide="download" class="w-4 h-4 text-indigo-700 stroke-[2.5]"></i>
           <span>Pasang di HP Sekarang</span>
         </button>
       </div>
 
-      <!-- Dua Pintu Masuk Cepat (Gateway Cards) -->
+      <!-- Dua Pintu Masuk Cepat (Gateway Cards Modern & Canggih) -->
       <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
         
         <!-- Pintu Masuk Siswa -->
-        <div class="bg-white rounded-3xl p-6 sm:p-8 border border-slate-200 shadow-sm hover:shadow-md transition-all relative overflow-hidden group">
-          <div class="w-14 h-14 rounded-2xl bg-cyan-100 text-cyan-700 flex items-center justify-center mb-5 group-hover:scale-105 transition">
-            <i data-lucide="sparkles" class="w-8 h-8"></i>
-          </div>
-          <span class="inline-block px-2.5 py-0.5 bg-cyan-50 text-cyan-700 border border-cyan-200 rounded-full text-xs font-semibold mb-2">Portal Siswa</span>
-          <h3 class="text-2xl font-bold text-slate-900 mb-2">Masuk Sebagai Siswa</h3>
-          <p class="text-sm text-slate-600 mb-6 leading-relaxed">
-            Isi Jurnal 7 Kebiasaan Anak Hebat, pantau presensi harian kelas, cek kehadiran ekskul, periksa nilai ulangan & rapor, serta cek kelulusan.
-          </p>
+        <div class="bg-white rounded-3xl border border-slate-200/90 shadow-lg shadow-slate-200/50 hover:shadow-2xl hover:border-cyan-400/60 transition-all duration-300 relative overflow-hidden group flex flex-col justify-between">
+          <!-- Cyber Top Glow Line -->
+          <div class="h-1.5 w-full bg-gradient-to-r from-cyan-400 via-sky-500 to-blue-600"></div>
+          <!-- Ambient Glow Spot -->
+          <div class="absolute -top-10 -right-10 w-36 h-36 bg-cyan-400/10 rounded-full blur-2xl pointer-events-none group-hover:bg-cyan-400/20 transition duration-300"></div>
 
-          <form onsubmit="handleLoginSiswa(event)" class="space-y-4">
-            <div>
-              <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">10 Digit NISN Resmi</label>
-              <div class="relative">
-                <input type="text" id="inputNisnSiswa" required maxlength="10" inputmode="numeric" pattern="[0-9]*" placeholder="Contoh: 0081234567" class="w-full pl-11 pr-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm font-semibold text-slate-900 focus:bg-white focus:ring-2 focus:ring-cyan-500 focus:outline-none transition">
-                <i data-lucide="credit-card" class="w-5 h-5 text-slate-400 absolute left-3.5 top-3.5"></i>
+          <div class="p-6 sm:p-8 relative z-10 flex-1">
+            <div class="flex items-center justify-between mb-4">
+              <div class="w-14 h-14 rounded-2xl bg-gradient-to-tr from-cyan-500 to-blue-600 text-white flex items-center justify-center shadow-lg shadow-cyan-500/25 group-hover:scale-105 group-hover:rotate-1 transition duration-300">
+                <i data-lucide="sparkles" class="w-7 h-7"></i>
               </div>
+              <span class="inline-flex items-center gap-1.5 px-3 py-1 bg-cyan-50 text-cyan-700 border border-cyan-200/60 rounded-full text-xs font-bold tracking-wide">
+                <span class="w-1.5 h-1.5 rounded-full bg-cyan-500 animate-pulse"></span>
+                Portal Siswa
+              </span>
             </div>
-            <div>
-              <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">PIN Siswa <span class="text-slate-400 font-normal">(Default: 4 digit terakhir NISN)</span></label>
-              <div class="relative">
-                <input type="password" id="inputPinSiswa" maxlength="6" inputmode="numeric" pattern="[0-9]*" placeholder="PIN Anda" class="w-full pl-11 pr-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm font-semibold text-slate-900 focus:bg-white focus:ring-2 focus:ring-cyan-500 focus:outline-none transition">
-                <i data-lucide="key-round" class="w-5 h-5 text-slate-400 absolute left-3.5 top-3.5"></i>
+
+            <h3 class="text-2xl font-black text-slate-900 tracking-tight mb-2">Masuk Sebagai Siswa</h3>
+            <p class="text-sm text-slate-600 mb-6 leading-relaxed">
+              Isi Jurnal 7 Kebiasaan Anak Hebat, pantau presensi harian kelas, cek kehadiran ekskul, periksa nilai ulangan & rapor, serta cek kelulusan.
+            </p>
+
+            <form onsubmit="handleLoginSiswa(event)" class="space-y-4">
+              <div>
+                <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5 flex items-center justify-between">
+                  <span>10 Digit NISN Resmi</span>
+                  <span class="text-[10px] text-cyan-700 font-semibold lowercase">cek kartu pelajar</span>
+                </label>
+                <div class="relative">
+                  <input type="text" id="inputNisnSiswa" required maxlength="10" inputmode="numeric" pattern="[0-9]*" placeholder="Contoh: 0081234567" class="w-full pl-11 pr-4 py-3 bg-slate-50/70 border border-slate-200 rounded-xl text-sm font-semibold text-slate-900 focus:bg-white focus:border-cyan-500 focus:ring-4 focus:ring-cyan-500/15 focus:outline-none transition">
+                  <i data-lucide="credit-card" class="w-5 h-5 text-slate-400 absolute left-3.5 top-3.5 group-focus-within:text-cyan-600 transition"></i>
+                </div>
               </div>
-            </div>
-            <button type="submit" class="w-full py-3.5 bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-700 hover:to-blue-700 text-white font-bold rounded-xl shadow-md shadow-cyan-200 transition flex items-center justify-center gap-2">
-              <span>Buka Portal Siswa</span>
-              <i data-lucide="arrow-right" class="w-4 h-4"></i>
-            </button>
-          </form>
+              <div>
+                <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">
+                  PIN Siswa <span class="text-slate-400 font-normal lowercase">(default: 4 digit terakhir NISN)</span>
+                </label>
+                <div class="relative">
+                  <input type="password" id="inputPinSiswa" maxlength="6" inputmode="numeric" pattern="[0-9]*" placeholder="PIN Anda" class="w-full pl-11 pr-4 py-3 bg-slate-50/70 border border-slate-200 rounded-xl text-sm font-semibold text-slate-900 focus:bg-white focus:border-cyan-500 focus:ring-4 focus:ring-cyan-500/15 focus:outline-none transition">
+                  <i data-lucide="key-round" class="w-5 h-5 text-slate-400 absolute left-3.5 top-3.5 group-focus-within:text-cyan-600 transition"></i>
+                </div>
+              </div>
+              <button type="submit" class="w-full py-3.5 bg-gradient-to-r from-cyan-600 via-sky-600 to-blue-700 hover:from-cyan-500 hover:via-sky-500 hover:to-blue-600 text-white font-extrabold rounded-xl shadow-lg shadow-cyan-500/25 hover:shadow-cyan-500/35 transition-all transform active:scale-[0.99] flex items-center justify-center gap-2 cursor-pointer mt-2">
+                <span>Buka Portal Siswa</span>
+                <i data-lucide="arrow-right" class="w-4 h-4"></i>
+              </button>
+            </form>
+          </div>
         </div>
 
         <!-- Pintu Masuk Guru / Pelatih / Staff -->
-        <div class="bg-white rounded-3xl p-6 sm:p-8 border border-slate-200 shadow-sm hover:shadow-md transition-all relative overflow-hidden group">
-          <div class="w-14 h-14 rounded-2xl bg-indigo-100 text-indigo-700 flex items-center justify-center mb-5 group-hover:scale-105 transition">
-            <i data-lucide="briefcase" class="w-8 h-8"></i>
-          </div>
-          <span class="inline-block px-2.5 py-0.5 bg-indigo-50 text-indigo-700 border border-indigo-200 rounded-full text-xs font-semibold mb-2">Portal Pendidik</span>
-          <h3 class="text-2xl font-bold text-slate-900 mb-2">Masuk Sebagai Guru / Pelatih</h3>
-          <p class="text-sm text-slate-600 mb-6 leading-relaxed">
-            Presensi KBM kelas (Walas), presensi latihan (Pelatih ekskul), bimbingan & rekap 7 kebiasaan (Guru Wali), scan QR pelanggaran (Piket/BK), dan input nilai.
-          </p>
+        <div class="bg-white rounded-3xl border border-slate-200/90 shadow-lg shadow-slate-200/50 hover:shadow-2xl hover:border-indigo-400/60 transition-all duration-300 relative overflow-hidden group flex flex-col justify-between">
+          <!-- Cyber Top Glow Line -->
+          <div class="h-1.5 w-full bg-gradient-to-r from-indigo-500 via-blue-600 to-purple-600"></div>
+          <!-- Ambient Glow Spot -->
+          <div class="absolute -top-10 -right-10 w-36 h-36 bg-indigo-500/10 rounded-full blur-2xl pointer-events-none group-hover:bg-indigo-500/20 transition duration-300"></div>
 
-          <form onsubmit="handleLoginGuru(event)" class="space-y-4">
-            <div>
-              <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">NIP / Username Pelatih</label>
-              <div class="relative">
-                <input type="text" id="inputNipGuru" required placeholder="Contoh: 19800101... atau PELATIH-FUTSAL" class="w-full pl-11 pr-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm font-semibold text-slate-900 focus:bg-white focus:ring-2 focus:ring-indigo-500 focus:outline-none transition">
-                <i data-lucide="user-check" class="w-5 h-5 text-slate-400 absolute left-3.5 top-3.5"></i>
+          <div class="p-6 sm:p-8 relative z-10 flex-1">
+            <div class="flex items-center justify-between mb-4">
+              <div class="w-14 h-14 rounded-2xl bg-gradient-to-tr from-indigo-600 to-blue-700 text-white flex items-center justify-center shadow-lg shadow-indigo-600/25 group-hover:scale-105 group-hover:rotate-1 transition duration-300">
+                <i data-lucide="briefcase" class="w-7 h-7"></i>
               </div>
+              <span class="inline-flex items-center gap-1.5 px-3 py-1 bg-indigo-50 text-indigo-700 border border-indigo-200/60 rounded-full text-xs font-bold tracking-wide">
+                <span class="w-1.5 h-1.5 rounded-full bg-indigo-500 animate-pulse"></span>
+                Portal Pendidik
+              </span>
             </div>
-            <div>
-              <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">PIN / Kata Sandi <span class="text-slate-400 font-normal">(Default: 1234)</span></label>
-              <div class="relative">
-                <input type="password" id="inputPinGuru" inputmode="numeric" placeholder="PIN Guru" class="w-full pl-11 pr-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm font-semibold text-slate-900 focus:bg-white focus:ring-2 focus:ring-indigo-500 focus:outline-none transition">
-                <i data-lucide="lock" class="w-5 h-5 text-slate-400 absolute left-3.5 top-3.5"></i>
+
+            <h3 class="text-2xl font-black text-slate-900 tracking-tight mb-2">Masuk Sebagai Guru / Pelatih</h3>
+            <p class="text-sm text-slate-600 mb-6 leading-relaxed">
+              Presensi KBM kelas (Walas), presensi latihan (Pelatih ekskul), bimbingan & rekap 7 kebiasaan (Guru Wali), scan QR pelanggaran (Piket/BK), dan input nilai.
+            </p>
+
+            <form onsubmit="handleLoginGuru(event)" class="space-y-4">
+              <div>
+                <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5 flex items-center justify-between">
+                  <span>NIP / Username Pelatih</span>
+                  <span class="text-[10px] text-indigo-700 font-semibold lowercase">guru / pelatih / staf</span>
+                </label>
+                <div class="relative">
+                  <input type="text" id="inputNipGuru" required placeholder="Contoh: 19800101... atau PELATIH-FUTSAL" class="w-full pl-11 pr-4 py-3 bg-slate-50/70 border border-slate-200 rounded-xl text-sm font-semibold text-slate-900 focus:bg-white focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/15 focus:outline-none transition">
+                  <i data-lucide="user-check" class="w-5 h-5 text-slate-400 absolute left-3.5 top-3.5 group-focus-within:text-indigo-600 transition"></i>
+                </div>
               </div>
-            </div>
-            <button type="submit" class="w-full py-3.5 bg-gradient-to-r from-indigo-700 to-blue-800 hover:from-indigo-800 hover:to-blue-900 text-white font-bold rounded-xl shadow-md shadow-indigo-200 transition flex items-center justify-center gap-2">
-              <span>Buka Dashboard Guru</span>
-              <i data-lucide="arrow-right" class="w-4 h-4"></i>
-            </button>
-          </form>
+              <div>
+                <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">
+                  PIN / Kata Sandi <span class="text-slate-400 font-normal lowercase">(default: 1234)</span>
+                </label>
+                <div class="relative">
+                  <input type="password" id="inputPinGuru" inputmode="numeric" placeholder="PIN Guru" class="w-full pl-11 pr-4 py-3 bg-slate-50/70 border border-slate-200 rounded-xl text-sm font-semibold text-slate-900 focus:bg-white focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/15 focus:outline-none transition">
+                  <i data-lucide="lock" class="w-5 h-5 text-slate-400 absolute left-3.5 top-3.5 group-focus-within:text-indigo-600 transition"></i>
+                </div>
+              </div>
+              <button type="submit" class="w-full py-3.5 bg-gradient-to-r from-indigo-600 via-blue-700 to-indigo-800 hover:from-indigo-500 hover:via-blue-600 hover:to-indigo-700 text-white font-extrabold rounded-xl shadow-lg shadow-indigo-600/25 hover:shadow-indigo-600/35 transition-all transform active:scale-[0.99] flex items-center justify-center gap-2 cursor-pointer mt-2">
+                <span>Buka Dashboard Guru</span>
+                <i data-lucide="arrow-right" class="w-4 h-4"></i>
+              </button>
+            </form>
+          </div>
         </div>
 
       </div>
 
-      <!-- Showcase 6 Layanan Super App -->
-      <div class="pt-4">
-        <h4 class="text-center font-bold text-slate-900 text-lg sm:text-xl mb-6">6 Pilar Layanan Sekolah Terpadu</h4>
+      <!-- Showcase 6 Layanan Super App Canggih -->
+      <div class="pt-6">
+        <div class="text-center max-w-xl mx-auto mb-8">
+          <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-50 border border-blue-200/60 text-blue-700 text-[11px] font-extrabold tracking-wider uppercase mb-2">
+            <span class="w-1.5 h-1.5 rounded-full bg-blue-600 animate-pulse"></span>
+            Ekosistem Sekolah Digital
+          </div>
+          <h4 class="font-black text-slate-900 text-xl sm:text-2xl tracking-tight">6 Pilar Layanan Terpadu</h4>
+          <p class="text-xs sm:text-sm text-slate-500 mt-1">Seluruh administrasi sekolah terintegrasi dalam satu platform modern berbasis cloud</p>
+        </div>
+
         <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3 sm:gap-4">
-          <div class="bg-white p-4 rounded-2xl border border-slate-200 text-center shadow-xs">
-            <div class="w-10 h-10 mx-auto rounded-xl bg-blue-100 text-blue-600 flex items-center justify-center mb-2"><i data-lucide="calendar-check" class="w-5 h-5"></i></div>
-            <h5 class="text-xs font-bold text-slate-800">Presensi Harian</h5>
-            <p class="text-[10px] text-slate-500 mt-1">KBM Kelas oleh Walas</p>
+          <!-- 1. Presensi Harian -->
+          <div class="bg-white p-4 sm:p-5 rounded-2xl border border-slate-200/80 hover:border-blue-400 hover:shadow-xl hover:-translate-y-1.5 transition-all duration-300 text-center group cursor-pointer flex flex-col items-center justify-between">
+            <div class="w-12 h-12 rounded-2xl bg-gradient-to-tr from-blue-600 to-cyan-400 text-white flex items-center justify-center mb-3 shadow-md shadow-blue-500/25 group-hover:scale-110 transition duration-300">
+              <i data-lucide="calendar-check" class="w-6 h-6"></i>
+            </div>
+            <div>
+              <h5 class="text-xs sm:text-sm font-bold text-slate-900 group-hover:text-blue-600 transition">Presensi Harian</h5>
+              <p class="text-[10px] sm:text-[11px] text-slate-500 mt-1 line-clamp-2">KBM Kelas oleh Walas</p>
+            </div>
+            <span class="mt-3 px-2 py-0.5 rounded-md bg-blue-50 text-blue-700 text-[9px] font-bold">Wali Kelas</span>
           </div>
-          <div class="bg-white p-4 rounded-2xl border border-slate-200 text-center shadow-xs">
-            <div class="w-10 h-10 mx-auto rounded-xl bg-emerald-100 text-emerald-600 flex items-center justify-center mb-2"><i data-lucide="activity" class="w-5 h-5"></i></div>
-            <h5 class="text-xs font-bold text-slate-800">Presensi Ekskul</h5>
-            <p class="text-[10px] text-slate-500 mt-1">Absensi Khusus Pelatih</p>
+
+          <!-- 2. Presensi Ekskul -->
+          <div class="bg-white p-4 sm:p-5 rounded-2xl border border-slate-200/80 hover:border-emerald-400 hover:shadow-xl hover:-translate-y-1.5 transition-all duration-300 text-center group cursor-pointer flex flex-col items-center justify-between">
+            <div class="w-12 h-12 rounded-2xl bg-gradient-to-tr from-emerald-600 to-teal-400 text-white flex items-center justify-center mb-3 shadow-md shadow-emerald-500/25 group-hover:scale-110 transition duration-300">
+              <i data-lucide="activity" class="w-6 h-6"></i>
+            </div>
+            <div>
+              <h5 class="text-xs sm:text-sm font-bold text-slate-900 group-hover:text-emerald-600 transition">Presensi Ekskul</h5>
+              <p class="text-[10px] sm:text-[11px] text-slate-500 mt-1 line-clamp-2">Absensi Khusus Pelatih</p>
+            </div>
+            <span class="mt-3 px-2 py-0.5 rounded-md bg-emerald-50 text-emerald-700 text-[9px] font-bold">Pelatih Ekskul</span>
           </div>
-          <div class="bg-white p-4 rounded-2xl border border-slate-200 text-center shadow-xs">
-            <div class="w-10 h-10 mx-auto rounded-xl bg-purple-100 text-purple-600 flex items-center justify-center mb-2"><i data-lucide="file-spreadsheet" class="w-5 h-5"></i></div>
-            <h5 class="text-xs font-bold text-slate-800">Nilai Ulangan</h5>
-            <p class="text-[10px] text-slate-500 mt-1">Paste Leger Sekelas</p>
+
+          <!-- 3. Nilai Ulangan -->
+          <div class="bg-white p-4 sm:p-5 rounded-2xl border border-slate-200/80 hover:border-purple-400 hover:shadow-xl hover:-translate-y-1.5 transition-all duration-300 text-center group cursor-pointer flex flex-col items-center justify-between">
+            <div class="w-12 h-12 rounded-2xl bg-gradient-to-tr from-purple-600 to-indigo-500 text-white flex items-center justify-center mb-3 shadow-md shadow-purple-500/25 group-hover:scale-110 transition duration-300">
+              <i data-lucide="file-spreadsheet" class="w-6 h-6"></i>
+            </div>
+            <div>
+              <h5 class="text-xs sm:text-sm font-bold text-slate-900 group-hover:text-purple-600 transition">Nilai Ulangan</h5>
+              <p class="text-[10px] sm:text-[11px] text-slate-500 mt-1 line-clamp-2">Paste Leger Sekelas</p>
+            </div>
+            <span class="mt-3 px-2 py-0.5 rounded-md bg-purple-50 text-purple-700 text-[9px] font-bold">Guru Mapel</span>
           </div>
-          <div class="bg-white p-4 rounded-2xl border border-slate-200 text-center shadow-xs">
-            <div class="w-10 h-10 mx-auto rounded-xl bg-amber-100 text-amber-600 flex items-center justify-center mb-2"><i data-lucide="award" class="w-5 h-5"></i></div>
-            <h5 class="text-xs font-bold text-slate-800">Kelulusan & SKL</h5>
-            <p class="text-[10px] text-slate-500 mt-1">Cetak SKL Resmi A4</p>
+
+          <!-- 4. Kelulusan & SKL -->
+          <div class="bg-white p-4 sm:p-5 rounded-2xl border border-slate-200/80 hover:border-amber-400 hover:shadow-xl hover:-translate-y-1.5 transition-all duration-300 text-center group cursor-pointer flex flex-col items-center justify-between">
+            <div class="w-12 h-12 rounded-2xl bg-gradient-to-tr from-amber-500 to-yellow-400 text-slate-950 flex items-center justify-center mb-3 shadow-md shadow-amber-500/25 group-hover:scale-110 transition duration-300">
+              <i data-lucide="award" class="w-6 h-6"></i>
+            </div>
+            <div>
+              <h5 class="text-xs sm:text-sm font-bold text-slate-900 group-hover:text-amber-600 transition">Kelulusan & SKL</h5>
+              <p class="text-[10px] sm:text-[11px] text-slate-500 mt-1 line-clamp-2">Cetak SKL Resmi A4</p>
+            </div>
+            <span class="mt-3 px-2 py-0.5 rounded-md bg-amber-50 text-amber-800 text-[9px] font-bold">Siswa & Wali</span>
           </div>
-          <div class="bg-white p-4 rounded-2xl border border-slate-200 text-center shadow-xs">
-            <div class="w-10 h-10 mx-auto rounded-xl bg-rose-100 text-rose-600 flex items-center justify-center mb-2"><i data-lucide="sun" class="w-5 h-5"></i></div>
-            <h5 class="text-xs font-bold text-slate-800">Guru Wali (7 Kebiasaan)</h5>
-            <p class="text-[10px] text-slate-500 mt-1">Bimbingan, Rekap A4 & WA</p>
+
+          <!-- 5. Guru Wali (7 Kebiasaan) -->
+          <div class="bg-white p-4 sm:p-5 rounded-2xl border border-slate-200/80 hover:border-rose-400 hover:shadow-xl hover:-translate-y-1.5 transition-all duration-300 text-center group cursor-pointer flex flex-col items-center justify-between">
+            <div class="w-12 h-12 rounded-2xl bg-gradient-to-tr from-rose-500 to-pink-500 text-white flex items-center justify-center mb-3 shadow-md shadow-rose-500/25 group-hover:scale-110 transition duration-300">
+              <i data-lucide="sun" class="w-6 h-6"></i>
+            </div>
+            <div>
+              <h5 class="text-xs sm:text-sm font-bold text-slate-900 group-hover:text-rose-600 transition">7 Kebiasaan</h5>
+              <p class="text-[10px] sm:text-[11px] text-slate-500 mt-1 line-clamp-2">Karakter, Rekap A4 & WA</p>
+            </div>
+            <span class="mt-3 px-2 py-0.5 rounded-md bg-rose-50 text-rose-700 text-[9px] font-bold">Guru Wali</span>
           </div>
-          <div class="bg-white p-4 rounded-2xl border border-slate-200 text-center shadow-xs">
-            <div class="w-10 h-10 mx-auto rounded-xl bg-red-100 text-red-600 flex items-center justify-center mb-2"><i data-lucide="alert-octagon" class="w-5 h-5"></i></div>
-            <h5 class="text-xs font-bold text-slate-800">Tata Tertib</h5>
-            <p class="text-[10px] text-slate-500 mt-1">Scan QR & Surat Panggilan</p>
+
+          <!-- 6. Tata Tertib -->
+          <div class="bg-white p-4 sm:p-5 rounded-2xl border border-slate-200/80 hover:border-red-400 hover:shadow-xl hover:-translate-y-1.5 transition-all duration-300 text-center group cursor-pointer flex flex-col items-center justify-between">
+            <div class="w-12 h-12 rounded-2xl bg-gradient-to-tr from-red-600 to-orange-500 text-white flex items-center justify-center mb-3 shadow-md shadow-red-500/25 group-hover:scale-110 transition duration-300">
+              <i data-lucide="alert-octagon" class="w-6 h-6"></i>
+            </div>
+            <div>
+              <h5 class="text-xs sm:text-sm font-bold text-slate-900 group-hover:text-red-600 transition">Tata Tertib</h5>
+              <p class="text-[10px] sm:text-[11px] text-slate-500 mt-1 line-clamp-2">Scan QR & Surat Panggilan</p>
+            </div>
+            <span class="mt-3 px-2 py-0.5 rounded-md bg-red-50 text-red-700 text-[9px] font-bold">Piket / BK</span>
           </div>
         </div>
       </div>
@@ -1694,8 +1810,11 @@
             <i data-lucide="database" class="w-5 h-5"></i>
           </div>
           <div>
-            <h3 class="font-extrabold text-base text-slate-900 leading-tight">Hubungkan Google Spreadsheet</h3>
-            <p class="text-xs text-slate-500">Koneksi Database 1 Google Sheet via Web App Apps Script</p>
+            <div class="flex items-center gap-2">
+              <h3 class="font-extrabold text-base text-slate-900 leading-tight">Hubungkan Google Spreadsheet</h3>
+              <span class="px-2 py-0.5 bg-amber-100 text-amber-800 rounded-md text-[10px] font-bold border border-amber-300">Khusus Admin</span>
+            </div>
+            <p class="text-xs text-slate-500 mt-0.5">Koneksi Database 1 Google Sheet via Web App Apps Script</p>
           </div>
         </div>
         <button onclick="closeModalSetelBackend()" class="text-slate-400 hover:text-slate-600 p-1.5 rounded-lg transition">
@@ -1887,6 +2006,11 @@
     let capturedWatermarkBase64 = null;
     let audioContext = null;
 
+    // Flag global untuk proteksi edit pengguna dan sinkronisasi
+    let isUserEditing = false;
+    window.isUserEditing = false;
+    let consecutiveSyncFailures = 0;
+
     // ============================================================
     // KONFIGURASI BACKEND & AUTO-ONLINE VERCEL (DUAL MODE GAS & REMOTE)
     // ============================================================
@@ -1995,7 +2119,7 @@
         if (badge) {
           badge.innerHTML = `<span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span><span>🟢 Online (Sheets)</span>`;
           badge.className = "inline-flex items-center gap-1 px-2.5 py-0.5 bg-emerald-100 text-emerald-800 rounded-full text-[10px] font-bold border border-emerald-300 hover:bg-emerald-200 transition cursor-pointer";
-          badge.title = "Terhubung ke Google Spreadsheet via Web App API. Klik untuk kelola koneksi.";
+          badge.title = "Terhubung ke Google Spreadsheet (Akses Kelola: Khusus Admin)";
         }
         if (banner) banner.classList.add('hidden');
         if (landingBadge) {
@@ -2011,14 +2135,14 @@
         if (badge) {
           badge.innerHTML = `<span class="w-1.5 h-1.5 rounded-full bg-amber-500 animate-pulse"></span><span>🟡 Mode Offline</span>`;
           badge.className = "inline-flex items-center gap-1 px-2.5 py-0.5 bg-amber-100 text-amber-800 rounded-full text-[10px] font-bold border border-amber-300 hover:bg-amber-200 transition cursor-pointer";
-          badge.title = "Penyimpanan browser lokal. Klik untuk menghubungkan ke Google Spreadsheet.";
+          badge.title = "Penyimpanan browser lokal (Hubungkan Sheets: Khusus Admin)";
         }
         if (banner) banner.classList.remove('hidden');
         if (landingBadge) {
           landingBadge.innerHTML = `<span class="px-2.5 py-0.5 bg-amber-100 text-amber-800 rounded-full text-xs font-bold border border-amber-300">🟡 Mode Offline / Demo</span>`;
         }
         if (landingDesc) {
-          landingDesc.innerText = "Penyimpanan lokal browser. Klik 'Kelola Koneksi Sheets' untuk menghubungkan ke spreadsheet.";
+          landingDesc.innerText = "Penyimpanan lokal browser. Hubungkan ke spreadsheet melalui Panel Administrator.";
         }
         if (landingIcon) {
           landingIcon.className = "w-9 h-9 rounded-xl bg-amber-100 text-amber-700 flex items-center justify-center flex-shrink-0";
@@ -2242,7 +2366,7 @@
     // -------------------------------------------------------------
     // INISIALISASI, AUTO-REFRESH & SINKRONISASI ONLINE REAL-TIME
     // -------------------------------------------------------------
-    window.addEventListener("DOMContentLoaded", () => {
+    function initApp() {
       // Simpan parameter tab jika dibuka dari shortcut PWA
       const urlParams = new URLSearchParams(window.location.search);
       const initialTab = urlParams.get('tab');
@@ -2257,27 +2381,47 @@
       loadInitialData();
       startCountdownTimer();
 
-      // 1. Auto-Sync saat aplikasi dibuka kembali dari background HP / berganti tab browser
+      // Flag perlindungan form & counter toleransi koneksi
+      let lastBackgroundTimestamp = Date.now();
+
+      // Deteksi otomatis jika user sedang mengetik, memilih radio/select, atau mengisi form di halaman mana pun
+      const markUserEditing = () => {
+        isUserEditing = true;
+        window.isUserEditing = true;
+        clearTimeout(window._userEditingTimer);
+        window._userEditingTimer = setTimeout(() => { isUserEditing = false; window.isUserEditing = false; }, 30000);
+      };
+      document.addEventListener('input', markUserEditing, true);
+      document.addEventListener('change', markUserEditing, true);
+
+      // 1. Auto-Sync hanya jika aplikasi ditinggalkan lama di background HP (> 90 detik)
       document.addEventListener('visibilitychange', () => {
-        if (document.visibilityState === 'visible') {
-          console.log('[AutoSync] Aplikasi aktif kembali di layar, menyinkronkan data terbaru...');
-          syncDataFromGoogleSheets(true, true);
+        if (document.visibilityState === 'hidden') {
+          lastBackgroundTimestamp = Date.now();
+        } else if (document.visibilityState === 'visible') {
+          if (Date.now() - lastBackgroundTimestamp > 90000 && !isUserEditing) {
+            console.log('[AutoSync] Tab aktif kembali setelah lama di background, perbarui data...');
+            syncDataFromGoogleSheets(true, false);
+          }
         }
       });
-      window.addEventListener('focus', () => {
-        syncDataFromGoogleSheets(true, true);
-      });
 
-      // 2. Background Real-Time Poller: periksa perubahan di Google Sheet setiap 7 detik jika tab aktif
+      // 2. Background Poller Tenang & Stabil (Setiap 60 detik saat tab aktif & tidak sedang mengedit)
       setInterval(() => {
-        if (document.visibilityState === 'visible' && (isGas() || BACKEND_URL) && !isSyncingData) {
+        if (document.visibilityState === 'visible' && (isGas() || BACKEND_URL) && !isSyncingData && !isUserEditing) {
           syncDataFromGoogleSheets(true, false);
         }
-      }, 7000);
-    });
+      }, 60000);
+    }
+
+    if (document.readyState === 'loading') {
+      window.addEventListener('DOMContentLoaded', initApp);
+    } else {
+      initApp();
+    }
 
     // -------------------------------------------------------------
-    // KOMUNIKASI API REST / POST KE GOOGLE APPS SCRIPT (DUAL MODE)
+    // KOMUNIKASI API REST / POST KE GOOGLE APPS SCRIPT (DUAL MODE DENGAN RETRY OTOMATIS)
     // -------------------------------------------------------------
     async function callBackendPost(payload) {
       if (isGas()) {
@@ -2298,30 +2442,56 @@
         return { success: true, localOnly: true };
       }
 
-      // 1. Coba POST (Content-Type text/plain agar tidak trigger CORS preflight OPTIONS)
-      try {
-        const res = await fetch(BACKEND_URL, {
-          method: 'POST',
-          mode: 'cors',
-          redirect: 'follow',
-          headers: {
-            'Content-Type': 'text/plain;charset=utf-8'
-          },
-          body: JSON.stringify(payload)
-        });
-        const rawText = await res.text();
+      // Prioritas Simpan Data Pengguna: tangguhkan background sync sementara
+      isSyncingData = true;
+
+      // Helper POST dengan controller timeout 25 detik
+      async function doFetchPost(dataPayload) {
+        const controller = new AbortController();
+        const timeoutId = setTimeout(() => controller.abort(), 25000);
         try {
-          const json = JSON.parse(rawText);
-          return json;
-        } catch (jsonErr) {
-          console.warn('POST response bukan JSON murni:', rawText.slice(0, 150));
+          const res = await fetch(BACKEND_URL, {
+            method: 'POST',
+            mode: 'cors',
+            redirect: 'follow',
+            signal: controller.signal,
+            headers: {
+              'Content-Type': 'text/plain;charset=utf-8'
+            },
+            body: JSON.stringify(dataPayload)
+          });
+          clearTimeout(timeoutId);
+          const rawText = await res.text();
+          try {
+            return JSON.parse(rawText);
+          } catch (jsonErr) {
+            console.warn('POST response bukan JSON murni:', rawText.slice(0, 150));
+            return null;
+          }
+        } catch (err) {
+          clearTimeout(timeoutId);
+          console.warn('Percobaan POST API mengalami timeout/glitch:', err);
+          return null;
         }
-      } catch (err) {
-        console.warn('POST API gagal, mencoba fallback GET:', err);
       }
 
-      // 2. Fallback otomatis ke GET jika POST gagal (seperti pada aplikasi rekap presensi ekstra)
       try {
+        // Percobaan 1: Kirim langsung via POST
+        let json = await doFetchPost(payload);
+
+        // Percobaan 2: Jika percobaan 1 gagal (cold-start / glitch jaringan), coba ulang 1 kali setelah 1.2 detik
+        if (!json || (!json.success && !json.error)) {
+          console.log('[API] Menghubungi ulang server Google Apps Script (Auto-Retry)...');
+          await new Promise(r => setTimeout(r, 1200));
+          json = await doFetchPost(payload);
+        }
+
+        if (json && (json.success || json.error)) {
+          consecutiveSyncFailures = 0;
+          return json;
+        }
+
+        // Percobaan 3: Fallback ke GET jika POST diblokir oleh browser atau proxy
         const sep = BACKEND_URL.includes('?') ? '&' : '?';
         const action = payload.action || 'ping';
         let getPayload = payload;
@@ -2337,18 +2507,15 @@
           redirect: 'follow'
         });
         const rawText = await res.text();
-        try {
-          const json = JSON.parse(rawText);
-          return json;
-        } catch (jsonErr) {
-          console.error('GET response bukan JSON:', rawText.slice(0, 150));
-        }
-      } catch (getErr) {
-        console.error('Koneksi Google Apps Script API gagal (POST & GET):', getErr);
-        return { success: false, error: getErr.message || String(getErr) };
+        const getJson = JSON.parse(rawText);
+        if (getJson) consecutiveSyncFailures = 0;
+        return getJson;
+      } catch (finalErr) {
+        console.error('Koneksi Google Apps Script API gagal (POST & GET):', finalErr);
+        return { success: false, error: finalErr.message || String(finalErr) };
+      } finally {
+        isSyncingData = false;
       }
-
-      return { success: false, error: 'Gagal menghubungi server Google Apps Script.' };
     }
 
     // -------------------------------------------------------------
@@ -2514,14 +2681,18 @@
         return false;
       }
 
+      // Jangan jalankan background sync jika pengguna sedang aktif mengisi form/mengetik
+      if (isUserEditing && isSilent) {
+        return false;
+      }
+
       // Proteksi Concurrency & Throttling: Jangan kirim request bertumpuk kecuali dipaksa (force)
       if (isSyncingData && !force) {
         return false;
       }
       // Adaptive Real-Time Throttling:
-      // Hanya batasi jika ini background polling otomatis murni (isSilent && !force).
-      // Batas interval minimum diperkecil ke 6 detik (bukan 35 detik) agar sinkronisasi antar perangkat cepat & responsif
-      if (isSilent && !force && (Date.now() - lastDataSyncTimestamp < 6000)) {
+      // Batas interval minimum background sync adalah 45 detik agar Google Apps Script tidak kewalahan
+      if (isSilent && !force && (Date.now() - lastDataSyncTimestamp < 45000)) {
         return true;
       }
 
@@ -2649,7 +2820,7 @@
 
       applyConfigToUi();
 
-      // Refresh tampilan aktif sesuai sesi pengguna
+      // Refresh tampilan aktif sesuai sesi pengguna tanpa me-reset form
       if (currentUser) {
         if (currentUser.role === 'SISWA') {
           const me = masterSiswa.find(s => isSameNisn(s.nisn, currentUser.nisn));
@@ -2659,7 +2830,8 @@
             currentUser.nipGuruWali = me.nipGuruWali;
             currentUser.noHpOrtu = (me.noHpOrtu !== undefined && me.noHpOrtu !== null) ? String(me.noHpOrtu).trim() : '';
           }
-          setupSiswaUi();
+          if (document.getElementById('userName')) document.getElementById('userName').innerText = currentUser.nama;
+          if (document.getElementById('profileNamaSiswa')) document.getElementById('profileNamaSiswa').innerText = currentUser.nama;
 
           // Perbarui tampilan tab siswa yang sedang aktif secara real-time
           const activeSiswaContent = document.querySelector('.tab-siswa-content:not(.hidden)');
@@ -2670,11 +2842,10 @@
             else if (tabId === 'tabContentSiswa_presensi') renderPresensiSiswa();
             else if (tabId === 'tabContentSiswa_tatatertib') renderBukuSakuSiswa();
             else if (tabId === 'tabContentSiswa_ekskul') { renderKatalogEkskulSiswa(); renderEkskulSayaSiswa(); }
-            else if (tabId === 'tabContentSiswa_kebiasaan') { cekStatusJurnalTanggal(); renderRekap7KebiasaanSiswa(); }
+            else if (tabId === 'tabContentSiswa_kebiasaan') { renderRekap7KebiasaanSiswa(); }
             else if (tabId === 'tabContentSiswa_beranda') { renderPresensiSiswa(); renderBukuSakuSiswa(); renderRekap7KebiasaanSiswa(); }
           }
         } else if (currentUser.role === 'ADMIN') {
-          setupAdminUi();
           const activeAdminContent = document.querySelector('.tab-admin-content:not(.hidden)');
           if (activeAdminContent) {
             const tabId = activeAdminContent.id;
@@ -2683,14 +2854,11 @@
             else if (tabId === 'tabContentAdmin_konfigurasi' || tabId === 'tabContentAdmin_pengaturan') applyConfigToUi();
           }
         } else {
-          setupGuruUi();
-          // Perbarui tampilan tab guru yang sedang aktif secara real-time
+          // Guru / Pelatih
           const activeGuruContent = document.querySelector('.tab-guru-content:not(.hidden)');
-          if (activeGuruContent) {
+          if (activeGuruContent && !isUserEditing) {
             const tabId = activeGuruContent.id;
-            if (tabId === 'tabContentGuru_presensiKbm') renderFormPresensiKbm();
-            else if (tabId === 'tabContentGuru_absenEkskul') renderFormAbsenPelatih();
-            else if (tabId === 'tabContentGuru_rekapWalas') renderRekapWalasEkskul();
+            if (tabId === 'tabContentGuru_rekapWalas') renderRekapWalasEkskul();
             else if (tabId === 'tabContentGuru_guruWali' || tabId === 'tabContentGuru_validasi7K') loadValidasi7Kebiasaan();
             else if (tabId === 'tabContentGuru_tibum') renderCheckboxMasterTibum();
           }
@@ -2797,8 +2965,16 @@
       document.getElementById('landingInstansi').innerText = appConfig.INSTANSI_PEMBINA || "";
       document.getElementById('landingAlamat').innerText = appConfig.ALAMAT_SEKOLAH || "";
       
-      if (appConfig.LOGO_KIRI_PEMDA) document.getElementById('landingLogoPemda').src = appConfig.LOGO_KIRI_PEMDA;
-      if (appConfig.LOGO_KANAN_SEKOLAH) document.getElementById('landingLogoSekolah').src = appConfig.LOGO_KANAN_SEKOLAH;
+      if (appConfig.LOGO_KIRI_PEMDA) {
+        const el = document.getElementById('landingLogoPemda');
+        if (el) el.src = appConfig.LOGO_KIRI_PEMDA;
+      }
+      if (appConfig.LOGO_KANAN_SEKOLAH) {
+        const el1 = document.getElementById('landingLogoSekolah');
+        if (el1) el1.src = appConfig.LOGO_KANAN_SEKOLAH;
+        const el2 = document.getElementById('landingLogoSekolahMob');
+        if (el2) el2.src = appConfig.LOGO_KANAN_SEKOLAH;
+      }
       if (appConfig.PENGUMUMAN_RUNNING) document.getElementById('newsTickerText').innerText = appConfig.PENGUMUMAN_RUNNING;
 
       // Status pendaftaran ekskul di katalog siswa
@@ -2932,6 +3108,7 @@
       if (document.getElementById('inputPinSiswa')) {
         document.getElementById('inputPinSiswa').value = '';
       }
+      resetForm7Kebiasaan();
       showView('viewLanding');
       Swal.fire({
         toast: true,
@@ -2993,6 +3170,7 @@
         document.getElementById('inputNoHpOrtuSiswa').value = currentUser.noHpOrtu || '';
       }
 
+      resetForm7Kebiasaan();
       setupSiswaUi();
       showView('viewSiswa');
 
@@ -3116,9 +3294,6 @@
         else btnHeader.classList.add('hidden');
       }
 
-      // Reset form 7 kebiasaan agar isian akun sebelumnya tidak tertinggal
-      resetForm7Kebiasaan();
-
       renderKatalogEkskulSiswa();
       renderEkskulSayaSiswa();
       renderNilaiSiswa();
@@ -3193,11 +3368,6 @@
         if (document.getElementById('inputNoHpOrtuSiswa')) {
           document.getElementById('inputNoHpOrtuSiswa').value = (currentUser && currentUser.noHpOrtu) ? currentUser.noHpOrtu : '';
         }
-      }
-
-      // Sinkronisasi data menyeluruh di latar belakang secara instan saat tab berganti
-      if (BACKEND_URL || isGas()) {
-        syncDataFromGoogleSheets(true, true);
       }
 
       safeCreateIcons();
@@ -3640,9 +3810,10 @@
       document.getElementById('snapshotKebiasaanSiswa').innerText = "Sudah Lapor ✓";
       document.getElementById('snapshotKebiasaanSiswa').className = "text-lg font-bold text-emerald-600 mt-2";
 
+      isUserEditing = true;
       playChimeBell();
       Swal.fire({
-        title: 'Mengirim ke Google Sheets & Drive...',
+        title: 'Mengirim ke Google Sheets & Drive... ⏳',
         text: 'Mengunggah jurnal dan foto bukti terkompresi...',
         didOpen: () => Swal.showLoading(),
         allowOutsideClick: false
@@ -3653,10 +3824,11 @@
         laporan: laporan
       });
 
-      resetForm7Kebiasaan();
-      renderRekap7KebiasaanSiswa();
+      isUserEditing = false;
 
       if (res && res.success) {
+        resetForm7Kebiasaan();
+        renderRekap7KebiasaanSiswa();
         Swal.fire({
           title: 'Alhamdulillah! 🟢',
           text: res.message || 'Laporan 7 Kebiasaan ananda berhasil disimpan ke Google Sheets.',
@@ -3664,9 +3836,10 @@
         });
         await syncDataFromGoogleSheets(true, true);
       } else {
+        renderRekap7KebiasaanSiswa();
         Swal.fire({
-          title: 'Tersimpan Lokal',
-          text: 'Laporan tersimpan di memori perangkat. (Info server: ' + (res.error || 'Offline') + ')',
+          title: 'Tersimpan Lokal 💾',
+          text: 'Laporan tersimpan di memori perangkat. (Info server: ' + (res ? (res.error || 'Offline') : 'Offline') + '). Anda dapat mencoba menekan tombol Kirim Laporan kembali.',
           icon: 'info'
         });
       }
@@ -4846,15 +5019,14 @@
         inputOleh: currentUser ? currentUser.nama : "Guru Mapel"
       });
 
-      document.getElementById('pasteExcelTextarea').value = '';
-      document.getElementById('previewPastedNilaiArea').classList.add('hidden');
-      parsedNilaiCache = [];
-
       if (res && res.success) {
+        document.getElementById('pasteExcelTextarea').value = '';
+        document.getElementById('previewPastedNilaiArea').classList.add('hidden');
+        parsedNilaiCache = [];
         Swal.fire('Tersimpan di Google Sheets! 🟢', `Sebanyak ${dataNilaiToPost.length} nilai mapel ${mapel} kelas ${kelas} berhasil disimpan ke Google Sheets.`, 'success');
         await syncDataFromGoogleSheets(true, true);
       } else {
-        Swal.fire('Tersimpan Lokal', `Nilai disimpan di memori perangkat. (Info server: ${res.error || 'Offline'})`, 'info');
+        Swal.fire('Tersimpan di Sesi Lokal ⚠️', `Nilai tersimpan di memori perangkat karena sinkronisasi Google Sheets belum terhubung (${res.error || 'Timeout/Offline'}). Data paste Anda tetap aman untuk dicoba simpan ulang.`, 'warning');
       }
     }
 
@@ -5350,11 +5522,6 @@
         renderAdminPlottingGuruWali();
       }
 
-      // Sinkronisasi data menyeluruh di latar belakang secara instan saat admin berganti tab
-      if (BACKEND_URL || isGas()) {
-        syncDataFromGoogleSheets(true, true);
-      }
-
       safeCreateIcons();
     }
 
@@ -5753,6 +5920,54 @@
 
     function openModalSetelBackend(e) {
       if (e) e.stopPropagation();
+
+      // Pastikan HANYA ADMIN yang bisa mengelola koneksi database Google Sheets
+      if (!currentUser || currentUser.role !== 'ADMIN') {
+        Swal.fire({
+          title: '🔐 Akses Khusus Administrator',
+          html: `
+            <div class="text-left space-y-2 text-xs text-slate-600 mb-3">
+              <p>Pengaturan dan koneksi database Google Spreadsheet hanya boleh dikelola oleh <b>Administrator Sekolah</b>.</p>
+              <p>Silakan masukkan PIN Administrator Anda:</p>
+            </div>
+            <input type="password" id="swalAdminPinInput" maxlength="10" inputmode="numeric" pattern="[0-9]*" placeholder="Default: 123456" class="w-full text-center tracking-widest text-base font-mono font-bold py-2.5 px-3 bg-slate-50 border border-slate-300 rounded-xl focus:bg-white focus:ring-2 focus:ring-blue-600 focus:outline-none">
+          `,
+          showCancelButton: true,
+          confirmButtonText: 'Buka Koneksi Sheets',
+          cancelButtonText: 'Batal',
+          confirmButtonColor: '#1d4ed8',
+          cancelButtonColor: '#64748b',
+          customClass: { popup: 'rounded-3xl p-6 max-w-sm' },
+          didOpen: () => {
+            const pinInput = document.getElementById('swalAdminPinInput');
+            if (pinInput) pinInput.focus();
+          },
+          preConfirm: () => {
+            const inputVal = document.getElementById('swalAdminPinInput').value.trim();
+            const correctPin = appConfig.PIN_ADMIN || '123456';
+            if (!inputVal) {
+              Swal.showValidationMessage('Silakan masukkan PIN Admin.');
+              return false;
+            }
+            if (inputVal !== correctPin) {
+              Swal.showValidationMessage('PIN Administrator salah. Akses ditolak!');
+              return false;
+            }
+            return true;
+          }
+        }).then((result) => {
+          if (result.isConfirmed) {
+            currentUser = { role: 'ADMIN', nama: 'Administrator Sistem', nip: 'ADMIN' };
+            showModalSetelBackendDirect();
+          }
+        });
+        return;
+      }
+
+      showModalSetelBackendDirect();
+    }
+
+    function showModalSetelBackendDirect() {
       const currentUrl = getBackendUrl();
       const isNative = isGas();
       document.getElementById('inputModalBackendUrl').value = currentUrl || '';
@@ -5909,6 +6124,10 @@
     }
 
     function simpanBackendUrlModal() {
+      if (!currentUser || currentUser.role !== 'ADMIN') {
+        Swal.fire('Akses Ditolak ⚠️', 'Hanya Administrator yang memiliki wewenang menyimpan URL database.', 'error');
+        return;
+      }
       const raw = document.getElementById('inputModalBackendUrl').value.trim();
       if (!raw) {
         setGasApiUrl('');
@@ -5949,12 +6168,20 @@
     }
 
     function resetDefaultBackendUrlModal() {
+      if (!currentUser || currentUser.role !== 'ADMIN') {
+        Swal.fire('Akses Ditolak ⚠️', 'Hanya Administrator yang memiliki wewenang mereset URL database.', 'error');
+        return;
+      }
       const defUrl = (typeof window !== 'undefined' && window.DEFAULT_GAS_API_URL) ? window.DEFAULT_GAS_API_URL : DEFAULT_GAS_API_URL;
       document.getElementById('inputModalBackendUrl').value = defUrl || '';
       Swal.fire('Reset ke Default', 'URL dikembalikan ke konfigurasi default (config.js). Silakan klik "Simpan & Aktifkan".', 'info');
     }
 
     function putuskanKoneksiBackendModal() {
+      if (!currentUser || currentUser.role !== 'ADMIN') {
+        Swal.fire('Akses Ditolak ⚠️', 'Hanya Administrator yang memiliki wewenang memutuskan koneksi database.', 'error');
+        return;
+      }
       Swal.fire({
         title: 'Putuskan Koneksi Sheets?',
         text: 'Aplikasi akan beralih ke Mode Offline (Penyimpanan Browser Lokal).',
@@ -5975,6 +6202,10 @@
     }
 
     function handleSimpanBackendUrl() {
+      if (!currentUser || currentUser.role !== 'ADMIN') {
+        Swal.fire('Akses Ditolak ⚠️', 'Hanya Administrator yang memiliki wewenang mengubah URL endpoint.', 'error');
+        return;
+      }
       const url = document.getElementById('inputBackendUrlConfig').value.trim();
       if (!url) {
         setGasApiUrl('');
