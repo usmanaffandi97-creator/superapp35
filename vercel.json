@@ -1,12 +1,10 @@
 {
   "version": 2,
   "name": "super-app-sekolah",
-  "outputDirectory": ".",
-  "buildCommand": "echo 'Static web app ready'",
   "cleanUrls": true,
   "rewrites": [
     {
-      "source": "/((?!icons/|sw\\.js|manifest\\.json|favicon\\.ico).*)",
+      "source": "/(.*)",
       "destination": "/index.html"
     }
   ],
@@ -16,24 +14,11 @@
       "headers": [
         {
           "key": "Cache-Control",
-          "value": "no-cache, no-store, must-revalidate"
+          "value": "public, max-age=0, must-revalidate"
         },
         {
           "key": "Service-Worker-Allowed",
           "value": "/"
-        }
-      ]
-    },
-    {
-      "source": "/manifest.json",
-      "headers": [
-        {
-          "key": "Content-Type",
-          "value": "application/manifest+json"
-        },
-        {
-          "key": "Cache-Control",
-          "value": "public, max-age=0, must-revalidate"
         }
       ]
     },

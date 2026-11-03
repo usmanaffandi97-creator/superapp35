@@ -46,20 +46,7 @@ function doGet(e) {
 
     try {
       if (action === "ping") {
-        let ssName = "Tidak Terdeteksi";
-        let ssId = "";
-        try {
-          const targetSs = getSS();
-          ssName = targetSs.getName();
-          ssId = targetSs.getId();
-        } catch(e){}
-        result = { 
-          success: true, 
-          message: "Super App Sekolah API Aktif", 
-          spreadsheetName: ssName,
-          spreadsheetId: ssId,
-          timestamp: new Date().toISOString() 
-        };
+        result = { success: true, message: "Super App Sekolah API Aktif", timestamp: new Date().toISOString() };
       } else if (action === "getInitialData") {
         result = getInitialData();
       } else if (action === "getPresensiHarian") {
@@ -104,6 +91,16 @@ function doGet(e) {
  * Entry Point POST (Menerima Request dari Frontend Vercel)
  */
 function doPost(e) {
+  let lock = LockService.getScriptLock();
+  try {
+    lock.waitLock(15000); // Kunci concurrency 15 detik
+  } catch (lockErr) {
+    return ContentService.createTextOutput(JSON.stringify({ 
+      success: false, 
+      error: "Sistem sedang sibuk memproses data lain, silakan coba 5 detik lagi." 
+    })).setMimeType(ContentService.MimeType.JSON);
+  }
+
   try {
     let payload = {};
     if (e && e.postData && e.postData.contents) {
@@ -116,100 +113,61 @@ function doPost(e) {
       payload = e.parameter;
     }
 
-    const action = payload.action || (e && e.parameter && e.parameter.action);
+    const action = payload.action;
     let response = { success: false, error: "Action tidak ditentukan: " + (action || 'kosong') };
 
-    // -------------------------------------------------------------
-    // OPERASI READ-ONLY (Tanpa LockService agar Respons Cepat & Tidak Antre)
-    // -------------------------------------------------------------
     if (action === "ping") {
-      let ssName = "Tidak Terdeteksi";
-      let ssId = "";
-      try {
-        const targetSs = getSS();
-        ssName = targetSs.getName();
-        ssId = targetSs.getId();
-      } catch(e){}
-      return ContentService.createTextOutput(JSON.stringify({ 
-        success: true, 
-        message: "Super App Sekolah API Aktif", 
-        spreadsheetName: ssName,
-        spreadsheetId: ssId,
-        timestamp: new Date().toISOString() 
-      })).setMimeType(ContentService.MimeType.JSON);
+      response = { success: true, message: "Super App Sekolah API Aktif", timestamp: new Date().toISOString() };
     } else if (action === "getInitialData") {
       response = getInitialData();
-      return ContentService.createTextOutput(JSON.stringify(response))
-        .setMimeType(ContentService.MimeType.JSON);
     } else if (action === "loginUser") {
       response = loginUser(payload.role, payload.identifier, payload.pin);
-      return ContentService.createTextOutput(JSON.stringify(response))
-        .setMimeType(ContentService.MimeType.JSON);
+    } else if (action === "simpanPresensiHarian") {
+      response = simpanPresensiHarian(payload.tanggal, payload.kelas, payload.dataAbsen, payload.dicatatOleh);
+    } else if (action === "simpanPresensiEkskul") {
+      response = simpanPresensiEkskul(payload.tanggal, payload.idEkskul, payload.dataAbsen, payload.dicatatOleh);
+    } else if (action === "daftarEkskulMandiri") {
+      response = daftarEkskulMandiri(payload.nisn, payload.nama, payload.kelas, payload.idEkskul, payload.namaEkskul);
+    } else if (action === "batalEkskulMandiri") {
+      response = batalEkskulMandiri(payload.nisn, payload.idEkskul);
+    } else if (action === "simpanNilaiUlangan") {
+      response = simpanNilaiUlangan(payload.dataNilai, payload.inputOleh);
+    } else if (action === "simpanKelulusan") {
+      response = simpanKelulusan(payload.dataKelulusan, payload.pin);
+    } else if (action === "simpan7Kebiasaan") {
+      response = simpan7Kebiasaan(payload.laporan);
+    } else if (action === "validasi7Kebiasaan") {
+      response = validasi7Kebiasaan(payload.idLog, payload.statusValidasi, payload.catatanGuru, payload.nipValidator);
+    } else if (action === "simpanPelanggaran") {
+      response = simpanPelanggaran(payload.pelanggaran);
+    } else if (action === "updateStatusBK") {
+      response = updateStatusBK(payload.idLog, payload.statusBK, payload.catatanKasus, payload.sanksi);
+    } else if (action === "simpanPengaturan") {
+      response = simpanPengaturan(payload.config, payload.pin);
+    } else if (action === "simpanMasterSiswa") {
+      response = simpanMasterSiswa(payload.siswaList, payload.pin);
+    } else if (action === "updateGuruWaliSiswa") {
+      response = updateGuruWaliSiswa(payload.assignments, payload.pin);
+    } else if (action === "simpanMasterGuru") {
+      response = simpanMasterGuru(payload.guruList, payload.pin);
+    } else if (action === "simpanMasterEkskul") {
+      response = simpanMasterEkskul(payload.ekskulList, payload.pin);
+    } else if (action === "updateProfilSiswa") {
+      response = updateProfilSiswa(payload.nisn, payload.noHpOrtu);
     } else if (action === "verifyAdminPin") {
       response = verifyAdminPin(payload.pin);
-      return ContentService.createTextOutput(JSON.stringify(response))
-        .setMimeType(ContentService.MimeType.JSON);
     }
 
-    // -------------------------------------------------------------
-    // OPERASI WRITE / TRANSAKSI DATABASE (Gunakan LockService Concurrency)
-    // -------------------------------------------------------------
-    let lock = LockService.getScriptLock();
-    try {
-      lock.waitLock(15000); // Kunci concurrency 15 detik
-    } catch (lockErr) {
-      return ContentService.createTextOutput(JSON.stringify({ 
-        success: false, 
-        error: "Sistem sedang memproses data lain, silakan coba beberapa saat lagi." 
-      })).setMimeType(ContentService.MimeType.JSON);
-    }
-
-    try {
-      if (action === "simpanPresensiHarian") {
-        response = simpanPresensiHarian(payload.tanggal, payload.kelas, payload.dataAbsen, payload.dicatatOleh);
-      } else if (action === "simpanPresensiEkskul") {
-        response = simpanPresensiEkskul(payload.tanggal, payload.idEkskul, payload.dataAbsen, payload.dicatatOleh);
-      } else if (action === "daftarEkskulMandiri") {
-        response = daftarEkskulMandiri(payload.nisn, payload.nama, payload.kelas, payload.idEkskul, payload.namaEkskul);
-      } else if (action === "batalEkskulMandiri") {
-        response = batalEkskulMandiri(payload.nisn, payload.idEkskul);
-      } else if (action === "simpanNilaiUlangan") {
-        response = simpanNilaiUlangan(payload.dataNilai, payload.inputOleh);
-      } else if (action === "simpanKelulusan") {
-        response = simpanKelulusan(payload.dataKelulusan, payload.pin);
-      } else if (action === "simpan7Kebiasaan") {
-        response = simpan7Kebiasaan(payload.laporan);
-      } else if (action === "validasi7Kebiasaan") {
-        response = validasi7Kebiasaan(payload.idLog, payload.statusValidasi, payload.catatanGuru, payload.nipValidator);
-      } else if (action === "simpanPelanggaran") {
-        response = simpanPelanggaran(payload.pelanggaran);
-      } else if (action === "updateStatusBK") {
-        response = updateStatusBK(payload.idLog, payload.statusBK, payload.catatanKasus, payload.sanksi);
-      } else if (action === "simpanPengaturan") {
-        response = simpanPengaturan(payload.config, payload.pin);
-      } else if (action === "simpanMasterSiswa") {
-        response = simpanMasterSiswa(payload.siswaList, payload.pin);
-      } else if (action === "updateGuruWaliSiswa") {
-        response = updateGuruWaliSiswa(payload.assignments, payload.pin);
-      } else if (action === "simpanMasterGuru") {
-        response = simpanMasterGuru(payload.guruList, payload.pin);
-      } else if (action === "simpanMasterEkskul") {
-        response = simpanMasterEkskul(payload.ekskulList, payload.pin);
-      } else if (action === "updateProfilSiswa") {
-        response = updateProfilSiswa(payload.nisn, payload.noHpOrtu);
-      }
-
-      return ContentService.createTextOutput(JSON.stringify(response))
-        .setMimeType(ContentService.MimeType.JSON);
-    } finally {
-      try { lock.releaseLock(); } catch(e){}
-    }
+    return ContentService.createTextOutput(JSON.stringify(response))
+      .setMimeType(ContentService.MimeType.JSON);
 
   } catch (err) {
     return ContentService.createTextOutput(JSON.stringify({ 
       success: false, 
       error: "Kesalahan server: " + err.message 
     })).setMimeType(ContentService.MimeType.JSON);
+  } finally {
+    try { lock.releaseLock(); } catch(e){}
   }
 }
 
@@ -238,38 +196,13 @@ function tampilkanUrlService() {
 
 /**
  * Helper: Ambil Spreadsheet Aktif dengan Caching In-Memory Execution
- * Mendukung Container-Bound Script (Ekstensi > Apps Script) maupun Standalone Script (Script Properties)
  */
 let _cachedSS = null;
 function getSS() {
-  if (_cachedSS) return _cachedSS;
-
-  // 1. Coba ambil dari Active Spreadsheet (jika skrip terikat / bound script di dalam Google Sheets)
-  try {
+  if (!_cachedSS) {
     _cachedSS = SpreadsheetApp.getActiveSpreadsheet();
-    if (_cachedSS) return _cachedSS;
-  } catch (e) {
-    Logger.log("getActiveSpreadsheet error: " + e.message);
   }
-
-  // 2. Coba ambil dari Script Properties (jika standalone script atau disetel manual SPREADSHEET_ID / SPREADSHEET_URL)
-  try {
-    const props = PropertiesService.getScriptProperties();
-    const sheetId = props.getProperty("SPREADSHEET_ID") || props.getProperty("SHEET_ID");
-    if (sheetId) {
-      _cachedSS = SpreadsheetApp.openById(sheetId);
-      if (_cachedSS) return _cachedSS;
-    }
-    const sheetUrl = props.getProperty("SPREADSHEET_URL");
-    if (sheetUrl) {
-      _cachedSS = SpreadsheetApp.openByUrl(sheetUrl);
-      if (_cachedSS) return _cachedSS;
-    }
-  } catch (e) {
-    Logger.log("ScriptProperties open spreadsheet error: " + e.message);
-  }
-
-  throw new Error("Spreadsheet tidak ditemukan! Pastikan skrip ini dipasang melalui menu 'Ekstensi > Apps Script' di dalam Google Spreadsheet Anda, atau simpan 'SPREADSHEET_ID' pada Pengaturan Proyek > Script Properties.");
+  return _cachedSS;
 }
 
 /**
@@ -1289,36 +1222,29 @@ function simpan7Kebiasaan(laporan) {
 
   const now = new Date();
   const tglStr = laporan.tanggal || Utilities.formatDate(now, "GMT+7", "yyyy-MM-dd");
-  const formattedNisn = String(laporan.nisn || "").replace(/\D/g, "").padStart(10, "0");
+  const formattedNisn = String(laporan.nisn).padStart(10, "0");
 
-  // Cek apakah siswa sudah pernah lapor di tanggal ini
+  // Cek apakah siswa sudah pernah mengirim laporan pada tanggal ini
   const raw = sheet.getDataRange().getValues();
   for (let i = 1; i < raw.length; i++) {
     const rowTgl = raw[i][1] instanceof Date ? Utilities.formatDate(raw[i][1], "GMT+7", "yyyy-MM-dd") : String(raw[i][1]);
-    const rowNisn = String(raw[i][2] || "").replace(/\D/g, "").padStart(10, "0");
+    const rowNisn = String(raw[i][2]).padStart(10, "0");
     if (rowTgl === tglStr && rowNisn === formattedNisn) {
-      const existingStatus = String(raw[i][14] || "").toUpperCase().trim();
-      
-      // Jika sudah divalidasi resmi oleh guru wali, data terkunci permanen
-      if (existingStatus === "VALID") {
-        return { 
-          success: false, 
-          error: "Laporan 7 Kebiasaan pada tanggal ini sudah divalidasi resmi oleh Guru Wali dan sudah terkunci (tidak dapat diubah)!" 
-        };
+      const currentStatus = String(raw[i][14] || "").toUpperCase();
+      if (currentStatus === "VALID") {
+        return { success: false, error: "Laporan 7 Kebiasaan pada tanggal ini sudah divalidasi oleh Guru Wali dan telah terkunci." };
       }
 
-      // Jika belum divalidasi (PENDING/MENUNGGU) atau DITOLAK: izinkan siswa memperbarui data laporannya
-      let updateFotoUrl = String(raw[i][12] || "");
+      // Siswa memperbarui data yang belum divalidasi atau yang ditolak
+      let fotoUrl = laporan.fotoBuktiUrl || raw[i][12] || "";
       if (laporan.fotoBase64) {
         try {
-          updateFotoUrl = simpanFotoBuktiKeDrive(formattedNisn, laporan.nama, tglStr, laporan.fotoBase64);
+          fotoUrl = simpanFotoBuktiKeDrive(formattedNisn, laporan.nama, tglStr, laporan.fotoBase64);
         } catch(err) {
-          Logger.log("Gagal simpan foto Drive: " + err.message);
-          updateFotoUrl = "Foto diperbarui di kanvas lokal";
+          fotoUrl = "Foto tersimpan di kanvas lokal";
         }
       }
 
-      // Update kolom-kolom pada baris (i + 1)
       sheet.getRange(i + 1, 6).setValue(laporan.bangunPagi || "-");
       sheet.getRange(i + 1, 7).setValue(laporan.beribadah || "-");
       sheet.getRange(i + 1, 8).setValue(laporan.olahraga || "Tidak");
@@ -1326,19 +1252,14 @@ function simpan7Kebiasaan(laporan) {
       sheet.getRange(i + 1, 10).setValue(laporan.gemarBelajar || "Tidak");
       sheet.getRange(i + 1, 11).setValue(laporan.gotongRoyong || "Tidak");
       sheet.getRange(i + 1, 12).setValue(laporan.tidurMalam || "-");
-      if (updateFotoUrl) sheet.getRange(i + 1, 13).setValue(updateFotoUrl);
-      if (laporan.watermarkInfo) sheet.getRange(i + 1, 14).setValue(laporan.watermarkInfo);
+      sheet.getRange(i + 1, 13).setValue(fotoUrl);
+      sheet.getRange(i + 1, 14).setValue(laporan.watermarkInfo || "");
       sheet.getRange(i + 1, 15).setValue("PENDING");
-      sheet.getRange(i + 1, 16).setValue(existingStatus === "DITOLAK" ? "Telah diperbaiki oleh siswa" : "");
+      sheet.getRange(i + 1, 16).setValue(""); // Reset catatan penolakan lama
       sheet.getRange(i + 1, 18).setValue(Utilities.formatDate(now, "GMT+7", "yyyy-MM-dd HH:mm:ss"));
       SpreadsheetApp.flush();
 
-      return { 
-        success: true, 
-        message: "Laporan 7 Kebiasaan tanggal " + tglStr + " berhasil diperbarui!",
-        idLog: String(raw[i][0]),
-        fotoBuktiUrl: updateFotoUrl
-      };
+      return { success: true, message: "Laporan 7 Kebiasaan berhasil diperbarui dan dikirim ulang ke Guru Wali." };
     }
   }
 
@@ -1376,7 +1297,7 @@ function simpan7Kebiasaan(laporan) {
   ]);
   SpreadsheetApp.flush();
 
-  return { success: true, message: "Alhamdulillah! Jurnal 7 Kebiasaan berhasil dikirim ke Guru Wali.", idLog: idLog, fotoBuktiUrl: fotoUrl };
+  return { success: true, message: "Alhamdulillah! Jurnal 7 Kebiasaan berhasil dikirim ke Guru Wali." };
 }
 
 function simpanFotoBuktiKeDrive(nisn, nama, tanggal, base64Data) {
@@ -1484,24 +1405,21 @@ function validasi7Kebiasaan(idLog, statusValidasi, catatanGuru, nipValidator) {
   if (!sheet) return { success: false, error: "Sheet LOG_KEBIASAAN tidak ditemukan." };
 
   const raw = sheet.getDataRange().getValues();
-  const targetId = String(idLog || "").trim();
-  const cleanStatus = String(statusValidasi || "VALID").toUpperCase().trim();
+  const searchKey = String(idLog || "").trim();
+  const status = (statusValidasi || "VALID").toUpperCase();
 
   for (let i = 1; i < raw.length; i++) {
-    const rowId = String(raw[i][0] || "").trim();
-    const rowNisn = String(raw[i][2] || "").replace(/\D/g, "").padStart(10, "0");
-    const targetNisn = targetId.replace(/\D/g, "").padStart(10, "0");
-
-    if (rowId === targetId || (targetNisn.length === 10 && rowNisn === targetNisn)) {
-      sheet.getRange(i + 1, 15).setValue(cleanStatus);
-      sheet.getRange(i + 1, 16).setValue(catatanGuru || (cleanStatus === "DITOLAK" ? "Perlu perbaikan siswa" : "Disetujui Guru Wali"));
+    const rowId = String(raw[i][0]).trim();
+    const rowNisn = String(raw[i][2]).padStart(10, "0");
+    if (rowId === searchKey || rowNisn === searchKey.padStart(10, "0")) {
+      sheet.getRange(i + 1, 15).setValue(status);
+      sheet.getRange(i + 1, 16).setValue(catatanGuru || "");
       sheet.getRange(i + 1, 17).setValue(nipValidator || "");
       SpreadsheetApp.flush();
-
-      const msg = cleanStatus === "DITOLAK"
-        ? "Laporan 7 Kebiasaan berhasil ditolak untuk diperbaiki oleh siswa."
+      const msg = status === "DITOLAK"
+        ? "Laporan 7 Kebiasaan berhasil ditolak dan dikembalikan ke siswa untuk diperbaiki."
         : "Laporan 7 Kebiasaan berhasil disetujui / divalidasi.";
-      return { success: true, message: msg, statusValidasi: cleanStatus };
+      return { success: true, message: msg };
     }
   }
 
@@ -1821,20 +1739,14 @@ function updateProfilSiswa(nisn, noHpOrtu) {
   if (!sheet || sheet.getLastRow() <= 1) return { success: false, error: "Sheet DATA_SISWA tidak ditemukan atau kosong." };
 
   const raw = sheet.getDataRange().getValues();
-  const targetNisn = String(nisn || "").replace(/\D/g, "").padStart(10, "0");
-  const cleanPhone = String(noHpOrtu || "").trim();
+  const targetNisn = String(nisn || "").padStart(10, "0");
 
   for (let i = 1; i < raw.length; i++) {
-    const rowNisn = String(raw[i][0] || "").replace(/\D/g, "").padStart(10, "0");
+    const rowNisn = String(raw[i][0]).padStart(10, "0");
     if (rowNisn === targetNisn) {
-      sheet.getRange(i + 1, 7).setNumberFormat("@");
-      sheet.getRange(i + 1, 7).setValue(cleanPhone);
+      sheet.getRange(i + 1, 7).setValue(String(noHpOrtu || "").trim());
       SpreadsheetApp.flush();
-      return { 
-        success: true, 
-        message: "Nomor WhatsApp orang tua berhasil diperbarui di Google Sheets.",
-        noHpOrtu: cleanPhone
-      };
+      return { success: true, message: "Nomor WhatsApp orang tua berhasil diperbarui di Google Sheets." };
     }
   }
 

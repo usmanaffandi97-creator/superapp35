@@ -1,5 +1,5 @@
-// Service Worker — Super App Sekolah Terpadu (Network-First Navigation & Offline Resilience)
-const CACHE_NAME = 'superapp-sekolah-v5';
+// Service Worker — Super App Sekolah Terpadu (Ultra-Resilient & Instant Launch)
+const CACHE_NAME = 'superapp-sekolah-v3';
 const STATIC_ASSETS = [
   '/',
   '/index.html',
@@ -31,7 +31,7 @@ self.addEventListener('activate', (event) => {
       return Promise.all(
         keys.map((key) => {
           if (key !== CACHE_NAME) {
-            console.log('[SW] Clearing old cache version:', key);
+            console.log('[SW] Clearing old cache:', key);
             return caches.delete(key);
           }
         })
@@ -46,48 +46,55 @@ self.addEventListener('fetch', (event) => {
   const url = new URL(req.url);
 
   // Jangan sentuh request non-GET atau request ke Google Apps Script / WhatsApp
-  if (req.method !== 'GET' || url.hostname.includes('script.google.com') || url.hostname.includes('script.googleusercontent.com') || url.hostname.includes('api.whatsapp.com')) {
+  if (req.method !== 'GET' || url.hostname.includes('script.google.com') || url.hostname.includes('api.whatsapp.com')) {
     return;
   }
 
-  // Navigasi Halaman HTML: Gunakan Network-First agar pembaruan GitHub / Vercel langsung tampil di HP
+  // Navigasi halaman (HTML document): Gunakan Cache-First + Background Revalidate
+  // agar PWA di HP TERBUKA INSTAN DALAM <50ms tanpa menunggu jaringan atau layar putih!
   if (req.mode === 'navigate') {
     event.respondWith(
       (async () => {
-        try {
-          // 1. Coba ambil halaman terbaru dari Vercel/Internet dengan batas waktu 3.5 detik
-          const controller = new AbortController();
-          const timer = setTimeout(() => controller.abort(), 3500);
-          const networkRes = await fetch(req, { signal: controller.signal });
-          clearTimeout(timer);
-
+        const cached = await caches.match(req) || await caches.match('/') || await caches.match('/index.html');
+        
+        // Background fetch untuk update cache terbaru jika online
+        const fetchPromise = fetch(req).then((networkRes) => {
           if (networkRes && networkRes.status === 200) {
             const clone = networkRes.clone();
             caches.open(CACHE_NAME).then((cache) => cache.put(req, clone));
-            return networkRes;
           }
-        } catch (err) {
-          console.warn('[SW] Jaringan lambat/offline, memuat dari cache lokal...', err);
+          return networkRes;
+        }).catch((err) => {
+          console.warn('[SW] Background revalidate offline/failed:', err);
+          return null;
+        });
+
+        // Jika cache sudah ada di HP, buka aplikasi seketika!
+        if (cached) {
+          return cached;
         }
 
-        // 2. Jika offline atau timeout, buka dari cache lokal
-        const cached = await caches.match(req) || await caches.match('/') || await caches.match('/index.html');
-        if (cached) return cached;
+        // Jika baru pertama kali diinstal/dibuka, tunggu jaringan
+        const res = await fetchPromise;
+        if (res) return res;
 
-        // 3. Fallback darurat jika benar-benar belum pernah ter-cache
+        // Fallback jika benar-benar offline tanpa cache sama sekali
         return new Response(
-          '<!DOCTYPE html><html><head><meta charset="utf-8"><title>Super App Offline</title></head><body style="font-family:sans-serif;padding:30px;text-align:center;"><h2>Super App Sekolah Terpadu</h2><p>Aplikasi sedang dalam mode offline. Silakan periksa koneksi internet Anda.</p><button onclick="location.reload()" style="padding:10px 20px;border-radius:8px;background:#1e40af;color:white;border:none;cursor:pointer;">Muat Ulang</button></body></html>',
-          { headers: { 'Content-Type': 'text/html;charset=utf-8' } }
+          '<!DOCTYPE html><html><head><meta charset="utf-8"><title>Super App Offline</title></head><body style="font-family:sans-serif;padding:30px;text-align:center;"><h2>Super App Sekolah</h2><p>Sedang menghubungkan ke server...</p><button onclick="location.reload()" style="padding:10px 20px;border-radius:8px;background:#1e40af;color:white;border:none;">Muat Ulang</button></body></html>',
+          { headers: { 'Content-Type': 'text/html' } }
         );
       })()
     );
     return;
   }
 
-  // Untuk aset statis (gambar ikon, manifest): Stale-While-Revalidate
+  // Untuk aset lainnya (gambar, ikon, CSS, JS), gunakan Cache-First dengan Network Fallback
   event.respondWith(
     caches.match(req).then((cachedRes) => {
-      const fetchPromise = fetch(req).then((networkRes) => {
+      if (cachedRes) {
+        return cachedRes;
+      }
+      return fetch(req).then((networkRes) => {
         if (networkRes && networkRes.status === 200) {
           const clone = networkRes.clone();
           caches.open(CACHE_NAME).then((cache) => cache.put(req, clone));
@@ -96,8 +103,6 @@ self.addEventListener('fetch', (event) => {
       }).catch((err) => {
         console.warn('[SW] Fetch failed for:', req.url, err);
       });
-
-      return cachedRes || fetchPromise;
     })
   );
 });

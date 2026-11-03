@@ -94,9 +94,9 @@
             <h1 id="navSchoolName" class="font-bold text-sm sm:text-base text-slate-900 leading-tight line-clamp-1">SMP NEGERI 1 INDONESIA HEBAT</h1>
             <p class="text-xs text-blue-700 font-medium flex items-center gap-1.5 mt-0.5">
               <span>Super App Sekolah</span>
-              <button id="backendBadge" onclick="openModalSetelBackend(event)" title="Status Database Google Sheets" class="inline-flex items-center gap-1 px-2 py-0.5 bg-blue-100 text-blue-800 rounded-full text-[10px] font-bold border border-blue-300 hover:bg-blue-200 transition cursor-pointer">
-                <span class="w-1.5 h-1.5 rounded-full bg-blue-500 animate-pulse"></span>
-                <span id="backendBadgeText">Menghubungkan...</span>
+              <button id="backendBadge" onclick="openModalSetelBackend(event)" title="Klik untuk Hubungkan Database Google Sheets" class="inline-flex items-center gap-1 px-2 py-0.5 bg-amber-100 text-amber-800 rounded-full text-[10px] font-bold border border-amber-300 hover:bg-amber-200 transition cursor-pointer">
+                <span class="w-1.5 h-1.5 rounded-full bg-amber-500 animate-pulse"></span>
+                <span>Hubungkan Sheets</span>
               </button>
             </p>
           </div>
@@ -141,12 +141,12 @@
   </header>
 
   <!-- BANNER JIKA DATABASE BELUM TERHUBUNG -->
-  <div id="bannerKoneksiDatabase" class="hidden bg-amber-400 text-slate-950 text-xs py-2 px-4 flex items-center justify-between font-semibold shadow-xs">
+  <div id="bannerKoneksiDatabase" class="bg-amber-400 text-slate-950 text-xs py-2 px-4 flex items-center justify-between font-semibold shadow-xs">
     <div class="flex items-center gap-2">
       <i data-lucide="database" class="w-4 h-4 flex-shrink-0 animate-pulse text-amber-900"></i>
-      <span id="bannerKoneksiDatabaseText"><b>Database Spreadsheet Belum Terhubung:</b> Masih menggunakan data simulasi lokal. Hubungkan Web App Google Apps Script Anda agar data tersimpan online!</span>
+      <span><b>Database Spreadsheet Belum Terhubung:</b> Masih menggunakan data simulasi lokal. Hubungkan Web App Google Apps Script Anda agar data tersimpan online!</span>
     </div>
-    <button onclick="openModalSetelBackend(event)" class="bg-slate-900 text-white hover:bg-slate-800 font-bold px-3 py-1 rounded-lg text-xs shadow-xs transition flex-shrink-0 ml-3 cursor-pointer">
+    <button onclick="openModalSetelBackend(event)" class="bg-slate-900 text-white hover:bg-slate-800 font-bold px-3 py-1 rounded-lg text-xs shadow-xs transition flex-shrink-0 ml-3">
       Hubungkan Sekarang
     </button>
   </div>
@@ -435,14 +435,12 @@
           </div>
 
           <form id="formInput7Kebiasaan" onsubmit="handleKirim7Kebiasaan(event)" class="mt-6 space-y-6">
+            <div id="statusBannerForm7K"></div>
             
-            <!-- Banner Status Validasi / Perbaikan Laporan -->
-            <div id="bannerStatusKebiasaanHariIni" class="hidden"></div>
-
             <!-- Tanggal Jurnal -->
             <div>
               <label class="block text-xs font-bold text-slate-700 uppercase mb-1">Tanggal Laporan</label>
-              <input type="date" id="formKebiasaanTgl" onchange="checkKebiasaanHariIniState()" required class="w-full max-w-xs px-3.5 py-2 bg-slate-50 border border-slate-200 rounded-xl text-sm font-semibold text-slate-800">
+              <input type="date" id="formKebiasaanTgl" onchange="cekStatusJurnalTanggal()" required class="w-full max-w-xs px-3.5 py-2 bg-slate-50 border border-slate-200 rounded-xl text-sm font-semibold text-slate-800">
             </div>
 
             <!-- Grid 7 Pilar Kebiasaan -->
@@ -599,7 +597,6 @@
                   <th class="py-3 px-3">Tidur</th>
                   <th class="py-3 px-3 text-center">Foto Bukti</th>
                   <th class="py-3 px-3 text-center">Validasi Guru Wali</th>
-                  <th class="py-3 px-3 text-center">Aksi</th>
                 </tr>
               </thead>
               <tbody id="tableRekap7KebiasaanSiswa" class="divide-y divide-slate-100 font-medium">
@@ -861,7 +858,7 @@
             <div id="metricSiswaRombel" class="text-2xl font-black text-slate-900 mt-1">0 Siswa</div>
             <p class="text-[11px] text-blue-600 font-semibold mt-1">Kelas Binaan Walas</p>
           </div>
-          <div id="cardMetricAnggotaEkskul" class="bg-white p-5 rounded-2xl border border-slate-200 shadow-xs">
+          <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-xs">
             <div class="text-xs font-semibold text-slate-500">Anggota Ekskul</div>
             <div id="metricAnggotaEkskul" class="text-2xl font-black text-slate-900 mt-1">0 Siswa</div>
             <p class="text-[11px] text-emerald-600 font-semibold mt-1">Cabang Binaannya</p>
@@ -1063,17 +1060,14 @@
 
             <div>
               <div class="flex items-center justify-between mb-1">
-                <label class="block text-xs font-bold text-slate-700 uppercase">Area Tempel / Paste Excel Leger</label>
-                <button type="button" onclick="parsePastedExcel()" class="px-3 py-1 bg-purple-600 hover:bg-purple-700 text-white rounded-lg text-xs font-bold transition flex items-center gap-1 shadow-xs">
-                  <i data-lucide="check" class="w-3.5 h-3.5"></i>
-                  <span>Ekstraksi Data Paste</span>
+                <label class="block text-xs font-bold text-slate-700 uppercase">Area Paste Excel (Format: NISN [Tab/Spasi/,/;] Nilai [Tab] Catatan)</label>
+                <button type="button" onclick="parsePastedExcel()" class="px-2.5 py-1 bg-indigo-50 hover:bg-indigo-100 text-indigo-700 border border-indigo-200 rounded-lg text-xs font-bold transition flex items-center gap-1 shadow-xs">
+                  <i data-lucide="cpu" class="w-3.5 h-3.5"></i>
+                  <span>Ekstraksi Nilai</span>
                 </button>
               </div>
-              <textarea id="pasteExcelTextarea" rows="6" oninput="parsePastedExcel()" onpaste="setTimeout(parsePastedExcel, 50)" placeholder="Salin langsung kolom dari Excel atau Google Sheets. Format yang didukung:
-• NISN [Tab] Nilai [Tab] Catatan
-• NISN [Tab] Nama Siswa [Tab] Nilai [Tab] Catatan
-• No [Tab] NISN [Tab] Nama [Tab] Nilai
-• Format CSV (NISN;Nilai atau NISN,Nilai)" class="w-full p-4 bg-slate-50 border border-slate-200 rounded-2xl text-xs font-mono font-medium focus:bg-white focus:ring-2 focus:ring-purple-500 focus:outline-none"></textarea>
+              <textarea id="pasteExcelTextarea" rows="6" oninput="parsePastedExcel()" onchange="parsePastedExcel()" onpaste="setTimeout(parsePastedExcel, 50)" placeholder="0081234567	88	Sangat aktif dalam KBM
+0082345678	92	Pemahaman konsep sangat baik" class="w-full p-4 bg-slate-50 border border-slate-200 rounded-2xl text-xs font-mono font-medium focus:bg-white focus:ring-2 focus:ring-purple-500 focus:outline-none"></textarea>
             </div>
 
             <!-- Preview Tabel Terurai -->
@@ -1592,54 +1586,18 @@
 
       <!-- KONTEN TAB 3 ADMIN: KONEKSI APPS SCRIPT -->
       <div id="tabContentAdmin_koneksi" class="tab-admin-content hidden space-y-6">
-        <div class="bg-white p-6 rounded-3xl border border-slate-200 shadow-xs space-y-5">
-          <div class="flex items-center justify-between border-b border-slate-100 pb-3">
-            <div>
-              <h3 class="font-extrabold text-base text-slate-900">Integrasi Database Google Sheets</h3>
-              <p class="text-xs text-slate-500">Konfigurasi endpoint API Web App Google Apps Script</p>
-            </div>
-            <div id="adminConnectionStatusBadge" class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-slate-100 text-slate-700 border border-slate-200">
-              <span class="w-2 h-2 rounded-full bg-slate-400"></span>
-              <span id="adminConnectionStatusText">Memeriksa...</span>
-            </div>
-          </div>
-
-          <div class="p-4 bg-slate-50 border border-slate-200 rounded-2xl grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
-            <div>
-              <span class="text-slate-500 block text-[11px]">Database Spreadsheet:</span>
-              <span id="adminConnectedSsName" class="font-bold text-slate-800">SMP NEGERI 1 INDONESIA HEBAT</span>
-            </div>
-            <div>
-              <span class="text-slate-500 block text-[11px]">Terakhir Tersinkron:</span>
-              <span id="adminLastSyncTime" class="font-semibold text-slate-700">Belum ada</span>
-            </div>
-          </div>
-
+        <div class="bg-white p-6 rounded-3xl border border-slate-200 shadow-xs space-y-4">
+          <h3 class="font-extrabold text-base text-slate-900 border-b border-slate-100 pb-3">Koneksi Google Apps Script</h3>
+          <p class="text-xs text-slate-500 leading-relaxed">
+            Super App ini terhubung ke 1 Google Sheet database melalui Web App URL Google Apps Script.
+          </p>
           <div>
-            <div class="flex items-center justify-between mb-1.5">
-              <label class="block text-xs font-bold text-slate-700 uppercase">URL Endpoint Apps Script (/exec)</label>
-              <button type="button" onclick="resetKeBackendDefault()" class="text-xs text-blue-700 hover:text-blue-900 font-semibold flex items-center gap-1">
-                <i data-lucide="rotate-ccw" class="w-3.5 h-3.5"></i>
-                <span>Gunakan URL Bawaan Server</span>
-              </button>
-            </div>
-            <input type="text" id="inputBackendUrlConfig" placeholder="https://script.google.com/macros/s/.../exec" class="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs font-mono font-medium focus:bg-white focus:ring-2 focus:ring-blue-600 focus:outline-none">
+            <label class="block text-[11px] font-bold text-slate-700 uppercase mb-1">URL Endpoint Apps Script</label>
+            <input type="text" id="inputBackendUrlConfig" placeholder="https://script.google.com/macros/s/.../exec" class="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs font-mono">
           </div>
-
-          <div class="grid grid-cols-1 sm:grid-cols-3 gap-2 pt-1">
-            <button type="button" onclick="jalankanDiagnostikKoneksi(document.getElementById('inputBackendUrlConfig').value)" class="py-2.5 px-3 bg-blue-50 hover:bg-blue-100 text-blue-700 border border-blue-200 font-bold rounded-xl text-xs transition flex items-center justify-center gap-1.5">
-              <i data-lucide="activity" class="w-4 h-4"></i>
-              <span>Diagnostik Koneksi</span>
-            </button>
-            <button type="button" onclick="bukaPanduanDeployGas()" class="py-2.5 px-3 bg-slate-100 hover:bg-slate-200 text-slate-800 font-bold rounded-xl text-xs transition flex items-center justify-center gap-1.5">
-              <i data-lucide="book-open" class="w-4 h-4"></i>
-              <span>Panduan Deploy</span>
-            </button>
-            <button type="button" onclick="handleSimpanBackendUrl()" class="py-2.5 px-3 bg-blue-700 hover:bg-blue-800 text-white font-bold rounded-xl text-xs transition flex items-center justify-center gap-1.5 shadow-sm">
-              <i data-lucide="check" class="w-4 h-4"></i>
-              <span>Simpan Endpoint</span>
-            </button>
-          </div>
+          <button onclick="handleSimpanBackendUrl()" class="w-full py-2 bg-slate-900 hover:bg-slate-800 text-white font-bold rounded-xl text-xs transition">
+            Uji & Simpan Endpoint
+          </button>
         </div>
       </div>
     </section>
@@ -1673,49 +1631,32 @@
 
       <div class="space-y-4">
         <div>
-          <div class="flex items-center justify-between mb-1.5">
-            <label class="block text-xs font-bold text-slate-700 uppercase">Web App URL Google Apps Script (/exec)</label>
-            <button type="button" onclick="resetKeBackendDefault()" class="text-[11px] text-blue-700 hover:text-blue-900 font-semibold flex items-center gap-1">
-              <i data-lucide="rotate-ccw" class="w-3.5 h-3.5"></i>
-              <span>Kembalikan ke URL Bawaan</span>
-            </button>
-          </div>
+          <label class="block text-xs font-bold text-slate-700 uppercase mb-1">Web App URL Google Apps Script (/exec)</label>
           <input type="text" id="inputModalBackendUrl" placeholder="https://script.google.com/macros/s/.../exec" class="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs font-mono font-medium focus:bg-white focus:ring-2 focus:ring-blue-600 focus:outline-none">
         </div>
 
         <div class="p-3.5 bg-blue-50 border border-blue-200 rounded-2xl text-[11px] text-blue-900 space-y-1.5">
-          <p class="font-bold flex items-center gap-1.5">
-            <i data-lucide="info" class="w-3.5 h-3.5"></i>
-            <span>Syarat Wajib Deploy Google Apps Script:</span>
-          </p>
-          <ul class="list-disc pl-4 space-y-0.5 text-blue-800">
-            <li><b>Execute as:</b> Me (email Anda).</li>
-            <li><b class="text-rose-700 font-bold">Who has access:</b> Anyone (Siapa saja) &mdash; <i>Jangan pilih 'Only myself' agar koneksi tidak ditolak</i>.</li>
-            <li>Salin URL yang berakhiran <b><code>/exec</code></b> (Bukan link spreadsheet atau /dev).</li>
-          </ul>
+          <p class="font-bold">Cara Mendapatkan Web App URL:</p>
+          <ol class="list-decimal pl-4 space-y-0.5 text-blue-800">
+            <li>Buka Spreadsheet &rarr; <b>Ekstensi</b> &rarr; <b>Apps Script</b>.</li>
+            <li>Klik tombol biru <b>Deploy</b> (kanan atas) &rarr; <b>New deployment</b>.</li>
+            <li>Pilih <b>Web app</b> &rarr; pastikan <i>Who has access</i>: <b>Anyone</b>.</li>
+            <li>Klik Deploy dan salin URL yang berakhiran <b><code>/exec</code></b>.</li>
+          </ol>
         </div>
 
-        <div class="grid grid-cols-2 gap-2 pt-1">
-          <button type="button" onclick="ujiKoneksiBackendModal()" class="py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-800 font-bold rounded-xl text-xs transition flex items-center justify-center gap-1.5">
+        <div class="flex items-center gap-2 pt-2">
+          <button type="button" onclick="ujiKoneksiBackendModal()" class="w-1/2 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-800 font-bold rounded-xl text-xs transition flex items-center justify-center gap-1.5">
             <i data-lucide="wifi" class="w-4 h-4"></i>
-            <span>Uji Ping Cepat</span>
+            <span>Uji Respon (Ping)</span>
           </button>
-          <button type="button" onclick="jalankanDiagnostikKoneksi(document.getElementById('inputModalBackendUrl').value)" class="py-2.5 bg-blue-50 hover:bg-blue-100 text-blue-700 border border-blue-200 font-bold rounded-xl text-xs transition flex items-center justify-center gap-1.5">
-            <i data-lucide="activity" class="w-4 h-4"></i>
-            <span>Diagnostik Lengkap</span>
-          </button>
-          <button type="button" onclick="bukaPanduanDeployGas()" class="py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold rounded-xl text-xs transition flex items-center justify-center gap-1.5">
-            <i data-lucide="book-open" class="w-4 h-4"></i>
-            <span>Panduan Deploy</span>
-          </button>
-          <button type="button" onclick="simpanBackendUrlModal()" class="py-2.5 bg-blue-700 hover:bg-blue-800 text-white font-bold rounded-xl text-xs transition flex items-center justify-center gap-1.5 shadow-sm">
+          <button type="button" onclick="simpanBackendUrlModal()" class="w-1/2 py-2.5 bg-blue-700 hover:bg-blue-800 text-white font-bold rounded-xl text-xs transition flex items-center justify-center gap-1.5 shadow-sm">
             <i data-lucide="check" class="w-4 h-4"></i>
             <span>Simpan URL Ini</span>
           </button>
         </div>
       </div>
     </div>
-  </div>
   </div>
 
   <!-- MODAL ADMIN PIN -->
@@ -1803,8 +1744,7 @@
 
     // TIPS: Tempelkan URL Web App Google Apps Script (/exec) Anda di sini
     // agar SEMUA pengunjung website Vercel otomatis tersambung ke Google Spreadsheet sekolah tanpa perlu input manual di tiap HP!
-    const DEFAULT_BACKEND_URL = "https://script.google.com/macros/s/AKfycbw4946_UzONzK8FYaB2SqMR-7CjAhfjrxnJBGJLHpYmVRXu-Gnhf7HnqNNiJ3XuZSPp1Q/exec";
-    const BACKEND_CONFIG_KEY = "SUPERAPP_CONFIG_VER_20261102_V1";
+    const DEFAULT_BACKEND_URL = "https://script.google.com/macros/s/AKfycbyd3DDzkWtGAgy8zeSkYSihuNJzo1IulGOq1fOmTjIyCVpMtijWJ_Wk3Mq31DENQBxaJA/exec";
 
     function getBackendUrl() {
       const urlParam = new URLSearchParams(window.location.search).get('api');
@@ -1814,22 +1754,12 @@
         localStorage.setItem("SUPERAPP_BACKEND_URL", clean);
         return clean;
       }
-
-      // Pastikan semua user yang membuka Vercel otomatis menggunakan backend spreadsheet sekolah terbaru
-      const lastVer = localStorage.getItem("SUPERAPP_CFG_VER");
-      if (lastVer !== BACKEND_CONFIG_KEY) {
-        localStorage.setItem("SUPERAPP_CFG_VER", BACKEND_CONFIG_KEY);
-        localStorage.setItem("SUPERAPP_BACKEND_URL", DEFAULT_BACKEND_URL);
-        return DEFAULT_BACKEND_URL;
-      }
-
       let stored = (localStorage.getItem("SUPERAPP_BACKEND_URL") || "").trim();
       // Validasi URL tersimpan: jika mengarah ke spreadsheet atau bukan URL Apps Script valid / 404 lama, bersihkan
       if (stored && (
         stored.includes("docs.google.com/spreadsheets") ||
         !stored.includes("script.google.com/macros/s/") ||
-        stored.includes("AKfycbz_5qHRJ0Pba2fNwQJDmba3pxwoooRA5GVWHRZelesu0psOTEsYuCDhhHQcQ4D-VHYzHg") ||
-        stored.includes("AKfycbwTjBnjT7zGPX506oNpQUpk-cUfGFJUIHIKfsvgsXIeyOXn8iejd-kZDWJG64FZ71HKLQ")
+        stored.includes("AKfycbz_5qHRJ0Pba2fNwQJDmba3pxwoooRA5GVWHRZelesu0psOTEsYuCDhhHQcQ4D-VHYzHg")
       )) {
         localStorage.removeItem("SUPERAPP_BACKEND_URL");
         stored = "";
@@ -1874,61 +1804,14 @@
     }
 
     // -------------------------------------------------------------
-    // PWA & SERVICE WORKER LIFECYCLE
-    // -------------------------------------------------------------
-    let deferredPrompt = null;
-
-    function initServiceWorker() {
-      if ('serviceWorker' in navigator) {
-        window.addEventListener('load', () => {
-          navigator.serviceWorker.register('/sw.js').then((reg) => {
-            console.log('[SW] ServiceWorker aktif di scope:', reg.scope);
-            try { reg.update(); } catch(e){}
-          }).catch((err) => {
-            console.warn('[SW] ServiceWorker gagal didaftarkan:', err);
-          });
-        });
-      }
-    }
-
-    function initPwaInstall() {
-      window.addEventListener('beforeinstallprompt', (e) => {
-        e.preventDefault();
-        deferredPrompt = e;
-        const btn = document.getElementById('btnInstallPwa');
-        if (btn) btn.classList.remove('hidden');
-      });
-
-      window.addEventListener('appinstalled', () => {
-        deferredPrompt = null;
-        const btn = document.getElementById('btnInstallPwa');
-        if (btn) btn.classList.add('hidden');
-        console.log('[PWA] Aplikasi berhasil dipasang');
-      });
-    }
-
-    async function triggerPwaInstall() {
-      if (!deferredPrompt) {
-        Swal.fire('Pasang di HP', 'Aplikasi ini dapat dipasang langsung melalui menu titik tiga peramban HP Anda lalu pilih "Tambahkan ke Layar Utama" (Add to Home Screen).', 'info');
-        return;
-      }
-      deferredPrompt.prompt();
-      const { outcome } = await deferredPrompt.userChoice;
-      console.log('[PWA] Pilihan user:', outcome);
-      deferredPrompt = null;
-      const btn = document.getElementById('btnInstallPwa');
-      if (btn) btn.classList.add('hidden');
-    }
-
-    // -------------------------------------------------------------
     // INISIALISASI, AUTO-REFRESH & SINKRONISASI ONLINE REAL-TIME
     // -------------------------------------------------------------
     window.addEventListener("DOMContentLoaded", () => {
-      try { safeCreateIcons(); } catch(e){}
-      try { initServiceWorker(); } catch(e){}
-      try { initPwaInstall(); } catch(e){}
-      try { loadInitialData(); } catch(e){ console.error('loadInitialData error:', e); }
-      try { startCountdownTimer(); } catch(e){}
+      safeCreateIcons();
+      initServiceWorker();
+      initPwaInstall();
+      loadInitialData();
+      startCountdownTimer();
 
       // 1. Auto-Sync saat aplikasi dibuka kembali dari background HP / berganti tab browser
       document.addEventListener('visibilitychange', () => {
@@ -1960,9 +1843,6 @@
       }
 
       try {
-        const controller = new AbortController();
-        const timeoutId = setTimeout(() => controller.abort(), 28000); // 28s timeout
-
         const res = await fetch(BACKEND_URL, {
           method: 'POST',
           mode: 'cors',
@@ -1970,34 +1850,13 @@
           headers: {
             'Content-Type': 'text/plain;charset=utf-8'
           },
-          body: JSON.stringify(payload),
-          signal: controller.signal
+          body: JSON.stringify(payload)
         });
-        clearTimeout(timeoutId);
-
-        const rawText = await res.text();
-        let json = null;
-        try {
-          json = JSON.parse(rawText);
-        } catch (parseErr) {
-          if (rawText.includes("<!DOCTYPE") || rawText.includes("<html") || rawText.includes("ServiceLogin")) {
-            if (rawText.includes("ServiceLogin") || rawText.includes("accounts.google.com")) {
-              throw new Error("Izin akses ditolak Google. Pastikan setelan Deploy Apps Script: 'Who has access: Anyone' (Siapa saja).");
-            }
-            throw new Error("Server Apps Script mengembalikan halaman web HTML. Periksa deployment Web App Apps Script Anda.");
-          }
-          throw new Error("Respon server bukan format JSON yang valid: " + rawText.slice(0, 100));
-        }
+        const json = await res.json();
         return json;
       } catch (err) {
         console.warn('Gagal call POST backend:', err);
-        let errorMsg = err.message || "Gagal terhubung ke Google Sheets";
-        if (err.name === 'AbortError') {
-          errorMsg = "Koneksi ke Google Sheets timeout (lebih dari 28 detik). Silakan coba lagi.";
-        } else if (errorMsg === 'Failed to fetch') {
-          errorMsg = "Gagal terhubung (Failed to fetch). Periksa izin Web App ('Who has access: Anyone') atau periksa koneksi internet.";
-        }
-        return { success: false, error: errorMsg };
+        return { success: false, error: err.message };
       }
     }
 
@@ -2223,9 +2082,8 @@
         }
 
         // 2. Fallback otomatis via POST jika GET gagal
-        let postResult = null;
         if (!json || !json.success) {
-          postResult = await callBackendPost({ action: 'getInitialData' });
+          const postResult = await callBackendPost({ action: 'getInitialData' });
           if (postResult && postResult.success) {
             json = postResult;
           }
@@ -2270,12 +2128,10 @@
           }
 
           if (badge) {
-            badge.innerHTML = `<span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span><span>🟢 Sheets Online (${masterSiswa.length} Siswa)</span>`;
+            badge.innerHTML = `<span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span><span>🟢 Sheets Online</span>`;
             badge.className = "inline-flex items-center gap-1 px-2 py-0.5 bg-emerald-100 text-emerald-800 rounded-full text-[10px] font-bold border border-emerald-300 hover:bg-emerald-200 transition cursor-pointer";
-            badge.title = `Tersambung ke Google Spreadsheet: ${appConfig.NAMA_SEKOLAH || 'SMP NEGERI 1 INDONESIA HEBAT'} (${masterSiswa.length} Siswa terdaftar)`;
           }
           if (banner) banner.classList.add('hidden');
-          updateAdminConnectionStatusUi(true);
 
           applyConfigToUi();
 
@@ -2287,7 +2143,7 @@
                 currentUser.nama = me.nama;
                 currentUser.kelas = me.kelas;
                 currentUser.nipGuruWali = me.nipGuruWali;
-                if (me.noHpOrtu) currentUser.noHpOrtu = me.noHpOrtu;
+                currentUser.noHpOrtu = me.noHpOrtu || currentUser.noHpOrtu || '';
               }
               setupSiswaUi();
 
@@ -2300,7 +2156,6 @@
                 else if (tabId === 'tabContentSiswa_presensi') renderPresensiSiswa();
                 else if (tabId === 'tabContentSiswa_tatatertib') renderBukuSakuSiswa();
                 else if (tabId === 'tabContentSiswa_ekskul') { renderKatalogEkskulSiswa(); renderEkskulSayaSiswa(); }
-                else if (tabId === 'tabContentSiswa_kebiasaan') { renderRekap7KebiasaanSiswa(); checkKebiasaanHariIniState(); }
                 else if (tabId === 'tabContentSiswa_beranda') { renderPresensiSiswa(); renderBukuSakuSiswa(); }
               }
             } else if (currentUser.role === 'ADMIN') {
@@ -2340,45 +2195,16 @@
 
           return true;
         } else {
-          const detailErr = (postResult && postResult.error) ? postResult.error : (json && json.error ? json.error : 'Tidak ada respon dari server Apps Script.');
-          throw new Error(detailErr);
+          throw new Error(json ? (json.error || 'Respon data gagal') : 'Tidak ada respon dari server Apps Script.');
         }
       } catch (err) {
         console.warn('Gagal sinkronisasi data online:', err);
         if (badge) {
-          badge.innerHTML = `<span class="w-1.5 h-1.5 rounded-full bg-rose-500"></span><span>❌ Offline / Gagal</span>`;
+          badge.innerHTML = `<span class="w-1.5 h-1.5 rounded-full bg-rose-500"></span><span>⚠️ Offline / Gagal</span>`;
           badge.className = "inline-flex items-center gap-1 px-2 py-0.5 bg-rose-100 text-rose-800 rounded-full text-[10px] font-bold border border-rose-300 hover:bg-rose-200 transition cursor-pointer";
         }
-        if (banner) {
-          banner.classList.remove('hidden');
-          banner.className = "bg-rose-600 text-white text-xs py-2 px-4 flex items-center justify-between font-semibold shadow-xs";
-          banner.innerHTML = `
-            <div class="flex items-center gap-2">
-              <i data-lucide="alert-triangle" class="w-4 h-4 flex-shrink-0 animate-bounce"></i>
-              <span><b>Koneksi Google Sheets Terkendala:</b> ${escapeHtml(err.message || 'Gagal tersambung')}. Periksa URL atau izin deploy Web App.</span>
-            </div>
-            <button onclick="openModalSetelBackend(event)" class="bg-white text-rose-700 hover:bg-rose-50 font-bold px-3 py-1 rounded-lg text-xs shadow-xs transition flex-shrink-0 ml-3 cursor-pointer">
-              Perbaiki Koneksi
-            </button>
-          `;
-          safeCreateIcons();
-        }
-        updateAdminConnectionStatusUi(false, err.message);
-
         if (!isSilent) {
-          Swal.fire({
-            title: 'Gagal Menyinkronkan',
-            text: 'Tidak dapat mengambil data terbaru dari Google Sheets: ' + err.message,
-            icon: 'warning',
-            showCancelButton: true,
-            confirmButtonText: 'Diagnostik Koneksi',
-            cancelButtonText: 'Tutup',
-            confirmButtonColor: '#1d4ed8'
-          }).then((r) => {
-            if (r.isConfirmed) {
-              jalankanDiagnostikKoneksi();
-            }
-          });
+          Swal.fire('Gagal Menyinkronkan', 'Tidak dapat mengambil data terbaru dari Google Sheets: ' + err.message, 'warning');
         }
         return false;
       } finally {
@@ -2524,10 +2350,7 @@
         if (document.getElementById('cfgIzinCetakNilai')) {
           document.getElementById('cfgIzinCetakNilai').value = appConfig.IZIN_CETAK_NILAI || "DIBUKA";
         }
-        if (document.getElementById('inputBackendUrlConfig')) {
-          document.getElementById('inputBackendUrlConfig').value = BACKEND_URL || "";
-        }
-        updateAdminConnectionStatusUi(Boolean(BACKEND_URL));
+        document.getElementById('inputBackendUrlConfig').value = BACKEND_URL || "";
       }
     }
 
@@ -2624,65 +2447,21 @@
     }
 
     // -------------------------------------------------------------
-    // AUTENTIKASI PENGGUNA (SISWA & GURU) DENGAN ONLINE FALLBACK
+    // AUTENTIKASI PENGGUNA (SISWA & GURU)
     // -------------------------------------------------------------
     async function handleLoginSiswa(e) {
       e.preventDefault();
-      const nisnInput = document.getElementById('inputNisnSiswa');
-      const pinInput = document.getElementById('inputPinSiswa');
-      if (!nisnInput) return;
+      const nisn = document.getElementById('inputNisnSiswa').value.trim().padStart(10, "0");
+      const pin = document.getElementById('inputPinSiswa').value.trim();
 
-      const rawNisn = nisnInput.value.trim();
-      const nisn = rawNisn.padStart(10, "0");
-      const pin = pinInput ? pinInput.value.trim() : "";
-
-      // 1. Cek di master data lokal
-      let s = masterSiswa.find(item => item.nisn === nisn || item.nisn === rawNisn);
-
-      // 2. Jika belum ada di lokal (misal sync 12 tab masih berjalan di latar belakang), verifikasi langsung secara online ke Google Sheets!
-      if (!s && BACKEND_URL) {
-        Swal.fire({
-          title: 'Memverifikasi ke Database...',
-          text: 'Mencocokkan NISN Anda dengan Google Spreadsheet sekolah...',
-          allowOutsideClick: false,
-          didOpen: () => { Swal.showLoading(); }
-        });
-
-        try {
-          const res = await callBackendPost({
-            action: 'loginUser',
-            role: 'SISWA',
-            identifier: nisn,
-            pin: pin
-          });
-
-          Swal.close();
-
-          if (res && res.success && res.user) {
-            s = res.user;
-            const existingIdx = masterSiswa.findIndex(item => item.nisn === s.nisn);
-            if (existingIdx >= 0) {
-              masterSiswa[existingIdx] = s;
-            } else {
-              masterSiswa.push(s);
-            }
-          } else {
-            Swal.fire('Login Gagal', (res && res.error) ? res.error : 'Nomor NISN Anda tidak tercatat dalam database siswa sekolah.', 'error');
-            return;
-          }
-        } catch (err) {
-          Swal.close();
-          Swal.fire('Koneksi Terkendala', 'Gagal memverifikasi ke database Google Sheets: ' + err.message, 'warning');
-          return;
-        }
-      }
-
+      // Cari di data master
+      const s = masterSiswa.find(item => item.nisn === nisn);
       if (!s) {
         Swal.fire('NISN Tidak Ditemukan', 'Nomor NISN Anda tidak tercatat dalam database siswa sekolah.', 'error');
         return;
       }
 
-      const defaultPin = s.nisn.slice(-4);
+      const defaultPin = nisn.slice(-4);
       if (pin && pin !== defaultPin && pin !== (s.pin || defaultPin)) {
         Swal.fire('PIN Salah', 'PIN siswa tidak cocok. Default PIN adalah 4 digit terakhir NISN Anda.', 'error');
         return;
@@ -2692,25 +2471,19 @@
       currentUser = {
         role: 'SISWA',
         nisn: s.nisn,
-        nis: s.nis || '',
+        nis: s.nis,
         nama: s.nama,
         kelas: s.kelas,
         gender: s.gender,
-        tglLahir: s.tglLahir || '',
-        noHpOrtu: s.noHpOrtu || '',
-        nipGuruWali: s.nipGuruWali || ''
+        tglLahir: s.tglLahir,
+        noHpOrtu: s.noHpOrtu,
+        nipGuruWali: s.nipGuruWali
       };
 
       setupSiswaUi();
       showView('viewSiswa');
       switchTabSiswa('beranda');
       playBeepSuccess();
-
-      // Minta data spesifik siswa secara langsung
-      fetchNilaiSiswaOnline(currentUser.nisn);
-      fetchKelulusanSiswaOnline(currentUser.nisn);
-      fetchPresensiHarianOnline(currentUser.nisn);
-      fetchPelanggaranSiswaOnline(currentUser.nisn);
 
       Swal.fire({
         toast: true,
@@ -2728,60 +2501,14 @@
       const pin = document.getElementById('inputPinGuru').value.trim();
 
       // Cek admin
-      if (nip.toUpperCase() === 'ADMIN') {
-        const adminPin = String(appConfig.PIN_ADMIN || '123456').trim();
-        if (pin === adminPin) {
-          currentUser = { role: 'ADMIN', nama: 'Administrator Sistem', nip: 'ADMIN' };
-          setupAdminUi();
-          showView('viewAdmin');
-          return;
-        } else {
-          Swal.fire('PIN Admin Salah', 'PIN Administrator yang dimasukkan salah.', 'error');
-          return;
-        }
+      if (nip.toUpperCase() === 'ADMIN' && pin === (appConfig.PIN_ADMIN || '123456')) {
+        currentUser = { role: 'ADMIN', nama: 'Administrator Sistem', nip: 'ADMIN' };
+        setupAdminUi();
+        showView('viewAdmin');
+        return;
       }
 
-      // 1. Cek di master data guru lokal
-      let g = masterGuru.find(item => item.nip.toLowerCase() === nip.toLowerCase());
-
-      // 2. Jika belum ditemukan di lokal, verifikasi langsung secara online ke Google Sheets!
-      if (!g && BACKEND_URL) {
-        Swal.fire({
-          title: 'Memverifikasi ke Database...',
-          text: 'Mencocokkan NIP/Username dengan Google Spreadsheet sekolah...',
-          allowOutsideClick: false,
-          didOpen: () => { Swal.showLoading(); }
-        });
-
-        try {
-          const res = await callBackendPost({
-            action: 'loginUser',
-            role: 'GURU',
-            identifier: nip,
-            pin: pin
-          });
-
-          Swal.close();
-
-          if (res && res.success && res.user) {
-            g = res.user;
-            const existingIdx = masterGuru.findIndex(item => item.nip.toLowerCase() === g.nip.toLowerCase());
-            if (existingIdx >= 0) {
-              masterGuru[existingIdx] = g;
-            } else {
-              masterGuru.push(g);
-            }
-          } else {
-            Swal.fire('Login Gagal', (res && res.error) ? res.error : 'Akun NIP / Pelatih tidak ditemukan dalam database.', 'error');
-            return;
-          }
-        } catch (err) {
-          Swal.close();
-          Swal.fire('Koneksi Terkendala', 'Gagal memverifikasi ke database: ' + err.message, 'warning');
-          return;
-        }
-      }
-
+      const g = masterGuru.find(item => item.nip.toLowerCase() === nip.toLowerCase());
       if (!g) {
         Swal.fire('Akun Tidak Ditemukan', 'NIP atau Username Pelatih tidak ditemukan dalam daftar guru/pelatih.', 'error');
         return;
@@ -2793,18 +2520,19 @@
       }
 
       currentUser = {
-        role: g.peran || g.role || 'GURU',
+        role: g.peran || 'GURU',
         nip: g.nip,
         nama: g.nama,
-        rombelWali: g.rombelWali || '',
-        cabangEkskul: g.cabangEkskul || '',
-        mapel: g.mapel || '',
-        noHp: g.noHp || ''
+        rombelWali: g.rombelWali,
+        cabangEkskul: g.cabangEkskul,
+        mapel: g.mapel,
+        noHp: g.noHp
       };
+
+      const isCoach = (currentUser.role === 'PELATIH_EKSKUL' || currentUser.peran === 'PELATIH_EKSKUL' || (currentUser.cabangEkskul && !currentUser.rombelWali && currentUser.role !== 'WALI_KELAS'));
 
       setupGuruUi();
       showView('viewGuru');
-      const isCoach = (currentUser.role === 'PELATIH_EKSKUL' || currentUser.peran === 'PELATIH_EKSKUL' || String(currentUser.nip).toUpperCase().startsWith('PELATIH-') || (currentUser.cabangEkskul && !currentUser.rombelWali && !currentUser.mapel));
       if (isCoach) {
         switchTabGuru('absenEkskul');
       } else {
@@ -2861,7 +2589,6 @@
       renderBukuSakuSiswa();
       renderPresensiSiswa();
       renderRekap7KebiasaanSiswa();
-      checkKebiasaanHariIniState();
     }
 
     function switchTabSiswa(tabName) {
@@ -2893,8 +2620,8 @@
 
       // Refresh data tampilan tab yang dibuka
       if (tabName === 'kebiasaan') {
+        cekStatusJurnalTanggal();
         renderRekap7KebiasaanSiswa();
-        checkKebiasaanHariIniState();
       } else if (tabName === 'nilai') {
         renderNilaiSiswa();
         fetchNilaiSiswaOnline();
@@ -3027,137 +2754,150 @@
         camText.innerText = "Wajib kamera langsung. Watermark nama, jam, dan tanggal tercetak otomatis.";
         camText.className = "text-xs text-slate-500";
       }
-    }
 
-    function checkKebiasaanHariIniState() {
-      if (!currentUser || currentUser.role !== 'SISWA') return;
-      const tglInput = document.getElementById('formKebiasaanTgl');
-      if (!tglInput) return;
-      const selectedTgl = tglInput.value;
+      const bannerArea = document.getElementById('statusBannerForm7K');
+      if (bannerArea) bannerArea.innerHTML = '';
 
-      const banner = document.getElementById('bannerStatusKebiasaanHariIni');
       const submitBtn = document.getElementById('btnSubmitKebiasaan');
-      if (!banner || !submitBtn) return;
-
-      const existing = log7Kebiasaan.find(k => k.nisn === currentUser.nisn && k.tanggal === selectedTgl);
-
-      if (!existing) {
-        banner.innerHTML = '';
-        banner.className = 'hidden';
+      if (submitBtn) {
         submitBtn.disabled = false;
         submitBtn.className = "w-full py-3.5 bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 text-white font-bold rounded-xl shadow-md shadow-emerald-200 transition flex items-center justify-center gap-2";
         submitBtn.innerHTML = `<i data-lucide="send" class="w-4 h-4"></i><span>Kirim Jurnal 7 Kebiasaan Hari Ini</span>`;
+      }
+      safeCreateIcons();
+    }
+
+    function cekStatusJurnalTanggal() {
+      const tglInput = document.getElementById('formKebiasaanTgl');
+      if (!tglInput || !currentUser || currentUser.role !== 'SISWA') return;
+      const tgl = tglInput.value;
+      const existing = log7Kebiasaan.find(k => k.nisn === currentUser.nisn && k.tanggal === tgl);
+      
+      const bannerArea = document.getElementById('statusBannerForm7K');
+      const submitBtn = document.getElementById('btnSubmitKebiasaan');
+
+      if (!existing) {
+        if (bannerArea) bannerArea.innerHTML = '';
+        if (submitBtn) {
+          submitBtn.disabled = false;
+          submitBtn.className = "w-full py-3.5 bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 text-white font-bold rounded-xl shadow-md shadow-emerald-200 transition flex items-center justify-center gap-2";
+          submitBtn.innerHTML = `<i data-lucide="send" class="w-4 h-4"></i><span>Kirim Jurnal 7 Kebiasaan Hari Ini</span>`;
+        }
         safeCreateIcons();
         return;
       }
 
-      const status = String(existing.statusValidasi || '').toUpperCase().trim();
+      muatDataKeForm7K(existing);
 
-      if (status === 'VALID') {
-        banner.className = 'p-4 bg-emerald-50 border border-emerald-200 rounded-2xl flex items-start gap-3';
-        banner.innerHTML = `
-          <div class="p-2 bg-emerald-100 rounded-xl text-emerald-700 shrink-0"><i data-lucide="check-check" class="w-5 h-5"></i></div>
-          <div>
-            <h5 class="text-xs font-bold text-emerald-900 uppercase">Laporan Telah Divalidasi Resmi (Terkunci)</h5>
-            <p class="text-xs text-emerald-700 mt-0.5">Jurnal 7 Kebiasaan ananda untuk tanggal <b>${selectedTgl}</b> telah disetujui oleh Guru Wali. Data terkunci dan tidak dapat diubah lagi.</p>
-          </div>
-        `;
-        submitBtn.disabled = true;
-        submitBtn.className = "w-full py-3.5 bg-slate-200 text-slate-400 font-bold rounded-xl cursor-not-allowed flex items-center justify-center gap-2";
-        submitBtn.innerHTML = `<i data-lucide="lock" class="w-4 h-4"></i><span>Laporan Sudah Divalidasi (Terkunci)</span>`;
-      } else if (status === 'DITOLAK') {
-        banner.className = 'p-4 bg-rose-50 border border-rose-200 rounded-2xl flex items-start justify-between gap-3';
-        banner.innerHTML = `
-          <div class="flex items-start gap-3">
-            <div class="p-2 bg-rose-100 rounded-xl text-rose-700 shrink-0"><i data-lucide="alert-triangle" class="w-5 h-5"></i></div>
-            <div>
-              <h5 class="text-xs font-bold text-rose-900 uppercase">Laporan Ditolak / Perlu Perbaikan</h5>
-              <p class="text-xs text-rose-700 mt-0.5">Catatan Guru Wali: <i>"${existing.catatanGuru || 'Mohon periksa kembali isian dan foto bukti.'}"</i></p>
+      if (existing.statusValidasi === 'VALID') {
+        if (bannerArea) {
+          bannerArea.innerHTML = `
+            <div class="p-3.5 bg-emerald-50 border border-emerald-300 rounded-2xl text-emerald-900 text-xs font-bold flex items-center gap-2.5 shadow-xs">
+              <i data-lucide="shield-check" class="w-5 h-5 text-emerald-600 shrink-0"></i>
+              <div>
+                <span>Jurnal tanggal <b>${tgl}</b> sudah diverifikasi oleh Guru Wali dan telah TERKUNCI permanen.</span>
+                <p class="text-[11px] font-normal text-emerald-700 mt-0.5">Data yang telah divalidasi tidak dapat diubah kembali demi menjaga integritas pelaporan.</p>
+              </div>
             </div>
-          </div>
-          <button type="button" onclick="muatUlangData7Kebiasaan('${selectedTgl}')" class="px-3 py-1.5 bg-rose-600 hover:bg-rose-700 text-white rounded-lg text-xs font-bold whitespace-nowrap shadow-xs">
-            Muat Isian Lama
-          </button>
-        `;
-        submitBtn.disabled = false;
-        submitBtn.className = "w-full py-3.5 bg-gradient-to-r from-rose-600 to-amber-600 hover:from-rose-700 hover:to-amber-700 text-white font-bold rounded-xl shadow-md transition flex items-center justify-center gap-2";
-        submitBtn.innerHTML = `<i data-lucide="refresh-cw" class="w-4 h-4"></i><span>Kirim Ulang Laporan Perbaikan</span>`;
+          `;
+        }
+        if (submitBtn) {
+          submitBtn.disabled = true;
+          submitBtn.className = "w-full py-3.5 bg-slate-200 text-slate-400 font-bold rounded-xl cursor-not-allowed flex items-center justify-center gap-2";
+          submitBtn.innerHTML = `<i data-lucide="lock" class="w-4 h-4"></i><span>Jurnal Sudah Diverifikasi (Terkunci)</span>`;
+        }
+      } else if (existing.statusValidasi === 'DITOLAK' || existing.statusValidasi === 'PERLU_PERBAIKAN') {
+        if (bannerArea) {
+          bannerArea.innerHTML = `
+            <div class="p-3.5 bg-rose-50 border border-rose-300 rounded-2xl text-rose-900 text-xs font-bold flex items-start gap-2.5 shadow-xs">
+              <i data-lucide="alert-triangle" class="w-5 h-5 text-rose-600 shrink-0 mt-0.5"></i>
+              <div>
+                <span class="text-sm font-black text-rose-700">Laporan Dikembalikan untuk Diperbaiki</span>
+                <p class="mt-1 text-slate-800 font-semibold bg-white p-2 rounded-lg border border-rose-200">Catatan Guru Wali: "${existing.catatanGuru || 'Mohon perbaiki data atau foto bukti'}"</p>
+                <p class="text-[11px] font-normal text-rose-700 mt-1">Silakan sesuaikan isian di bawah ini atau foto ulang bukti fisik, lalu klik "Kirim Perbaikan".</p>
+              </div>
+            </div>
+          `;
+        }
+        if (submitBtn) {
+          submitBtn.disabled = false;
+          submitBtn.className = "w-full py-3.5 bg-gradient-to-r from-amber-600 to-rose-600 hover:from-amber-700 hover:to-rose-700 text-white font-bold rounded-xl shadow-md shadow-amber-200 transition flex items-center justify-center gap-2";
+          submitBtn.innerHTML = `<i data-lucide="refresh-cw" class="w-4 h-4"></i><span>Kirim Perbaikan Jurnal 7 Kebiasaan 🚀</span>`;
+        }
       } else {
         // PENDING / MENUNGGU
-        banner.className = 'p-4 bg-amber-50 border border-amber-200 rounded-2xl flex items-start justify-between gap-3';
-        banner.innerHTML = `
-          <div class="flex items-start gap-3">
-            <div class="p-2 bg-amber-100 rounded-xl text-amber-700 shrink-0"><i data-lucide="clock" class="w-5 h-5"></i></div>
-            <div>
-              <h5 class="text-xs font-bold text-amber-900 uppercase">Menunggu Validasi Guru Wali</h5>
-              <p class="text-xs text-amber-700 mt-0.5">Ananda sudah mengisi laporan tanggal <b>${selectedTgl}</b>. Ananda masih dapat mengedit atau memperbarui data ini selama belum divalidasi.</p>
+        if (bannerArea) {
+          bannerArea.innerHTML = `
+            <div class="p-3.5 bg-amber-50 border border-amber-300 rounded-2xl text-amber-900 text-xs font-bold flex items-center gap-2.5 shadow-xs">
+              <i data-lucide="clock" class="w-5 h-5 text-amber-600 shrink-0"></i>
+              <div>
+                <span>Jurnal tanggal <b>${tgl}</b> sedang menunggu validasi Guru Wali.</span>
+                <p class="text-[11px] font-normal text-amber-700 mt-0.5">Anda masih dapat memperbarui data sebelum disetujui oleh Guru Wali.</p>
+              </div>
             </div>
-          </div>
-          <button type="button" onclick="muatUlangData7Kebiasaan('${selectedTgl}')" class="px-3 py-1.5 bg-amber-600 hover:bg-amber-700 text-white rounded-lg text-xs font-bold whitespace-nowrap shadow-xs">
-            Muat Isian Saya
-          </button>
-        `;
-        submitBtn.disabled = false;
-        submitBtn.className = "w-full py-3.5 bg-gradient-to-r from-amber-600 to-indigo-600 hover:from-amber-700 hover:to-indigo-700 text-white font-bold rounded-xl shadow-md transition flex items-center justify-center gap-2";
-        submitBtn.innerHTML = `<i data-lucide="save" class="w-4 h-4"></i><span>Simpan Perubahan Laporan</span>`;
+          `;
+        }
+        if (submitBtn) {
+          submitBtn.disabled = false;
+          submitBtn.className = "w-full py-3.5 bg-gradient-to-r from-blue-600 to-indigo-700 hover:from-blue-700 hover:to-indigo-800 text-white font-bold rounded-xl shadow-md shadow-blue-200 transition flex items-center justify-center gap-2";
+          submitBtn.innerHTML = `<i data-lucide="save" class="w-4 h-4"></i><span>Perbarui Jurnal 7 Kebiasaan 🚀</span>`;
+        }
       }
-
       safeCreateIcons();
     }
 
-    function muatUlangData7Kebiasaan(tgl) {
-      const existing = log7Kebiasaan.find(k => k.nisn === currentUser.nisn && k.tanggal === tgl);
-      if (!existing) return;
+    function muatDataKeForm7K(data) {
+      if (data.bangunPagi) {
+        document.getElementById('kbBangunJam').value = data.bangunPagi;
+        setJamBangun(data.bangunPagi);
+      }
+      if (data.tidurMalam) {
+        document.getElementById('kbTidurJam').value = data.tidurMalam;
+        setJamTidur(data.tidurMalam);
+      }
+      if (data.olahraga) document.getElementById('kbOlahraga').value = data.olahraga;
+      if (data.makanSehat) document.getElementById('kbMakan').value = data.makanSehat;
+      if (data.gemarBelajar) document.getElementById('kbBelajar').value = data.gemarBelajar;
+      if (data.gotongRoyong) document.getElementById('kbBantuOrtu').value = data.gotongRoyong;
 
-      document.getElementById('formKebiasaanTgl').value = existing.tanggal;
-      if (existing.bangunPagi) setJamBangun(existing.bangunPagi);
-      if (existing.tidurMalam) setJamTidur(existing.tidurMalam);
-      if (existing.olahraga) document.getElementById('kbOlahraga').value = existing.olahraga;
-      if (existing.makanSehat) document.getElementById('kbMakan').value = existing.makanSehat;
-      if (existing.gemarBelajar) document.getElementById('kbBelajar').value = existing.gemarBelajar;
-      if (existing.gotongRoyong) document.getElementById('kbBantuOrtu').value = existing.gotongRoyong;
-
-      // Shalat
-      const ibadahStr = existing.beribadah || '';
-      ['shSubuh', 'shDzuhur', 'shAshar', 'shMaghrib', 'shIsya'].forEach(id => {
-        const nameMap = { shSubuh: 'Subuh', shDzuhur: 'Dzuhur', shAshar: 'Ashar', shMaghrib: 'Maghrib', shIsya: 'Isya' };
-        const chk = document.getElementById(id);
-        if (chk) chk.checked = ibadahStr.includes(nameMap[id]);
+      const ibadahStr = (data.beribadah || '').toLowerCase();
+      ['Subuh', 'Dzuhur', 'Ashar', 'Maghrib', 'Isya'].forEach(sh => {
+        const chk = document.getElementById(`sh${sh}`);
+        if (chk) chk.checked = ibadahStr.includes(sh.toLowerCase());
       });
       updateShalatUi();
 
-      if (existing.fotoBase64) {
-        capturedWatermarkBase64 = existing.fotoBase64;
-        const canvas = document.getElementById('watermarkCanvas');
-        if (canvas) {
-          const img = new Image();
-          img.onload = () => {
+      if (data.fotoBase64) {
+        capturedWatermarkBase64 = data.fotoBase64;
+        const previewArea = document.getElementById('previewWatermarkArea');
+        if (previewArea) previewArea.classList.remove('hidden');
+        const img = new Image();
+        img.onload = function() {
+          const canvas = document.getElementById('watermarkCanvas');
+          if (canvas) {
             canvas.width = img.width;
             canvas.height = img.height;
             const ctx = canvas.getContext('2d');
             ctx.drawImage(img, 0, 0);
-          };
-          img.src = existing.fotoBase64;
+          }
+        };
+        img.src = data.fotoBase64;
+        const camText = document.getElementById('cameraStatusText');
+        if (camText) {
+          camText.innerText = "✓ Foto bukti tersimpan sebelumnya dimuat.";
+          camText.className = "text-xs text-blue-600 font-bold";
         }
-        document.getElementById('previewWatermarkArea').classList.remove('hidden');
-        document.getElementById('cameraStatusText').innerText = "✓ Menggunakan foto bukti sebelumnya.";
-        document.getElementById('cameraStatusText').className = "text-xs text-blue-600 font-bold";
       }
+    }
 
-      checkKebiasaanHariIniState();
+    function editJurnalSiswa(tanggal) {
+      const tglInput = document.getElementById('formKebiasaanTgl');
+      if (tglInput) {
+        tglInput.value = tanggal;
+        cekStatusJurnalTanggal();
+      }
       const formEl = document.getElementById('formInput7Kebiasaan');
-      if (formEl) {
-        window.scrollTo({ top: formEl.offsetTop - 80, behavior: 'smooth' });
-      }
-
-      Swal.fire({
-        toast: true,
-        position: 'top-end',
-        icon: 'info',
-        title: `Data laporan tanggal ${tgl} berhasil dimuat ke formulir!`,
-        showConfirmButton: false,
-        timer: 2000
-      });
+      if (formEl) formEl.scrollIntoView({ behavior: 'smooth' });
     }
 
     function renderRekap7KebiasaanSiswa() {
@@ -3167,33 +2907,33 @@
       const myLogs = log7Kebiasaan.filter(k => k.nisn === currentUser.nisn).sort((a, b) => (b.tanggal || '').localeCompare(a.tanggal || ''));
 
       if (myLogs.length === 0) {
-        tbody.innerHTML = `<tr><td colspan="11" class="py-6 text-center text-slate-400">Belum ada riwayat pengisian jurnal 7 Kebiasaan. Silakan isi formulir di atas.</td></tr>`;
+        tbody.innerHTML = `<tr><td colspan="10" class="py-6 text-center text-slate-400">Belum ada riwayat pengisian jurnal 7 Kebiasaan. Silakan isi formulir di atas.</td></tr>`;
         return;
       }
 
       tbody.innerHTML = myLogs.map(k => {
-        const status = String(k.statusValidasi || '').toUpperCase();
         let badgeValidasi = '';
-        if (status === 'VALID') {
+        if (k.statusValidasi === 'VALID') {
           badgeValidasi = `<span class="px-2.5 py-1 bg-emerald-100 text-emerald-800 rounded-lg font-bold text-[10px] inline-flex items-center gap-1">✓ Terverifikasi</span>`;
-        } else if (status === 'DITOLAK') {
+        } else if (k.statusValidasi === 'DITOLAK' || k.statusValidasi === 'PERLU_PERBAIKAN') {
           badgeValidasi = `
-            <div>
-              <span class="px-2.5 py-1 bg-rose-100 text-rose-800 rounded-lg font-bold text-[10px] inline-flex items-center gap-1">✕ Perlu Revisi</span>
-              ${k.catatanGuru ? `<div class="text-[10px] text-rose-600 mt-0.5 italic max-w-xs text-center">${k.catatanGuru}</div>` : ''}
+            <div class="flex flex-col items-center gap-1">
+              <span class="px-2 py-0.5 bg-rose-100 text-rose-800 rounded-md font-bold text-[10px]" title="${k.catatanGuru || ''}">✕ Ditolak: ${k.catatanGuru || 'Perlu Perbaikan'}</span>
+              <button type="button" onclick="editJurnalSiswa('${k.tanggal}')" class="px-2.5 py-1 bg-rose-50 hover:bg-rose-100 text-rose-700 rounded-lg text-[10px] font-bold border border-rose-200 shadow-xs transition">✏️ Perbaiki Jurnal</button>
             </div>
           `;
         } else {
-          badgeValidasi = `<span class="px-2.5 py-1 bg-amber-100 text-amber-800 rounded-lg font-bold text-[10px] inline-flex items-center gap-1">⏳ Menunggu Validasi</span>`;
+          badgeValidasi = `
+            <div class="flex flex-col items-center gap-1">
+              <span class="px-2 py-0.5 bg-amber-100 text-amber-800 rounded-md font-bold text-[10px]">⏳ Menunggu</span>
+              <button type="button" onclick="editJurnalSiswa('${k.tanggal}')" class="px-2 py-0.5 bg-blue-50 hover:bg-blue-100 text-blue-700 rounded-lg text-[10px] font-bold border border-blue-200 shadow-xs transition">✏️ Edit Jurnal</button>
+            </div>
+          `;
         }
 
         const fotoBtn = k.fotoBase64
           ? `<button onclick="lihatFotoBuktiModal('${k.fotoBase64}')" class="px-2.5 py-1 bg-blue-50 hover:bg-blue-100 text-blue-700 rounded-lg text-[11px] font-bold border border-blue-200 inline-flex items-center gap-1 shadow-xs"><i data-lucide="image" class="w-3 h-3"></i><span>Lihat</span></button>`
           : `<span class="text-slate-400 text-[11px] italic">Tidak ada</span>`;
-
-        const aksiBtn = status === 'VALID'
-          ? `<span class="text-slate-400 text-xs font-semibold">🔒 Terkunci</span>`
-          : `<button onclick="muatUlangData7Kebiasaan('${k.tanggal}')" class="px-2.5 py-1 bg-amber-50 hover:bg-amber-100 text-amber-800 border border-amber-200 rounded-lg text-xs font-bold transition flex items-center justify-center gap-1 shadow-xs mx-auto"><i data-lucide="edit-3" class="w-3 h-3"></i><span>Edit</span></button>`;
 
         return `
           <tr class="hover:bg-slate-50/70 transition">
@@ -3207,14 +2947,13 @@
             <td class="py-3 px-3 font-mono text-slate-700">${k.tidurMalam || '-'}</td>
             <td class="py-3 px-3 text-center">${fotoBtn}</td>
             <td class="py-3 px-3 text-center">${badgeValidasi}</td>
-            <td class="py-3 px-3 text-center">${aksiBtn}</td>
           </tr>
         `;
       }).join('');
       safeCreateIcons();
     }
 
-    // Kamera Langsung & Canvas Watermark (Super Ringan & Terkompresi ~20 KB)
+    // Kamera Langsung & Canvas Watermark Terkompresi (< 25 KB agar tidak memberatkan database Google Sheets)
     function handleLiveCameraCapture(e) {
       const file = e.target.files[0];
       if (!file) return;
@@ -3226,51 +2965,37 @@
           const canvas = document.getElementById('watermarkCanvas');
           const ctx = canvas.getContext('2d');
 
-          // Resize ke maks 420px lebar/tinggi (sangat ringan ~20KB agar tidak memberatkan database Google Sheets)
-          const maxDim = 420;
-          let width = img.width;
-          let height = img.height;
-          if (width > height) {
-            if (width > maxDim) {
-              height = Math.round((height * maxDim) / width);
-              width = maxDim;
-            }
-          } else {
-            if (height > maxDim) {
-              width = Math.round((width * maxDim) / height);
-              height = maxDim;
-            }
-          }
-
-          canvas.width = width;
-          canvas.height = height;
+          // Resize kompresi ke maks 400px lebar agar string base64 muat dalam batasan sel Sheets (< 50.000 karakter)
+          const maxWidth = 400;
+          const scale = maxWidth / img.width;
+          canvas.width = maxWidth;
+          canvas.height = Math.round(img.height * scale);
 
           // Gambar foto
-          ctx.drawImage(img, 0, 0, width, height);
+          ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
 
-          // Beri Stempel Watermark Permanen
+          // Beri Stempel Watermark Permanen Proporsional
           const now = new Date();
           const tglStr = now.toLocaleDateString('id-ID', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' });
-          const jamStr = now.toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' }) + ' WIB';
+          const jamStr = now.toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit', second: '2-digit' }) + ' WIB';
           
           // Background banner watermark
-          ctx.fillStyle = 'rgba(0, 0, 0, 0.70)';
-          ctx.fillRect(0, height - 52, width, 52);
+          ctx.fillStyle = 'rgba(0, 0, 0, 0.65)';
+          ctx.fillRect(0, canvas.height - 48, canvas.width, 48);
 
           // Teks Watermark
           ctx.fillStyle = '#facc15'; // Amber
           ctx.font = 'bold 13px Plus Jakarta Sans, sans-serif';
-          ctx.fillText(`🌟 ${currentUser.nama.slice(0, 24)} (${currentUser.nisn})`, 10, height - 30);
+          ctx.fillText(`🌟 ${currentUser.nama} (${currentUser.nisn})`, 10, canvas.height - 28);
 
           ctx.fillStyle = '#ffffff';
           ctx.font = '10px Plus Jakarta Sans, sans-serif';
-          ctx.fillText(`📅 ${tglStr} • ⏰ ${jamStr} • Anti-Galeri Live`, 10, height - 12);
+          ctx.fillText(`📅 ${tglStr} • ⏰ ${jamStr} • Live Camera`, 10, canvas.height - 12);
 
-          // Export compressed JPEG (~15-25 KB kualitas 0.58)
-          capturedWatermarkBase64 = canvas.toDataURL('image/jpeg', 0.58);
+          // Export compressed JPEG quality 0.55 (~15 KB base64)
+          capturedWatermarkBase64 = canvas.toDataURL('image/jpeg', 0.55);
           document.getElementById('previewWatermarkArea').classList.remove('hidden');
-          const kbSize = Math.round((capturedWatermarkBase64.length * 0.75) / 1024);
-          document.getElementById('cameraStatusText').innerText = `✓ Foto dicap watermark & terkompresi hemat (${kbSize} KB).`;
+          document.getElementById('cameraStatusText').innerText = "✓ Foto berhasil dicap watermark & dikompresi ringan.";
           document.getElementById('cameraStatusText').className = "text-xs text-emerald-600 font-bold";
         };
         img.src = evt.target.result;
@@ -3280,16 +3005,19 @@
 
     async function handleKirim7Kebiasaan(e) {
       e.preventDefault();
-      const tglPilihan = document.getElementById('formKebiasaanTgl').value;
-      const existing = log7Kebiasaan.find(k => k.nisn === currentUser.nisn && k.tanggal === tglPilihan);
-
-      if (existing && String(existing.statusValidasi || '').toUpperCase() === 'VALID') {
-        Swal.fire('Laporan Terkunci', 'Laporan pada tanggal ini sudah divalidasi oleh Guru Wali dan tidak dapat diubah.', 'warning');
+      if (!capturedWatermarkBase64) {
+        Swal.fire('Foto Bukti Wajib', 'Mohon buka kamera HP untuk mengambil foto bukti pembiasaan hari ini.', 'warning');
         return;
       }
 
-      if (!capturedWatermarkBase64 && (!existing || !existing.fotoBase64)) {
-        Swal.fire('Foto Bukti Wajib', 'Mohon buka kamera HP untuk mengambil foto bukti pembiasaan hari ini.', 'warning');
+      const tgl = document.getElementById('formKebiasaanTgl').value;
+      const existing = log7Kebiasaan.find(k => k.nisn === currentUser.nisn && k.tanggal === tgl);
+      if (existing && existing.statusValidasi === 'VALID') {
+        Swal.fire({
+          icon: 'warning',
+          title: 'Jurnal Terkunci',
+          text: 'Jurnal 7 Kebiasaan pada tanggal ini sudah diverifikasi oleh Guru Wali dan telah terkunci permanen.'
+        });
         return;
       }
 
@@ -3301,7 +3029,8 @@
       if (document.getElementById('shIsya').checked) shalatList.push('Isya');
 
       const laporan = {
-        tanggal: tglPilihan,
+        idLog: existing ? existing.idLog : ("KB-" + Date.now().toString().slice(-8)),
+        tanggal: tgl,
         nisn: currentUser.nisn,
         nama: currentUser.nama,
         kelas: currentUser.kelas,
@@ -3312,15 +3041,16 @@
         gemarBelajar: document.getElementById('kbBelajar').value,
         gotongRoyong: document.getElementById('kbBantuOrtu').value,
         tidurMalam: document.getElementById('kbTidurJam').value,
-        fotoBase64: capturedWatermarkBase64 || (existing ? existing.fotoBase64 : null),
-        watermarkInfo: `${currentUser.nama} - ${tglPilihan}`,
-        statusValidasi: 'PENDING'
+        fotoBase64: capturedWatermarkBase64,
+        watermarkInfo: `${currentUser.nama} - ${tgl}`,
+        statusValidasi: 'PENDING',
+        catatanGuru: ''
       };
 
-      // Simpan / update di memori lokal
-      const existIdx = log7Kebiasaan.findIndex(k => k.nisn === currentUser.nisn && k.tanggal === tglPilihan);
-      if (existIdx !== -1) {
-        log7Kebiasaan[existIdx] = Object.assign(log7Kebiasaan[existIdx], laporan);
+      // Simpan lokal (update jika sudah ada, atau masukkan baru)
+      const existingIdx = log7Kebiasaan.findIndex(k => k.nisn === currentUser.nisn && k.tanggal === tgl);
+      if (existingIdx !== -1) {
+        log7Kebiasaan[existingIdx] = Object.assign(log7Kebiasaan[existingIdx], laporan);
       } else {
         log7Kebiasaan.push(laporan);
       }
@@ -3331,7 +3061,7 @@
       playChimeBell();
       Swal.fire({
         title: 'Mengirim ke Google Sheets & Drive...',
-        text: 'Mengunggah jurnal dan foto bukti...',
+        text: 'Mengunggah jurnal dan foto bukti terkompresi...',
         didOpen: () => Swal.showLoading(),
         allowOutsideClick: false
       });
@@ -3341,8 +3071,8 @@
         laporan: laporan
       });
 
+      resetForm7Kebiasaan();
       renderRekap7KebiasaanSiswa();
-      checkKebiasaanHariIniState();
 
       if (res && res.success) {
         Swal.fire({
@@ -3354,7 +3084,16 @@
       } else {
         Swal.fire({
           title: 'Tersimpan Lokal',
-          text: 'Laporan tersimpan di memori perangkat. (Info server: ' + (res ? res.error : 'Offline') + ')',
+          text: 'Laporan tersimpan di memori perangkat. (Info server: ' + (res.error || 'Offline') + ')',
+          icon: 'info'
+        });
+      }
+    }
+        syncDataFromGoogleSheets(true);
+      } else {
+        Swal.fire({
+          title: 'Tersimpan Lokal',
+          text: 'Laporan tersimpan di memori perangkat. (Info server: ' + (res.error || 'Offline') + ')',
           icon: 'info'
         });
       }
@@ -3806,19 +3545,18 @@
       const s = masterSiswa.find(item => item.nisn === currentUser.nisn);
       if (s) s.noHpOrtu = val;
 
-      // Update LocalStorage offline cache
+      // Update localStorage cache segera
       try {
-        const cacheRaw = localStorage.getItem("SUPERAPP_DATA_CACHE_V1");
-        if (cacheRaw) {
-          const cacheObj = JSON.parse(cacheRaw);
-          if (cacheObj.siswa) {
-            const cs = cacheObj.siswa.find(item => item.nisn === currentUser.nisn);
-            if (cs) cs.noHpOrtu = val;
-            localStorage.setItem("SUPERAPP_DATA_CACHE_V1", JSON.stringify(cacheObj));
-          }
+        const cachedRaw = localStorage.getItem("SUPERAPP_DATA_CACHE_V1");
+        if (cachedRaw) {
+          const cached = JSON.parse(cachedRaw);
+          const cachedS = (cached.siswa || []).find(item => item.nisn === currentUser.nisn);
+          if (cachedS) cachedS.noHpOrtu = val;
+          localStorage.setItem("SUPERAPP_DATA_CACHE_V1", JSON.stringify(cached));
         }
       } catch (err) {}
 
+      playBeepSuccess();
       Swal.fire({
         title: 'Menyimpan ke Google Sheets...',
         didOpen: () => Swal.showLoading(),
@@ -3832,14 +3570,10 @@
       });
 
       if (res && res.success) {
-        if (res.noHpOrtu) {
-          currentUser.noHpOrtu = res.noHpOrtu;
-          if (s) s.noHpOrtu = res.noHpOrtu;
-        }
         Swal.fire('Tersimpan di Google Sheets! 🟢', 'Nomor WhatsApp orang tua berhasil diperbarui.', 'success');
         syncDataFromGoogleSheets(true);
       } else {
-        Swal.fire('Tersimpan Lokal', 'Nomor WhatsApp orang tua disimpan di sesi ini. (Koneksi: ' + (res ? res.error : 'Offline') + ')', 'info');
+        Swal.fire('Tersimpan Lokal', 'Nomor WhatsApp orang tua disimpan di perangkat ini.', 'info');
       }
       switchTabSiswa('beranda');
     }
@@ -3858,41 +3592,42 @@
       document.getElementById('badgeGuruRolePrimary').innerText = currentUser.role || currentUser.peran;
       document.getElementById('badgeGuruTugasKhusus').innerText = currentUser.rombelWali ? `ROMBEL ${currentUser.rombelWali}` : (currentUser.cabangEkskul || "STAFF");
 
-      // Cek apakah akun adalah Pelatih Ekskul
-      const isCoach = (currentUser.peran === 'PELATIH_EKSKUL' || currentUser.role === 'PELATIH_EKSKUL' || String(currentUser.nip || '').toUpperCase().startsWith('PELATIH-') || (currentUser.cabangEkskul && !currentUser.rombelWali && !currentUser.mapel));
+      // Cek apakah akun adalah Pelatih Ekskul murni / Coach
+      const isCoach = (currentUser.role === 'PELATIH_EKSKUL' || currentUser.peran === 'PELATIH_EKSKUL' || (currentUser.cabangEkskul && !currentUser.rombelWali && currentUser.role !== 'WALI_KELAS'));
 
-      const tabBeranda = document.getElementById('tabBtnGuru_beranda');
-      const tabKbm = document.getElementById('tabBtnGuru_presensiKbm');
-      const tabAbsenEkskul = document.getElementById('tabBtnGuru_absenEkskul');
-      const tabRekapWalas = document.getElementById('tabBtnGuru_rekapWalas');
-      const tabNilai = document.getElementById('tabBtnGuru_nilaiUlangan');
-      const tabWali = document.getElementById('tabBtnGuru_guruWali');
-      const tabTibum = document.getElementById('tabBtnGuru_tibum');
-      const cardMetricEkskul = document.getElementById('cardMetricAnggotaEkskul');
+      const allGuruTabs = [
+        'tabBtnGuru_beranda',
+        'tabBtnGuru_presensiKbm',
+        'tabBtnGuru_rekapWalas',
+        'tabBtnGuru_nilaiUlangan',
+        'tabBtnGuru_guruWali',
+        'tabBtnGuru_tibum'
+      ];
+      const btnAbsenEkskul = document.getElementById('tabBtnGuru_absenEkskul');
 
       if (isCoach) {
         // BERANDA PELATIH: HANYA BERISI TAB ABSENSI EKSKUL SAJA
-        if (tabBeranda) tabBeranda.classList.add('hidden');
-        if (tabKbm) tabKbm.classList.add('hidden');
-        if (tabRekapWalas) tabRekapWalas.classList.add('hidden');
-        if (tabNilai) tabNilai.classList.add('hidden');
-        if (tabWali) tabWali.classList.add('hidden');
-        if (tabTibum) tabTibum.classList.add('hidden');
-        if (tabAbsenEkskul) {
-          tabAbsenEkskul.classList.remove('hidden');
-          tabAbsenEkskul.innerText = '⚽ Absensi Ekskul (Pelatih)';
+        allGuruTabs.forEach(id => {
+          const el = document.getElementById(id);
+          if (el) el.classList.add('hidden');
+        });
+        if (btnAbsenEkskul) {
+          btnAbsenEkskul.classList.remove('hidden');
+          btnAbsenEkskul.innerText = "⚽ Absensi Latihan Ekskul";
         }
-        document.getElementById('userRoleBadge').innerText = 'Pelatih Ekstrakurikuler';
+        document.getElementById('userRoleBadge').innerText = "Pelatih " + (currentUser.cabangEkskul || "Ekskul");
+        document.getElementById('badgeGuruRolePrimary').innerText = "PELATIH EKSTRAKURIKULER";
+        document.getElementById('badgeGuruTugasKhusus').innerText = currentUser.cabangEkskul ? `CABANG ${currentUser.cabangEkskul}` : "PELATIH";
       } else {
         // BERANDA GURU: HILANGKAN TAB ABSENSI EKSKUL
-        if (tabAbsenEkskul) tabAbsenEkskul.classList.add('hidden');
-        if (cardMetricEkskul) cardMetricEkskul.classList.add('hidden');
-        if (tabBeranda) tabBeranda.classList.remove('hidden');
-        if (tabKbm) tabKbm.classList.remove('hidden');
-        if (tabRekapWalas) tabRekapWalas.classList.remove('hidden');
-        if (tabNilai) tabNilai.classList.remove('hidden');
-        if (tabWali) tabWali.classList.remove('hidden');
-        if (tabTibum) tabTibum.classList.remove('hidden');
+        allGuruTabs.forEach(id => {
+          const el = document.getElementById(id);
+          if (el) el.classList.remove('hidden');
+        });
+        if (btnAbsenEkskul) btnAbsenEkskul.classList.add('hidden');
+        document.getElementById('userRoleBadge').innerText = currentUser.role || (currentUser.peran || "Guru Pengajar");
+        document.getElementById('badgeGuruRolePrimary').innerText = currentUser.role || currentUser.peran || "GURU";
+        document.getElementById('badgeGuruTugasKhusus').innerText = currentUser.rombelWali ? `ROMBEL ${currentUser.rombelWali}` : "GURU MAPEL";
       }
 
       // Hitung siswa binaan Guru Wali
@@ -3902,7 +3637,7 @@
         if (countBinaan > 0) {
           badgeWali.innerText = `🌟 GURU WALI (${countBinaan} Binaan)`;
         } else {
-          badgeWali.innerText = `GURU MAPEL / STAFF`;
+          badgeWali.innerText = isCoach ? `PELATIH EKSKUL` : `GURU MAPEL / STAFF`;
         }
       }
 
@@ -3964,13 +3699,11 @@
       if (tabName === 'nilai-ulangan') tabName = 'nilaiUlangan';
       if (tabName === 'catatan-tibum' || tabName === 'razia-tibum') tabName = 'tibum';
 
-      // Proteksi hak akses & pemisahan beranda Pelatih vs Guru
-      const isCoach = (currentUser.peran === 'PELATIH_EKSKUL' || currentUser.role === 'PELATIH_EKSKUL' || String(currentUser.nip || '').toUpperCase().startsWith('PELATIH-') || (currentUser.cabangEkskul && !currentUser.rombelWali && !currentUser.mapel));
-
-      if (isCoach && tabName !== 'absenEkskul') {
+      // Proteksi hak akses: Pelatih hanya boleh akses Absen Ekskul, Guru tidak punya tab Absen Ekskul
+      const isCoach = (currentUser.role === 'PELATIH_EKSKUL' || currentUser.peran === 'PELATIH_EKSKUL' || (currentUser.cabangEkskul && !currentUser.rombelWali && currentUser.role !== 'WALI_KELAS'));
+      if (isCoach) {
         tabName = 'absenEkskul';
-      }
-      if (!isCoach && tabName === 'absenEkskul') {
+      } else if (tabName === 'absenEkskul') {
         tabName = 'beranda';
       }
 
@@ -4008,6 +3741,36 @@
     }
 
     // Modul Presensi KBM Kelas (Walas)
+    function setKbmStatus(nisn, status) {
+      const container = document.getElementById(`group_kbm_${nisn}`);
+      if (!container) return;
+      const radio = container.querySelector(`input[value="${status}"]`);
+      if (radio) radio.checked = true;
+
+      const colorMap = {
+        'HADIR': 'bg-emerald-600 text-white shadow-xs',
+        'SAKIT': 'bg-amber-500 text-white shadow-xs',
+        'IZIN': 'bg-blue-600 text-white shadow-xs',
+        'ALPHA': 'bg-rose-600 text-white shadow-xs',
+        'TERLAMBAT': 'bg-purple-600 text-white shadow-xs'
+      };
+
+      container.querySelectorAll('.btn-st-kbm').forEach(b => {
+        b.className = 'btn-st-kbm cursor-pointer px-2 py-1 rounded text-slate-600 hover:bg-slate-200 transition font-bold text-[11px]';
+        if (b.getAttribute('data-val') === status) {
+          b.className = `btn-st-kbm cursor-pointer px-2 py-1 rounded transition font-bold text-[11px] ${colorMap[status]}`;
+        }
+      });
+    }
+
+    function setAllKbmStatus(status) {
+      const rows = document.querySelectorAll('#tableFormPresensiKbm tr');
+      rows.forEach(r => {
+        const nisn = r.getAttribute('data-nisn');
+        if (nisn) setKbmStatus(nisn, status);
+      });
+    }
+
     function renderFormPresensiKbm() {
       const kelas = document.getElementById('guruPresensiKbmKelas').value;
       const siswaKelas = masterSiswa.filter(s => s.kelas === kelas);
@@ -4022,13 +3785,17 @@
           <td class="py-2.5 px-3 font-mono font-bold text-slate-600">${s.nisn}</td>
           <td class="py-2.5 px-3 font-bold text-slate-800">${s.nama}</td>
           <td class="py-2.5 px-3 text-center">
-            <input type="hidden" id="input_st_kbm_${s.nisn}" value="HADIR">
-            <div class="inline-flex rounded-lg border border-slate-200 p-0.5 bg-slate-100 gap-1 text-[11px] font-bold">
-              <button type="button" onclick="setKbmStatus('${s.nisn}', 'HADIR')" id="btn_kbm_${s.nisn}_HADIR" class="btn-st-kbm-${s.nisn} px-2.5 py-1 rounded transition bg-emerald-600 text-white shadow-xs font-bold">H</button>
-              <button type="button" onclick="setKbmStatus('${s.nisn}', 'SAKIT')" id="btn_kbm_${s.nisn}_SAKIT" class="btn-st-kbm-${s.nisn} px-2.5 py-1 rounded transition text-slate-600 hover:bg-slate-200">S</button>
-              <button type="button" onclick="setKbmStatus('${s.nisn}', 'IZIN')" id="btn_kbm_${s.nisn}_IZIN" class="btn-st-kbm-${s.nisn} px-2.5 py-1 rounded transition text-slate-600 hover:bg-slate-200">I</button>
-              <button type="button" onclick="setKbmStatus('${s.nisn}', 'ALPHA')" id="btn_kbm_${s.nisn}_ALPHA" class="btn-st-kbm-${s.nisn} px-2.5 py-1 rounded transition text-slate-600 hover:bg-slate-200">A</button>
-              <button type="button" onclick="setKbmStatus('${s.nisn}', 'TERLAMBAT')" id="btn_kbm_${s.nisn}_TERLAMBAT" class="btn-st-kbm-${s.nisn} px-2.5 py-1 rounded transition text-slate-600 hover:bg-slate-200">T</button>
+            <div id="group_kbm_${s.nisn}" class="inline-flex rounded-lg border border-slate-200 p-0.5 bg-slate-50 gap-1 text-[11px]">
+              <input type="radio" name="st_kbm_${s.nisn}" value="HADIR" checked class="hidden">
+              <input type="radio" name="st_kbm_${s.nisn}" value="SAKIT" class="hidden">
+              <input type="radio" name="st_kbm_${s.nisn}" value="IZIN" class="hidden">
+              <input type="radio" name="st_kbm_${s.nisn}" value="ALPHA" class="hidden">
+              <input type="radio" name="st_kbm_${s.nisn}" value="TERLAMBAT" class="hidden">
+              <button type="button" onclick="setKbmStatus('${s.nisn}', 'HADIR')" data-val="HADIR" class="btn-st-kbm cursor-pointer px-2 py-1 rounded bg-emerald-600 text-white font-bold text-[11px] shadow-xs">H</button>
+              <button type="button" onclick="setKbmStatus('${s.nisn}', 'SAKIT')" data-val="SAKIT" class="btn-st-kbm cursor-pointer px-2 py-1 rounded text-slate-600 hover:bg-slate-200 font-bold text-[11px]">S</button>
+              <button type="button" onclick="setKbmStatus('${s.nisn}', 'IZIN')" data-val="IZIN" class="btn-st-kbm cursor-pointer px-2 py-1 rounded text-slate-600 hover:bg-slate-200 font-bold text-[11px]">I</button>
+              <button type="button" onclick="setKbmStatus('${s.nisn}', 'ALPHA')" data-val="ALPHA" class="btn-st-kbm cursor-pointer px-2 py-1 rounded text-slate-600 hover:bg-slate-200 font-bold text-[11px]">A</button>
+              <button type="button" onclick="setKbmStatus('${s.nisn}', 'TERLAMBAT')" data-val="TERLAMBAT" class="btn-st-kbm cursor-pointer px-2 py-1 rounded text-slate-600 hover:bg-slate-200 font-bold text-[11px]">T</button>
             </div>
           </td>
           <td class="py-2.5 px-3">
@@ -4036,26 +3803,6 @@
           </td>
         </tr>
       `).join('');
-    }
-
-    function setKbmStatus(nisn, status) {
-      const input = document.getElementById(`input_st_kbm_${nisn}`);
-      if (input) input.value = status;
-
-      const buttons = document.querySelectorAll(`.btn-st-kbm-${nisn}`);
-      buttons.forEach(btn => {
-        btn.className = `btn-st-kbm-${nisn} px-2.5 py-1 rounded transition text-slate-600 hover:bg-slate-200`;
-      });
-
-      const activeBtn = document.getElementById(`btn_kbm_${nisn}_${status}`);
-      if (activeBtn) {
-        let activeBg = 'bg-emerald-600';
-        if (status === 'SAKIT') activeBg = 'bg-amber-500';
-        else if (status === 'IZIN') activeBg = 'bg-blue-600';
-        else if (status === 'ALPHA') activeBg = 'bg-rose-600';
-        else if (status === 'TERLAMBAT') activeBg = 'bg-purple-600';
-        activeBtn.className = `btn-st-kbm-${nisn} px-2.5 py-1 rounded transition ${activeBg} text-white shadow-xs font-bold`;
-      }
     }
 
     async function simpanPresensiKbmSekelas() {
@@ -4066,8 +3813,7 @@
       const dataAbsen = [];
       rows.forEach(r => {
         const nisn = r.getAttribute('data-nisn');
-        if (!nisn) return;
-        const stElem = document.getElementById(`input_st_kbm_${nisn}`);
+        const stElem = r.querySelector(`input[name="st_kbm_${nisn}"]:checked`);
         const st = stElem ? stElem.value : 'HADIR';
         const ketElem = r.querySelector('.input-ket-kbm');
         const ket = ketElem ? ketElem.value : '';
@@ -4118,6 +3864,35 @@
     }
 
     // Modul Presensi Ekskul (HANYA Pelatih)
+    function setEkskulStatus(nisn, status) {
+      const container = document.getElementById(`group_ekskul_${nisn}`);
+      if (!container) return;
+      const radio = container.querySelector(`input[value="${status}"]`);
+      if (radio) radio.checked = true;
+
+      const colorMap = {
+        'HADIR': 'bg-emerald-600 text-white shadow-xs',
+        'SAKIT': 'bg-amber-500 text-white shadow-xs',
+        'IZIN': 'bg-blue-600 text-white shadow-xs',
+        'ALPHA': 'bg-rose-600 text-white shadow-xs'
+      };
+
+      container.querySelectorAll('.btn-st-ekskul').forEach(b => {
+        b.className = 'btn-st-ekskul cursor-pointer px-2.5 py-1 rounded text-slate-600 hover:bg-slate-200 transition font-bold text-[11px]';
+        if (b.getAttribute('data-val') === status) {
+          b.className = `btn-st-ekskul cursor-pointer px-2.5 py-1 rounded transition font-bold text-[11px] ${colorMap[status]}`;
+        }
+      });
+    }
+
+    function setAllEkskulStatus(status) {
+      const rows = document.querySelectorAll('#tableFormAbsenPelatih tr');
+      rows.forEach(r => {
+        const nisn = r.getAttribute('data-nisn');
+        if (nisn) setEkskulStatus(nisn, status);
+      });
+    }
+
     function renderFormAbsenPelatih() {
       const idEkskul = document.getElementById('pelatihAbsenCabang').value;
       const peserta = anggotaEkskul.filter(a => a.idEkskul === idEkskul && a.status === 'AKTIF');
@@ -4138,12 +3913,15 @@
           <td class="py-2.5 px-3 font-bold text-slate-800">${p.nama}</td>
           <td class="py-2.5 px-3">${p.kelas}</td>
           <td class="py-2.5 px-3 text-center">
-            <input type="hidden" id="input_st_ekskul_${p.nisn}" value="HADIR">
-            <div class="inline-flex rounded-lg border border-slate-200 p-0.5 bg-slate-100 gap-1 text-[11px] font-bold">
-              <button type="button" onclick="setEkskulStatus('${p.nisn}', 'HADIR')" id="btn_ekskul_${p.nisn}_HADIR" class="btn-st-ekskul-${p.nisn} px-2.5 py-1 rounded transition bg-emerald-600 text-white shadow-xs font-bold">Hadir</button>
-              <button type="button" onclick="setEkskulStatus('${p.nisn}', 'SAKIT')" id="btn_ekskul_${p.nisn}_SAKIT" class="btn-st-ekskul-${p.nisn} px-2.5 py-1 rounded transition text-slate-600 hover:bg-slate-200">Sakit</button>
-              <button type="button" onclick="setEkskulStatus('${p.nisn}', 'IZIN')" id="btn_ekskul_${p.nisn}_IZIN" class="btn-st-ekskul-${p.nisn} px-2.5 py-1 rounded transition text-slate-600 hover:bg-slate-200">Izin</button>
-              <button type="button" onclick="setEkskulStatus('${p.nisn}', 'ALPHA')" id="btn_ekskul_${p.nisn}_ALPHA" class="btn-st-ekskul-${p.nisn} px-2.5 py-1 rounded transition text-slate-600 hover:bg-slate-200">Alpha</button>
+            <div id="group_ekskul_${p.nisn}" class="inline-flex rounded-lg border border-slate-200 p-0.5 bg-slate-50 gap-1 text-[11px]">
+              <input type="radio" name="st_ekskul_${p.nisn}" value="HADIR" checked class="hidden">
+              <input type="radio" name="st_ekskul_${p.nisn}" value="SAKIT" class="hidden">
+              <input type="radio" name="st_ekskul_${p.nisn}" value="IZIN" class="hidden">
+              <input type="radio" name="st_ekskul_${p.nisn}" value="ALPHA" class="hidden">
+              <button type="button" onclick="setEkskulStatus('${p.nisn}', 'HADIR')" data-val="HADIR" class="btn-st-ekskul cursor-pointer px-2.5 py-1 rounded bg-emerald-600 text-white font-bold text-[11px] shadow-xs">Hadir</button>
+              <button type="button" onclick="setEkskulStatus('${p.nisn}', 'SAKIT')" data-val="SAKIT" class="btn-st-ekskul cursor-pointer px-2.5 py-1 rounded text-slate-600 hover:bg-slate-200 font-bold text-[11px]">Sakit</button>
+              <button type="button" onclick="setEkskulStatus('${p.nisn}', 'IZIN')" data-val="IZIN" class="btn-st-ekskul cursor-pointer px-2.5 py-1 rounded text-slate-600 hover:bg-slate-200 font-bold text-[11px]">Izin</button>
+              <button type="button" onclick="setEkskulStatus('${p.nisn}', 'ALPHA')" data-val="ALPHA" class="btn-st-ekskul cursor-pointer px-2.5 py-1 rounded text-slate-600 hover:bg-slate-200 font-bold text-[11px]">Alpha</button>
             </div>
           </td>
           <td class="py-2.5 px-3">
@@ -4151,25 +3929,6 @@
           </td>
         </tr>
       `).join('');
-    }
-
-    function setEkskulStatus(nisn, status) {
-      const input = document.getElementById(`input_st_ekskul_${nisn}`);
-      if (input) input.value = status;
-
-      const buttons = document.querySelectorAll(`.btn-st-ekskul-${nisn}`);
-      buttons.forEach(btn => {
-        btn.className = `btn-st-ekskul-${nisn} px-2.5 py-1 rounded transition text-slate-600 hover:bg-slate-200`;
-      });
-
-      const activeBtn = document.getElementById(`btn_ekskul_${nisn}_${status}`);
-      if (activeBtn) {
-        let activeBg = 'bg-emerald-600';
-        if (status === 'SAKIT') activeBg = 'bg-amber-500';
-        else if (status === 'IZIN') activeBg = 'bg-blue-600';
-        else if (status === 'ALPHA') activeBg = 'bg-rose-600';
-        activeBtn.className = `btn-st-ekskul-${nisn} px-2.5 py-1 rounded transition ${activeBg} text-white shadow-xs font-bold`;
-      }
     }
 
     async function simpanAbsenPelatihEkskul() {
@@ -4182,29 +3941,7 @@
       rows.forEach(r => {
         const nisn = r.getAttribute('data-nisn');
         if (!nisn) return;
-        const stElem = document.getElementById(`input_st_ekskul_${nisn}`);
-        const st = stElem ? stElem.value : 'HADIR';
-        const ketElem = r.querySelector('.input-ket-ekskul');
-        const ket = ketElem ? ketElem.value : '';
-        const a = anggotaEkskul.find(item => item.nisn === nisn);
-        const existingIdx = logPresensiEkskul.findIndex(p => p.nisn === nisn && p.idEkskul === idEkskul && p.tanggal === tgl);
-        const presensiItem = {
-          tanggal: tgl,
-          idEkskul: idEkskul,
-          nisn: nisn,
-          nama: a ? a.nama : '',
-          kelas: a ? a.kelas : '',
-          status: st,
-          keterangan: ket
-        };
-        if (existingIdx !== -1) {
-          logPresensiEkskul[existingIdx] = presensiItem;
-        } else {
-          logPresensiEkskul.push(presensiItem);
-        }
-        dataAbsen.push(presensiItem);
-        saved++;
-      });
+        const stElem = r.querySelector(`input[name="st_ekskul_${nisn}"]:checked`);
         const st = stElem ? stElem.value : 'HADIR';
         const ketElem = r.querySelector('.input-ket-ekskul');
         const ket = ketElem ? ketElem.value : '';
@@ -4297,12 +4034,15 @@
     // Modul Paste Leger Excel Nilai Sekelas
     let parsedNilaiCache = [];
     function parsePastedExcel() {
-      const rawText = document.getElementById('pasteExcelTextarea').value.trim();
-      if (!rawText) {
+      const rawText = document.getElementById('pasteExcelTextarea').value;
+      if (!rawText || !rawText.trim()) {
         document.getElementById('previewPastedNilaiArea').classList.add('hidden');
         parsedNilaiCache = [];
         return;
       }
+
+      const selectedKelas = document.getElementById('inputNilaiKelas') ? document.getElementById('inputNilaiKelas').value : '';
+      const siswaSekelas = masterSiswa.filter(s => !selectedKelas || s.kelas === selectedKelas);
 
       const lines = rawText.split(/\r?\n/).map(l => l.trim()).filter(Boolean);
       parsedNilaiCache = [];
@@ -4310,122 +4050,118 @@
       tbody.innerHTML = '';
 
       lines.forEach(line => {
-        // Deteksi pemisah: tab, titik-koma, pipa, koma (jika bukan desimal), atau spasi ganda
-        let parts = [];
-        if (line.includes('\t')) parts = line.split('\t');
-        else if (line.includes(';')) parts = line.split(';');
-        else if (line.includes('|')) parts = line.split('|');
-        else if (line.includes(',') && !line.match(/\b\d+,\d+\b/)) parts = line.split(',');
-        else parts = line.split(/\s{2,}/);
-
-        parts = parts.map(p => p.trim().replace(/^["']|["']$/g, '')).filter(p => p !== '');
-        if (parts.length < 2) return;
-
-        // Lewati jika ini baris header (misal mengandung kata "nisn", "nama", "nilai")
-        const lowerLine = line.toLowerCase();
-        if ((lowerLine.includes('nisn') || lowerLine.includes('nama siswa')) && (lowerLine.includes('nilai') || lowerLine.includes('mapel') || lowerLine.includes('skor'))) {
+        const lower = line.toLowerCase();
+        // Lewati baris judul / header tabel
+        if (lower.startsWith('no\t') || lower.startsWith('no ') || lower.startsWith('nisn') || lower.includes('nama siswa') || lower.includes('mata pelajaran') || lower === 'no' || lower === 'nisn') {
           return;
         }
 
-        // Cari kolom mana yang merupakan NISN
-        let nisn = null;
-        let nisnIdx = -1;
-        let nama = null;
-        let nilai = null;
-        let nilaiIdx = -1;
-        let catatan = "";
+        let parts = [];
+        if (line.includes('\t')) {
+          parts = line.split('\t').map(p => p.trim());
+        } else if (line.includes(';')) {
+          parts = line.split(';').map(p => p.trim());
+        } else if (line.includes(',')) {
+          parts = line.split(',').map(p => p.trim());
+        } else {
+          parts = line.split(/\s{2,}|\t/).map(p => p.trim());
+        }
+        parts = parts.filter(p => p !== '');
 
-        // 1. Cari NISN (kolom dengan 8-10 digit atau yang cocok di masterSiswa)
+        if (parts.length < 2) {
+          const spaceTokens = line.split(/\s+/).map(p => p.trim()).filter(Boolean);
+          if (spaceTokens.length >= 2) parts = spaceTokens;
+          else return;
+        }
+
+        let nisn = '';
+        let nama = '';
+        let nilai = null;
+        let catatan = '';
+
+        // 1. Cari token NISN (angka 8-12 digit atau terdaftar di masterSiswa)
+        let nisnIdx = -1;
         for (let i = 0; i < parts.length; i++) {
           const cleanDigits = parts[i].replace(/\D/g, '');
-          if (cleanDigits.length >= 8 && cleanDigits.length <= 11) {
-            nisn = cleanDigits.padStart(10, "0");
+          if (/^\d{8,12}$/.test(cleanDigits)) {
+            nisn = cleanDigits.padStart(10, '0');
             nisnIdx = i;
             break;
           }
         }
 
-        // 2. Jika tidak ditemukan NISN berdigit panjang, coba cocokkan nama di masterSiswa
+        // Jika NISN ditemukan, cari nama siswa
+        if (nisn) {
+          const s = masterSiswa.find(item => item.nisn === nisn);
+          if (s) nama = s.nama;
+        }
+
+        // 2. Cari nilai (angka 0 s.d 100 yang bukan nomor urut atau NISN)
+        for (let i = parts.length - 1; i >= 0; i--) {
+          if (i === nisnIdx) continue;
+          const num = Number(parts[i]);
+          if (!isNaN(num) && num >= 0 && num <= 100 && parts[i] !== '') {
+            // Jika token pertama berupa angka kecil (1..40) dan ada kolom angka lain di belakang, itu nomor urut
+            if (i === 0 && parts.length > 2) {
+              const lastNum = Number(parts[parts.length - 1]);
+              if (!isNaN(lastNum) && lastNum >= 0 && lastNum <= 100) continue;
+            }
+            nilai = num;
+            if (i < parts.length - 1) {
+              catatan = parts.slice(i + 1).join(' ');
+            }
+            break;
+          }
+        }
+
+        // 3. Jika NISN belum dapat, cocokkan dengan nama siswa di rombel
         if (!nisn) {
-          for (let i = 0; i < parts.length; i++) {
-            const partStr = parts[i].toLowerCase();
-            const foundSiswa = masterSiswa.find(s => s.nama.toLowerCase() === partStr || s.nama.toLowerCase().includes(partStr));
-            if (foundSiswa && parts[i].length > 3) {
-              nisn = foundSiswa.nisn;
-              nama = foundSiswa.nama;
-              nisnIdx = i;
+          for (let p of parts) {
+            const cleanP = p.toLowerCase().trim();
+            if (cleanP.length < 3) continue;
+            const matchedS = siswaSekelas.find(s => s.nama.toLowerCase().includes(cleanP) || cleanP.includes(s.nama.toLowerCase()));
+            if (matchedS) {
+              nisn = matchedS.nisn;
+              nama = matchedS.nama;
               break;
             }
           }
         }
 
-        if (!nisn) {
-          // Fallback: jika parts[0] berisi digit, gunakan parts[0]
-          const p0Digits = parts[0].replace(/\D/g, '');
-          if (p0Digits.length > 0) {
-            nisn = p0Digits.padStart(10, "0");
-            nisnIdx = 0;
-          } else {
-            return; // Abaikan baris tanpa identitas siswa
+        // 4. Fallback jika parts[0] adalah NIS / NISN tanpa format
+        if (!nisn && parts.length >= 2) {
+          const clean0 = parts[0].replace(/\D/g, '');
+          if (clean0.length >= 4) {
+            nisn = clean0.padStart(10, '0');
+            const s = masterSiswa.find(item => item.nisn === nisn);
+            if (s) nama = s.nama;
           }
         }
 
-        // Ambil nama dari masterSiswa jika belum dapat
-        const s = masterSiswa.find(item => item.nisn === nisn);
-        if (s) nama = s.nama;
-        else if (!nama) {
-          if (parts[nisnIdx + 1] && isNaN(parts[nisnIdx + 1])) {
-            nama = parts[nisnIdx + 1];
-          } else {
-            nama = "Siswa (" + nisn + ")";
+        if (nisn && nilai !== null) {
+          if (!nama) {
+            const s = masterSiswa.find(item => item.nisn === nisn);
+            nama = s ? s.nama : 'Siswa Terdaftar';
           }
+
+          parsedNilaiCache.push({ nisn, nama, nilai, catatan });
+
+          const tr = document.createElement('tr');
+          tr.innerHTML = `
+            <td class="py-1.5 px-3 font-mono font-bold">${nisn}</td>
+            <td class="py-1.5 px-3 font-semibold text-slate-800">${nama}</td>
+            <td class="py-1.5 px-3 text-center font-bold text-blue-700">${nilai}</td>
+            <td class="py-1.5 px-3 text-slate-500">${catatan || '-'}</td>
+          `;
+          tbody.appendChild(tr);
         }
-
-        // 3. Cari Nilai (angka antara 0 sampai 100 di kolom yang bukan nisnIdx)
-        for (let i = 0; i < parts.length; i++) {
-          if (i === nisnIdx) continue;
-          const numStr = parts[i].replace(',', '.');
-          const parsedNum = parseFloat(numStr);
-          if (!isNaN(parsedNum) && parsedNum >= 0 && parsedNum <= 100) {
-            nilai = parsedNum;
-            nilaiIdx = i;
-            break;
-          }
-        }
-
-        if (nilai === null) {
-          const fallbackNum = parseFloat(parts[parts.length - 1].replace(',', '.'));
-          if (!isNaN(fallbackNum)) nilai = fallbackNum;
-          else nilai = 0;
-        }
-
-        // 4. Catatan guru: sisa kolom yang bukan NISN, bukan Nama, dan bukan Nilai
-        const textParts = [];
-        for (let i = 0; i < parts.length; i++) {
-          if (i !== nisnIdx && i !== nilaiIdx && parts[i] !== nama) {
-            if (i === 0 && Number(parts[i]) <= 60 && parts.length > 2) continue;
-            textParts.push(parts[i]);
-          }
-        }
-        catatan = textParts.join(' ').trim();
-
-        parsedNilaiCache.push({ nisn, nama, nilai, catatan });
-
-        const tr = document.createElement('tr');
-        tr.innerHTML = `
-          <td class="py-1.5 px-3 font-mono font-bold text-slate-700">${nisn}</td>
-          <td class="py-1.5 px-3 font-semibold text-slate-800">${nama}</td>
-          <td class="py-1.5 px-3 text-center font-bold text-blue-700 bg-blue-50/50">${nilai}</td>
-          <td class="py-1.5 px-3 text-slate-500">${catatan || '-'}</td>
-        `;
-        tbody.appendChild(tr);
       });
 
       document.getElementById('countParsedNilai').innerText = parsedNilaiCache.length;
-      if (parsedNilaiCache.length > 0) {
-        document.getElementById('previewPastedNilaiArea').classList.remove('hidden');
-      } else {
-        document.getElementById('previewPastedNilaiArea').classList.add('hidden');
+      document.getElementById('previewPastedNilaiArea').classList.remove('hidden');
+
+      if (parsedNilaiCache.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="4" class="py-4 text-center text-rose-500 font-medium">Format tidak terdeteksi. Pastikan data memuat NISN dan Nilai (0-100).</td></tr>`;
       }
     }
 
@@ -4622,15 +4358,22 @@
               </td>
               <td class="py-2.5 px-3">
                 <span class="px-2 py-0.5 ${kb.statusValidasi === 'VALID' ? 'bg-emerald-100 text-emerald-800' : (kb.statusValidasi === 'DITOLAK' ? 'bg-rose-100 text-rose-800' : 'bg-amber-100 text-amber-800')} rounded font-bold text-[10px]">
-                  ${kb.statusValidasi || 'Menunggu'}
+                  ${kb.statusValidasi === 'VALID' ? '✓ VALID' : (kb.statusValidasi === 'DITOLAK' ? '✕ DITOLAK' : '⏳ Menunggu')}
                 </span>
-                ${kb.catatanGuru ? `<div class="text-[10px] text-slate-500 mt-0.5 italic max-w-xs">${kb.catatanGuru}</div>` : ''}
+                ${kb.catatanGuru ? `<p class="text-[10px] text-slate-500 italic mt-0.5 max-w-[120px] truncate" title="${kb.catatanGuru}">${kb.catatanGuru}</p>` : ''}
               </td>
               <td class="py-2.5 px-3 text-center">
-                <div class="inline-flex items-center gap-1.5">
-                  <button onclick="validasiLaporan7K('${kb.idLog || kb.nisn}', 'VALID')" class="px-2.5 py-1 bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg text-xs font-bold shadow-xs">Setujui ✓</button>
-                  <button onclick="tolakLaporan7K('${kb.idLog || kb.nisn}')" class="px-2 py-1 bg-rose-50 hover:bg-rose-100 text-rose-700 border border-rose-200 rounded-lg text-xs font-bold shadow-xs">Tolak ✕</button>
-                </div>
+                ${kb.statusValidasi === 'VALID'
+                  ? `<span class="px-2 py-1 text-emerald-600 font-bold text-xs inline-flex items-center gap-1">✓ Disetujui</span>`
+                  : (kb.statusValidasi === 'DITOLAK'
+                    ? `<span class="px-2 py-1 text-rose-600 font-bold text-xs">Menunggu Perbaikan Siswa</span>`
+                    : `
+                      <div class="flex items-center justify-center gap-1.5">
+                        <button onclick="validasiLaporan7K('${kb.nisn}')" class="px-2.5 py-1 bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg text-xs font-bold shadow-xs transition">Validasi ✓</button>
+                        <button onclick="tolakLaporan7K('${kb.nisn}')" class="px-2.5 py-1 bg-rose-600 hover:bg-rose-700 text-white rounded-lg text-xs font-bold shadow-xs transition">Tolak ✕</button>
+                      </div>
+                    `)
+                }
               </td>
             </tr>
           `).join('');
@@ -4663,11 +4406,11 @@
       });
     }
 
-    async function validasiLaporan7K(idOrNisn, statusValidasi = 'VALID') {
-      const kb = log7Kebiasaan.find(k => k.idLog === idOrNisn || k.nisn === idOrNisn);
+    async function validasiLaporan7K(nisn) {
+      const kb = log7Kebiasaan.find(k => k.nisn === nisn);
       if (kb) {
-        kb.statusValidasi = statusValidasi;
-        if (statusValidasi === 'VALID') kb.catatanGuru = 'Disetujui Guru Wali';
+        kb.statusValidasi = 'VALID';
+        kb.catatanGuru = 'Disetujui Guru Wali';
       }
 
       playBeepSuccess();
@@ -4679,14 +4422,14 @@
 
       const res = await callBackendPost({
         action: 'validasi7Kebiasaan',
-        idLog: kb ? (kb.idLog || kb.nisn) : idOrNisn,
-        statusValidasi: statusValidasi,
-        catatanGuru: kb ? kb.catatanGuru : 'Disetujui Guru Wali',
+        idLog: kb ? kb.idLog : '',
+        statusValidasi: 'VALID',
+        catatanGuru: 'Disetujui Guru Wali',
         nipValidator: currentUser ? currentUser.nip : ''
       });
 
       if (res && res.success) {
-        Swal.fire('Berhasil Disetujui! 🟢', 'Laporan 7 Kebiasaan siswa telah disetujui di Google Sheets.', 'success');
+        Swal.fire('Divalidasi! 🟢', 'Jurnal 7 Kebiasaan siswa telah disetujui di Google Sheets.', 'success');
         syncDataFromGoogleSheets(true);
       } else {
         Swal.fire('Divalidasi!', 'Jurnal 7 Kebiasaan siswa telah disetujui secara lokal.', 'success');
@@ -4694,51 +4437,58 @@
       loadValidasi7Kebiasaan();
     }
 
-    async function tolakLaporan7K(idOrNisn) {
-      const kb = log7Kebiasaan.find(k => k.idLog === idOrNisn || k.nisn === idOrNisn);
-      const { value: alasan } = await Swal.fire({
-        title: 'Tolak Laporan Siswa? ⚠️',
-        text: 'Masukkan catatan alasan penolakan agar siswa dapat merevisi/memperbaiki laporannya:',
-        input: 'text',
-        inputPlaceholder: 'Contoh: Foto tidak jelas / Jam bangun belum sesuai...',
-        showCancelButton: true,
-        confirmButtonColor: '#e11d48',
-        cancelButtonColor: '#64748b',
-        confirmButtonText: 'Tolak & Minta Perbaikan',
-        cancelButtonText: 'Batal',
+    async function tolakLaporan7K(nisn) {
+      const kb = log7Kebiasaan.find(k => k.nisn === nisn);
+      const { value: catatan } = await Swal.fire({
+        title: 'Tolak / Minta Perbaikan Jurnal',
+        html: `<p class="text-xs text-slate-600 mb-2">Tuliskan alasan penolakan agar ananda dapat memperbaiki laporannya:</p>`,
+        input: 'textarea',
+        inputPlaceholder: 'Contoh: Foto bukti buram/bukan seragam, waktu jam bangun tidak wajar...',
         inputValidator: (value) => {
           if (!value || !value.trim()) {
-            return 'Mohon tuliskan alasan penolakan!';
+            return 'Wajib memberikan catatan alasan perbaikan!';
           }
-        }
+        },
+        showCancelButton: true,
+        confirmButtonColor: '#e11d48',
+        confirmButtonText: 'Tolak & Kembalikan ke Siswa',
+        cancelButtonText: 'Batal'
       });
 
-      if (!alasan) return;
+      if (!catatan) return;
 
       if (kb) {
         kb.statusValidasi = 'DITOLAK';
-        kb.catatanGuru = alasan.trim();
+        kb.catatanGuru = catatan.trim();
       }
 
+      playBeepSuccess();
       Swal.fire({
-        title: 'Mengirim Penolakan ke Sheets...',
+        title: 'Menyimpan Penolakan ke Sheets...',
         didOpen: () => Swal.showLoading(),
         allowOutsideClick: false
       });
 
       const res = await callBackendPost({
         action: 'validasi7Kebiasaan',
-        idLog: kb ? (kb.idLog || kb.nisn) : idOrNisn,
+        idLog: kb ? kb.idLog : '',
         statusValidasi: 'DITOLAK',
-        catatanGuru: alasan.trim(),
+        catatanGuru: catatan.trim(),
         nipValidator: currentUser ? currentUser.nip : ''
       });
 
       if (res && res.success) {
-        Swal.fire('Laporan Ditolak', 'Catatan penolakan telah dikirim. Siswa kini dapat merevisi laporannya.', 'info');
+        Swal.fire('Dikembalikan! ⚠️', 'Laporan 7 Kebiasaan telah ditolak dan dikembalikan ke siswa untuk diperbaiki.', 'success');
         syncDataFromGoogleSheets(true);
       } else {
-        Swal.fire('Disimpan Lokal', 'Status penolakan tersimpan di sesi browser.', 'info');
+        Swal.fire('Tersimpan Lokal', 'Status penolakan disimpan di sesi ini.', 'info');
+      }
+      loadValidasi7Kebiasaan();
+    }
+        Swal.fire('Divalidasi! 🟢', 'Jurnal 7 Kebiasaan siswa telah disetujui di Google Sheets.', 'success');
+        syncDataFromGoogleSheets(true);
+      } else {
+        Swal.fire('Divalidasi!', 'Jurnal 7 Kebiasaan siswa telah disetujui secara lokal.', 'success');
       }
       loadValidasi7Kebiasaan();
     }
@@ -5365,38 +5115,9 @@
       reader.readAsDataURL(file);
     }
 
-    function updateAdminConnectionStatusUi(isOnline, errMsg) {
-      const badge = document.getElementById('adminConnectionStatusBadge');
-      const text = document.getElementById('adminConnectionStatusText');
-      const nameEl = document.getElementById('adminConnectedSsName');
-      const timeEl = document.getElementById('adminLastSyncTime');
-
-      if (timeEl) {
-        const d = new Date();
-        timeEl.innerText = d.toLocaleDateString('id-ID', { day: 'numeric', month: 'short' }) + ' ' + d.toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
-      }
-
-      if (nameEl && appConfig && appConfig.NAMA_SEKOLAH) {
-        nameEl.innerText = appConfig.NAMA_SEKOLAH;
-      }
-
-      if (badge && text) {
-        if (isOnline) {
-          badge.className = "inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-emerald-100 text-emerald-800 border border-emerald-300";
-          badge.innerHTML = `<span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span><span>Online / Terhubung</span>`;
-        } else {
-          badge.className = "inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-rose-100 text-rose-800 border border-rose-300";
-          badge.innerHTML = `<span class="w-2 h-2 rounded-full bg-rose-500"></span><span>Offline: ${(errMsg || 'Gagal Konek').slice(0, 30)}</span>`;
-        }
-      }
-    }
-
     function openModalSetelBackend(e) {
       if (e) e.stopPropagation();
-      const current = getBackendUrl();
-      if (document.getElementById('inputModalBackendUrl')) {
-        document.getElementById('inputModalBackendUrl').value = current;
-      }
+      document.getElementById('inputModalBackendUrl').value = getBackendUrl();
       document.getElementById('modalSetelBackendGas').classList.remove('hidden');
       safeCreateIcons();
     }
@@ -5405,88 +5126,31 @@
       document.getElementById('modalSetelBackendGas').classList.add('hidden');
     }
 
-    function resetKeBackendDefault() {
-      localStorage.removeItem("SUPERAPP_BACKEND_URL");
-      BACKEND_URL = DEFAULT_BACKEND_URL;
-      if (document.getElementById('inputModalBackendUrl')) document.getElementById('inputModalBackendUrl').value = DEFAULT_BACKEND_URL;
-      if (document.getElementById('inputBackendUrlConfig')) document.getElementById('inputBackendUrlConfig').value = DEFAULT_BACKEND_URL;
-      
-      Swal.fire({
-        title: 'URL Bawaan Dipulihkan! 🟢',
-        text: 'Mengembalikan ke Google Apps Script backend resmi bawaan aplikasi. Menyinkronkan data...',
-        icon: 'success',
-        timer: 1800,
-        showConfirmButton: false
-      });
-      closeModalSetelBackend();
-      syncDataFromGoogleSheets(false, true);
-    }
-
-    function bukaPanduanDeployGas() {
-      Swal.fire({
-        title: 'Panduan Deploy Google Apps Script 🚀',
-        html: `
-          <div class="text-left text-xs space-y-3 text-slate-700 max-h-[70vh] overflow-y-auto pr-1">
-            <div class="p-3 bg-blue-50 border border-blue-200 rounded-xl space-y-1">
-              <p class="font-bold text-blue-900">1. Buka Skrip dari Google Spreadsheet</p>
-              <p class="text-blue-800 text-[11px]">Buka Google Sheet database Anda &rarr; klik menu atas <b>Ekstensi</b> &rarr; pilih <b>Apps Script</b>.</p>
-            </div>
-            <div class="p-3 bg-blue-50 border border-blue-200 rounded-xl space-y-1">
-              <p class="font-bold text-blue-900">2. Tempel Kode Code.gs</p>
-              <p class="text-blue-800 text-[11px]">Hapus seluruh kode lama di Apps Script, salin dan tempelkan seluruh isi file <b>Code.gs</b> terbaru, lalu klik ikon <b>Simpan (Ctrl+S)</b>.</p>
-            </div>
-            <div class="p-3 bg-amber-50 border border-amber-300 rounded-xl space-y-1">
-              <p class="font-bold text-amber-950">3. Deploy Web App (PENTING!)</p>
-              <p class="text-amber-900 text-[11px] leading-relaxed">
-                &bull; Klik tombol biru <b>Deploy</b> (kanan atas) &rarr; pilih <b>Manage deployments</b> (jika sudah ada) atau <b>New deployment</b>.<br>
-                &bull; Tipe: <b>Web app</b>.<br>
-                &bull; Execute as: <b>Me (email Anda)</b>.<br>
-                &bull; <b class="text-rose-700 font-bold underline">Who has access: Anyone (Siapa saja)</b>. <br><i>(Wajib 'Anyone', jangan pilih 'Only myself' agar koneksi frontend tidak ditolak!)</i>
-              </p>
-            </div>
-            <div class="p-3 bg-blue-50 border border-blue-200 rounded-xl space-y-1">
-              <p class="font-bold text-blue-900">4. Salin URL /exec & Tempel</p>
-              <p class="text-blue-800 text-[11px]">Salin Web App URL yang berakhiran <b><code>/exec</code></b>, lalu tempelkan di aplikasi dan klik <b>Simpan</b>.</p>
-            </div>
-          </div>
-        `,
-        confirmButtonText: 'Saya Mengerti',
-        confirmButtonColor: '#1d4ed8'
-      });
-    }
-
-    function tampilkanModalSalahLinkSpreadsheet(rawUrl) {
-      Swal.fire({
-        title: 'Salah Format Link! ⚠️',
-        html: `
-          <div class="text-left text-xs space-y-2 text-slate-700">
-            <p>Link yang Anda tempel adalah <b>Link Google Spreadsheet</b>:</p>
-            <code class="text-rose-600 block bg-slate-100 p-2 rounded text-[10px] break-all">${escapeHtml(rawUrl)}</code>
-            <p class="font-bold text-slate-800 mt-2">Yang dibutuhkan adalah Web App URL Google Apps Script (/exec):</p>
-            <ol class="list-decimal pl-4 space-y-1 text-slate-600">
-              <li>Buka Spreadsheet Anda &gt; <b>Ekstensi</b> &gt; <b>Apps Script</b>.</li>
-              <li>Klik tombol biru <b>Deploy &gt; New deployment</b>.</li>
-              <li>Pilih <b>Web app</b> &gt; pastikan <i>Who has access</i>: <b>Anyone</b>.</li>
-              <li>Salin link berakhiran <b><code>/exec</code></b> lalu tempel di sini.</li>
-            </ol>
-          </div>
-        `,
-        icon: 'warning',
-        confirmButtonColor: '#1d4ed8',
-        confirmButtonText: 'Buka Panduan Lengkap'
-      }).then((r) => {
-        if (r.isConfirmed) bukaPanduanDeployGas();
-      });
-    }
-
     async function ujiKoneksiBackendModal() {
       const raw = document.getElementById('inputModalBackendUrl').value.trim();
       if (!raw) {
         Swal.fire('Perhatian', 'Silakan tempel URL Web App Google Apps Script Anda!', 'warning');
         return;
       }
+
       if (raw.includes('docs.google.com/spreadsheets')) {
-        tampilkanModalSalahLinkSpreadsheet(raw);
+        Swal.fire({
+          title: 'Salah Format Link! ⚠️',
+          html: `
+            <div class="text-left text-xs space-y-2 text-slate-700">
+              <p>Link yang Anda tempel adalah <b>Link Google Spreadsheet</b>:</p>
+              <code class="text-rose-600 block bg-slate-100 p-2 rounded text-[10px] break-all">${raw}</code>
+              <p class="font-bold text-slate-800">Yang dibutuhkan adalah Web App URL Google Apps Script (/exec):</p>
+              <ol class="list-decimal pl-4 space-y-1 text-slate-600">
+                <li>Buka Spreadsheet &gt; <b>Ekstensi</b> &gt; <b>Apps Script</b>.</li>
+                <li>Klik tombol biru <b>Deploy &gt; New deployment</b>.</li>
+                <li>Pilih <b>Web app</b> &gt; pastikan <i>Who has access</i>: <b>Anyone</b>.</li>
+                <li>Salin link berakhiran <b><code>/exec</code></b>.</li>
+              </ol>
+            </div>
+          `,
+          icon: 'warning'
+        });
         return;
       }
 
@@ -5497,13 +5161,12 @@
       }
 
       Swal.fire({
-        title: 'Menguji Ping Respon...',
-        text: 'Mengirim paket uji GET dan POST ke Google Apps Script',
+        title: 'Menguji Koneksi...',
+        text: 'Menghubungkan ke Google Apps Script',
         allowOutsideClick: false,
         didOpen: () => { Swal.showLoading(); }
       });
 
-      const startTime = performance.now();
       try {
         const sep = testUrl.includes('?') ? '&' : '?';
         const pingUrl = `${testUrl}${sep}action=ping&_t=${Date.now()}`;
@@ -5539,312 +5202,30 @@
           }
         }
 
-        const elapsed = Math.round(performance.now() - startTime);
-
         if (json && json.success) {
-          const ssName = json.spreadsheetName ? `\n(Spreadsheet: ${json.spreadsheetName})` : '';
           Swal.fire({
             title: 'Koneksi Berhasil! 🟢',
-            text: `Backend Apps Script merespons aktif dalam ${elapsed} ms!${ssName} Silakan klik tombol "Simpan URL Ini".`,
-            icon: 'success',
-            confirmButtonText: 'OK',
-            confirmButtonColor: '#1d4ed8'
+            text: 'Backend Apps Script merespons aktif! Silakan klik tombol "Simpan URL Ini".',
+            icon: 'success'
           });
         } else {
-          throw new Error('Tidak ada respon aktif dari Apps Script. Pastikan opsi Deploy "Who has access" disetel ke "Anyone" (Siapa saja).');
+          throw new Error('Tidak ada respon aktif dari Apps Script. Pastikan Who has access: Anyone.');
         }
       } catch (err) {
         Swal.fire({
           title: 'Uji Koneksi Gagal 🔴',
           html: `
             <div class="text-left text-xs space-y-2 text-slate-700">
-              <p>Gagal menghubungi Apps Script: <b>${escapeHtml(err.message)}</b></p>
+              <p>Gagal menghubungi Apps Script: <b>${err.message}</b></p>
               <p class="font-semibold text-slate-800">Pastikan 3 hal ini di Google Apps Script Anda:</p>
               <ul class="list-disc pl-4 space-y-1 text-slate-600">
                 <li>Sudah menyalin seluruh kode <code>Code.gs</code> dan klik <b>Simpan</b>.</li>
                 <li>Saat Deploy, opsi <b>"Who has access"</b> wajib dipilih: <b>"Anyone" (Siapa saja)</b>.</li>
                 <li>Jika mengedit kode sebelumnya, buat <b>New Version</b> saat deploy.</li>
               </ul>
-              <div class="pt-2 flex items-center justify-between">
-                <button type="button" onclick="jalankanDiagnostikKoneksi('${testUrl}')" class="px-3 py-1.5 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-lg text-xs transition">
-                  Diagnostik Lengkap
-                </button>
-                <button type="button" onclick="resetKeBackendDefault()" class="px-3 py-1.5 bg-slate-200 hover:bg-slate-300 text-slate-800 font-bold rounded-lg text-xs transition">
-                  Gunakan URL Bawaan
-                </button>
-              </div>
             </div>
           `,
-          icon: 'error',
-          showConfirmButton: false,
-          showCloseButton: true
-        });
-      }
-    }
-
-    async function jalankanDiagnostikKoneksi(customUrl) {
-      let url = (customUrl || (document.getElementById('inputModalBackendUrl') ? document.getElementById('inputModalBackendUrl').value : '') || (document.getElementById('inputBackendUrlConfig') ? document.getElementById('inputBackendUrlConfig').value : '') || getBackendUrl() || "").trim();
-
-      if (!url) {
-        Swal.fire('Perhatian', 'Silakan masukkan URL Web App Google Apps Script (/exec) terlebih dahulu.', 'warning');
-        return;
-      }
-
-      if (url.includes('docs.google.com/spreadsheets')) {
-        tampilkanModalSalahLinkSpreadsheet(url);
-        return;
-      }
-
-      if (url.endsWith('/dev')) {
-        url = url.slice(0, -4) + '/exec';
-        if (document.getElementById('inputModalBackendUrl')) document.getElementById('inputModalBackendUrl').value = url;
-        if (document.getElementById('inputBackendUrlConfig')) document.getElementById('inputBackendUrlConfig').value = url;
-      }
-
-      Swal.fire({
-        title: 'Menjalankan Diagnostik Koneksi...',
-        html: `
-          <div class="text-left text-xs space-y-3 p-2 font-mono">
-            <div id="diagStep1" class="flex items-center gap-2 text-slate-500">
-              <span class="inline-block w-4 h-4 rounded-full border-2 border-slate-300 border-t-blue-600 animate-spin"></span>
-              <span>1. Validasi Format Endpoint URL...</span>
-            </div>
-            <div id="diagStep2" class="flex items-center gap-2 text-slate-400">
-              <span class="w-4 h-4 rounded-full bg-slate-200 text-center text-[10px] leading-4 text-slate-600 font-bold">2</span>
-              <span>2. Uji HTTP GET Ping & Latensi Server...</span>
-            </div>
-            <div id="diagStep3" class="flex items-center gap-2 text-slate-400">
-              <span class="w-4 h-4 rounded-full bg-slate-200 text-center text-[10px] leading-4 text-slate-600 font-bold">3</span>
-              <span>3. Uji HTTP POST Ping & Respon JSON...</span>
-            </div>
-            <div id="diagStep4" class="flex items-center gap-2 text-slate-400">
-              <span class="w-4 h-4 rounded-full bg-slate-200 text-center text-[10px] leading-4 text-slate-600 font-bold">4</span>
-              <span>4. Pengambilan Data 12 Tab Google Sheets...</span>
-            </div>
-          </div>
-        `,
-        showConfirmButton: false,
-        allowOutsideClick: false
-      });
-
-      const sep = url.includes('?') ? '&' : '?';
-      let report = {
-        url: url,
-        step1: false,
-        step2: false,
-        step3: false,
-        step4: false,
-        latencyGet: 0,
-        latencyPost: 0,
-        ssName: '',
-        siswaCount: 0,
-        guruCount: 0,
-        error: null,
-        suggestion: ''
-      };
-
-      try {
-        // Step 1: Format check
-        await new Promise(r => setTimeout(r, 200));
-        const step1El = document.getElementById('diagStep1');
-        if (!url.startsWith('https://') || !url.includes('/exec')) {
-          if (step1El) step1El.innerHTML = `<span class="text-rose-600 font-bold">❌</span><span class="text-rose-600">1. Format URL Tidak Sesuai (Wajib /exec)</span>`;
-          report.suggestion = "Pastikan URL berakhiran <b>/exec</b> bukan <b>/dev</b> atau link Google Sheets.";
-          throw new Error("Format URL tidak valid. Web App wajib berakhiran /exec.");
-        }
-        report.step1 = true;
-        if (step1El) step1El.innerHTML = `<span class="text-emerald-600 font-bold">✓</span><span class="text-slate-800 font-semibold">1. Format URL Endpoint Valid (/exec)</span>`;
-
-        // Step 2: GET Ping
-        const step2El = document.getElementById('diagStep2');
-        if (step2El) {
-          step2El.className = "flex items-center gap-2 text-slate-600";
-          step2El.innerHTML = `<span class="inline-block w-4 h-4 rounded-full border-2 border-slate-300 border-t-blue-600 animate-spin"></span><span>2. Menguji HTTP GET Ping...</span>`;
-        }
-        const t0 = performance.now();
-        let getResp = null;
-        let getRaw = "";
-        try {
-          const gRes = await fetch(`${url}${sep}action=ping&_t=${Date.now()}`, { method: 'GET', mode: 'cors', redirect: 'follow' });
-          report.latencyGet = Math.round(performance.now() - t0);
-          getRaw = await gRes.text();
-          try { getResp = JSON.parse(getRaw); } catch(e){}
-        } catch(err) {
-          console.warn("GET test failed:", err);
-        }
-
-        if (getResp && getResp.success) {
-          report.step2 = true;
-          if (getResp.spreadsheetName) report.ssName = getResp.spreadsheetName;
-          if (step2El) step2El.innerHTML = `<span class="text-emerald-600 font-bold">✓</span><span class="text-slate-800 font-semibold">2. HTTP GET Aktif (${report.latencyGet} ms)</span>`;
-        } else {
-          if (getRaw.includes("ServiceLogin") || getRaw.includes("accounts.google.com")) {
-            if (step2El) step2El.innerHTML = `<span class="text-rose-600 font-bold">❌</span><span class="text-rose-600">2. Akses Ditolak (Izin Apps Script Bukan 'Anyone')</span>`;
-            report.suggestion = "Izin Web App Apps Script disetel ke <b>'Hanya saya' (Only myself)</b>. Buka Apps Script &gt; Deploy &gt; Manage Deployments &gt; Edit &gt; ubah <b>Who has access</b> ke <b>'Anyone' (Siapa saja)</b>.";
-            throw new Error("Akses Ditolak: 'Who has access' belum disetel ke 'Anyone'.");
-          }
-          if (step2El) step2El.innerHTML = `<span class="text-amber-600 font-bold">⚠️</span><span class="text-amber-800">2. HTTP GET Terhambat, mencoba POST...</span>`;
-        }
-
-        // Step 3: POST Ping
-        const step3El = document.getElementById('diagStep3');
-        if (step3El) {
-          step3El.className = "flex items-center gap-2 text-slate-600";
-          step3El.innerHTML = `<span class="inline-block w-4 h-4 rounded-full border-2 border-slate-300 border-t-blue-600 animate-spin"></span><span>3. Menguji HTTP POST Ping...</span>`;
-        }
-        const t1 = performance.now();
-        let postResp = null;
-        let postRaw = "";
-        try {
-          const pRes = await fetch(url, {
-            method: 'POST',
-            mode: 'cors',
-            redirect: 'follow',
-            headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-            body: JSON.stringify({ action: 'ping' })
-          });
-          report.latencyPost = Math.round(performance.now() - t1);
-          postRaw = await pRes.text();
-          try { postResp = JSON.parse(postRaw); } catch(e){}
-        } catch(err) {
-          console.warn("POST test failed:", err);
-        }
-
-        if (postResp && postResp.success) {
-          report.step3 = true;
-          if (postResp.spreadsheetName && !report.ssName) report.ssName = postResp.spreadsheetName;
-          if (step3El) step3El.innerHTML = `<span class="text-emerald-600 font-bold">✓</span><span class="text-slate-800 font-semibold">3. HTTP POST Berhasil (${report.latencyPost} ms)</span>`;
-        } else {
-          if (postRaw.includes("ServiceLogin") || postRaw.includes("accounts.google.com")) {
-            if (step3El) step3El.innerHTML = `<span class="text-rose-600 font-bold">❌</span><span class="text-rose-600">3. Akses Ditolak (Izin Apps Script Bukan 'Anyone')</span>`;
-            report.suggestion = "Izin Web App Apps Script disetel ke <b>'Hanya saya' (Only myself)</b>. Ubah ke <b>'Anyone' (Siapa saja)</b> pada Deploy &gt; Manage Deployments.";
-            throw new Error("Akses Ditolak: 'Who has access' belum disetel ke 'Anyone'.");
-          }
-          if (!report.step2 && !report.step3) {
-            if (step3El) step3El.innerHTML = `<span class="text-rose-600 font-bold">❌</span><span class="text-rose-600">3. Gagal Terhubung ke Endpoint</span>`;
-            report.suggestion = "Periksa apakah skrip Apps Script sudah di-Deploy sebagai <b>Web App</b> dengan akses <b>Anyone</b>, dan pastikan koneksi internet aktif.";
-            throw new Error("Endpoint Apps Script tidak merespons request GET maupun POST.");
-          } else {
-            if (step3El) step3El.innerHTML = `<span class="text-amber-600 font-bold">⚠️</span><span class="text-slate-700">3. POST Terbatas, tapi GET Aktif</span>`;
-          }
-        }
-
-        // Step 4: Initial Data Verification
-        const step4El = document.getElementById('diagStep4');
-        if (step4El) {
-          step4El.className = "flex items-center gap-2 text-slate-600";
-          step4El.innerHTML = `<span class="inline-block w-4 h-4 rounded-full border-2 border-slate-300 border-t-blue-600 animate-spin"></span><span>4. Mengambil data 12 tab dari Google Sheets...</span>`;
-        }
-
-        let initData = null;
-        try {
-          const resInit = await fetch(`${url}${sep}action=getInitialData&_t=${Date.now()}`, {
-            method: 'GET',
-            mode: 'cors',
-            redirect: 'follow'
-          });
-          if (resInit.ok) {
-            const textInit = await resInit.text();
-            try { initData = JSON.parse(textInit); } catch(e){}
-          }
-        } catch(e){}
-
-        if (!initData || !initData.success) {
-          const pRes = await callBackendPost({ action: 'getInitialData' });
-          if (pRes && pRes.success) initData = pRes;
-        }
-
-        if (initData && initData.success) {
-          report.step4 = true;
-          report.siswaCount = (initData.siswa || []).length;
-          report.guruCount = (initData.guru || []).length;
-          if (initData.config && initData.config.NAMA_SEKOLAH) report.ssName = initData.config.NAMA_SEKOLAH;
-          if (step4El) step4El.innerHTML = `<span class="text-emerald-600 font-bold">✓</span><span class="text-slate-800 font-semibold">4. Database 12 Tab Terhubung (${report.siswaCount} Siswa, ${report.guruCount} Guru)</span>`;
-        } else {
-          const errMsg = (initData && initData.error) ? initData.error : "Gagal membaca tab database";
-          if (errMsg.includes("getSheetByName") || errMsg.includes("Spreadsheet tidak ditemukan")) {
-            if (step4El) step4El.innerHTML = `<span class="text-rose-600 font-bold">❌</span><span class="text-rose-600">4. Skrip Tidak Terikat ke Google Sheets</span>`;
-            report.suggestion = "Skrip Apps Script ini dibuat terpisah (Standalone). Silakan buka file <b>Google Spreadsheet</b> Anda, klik menu <b>Ekstensi &gt; Apps Script</b>, dan pasang kode <code>Code.gs</code> di sana.";
-          } else {
-            if (step4El) step4El.innerHTML = `<span class="text-amber-600 font-bold">⚠️</span><span class="text-amber-700">4. Respon Data: ${escapeHtml(errMsg)}</span>`;
-          }
-        }
-
-        // Tampilkan Hasil Diagnostik
-        await new Promise(r => setTimeout(r, 600));
-        Swal.fire({
-          icon: 'success',
-          title: 'Diagnostik Selesai: Terhubung! 🟢',
-          html: `
-            <div class="text-left text-xs space-y-3 text-slate-700 bg-slate-50 p-4 rounded-2xl border border-slate-200">
-              <div class="flex items-center justify-between pb-2 border-b border-slate-200">
-                <span class="font-bold text-slate-900">Database Sekolah:</span>
-                <span class="font-semibold text-blue-700">${report.ssName || 'Google Sheets Super App'}</span>
-              </div>
-              <div class="grid grid-cols-2 gap-2 text-[11px]">
-                <div class="bg-white p-2.5 rounded-xl border border-slate-200">
-                  <span class="text-slate-500 block">Respon Ping GET:</span>
-                  <span class="font-bold text-emerald-600">${report.latencyGet ? report.latencyGet + ' ms' : 'OK'}</span>
-                </div>
-                <div class="bg-white p-2.5 rounded-xl border border-slate-200">
-                  <span class="text-slate-500 block">Respon Ping POST:</span>
-                  <span class="font-bold text-emerald-600">${report.latencyPost ? report.latencyPost + ' ms' : 'OK'}</span>
-                </div>
-                <div class="bg-white p-2.5 rounded-xl border border-slate-200">
-                  <span class="text-slate-500 block">Master Siswa:</span>
-                  <span class="font-bold text-slate-800">${report.siswaCount} Data Siswa</span>
-                </div>
-                <div class="bg-white p-2.5 rounded-xl border border-slate-200">
-                  <span class="text-slate-500 block">Master Guru / Walas:</span>
-                  <span class="font-bold text-slate-800">${report.guruCount} Data Pendidik</span>
-                </div>
-              </div>
-              <p class="text-slate-600 text-[11px] leading-relaxed">
-                Koneksi Google Apps Script dan Google Spreadsheet berfungsi sempurna! Anda dapat menyimpan endpoint ini.
-              </p>
-            </div>
-          `,
-          showCancelButton: true,
-          confirmButtonText: 'Simpan URL Ini Sekarang',
-          cancelButtonText: 'Tutup',
-          confirmButtonColor: '#1d4ed8'
-        }).then(async (resClick) => {
-          if (resClick.isConfirmed) {
-            BACKEND_URL = url;
-            localStorage.setItem("SUPERAPP_BACKEND_URL", url);
-            if (document.getElementById('inputModalBackendUrl')) document.getElementById('inputModalBackendUrl').value = url;
-            if (document.getElementById('inputBackendUrlConfig')) document.getElementById('inputBackendUrlConfig').value = url;
-            closeModalSetelBackend();
-            await syncDataFromGoogleSheets(false, true);
-          }
-        });
-
-      } catch(err) {
-        Swal.fire({
-          icon: 'error',
-          title: 'Diagnostik: Gagal Terhubung 🔴',
-          html: `
-            <div class="text-left text-xs space-y-3 text-slate-700 bg-rose-50 p-4 rounded-2xl border border-rose-200">
-              <div>
-                <span class="font-bold text-rose-800 block mb-1">Penyebab Kegagalan:</span>
-                <p class="text-rose-700 font-mono text-[11px] bg-white p-2 rounded-lg border border-rose-200">${escapeHtml(err.message)}</p>
-              </div>
-              <div class="p-3 bg-white rounded-xl border border-rose-200 space-y-1.5 text-[11px] text-slate-700">
-                <span class="font-bold text-slate-900 block">💡 Solusi / Cara Mengatasi:</span>
-                <p class="leading-relaxed">${report.suggestion || 'Periksa pengaturan Deploy pada Google Apps Script Anda. Pastikan Who has access: Anyone.'}</p>
-              </div>
-              <div class="pt-2 flex items-center justify-between">
-                <button type="button" onclick="resetKeBackendDefault()" class="px-3 py-1.5 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-lg text-xs transition">
-                  Kembalikan ke URL Bawaan
-                </button>
-                <button type="button" onclick="bukaPanduanDeployGas()" class="px-3 py-1.5 bg-slate-200 hover:bg-slate-300 text-slate-800 font-bold rounded-lg text-xs transition">
-                  Lihat Panduan Deploy
-                </button>
-              </div>
-            </div>
-          `,
-          showConfirmButton: false,
-          showCloseButton: true
+          icon: 'error'
         });
       }
     }
@@ -5861,7 +5242,7 @@
       }
 
       if (raw.includes('docs.google.com/spreadsheets')) {
-        tampilkanModalSalahLinkSpreadsheet(raw);
+        Swal.fire('Salah Format Link', 'Link yang ditempel adalah link Spreadsheet, bukan URL Web App (/exec)!', 'warning');
         return;
       }
 
@@ -5875,14 +5256,8 @@
       }
 
       closeModalSetelBackend();
-      Swal.fire({
-        title: 'Tersimpan! 🟢',
-        text: 'URL Google Apps Script berhasil disimpan secara permanen. Menghubungkan ke Google Spreadsheet...',
-        icon: 'success',
-        timer: 1500,
-        showConfirmButton: false
-      });
-      syncDataFromGoogleSheets(false, true);
+      Swal.fire('Tersimpan! 🟢', 'URL Google Apps Script berhasil disimpan secara permanen. Memuat data dari Google Spreadsheet...', 'success');
+      loadInitialData();
     }
 
     function handleSimpanBackendUrl() {
@@ -5896,7 +5271,7 @@
       }
 
       if (url.includes('docs.google.com/spreadsheets')) {
-        tampilkanModalSalahLinkSpreadsheet(url);
+        Swal.fire('Salah Format Link', 'Link yang ditempel adalah link Spreadsheet, bukan URL Web App (/exec)!', 'warning');
         return;
       }
 
@@ -5906,18 +5281,8 @@
       BACKEND_URL = finalUrl;
       localStorage.setItem("SUPERAPP_BACKEND_URL", finalUrl);
       document.getElementById('inputBackendUrlConfig').value = finalUrl;
-      if (document.getElementById('inputModalBackendUrl')) {
-        document.getElementById('inputModalBackendUrl').value = finalUrl;
-      }
-
-      Swal.fire({
-        title: 'Endpoint Tersimpan! 🟢',
-        text: 'URL backend Apps Script tersimpan permanen. Menghubungkan ke Google Sheets...',
-        icon: 'success',
-        timer: 1500,
-        showConfirmButton: false
-      });
-      syncDataFromGoogleSheets(false, true);
+      Swal.fire('Endpoint Tersimpan! 🟢', 'URL backend Apps Script tersimpan permanen. Menghubungkan ke Google Sheets...', 'success');
+      loadInitialData();
     }
 
     // -------------------------------------------------------------
@@ -5998,7 +5363,11 @@
         </div>
       `;
 
+      printDiv.classList.remove('hidden');
       window.print();
+      setTimeout(() => {
+        printDiv.classList.add('hidden');
+      }, 1000);
     }
 
     function cetakRaporNilaiSiswaA4() {
@@ -6145,7 +5514,11 @@
         </div>
       `;
 
+      printDiv.classList.remove('hidden');
       window.print();
+      setTimeout(() => {
+        printDiv.classList.add('hidden');
+      }, 1000);
     }
 
     function cetakRekapMingguanSiswa(nisn) {
@@ -6176,27 +5549,38 @@
       const now = new Date();
       const tglCetak = now.toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' });
 
-      // Ambil catatan log jika ada
-      const riwayatSiswa = log7Kebiasaan.filter(k => k.nisn === nisn);
+      // Ambil catatan log 7K siswa
+      const riwayatSiswa = (log7Kebiasaan || []).filter(k => k.nisn === nisn);
       const daysOfWeek = [
-        { hari: 'Senin', defaultBangun: '04:30', defaultTidur: '21:00' },
-        { hari: 'Selasa', defaultBangun: '04:30', defaultTidur: '21:00' },
-        { hari: 'Rabu', defaultBangun: '04:15', defaultTidur: '20:45' },
-        { hari: 'Kamis', defaultBangun: '04:30', defaultTidur: '21:00' },
-        { hari: 'Jumat', defaultBangun: '04:30', defaultTidur: '21:00' },
-        { hari: 'Sabtu', defaultBangun: '04:45', defaultTidur: '21:30' },
-        { hari: 'Ahad', defaultBangun: '04:30', defaultTidur: '21:00' }
+        { hari: 'Senin', defaultBangun: '04:30', defaultTidur: '21:00', dayNum: 1 },
+        { hari: 'Selasa', defaultBangun: '04:30', defaultTidur: '21:00', dayNum: 2 },
+        { hari: 'Rabu', defaultBangun: '04:15', defaultTidur: '20:45', dayNum: 3 },
+        { hari: 'Kamis', defaultBangun: '04:30', defaultTidur: '21:00', dayNum: 4 },
+        { hari: 'Jumat', defaultBangun: '04:30', defaultTidur: '21:00', dayNum: 5 },
+        { hari: 'Sabtu', defaultBangun: '04:45', defaultTidur: '21:30', dayNum: 6 },
+        { hari: 'Ahad', defaultBangun: '04:30', defaultTidur: '21:00', dayNum: 0 }
       ];
 
       const rowsHtml = daysOfWeek.map((d, idx) => {
-        const entry = riwayatSiswa[idx];
+        // Cari laporan berdasarkan hari
+        let entry = riwayatSiswa.find(k => {
+          if (!k.tanggal) return false;
+          const dt = new Date(k.tanggal);
+          return dt.getDay() === d.dayNum;
+        });
+        if (!entry && riwayatSiswa[idx]) entry = riwayatSiswa[idx];
+
         const bangun = (entry && entry.bangunPagi) ? `${entry.bangunPagi} ✓` : `${d.defaultBangun} ✓`;
-        const ibadah = (entry && entry.beribadah) ? `${String(entry.beribadah).slice(0, 15)} ✓` : '5 Waktu ✓';
-        const olahraga = (entry && entry.olahraga) ? `${String(entry.olahraga).slice(0, 15)} ✓` : 'Ya ✓';
-        const makan = (entry && entry.makanSehat) ? `${String(entry.makanSehat).slice(0, 15)} ✓` : 'Ya ✓';
-        const belajar = (entry && entry.gemarBelajar) ? `${String(entry.gemarBelajar).slice(0, 15)} ✓` : 'Ya ✓';
-        const gotong = (entry && entry.gotongRoyong) ? `${String(entry.gotongRoyong).slice(0, 15)} ✓` : 'Ya ✓';
+        const ibadah = (entry && entry.beribadah) ? `${String(entry.beribadah).slice(0, 22)} ✓` : '5 Waktu ✓';
+        const olahraga = (entry && entry.olahraga) ? `${entry.olahraga} ✓` : 'Ya ✓';
+        const makan = (entry && entry.makanSehat) ? `${entry.makanSehat} ✓` : 'Ya ✓';
+        const belajar = (entry && entry.gemarBelajar) ? `${entry.gemarBelajar} ✓` : 'Ya ✓';
+        const gotong = (entry && entry.gotongRoyong) ? `${entry.gotongRoyong} ✓` : 'Ya ✓';
         const tidur = (entry && entry.tidurMalam) ? `${entry.tidurMalam} ✓` : `${d.defaultTidur} ✓`;
+        const paraf = (entry && entry.statusValidasi === 'VALID')
+          ? `<span style="color: #047857; font-weight: bold;">✓ Terverifikasi</span>`
+          : `<span style="color: #94a3b8; font-style: italic;">Paraf</span>`;
+
         return `
           <tr>
             <td style="border: 1px solid #000; padding: 6px; font-weight: bold;">${d.hari}</td>
@@ -6207,7 +5591,7 @@
             <td style="border: 1px solid #000; padding: 6px;">${belajar}</td>
             <td style="border: 1px solid #000; padding: 6px;">${gotong}</td>
             <td style="border: 1px solid #000; padding: 6px;">${tidur}</td>
-            <td style="border: 1px solid #000; padding: 6px;">✓</td>
+            <td style="border: 1px solid #000; padding: 6px;">${paraf}</td>
           </tr>
         `;
       }).join('');
@@ -6219,9 +5603,9 @@
             <tr>
               <td style="width: 15%; text-align: left;"><img src="${appConfig.LOGO_KIRI_PEMDA}" style="height: 75px;" onerror="this.style.display='none'"></td>
               <td style="width: 70%; text-align: center;">
-                <h4 style="margin: 0; font-size: 13pt; text-transform: uppercase;">${appConfig.INSTANSI_PEMBINA}</h4>
-                <h3 style="margin: 0; font-size: 15pt; font-weight: bold; text-transform: uppercase;">${appConfig.NAMA_SEKOLAH}</h3>
-                <p style="margin: 0; font-size: 9.5pt; font-style: italic;">${appConfig.ALAMAT_SEKOLAH}</p>
+                <h4 style="margin: 0; font-size: 13pt; text-transform: uppercase;">${appConfig.INSTANSI_PEMBINA || 'DINAS PENDIDIKAN'}</h4>
+                <h3 style="margin: 0; font-size: 15pt; font-weight: bold; text-transform: uppercase;">${appConfig.NAMA_SEKOLAH || 'SMP NEGERI INDONESIA HEBAT'}</h3>
+                <p style="margin: 0; font-size: 9.5pt; font-style: italic;">${appConfig.ALAMAT_SEKOLAH || ''}</p>
               </td>
               <td style="width: 15%; text-align: right;"><img src="${appConfig.LOGO_KANAN_SEKOLAH}" style="height: 75px;" onerror="this.style.display='none'"></td>
             </tr>
@@ -6229,7 +5613,7 @@
 
           <div style="text-align: center; margin-bottom: 15px;">
             <h3 style="margin: 0; text-decoration: underline; font-size: 13pt; font-weight: bold;">LEMBAR REKAPITULASI MINGGUAN PEMBIASAAN KARAKTER</h3>
-            <p style="margin: 3px 0 0 0; font-size: 11pt; font-weight: bold;">7 KEBIASAAN ANAK INDONESIA HEBAT</p>
+            <p style="margin: 3px 0 0 0; font-size: 11pt; font-weight: bold;">7 KEBIASAAN ANAK INDONESIA HEBAT (7 KAIH)</p>
           </div>
 
           <table style="width: 100%; font-size: 10.5pt; margin-bottom: 15px;">
@@ -6287,10 +5671,10 @@
       `;
 
       printDiv.classList.remove('hidden');
+      window.print();
       setTimeout(() => {
-        window.print();
-      }, 50);
-    }
+        printDiv.classList.add('hidden');
+      }, 1000);
     }
 
     function downloadRekapMingguanPdf() {
