@@ -236,6 +236,27 @@
         </button>
       </div>
 
+      <!-- Banner Khusus Pasang di HP Android (Siswa & Ortu) -->
+      <div id="landingPwaInstallCard" class="bg-gradient-to-r from-blue-700 via-indigo-700 to-blue-800 rounded-3xl p-5 sm:p-6 text-white shadow-md border border-blue-400/30 flex flex-col sm:flex-row items-center justify-between gap-4">
+        <div class="flex items-center gap-4 text-left">
+          <div class="w-14 h-14 rounded-2xl bg-white/15 backdrop-blur-md flex items-center justify-center flex-shrink-0 border border-white/25 shadow-inner">
+            <img src="icons/icon-192.png" alt="SuperApp" class="w-10 h-10 rounded-xl object-contain shadow-sm">
+          </div>
+          <div>
+            <div class="flex items-center gap-2">
+              <span class="px-2 py-0.5 bg-amber-400 text-slate-900 rounded-md text-[10px] font-black uppercase tracking-wider">Aplikasi Android</span>
+              <span class="text-xs text-blue-200 font-semibold hidden sm:inline">• Gratis & Ringan</span>
+            </div>
+            <h3 class="text-base sm:text-lg font-black text-white mt-0.5 leading-tight">Pasang Aplikasi di Layar Utama HP</h3>
+            <p class="text-xs text-blue-100 mt-1 leading-relaxed">Akses instan seperti aplikasi Android, hemat kuota internet, dan tidak perlu membuka browser lagi.</p>
+          </div>
+        </div>
+        <button type="button" onclick="triggerPwaInstall()" class="w-full sm:w-auto px-5 py-3 bg-white hover:bg-blue-50 text-blue-800 font-extrabold rounded-2xl text-xs shadow-lg transition transform active:scale-95 flex items-center justify-center gap-2 cursor-pointer flex-shrink-0">
+          <i data-lucide="download" class="w-4 h-4"></i>
+          <span>Pasang di HP Sekarang</span>
+        </button>
+      </div>
+
       <!-- Dua Pintu Masuk Cepat (Gateway Cards) -->
       <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
         
@@ -254,14 +275,14 @@
             <div>
               <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">10 Digit NISN Resmi</label>
               <div class="relative">
-                <input type="text" id="inputNisnSiswa" required maxlength="10" placeholder="Contoh: 0081234567" class="w-full pl-11 pr-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm font-semibold text-slate-900 focus:bg-white focus:ring-2 focus:ring-cyan-500 focus:outline-none transition">
+                <input type="text" id="inputNisnSiswa" required maxlength="10" inputmode="numeric" pattern="[0-9]*" placeholder="Contoh: 0081234567" class="w-full pl-11 pr-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm font-semibold text-slate-900 focus:bg-white focus:ring-2 focus:ring-cyan-500 focus:outline-none transition">
                 <i data-lucide="credit-card" class="w-5 h-5 text-slate-400 absolute left-3.5 top-3.5"></i>
               </div>
             </div>
             <div>
               <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">PIN Siswa <span class="text-slate-400 font-normal">(Default: 4 digit terakhir NISN)</span></label>
               <div class="relative">
-                <input type="password" id="inputPinSiswa" maxlength="6" placeholder="PIN Anda" class="w-full pl-11 pr-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm font-semibold text-slate-900 focus:bg-white focus:ring-2 focus:ring-cyan-500 focus:outline-none transition">
+                <input type="password" id="inputPinSiswa" maxlength="6" inputmode="numeric" pattern="[0-9]*" placeholder="PIN Anda" class="w-full pl-11 pr-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm font-semibold text-slate-900 focus:bg-white focus:ring-2 focus:ring-cyan-500 focus:outline-none transition">
                 <i data-lucide="key-round" class="w-5 h-5 text-slate-400 absolute left-3.5 top-3.5"></i>
               </div>
             </div>
@@ -294,7 +315,7 @@
             <div>
               <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">PIN / Kata Sandi <span class="text-slate-400 font-normal">(Default: 1234)</span></label>
               <div class="relative">
-                <input type="password" id="inputPinGuru" placeholder="PIN Guru" class="w-full pl-11 pr-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm font-semibold text-slate-900 focus:bg-white focus:ring-2 focus:ring-indigo-500 focus:outline-none transition">
+                <input type="password" id="inputPinGuru" inputmode="numeric" placeholder="PIN Guru" class="w-full pl-11 pr-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm font-semibold text-slate-900 focus:bg-white focus:ring-2 focus:ring-indigo-500 focus:outline-none transition">
                 <i data-lucide="lock" class="w-5 h-5 text-slate-400 absolute left-3.5 top-3.5"></i>
               </div>
             </div>
@@ -349,7 +370,7 @@
     <!-- ========================================================================= -->
     <!-- VIEW 2: PORTAL SISWA -->
     <!-- ========================================================================= -->
-    <section id="viewSiswa" class="hidden space-y-6">
+    <section id="viewSiswa" class="hidden space-y-6 pb-28 md:pb-6">
       
       <!-- Kartu Profil & Sambutan Siswa -->
       <div class="bg-gradient-to-r from-blue-700 via-indigo-700 to-cyan-600 rounded-3xl p-6 text-white shadow-lg relative overflow-hidden">
@@ -368,6 +389,10 @@
             </div>
           </div>
           <div class="flex items-center gap-2">
+            <button id="btnInstallPwaSiswaHeader" onclick="triggerPwaInstall()" class="hidden px-3 py-1.5 bg-amber-400 hover:bg-amber-300 text-slate-900 rounded-xl text-xs font-extrabold backdrop-blur-md transition flex items-center gap-1.5 shadow-sm">
+              <i data-lucide="download" class="w-3.5 h-3.5"></i>
+              <span>Pasang App</span>
+            </button>
             <button onclick="switchTabSiswa('profil')" class="px-3 py-1.5 bg-white/10 hover:bg-white/20 rounded-xl text-xs font-semibold backdrop-blur-md transition flex items-center gap-1.5">
               <i data-lucide="phone" class="w-3.5 h-3.5"></i>
               <span>Update No. HP Ortu</span>
@@ -841,7 +866,7 @@
     <!-- ========================================================================= -->
     <!-- VIEW 3: PORTAL GURU, PELATIH & STAFF -->
     <!-- ========================================================================= -->
-    <section id="viewGuru" class="hidden space-y-6">
+    <section id="viewGuru" class="hidden space-y-6 pb-20 md:pb-6">
       
       <!-- Kartu Profil Guru & Role Switcher -->
       <div class="bg-gradient-to-r from-indigo-800 via-blue-800 to-slate-900 rounded-3xl p-6 text-white shadow-lg">
@@ -912,7 +937,7 @@
               <p class="text-xs text-slate-500">Semua siswa otomatis HADIR. Sentuh tombol untuk siswa yang Sakit (S), Izin (I), Alpha (A), atau Terlambat (T).</p>
             </div>
             <div class="flex items-center gap-2">
-              <input type="date" id="guruPresensiKbmTgl" onclick="try{this.showPicker()}catch(e){}" class="px-3 py-1.5 bg-slate-50 border border-slate-200 rounded-xl text-xs font-bold cursor-pointer">
+              <input type="date" id="guruPresensiKbmTgl" onchange="renderFormPresensiKbm()" onclick="try{this.showPicker()}catch(e){}" class="px-3 py-1.5 bg-slate-50 border border-slate-200 rounded-xl text-xs font-bold cursor-pointer">
               <select id="guruPresensiKbmKelas" onchange="renderFormPresensiKbm()" class="px-3 py-1.5 bg-slate-50 border border-slate-200 rounded-xl text-xs font-bold">
                 <option value="8-A">Kelas 8-A</option>
                 <option value="8-B">Kelas 8-B</option>
@@ -970,7 +995,7 @@
               <p class="text-xs text-slate-500">Sistem otomatis menyaring HANYA anggota sah cabang ekstrakurikuler binaan Anda.</p>
             </div>
             <div class="flex items-center gap-2">
-              <input type="date" id="pelatihAbsenTgl" onclick="try{this.showPicker()}catch(e){}" class="px-3 py-1.5 bg-slate-50 border border-slate-200 rounded-xl text-xs font-bold cursor-pointer">
+              <input type="date" id="pelatihAbsenTgl" onchange="renderFormAbsenPelatih()" onclick="try{this.showPicker()}catch(e){}" class="px-3 py-1.5 bg-slate-50 border border-slate-200 rounded-xl text-xs font-bold cursor-pointer">
               <select id="pelatihAbsenCabang" onchange="renderFormAbsenPelatih()" class="px-3 py-1.5 bg-slate-50 border border-slate-200 rounded-xl text-xs font-bold">
                 <!-- Diisi JS dari data ekskul pembina -->
               </select>
@@ -1337,7 +1362,7 @@
     <!-- ========================================================================= -->
     <!-- VIEW 4: PANEL ADMINISTRATOR SEKOLAH -->
     <!-- ========================================================================= -->
-    <section id="viewAdmin" class="hidden space-y-6">
+    <section id="viewAdmin" class="hidden space-y-6 pb-20 md:pb-6">
       <div class="bg-gradient-to-r from-slate-900 via-blue-950 to-slate-900 rounded-3xl p-6 text-white shadow-xl flex items-center justify-between">
         <div>
           <span class="px-2.5 py-0.5 bg-amber-400 text-slate-950 rounded text-[10px] font-black tracking-wider uppercase">Super Administrator</span>
@@ -1737,12 +1762,64 @@
       <p class="text-xs text-slate-500 mt-1 mb-4">Masukkan 6-digit PIN Administrator untuk membuka konfigurasi sistem.</p>
       
       <form onsubmit="handleVerifyAdminPin(event)">
-        <input type="password" id="inputModalAdminPin" required maxlength="10" placeholder="Default: 123456" class="w-full text-center tracking-widest text-lg font-mono font-bold py-3 bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:ring-2 focus:ring-blue-600 focus:outline-none mb-4">
+        <input type="password" id="inputModalAdminPin" required maxlength="10" inputmode="numeric" pattern="[0-9]*" placeholder="Default: 123456" class="w-full text-center tracking-widest text-lg font-mono font-bold py-3 bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:ring-2 focus:ring-blue-600 focus:outline-none mb-4">
         <div class="flex items-center gap-2">
           <button type="button" onclick="closeAdminPinModal()" class="w-1/2 py-2.5 bg-slate-100 text-slate-700 font-bold rounded-xl text-xs hover:bg-slate-200 transition">Batal</button>
           <button type="submit" class="w-1/2 py-2.5 bg-blue-700 text-white font-bold rounded-xl text-xs hover:bg-blue-800 transition">Buka Panel</button>
         </div>
       </form>
+    </div>
+  </div>
+
+  <!-- ========================================================================= -->
+  <!-- MOBILE BOTTOM NAVIGATION (KHUSUS PORTAL SISWA DI LAYAR HP) -->
+  <!-- ========================================================================= -->
+  <nav id="mobileBottomNavSiswa" class="fixed bottom-0 left-0 right-0 z-40 bg-white/95 backdrop-blur-md border-t border-slate-200/80 px-2 py-1.5 shadow-[0_-4px_20px_rgba(0,0,0,0.06)] hidden md:hidden">
+    <div class="grid grid-cols-5 gap-1 max-w-md mx-auto">
+      <button type="button" onclick="switchTabSiswa('beranda')" id="mobileNav_beranda" class="mobile-nav-btn flex flex-col items-center justify-center py-1 px-1 rounded-xl transition text-blue-700 font-bold">
+        <i data-lucide="home" class="w-5 h-5 mb-0.5"></i>
+        <span class="text-[10px] leading-tight">Beranda</span>
+      </button>
+      <button type="button" onclick="switchTabSiswa('kebiasaan')" id="mobileNav_kebiasaan" class="mobile-nav-btn flex flex-col items-center justify-center py-1 px-1 rounded-xl transition text-slate-500 hover:text-blue-600 font-semibold">
+        <i data-lucide="sun" class="w-5 h-5 mb-0.5"></i>
+        <span class="text-[10px] leading-tight">7 Kebiasaan</span>
+      </button>
+      <button type="button" onclick="switchTabSiswa('presensi')" id="mobileNav_presensi" class="mobile-nav-btn flex flex-col items-center justify-center py-1 px-1 rounded-xl transition text-slate-500 hover:text-blue-600 font-semibold">
+        <i data-lucide="calendar" class="w-5 h-5 mb-0.5"></i>
+        <span class="text-[10px] leading-tight">Presensi</span>
+      </button>
+      <button type="button" onclick="switchTabSiswa('nilai')" id="mobileNav_nilai" class="mobile-nav-btn flex flex-col items-center justify-center py-1 px-1 rounded-xl transition text-slate-500 hover:text-blue-600 font-semibold">
+        <i data-lucide="bar-chart-2" class="w-5 h-5 mb-0.5"></i>
+        <span class="text-[10px] leading-tight">Nilai</span>
+      </button>
+      <button type="button" onclick="switchTabSiswa('ekskul')" id="mobileNav_ekskul" class="mobile-nav-btn flex flex-col items-center justify-center py-1 px-1 rounded-xl transition text-slate-500 hover:text-blue-600 font-semibold">
+        <i data-lucide="activity" class="w-5 h-5 mb-0.5"></i>
+        <span class="text-[10px] leading-tight">Ekskul</span>
+      </button>
+    </div>
+  </nav>
+
+  <!-- ========================================================================= -->
+  <!-- FLOATING BOTTOM PWA INSTALL BANNER (PROMPT INSTALASI APLIKASI DI HP) -->
+  <!-- ========================================================================= -->
+  <div id="pwaInstallBannerMobile" class="fixed bottom-4 left-3 right-3 sm:left-6 sm:right-6 max-w-lg mx-auto z-50 bg-slate-900/95 backdrop-blur-md text-white p-3.5 rounded-2xl shadow-2xl border border-slate-700/60 hidden transition-all duration-300">
+    <div class="flex items-center justify-between gap-3">
+      <div class="flex items-center gap-3 min-w-0">
+        <img src="icons/icon-192.png" alt="SuperApp" class="w-11 h-11 rounded-xl object-contain border border-white/20 shadow-xs flex-shrink-0">
+        <div class="min-w-0">
+          <h4 class="text-xs sm:text-sm font-extrabold truncate text-white leading-tight">Pasang Super App Sekolah</h4>
+          <p class="text-[11px] text-slate-300 truncate mt-0.5">Buka lebih cepat dari Layar Utama HP Anda</p>
+        </div>
+      </div>
+      <div class="flex items-center gap-1.5 flex-shrink-0">
+        <button type="button" onclick="triggerPwaInstall()" class="px-3 py-1.5 bg-blue-600 hover:bg-blue-500 text-white font-bold rounded-xl text-xs shadow-md transition transform active:scale-95 flex items-center gap-1 cursor-pointer">
+          <i data-lucide="download" class="w-3.5 h-3.5"></i>
+          <span>Pasang</span>
+        </button>
+        <button type="button" onclick="dismissPwaBanner()" class="p-1.5 text-slate-400 hover:text-white rounded-lg transition" title="Tutup">
+          <i data-lucide="x" class="w-4 h-4"></i>
+        </button>
+      </div>
     </div>
   </div>
 
@@ -1982,9 +2059,197 @@
     }
 
     // -------------------------------------------------------------
+    // PROGRESSIVE WEB APP (PWA) & INSTALASI DI HP ANDROID / IOS
+    // -------------------------------------------------------------
+    let swRegistration = null;
+    let deferredInstallPrompt = null;
+
+    function isRunningInStandalone() {
+      return window.matchMedia('(display-mode: standalone)').matches ||
+             window.navigator.standalone === true ||
+             document.referrer.includes('android-app://');
+    }
+
+    function initServiceWorker() {
+      if ('serviceWorker' in navigator) {
+        window.addEventListener('load', () => {
+          navigator.serviceWorker.register('./sw.js')
+            .then((reg) => {
+              swRegistration = reg;
+              console.log('[SW] ServiceWorker terdaftar sukses dengan scope:', reg.scope);
+              
+              reg.onupdatefound = () => {
+                const installingWorker = reg.installing;
+                if (installingWorker) {
+                  installingWorker.onstatechange = () => {
+                    if (installingWorker.state === 'installed' && navigator.serviceWorker.controller) {
+                      console.log('[SW] Versi baru aplikasi siap digunakan.');
+                    }
+                  };
+                }
+              };
+            })
+            .catch((err) => {
+              console.warn('[SW] Info registrasi ServiceWorker:', err);
+            });
+        });
+      }
+    }
+
+    function initPwaInstall() {
+      // Sembunyikan elemen pasang jika sudah dibuka dari mode PWA / Standalone di HP
+      if (isRunningInStandalone()) {
+        console.log('[PWA] Aplikasi aktif dalam mode PWA Standalone di HP.');
+        const landingBanner = document.getElementById('landingPwaInstallCard');
+        if (landingBanner) landingBanner.classList.add('hidden');
+        const mobBanner = document.getElementById('pwaInstallBannerMobile');
+        if (mobBanner) mobBanner.classList.add('hidden');
+        const btnHeader = document.getElementById('btnInstallPwaSiswaHeader');
+        if (btnHeader) btnHeader.classList.add('hidden');
+        return;
+      }
+
+      // Tangkap event instalasi browser (Chrome/Edge/Samsung Internet di Android)
+      window.addEventListener('beforeinstallprompt', (e) => {
+        e.preventDefault();
+        deferredInstallPrompt = e;
+        console.log('[PWA] Event beforeinstallprompt ditangkap.');
+
+        const landingBanner = document.getElementById('landingPwaInstallCard');
+        if (landingBanner) {
+          landingBanner.classList.remove('hidden');
+        }
+
+        // Tampilkan floating banner di HP jika belum ditutup hari ini
+        const dismissed = localStorage.getItem('dismissed_pwa_banner');
+        const now = Date.now();
+        if (!dismissed || (now - parseInt(dismissed, 10)) > (12 * 60 * 60 * 1000)) {
+          const mobBanner = document.getElementById('pwaInstallBannerMobile');
+          if (mobBanner && window.innerWidth < 768) {
+            mobBanner.classList.remove('hidden');
+            safeCreateIcons();
+          }
+        }
+      });
+
+      window.addEventListener('appinstalled', () => {
+        console.log('[PWA] Super App berhasil terpasang di HP!');
+        deferredInstallPrompt = null;
+        const landingBanner = document.getElementById('landingPwaInstallCard');
+        if (landingBanner) landingBanner.classList.add('hidden');
+        const mobBanner = document.getElementById('pwaInstallBannerMobile');
+        if (mobBanner) mobBanner.classList.add('hidden');
+        const btnHeader = document.getElementById('btnInstallPwaSiswaHeader');
+        if (btnHeader) btnHeader.classList.add('hidden');
+        Swal.fire({
+          icon: 'success',
+          title: '🎉 Berhasil Terpasang!',
+          text: 'Ikon Super App Sekolah kini sudah ada di Layar Utama HP Anda. Silakan buka kapan saja seperti aplikasi Android biasa!',
+          confirmButtonColor: '#1d4ed8'
+        });
+      });
+    }
+
+    async function triggerPwaInstall() {
+      if (deferredInstallPrompt) {
+        try {
+          deferredInstallPrompt.prompt();
+          const choiceResult = await deferredInstallPrompt.userChoice;
+          console.log('[PWA] Pilihan pengguna:', choiceResult.outcome);
+          if (choiceResult.outcome === 'accepted') {
+            deferredInstallPrompt = null;
+            dismissPwaBanner();
+          }
+        } catch (err) {
+          console.error('[PWA] Gagal menampilkan prompt:', err);
+          showPwaInstallGuideModal();
+        }
+      } else {
+        showPwaInstallGuideModal();
+      }
+    }
+
+    function dismissPwaBanner() {
+      const mobBanner = document.getElementById('pwaInstallBannerMobile');
+      if (mobBanner) mobBanner.classList.add('hidden');
+      localStorage.setItem('dismissed_pwa_banner', Date.now().toString());
+    }
+
+    function showPwaInstallGuideModal() {
+      const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
+
+      let stepHtml = '';
+      if (isIOS) {
+        stepHtml = `
+          <div class="text-left space-y-3 text-xs sm:text-sm text-slate-700">
+            <p class="font-bold text-slate-900">Cara Pasang di iPhone / iPad (Safari):</p>
+            <div class="flex items-start gap-2.5 p-2.5 bg-slate-50 rounded-xl border border-slate-200">
+              <span class="w-6 h-6 rounded-full bg-blue-600 text-white flex items-center justify-center font-bold text-xs flex-shrink-0">1</span>
+              <span>Ketuk ikon <strong>Bagikan / Share</strong> (tombol kotak dengan panah ke atas) di menu Safari bawah.</span>
+            </div>
+            <div class="flex items-start gap-2.5 p-2.5 bg-slate-50 rounded-xl border border-slate-200">
+              <span class="w-6 h-6 rounded-full bg-blue-600 text-white flex items-center justify-center font-bold text-xs flex-shrink-0">2</span>
+              <span>Gulir ke bawah dan ketuk opsi <strong>"Tambahkan ke Layar Utama" (Add to Home Screen)</strong>.</span>
+            </div>
+            <div class="flex items-start gap-2.5 p-2.5 bg-slate-50 rounded-xl border border-slate-200">
+              <span class="w-6 h-6 rounded-full bg-blue-600 text-white flex items-center justify-center font-bold text-xs flex-shrink-0">3</span>
+              <span>Tekan <strong>Tambah (Add)</strong> di pojok kanan atas. Ikon aplikasi langsung muncul di layar utama iPhone!</span>
+            </div>
+          </div>
+        `;
+      } else {
+        stepHtml = `
+          <div class="text-left space-y-3 text-xs sm:text-sm text-slate-700">
+            <p class="font-bold text-slate-900">Cara Pasang di HP Android (Google Chrome / Edge):</p>
+            <div class="flex items-start gap-2.5 p-2.5 bg-blue-50/70 rounded-xl border border-blue-200">
+              <span class="w-6 h-6 rounded-full bg-blue-600 text-white flex items-center justify-center font-bold text-xs flex-shrink-0">1</span>
+              <span>Ketuk menu <strong>Titik Tiga (⋮)</strong> di pojok kanan atas browser Google Chrome HP Anda.</span>
+            </div>
+            <div class="flex items-start gap-2.5 p-2.5 bg-blue-50/70 rounded-xl border border-blue-200">
+              <span class="w-6 h-6 rounded-full bg-blue-600 text-white flex items-center justify-center font-bold text-xs flex-shrink-0">2</span>
+              <span>Pilih menu <strong>"Instal Aplikasi"</strong> atau <strong>"Tambahkan ke Layar Utama"</strong>.</span>
+            </div>
+            <div class="flex items-start gap-2.5 p-2.5 bg-blue-50/70 rounded-xl border border-blue-200">
+              <span class="w-6 h-6 rounded-full bg-blue-600 text-white flex items-center justify-center font-bold text-xs flex-shrink-0">3</span>
+              <span>Tekan tombol <strong>Instal / Pasang</strong>. Selesai! SuperApp langsung terpasang di HP seperti aplikasi dari Play Store.</span>
+            </div>
+          </div>
+        `;
+      }
+
+      Swal.fire({
+        title: '📲 Pasang Super App di HP',
+        html: `
+          <div class="space-y-4 pt-1">
+            <div class="flex items-center justify-center gap-3">
+              <img src="icons/icon-192.png" alt="SuperApp" class="w-14 h-14 rounded-2xl shadow-md border border-slate-100 object-contain">
+              <div class="text-left">
+                <h4 class="font-black text-slate-900 text-base leading-tight">Super App Sekolah</h4>
+                <p class="text-xs text-slate-500 mt-0.5">Buka Cepat Langsung dari Layar HP</p>
+                <span class="inline-block mt-1 px-2 py-0.5 bg-emerald-100 text-emerald-800 text-[10px] font-bold rounded-md">Bebas Kuota Browser</span>
+              </div>
+            </div>
+            ${stepHtml}
+          </div>
+        `,
+        showConfirmButton: true,
+        confirmButtonText: 'Mengerti, Terima Kasih',
+        confirmButtonColor: '#1d4ed8',
+        customClass: { popup: 'rounded-3xl p-6 max-w-md' }
+      });
+    }
+
+    // -------------------------------------------------------------
     // INISIALISASI, AUTO-REFRESH & SINKRONISASI ONLINE REAL-TIME
     // -------------------------------------------------------------
     window.addEventListener("DOMContentLoaded", () => {
+      // Simpan parameter tab jika dibuka dari shortcut PWA
+      const urlParams = new URLSearchParams(window.location.search);
+      const initialTab = urlParams.get('tab');
+      if (initialTab) {
+        sessionStorage.setItem('pendingTab', initialTab);
+      }
+
       updateEnvBadges();
       safeCreateIcons();
       initServiceWorker();
@@ -1995,20 +2260,20 @@
       // 1. Auto-Sync saat aplikasi dibuka kembali dari background HP / berganti tab browser
       document.addEventListener('visibilitychange', () => {
         if (document.visibilityState === 'visible') {
-          console.log('[AutoSync] Aplikasi aktif kembali di layar, menyinkronkan data...');
-          syncDataFromGoogleSheets(true);
+          console.log('[AutoSync] Aplikasi aktif kembali di layar, menyinkronkan data terbaru...');
+          syncDataFromGoogleSheets(true, true);
         }
       });
       window.addEventListener('focus', () => {
-        syncDataFromGoogleSheets(true);
+        syncDataFromGoogleSheets(true, true);
       });
 
-      // 2. Background Real-Time Poller: periksa perubahan di Google Sheet setiap 20 detik
+      // 2. Background Real-Time Poller: periksa perubahan di Google Sheet setiap 7 detik jika tab aktif
       setInterval(() => {
-        if (document.visibilityState === 'visible' && (isGas() || BACKEND_URL)) {
-          syncDataFromGoogleSheets(true);
+        if (document.visibilityState === 'visible' && (isGas() || BACKEND_URL) && !isSyncingData) {
+          syncDataFromGoogleSheets(true, false);
         }
-      }, 20000);
+      }, 7000);
     });
 
     // -------------------------------------------------------------
@@ -2249,12 +2514,15 @@
         return false;
       }
 
-      // Proteksi Concurrency & Throttling: Jangan kirim request bertumpuk ke GAS
-      if (isSyncingData) {
+      // Proteksi Concurrency & Throttling: Jangan kirim request bertumpuk kecuali dipaksa (force)
+      if (isSyncingData && !force) {
         return false;
       }
-      if (isSilent && !force && (Date.now() - lastDataSyncTimestamp < 35000)) {
-        return true; // Lewati sinkronisasi latar belakang jika baru saja sinkron < 35 detik
+      // Adaptive Real-Time Throttling:
+      // Hanya batasi jika ini background polling otomatis murni (isSilent && !force).
+      // Batas interval minimum diperkecil ke 6 detik (bukan 35 detik) agar sinkronisasi antar perangkat cepat & responsif
+      if (isSilent && !force && (Date.now() - lastDataSyncTimestamp < 6000)) {
+        return true;
       }
 
       isSyncingData = true;
@@ -2393,7 +2661,7 @@
           }
           setupSiswaUi();
 
-          // Perbarui tampilan tab siswa yang sedang aktif
+          // Perbarui tampilan tab siswa yang sedang aktif secara real-time
           const activeSiswaContent = document.querySelector('.tab-siswa-content:not(.hidden)');
           if (activeSiswaContent) {
             const tabId = activeSiswaContent.id;
@@ -2402,7 +2670,8 @@
             else if (tabId === 'tabContentSiswa_presensi') renderPresensiSiswa();
             else if (tabId === 'tabContentSiswa_tatatertib') renderBukuSakuSiswa();
             else if (tabId === 'tabContentSiswa_ekskul') { renderKatalogEkskulSiswa(); renderEkskulSayaSiswa(); }
-            else if (tabId === 'tabContentSiswa_beranda') { renderPresensiSiswa(); renderBukuSakuSiswa(); }
+            else if (tabId === 'tabContentSiswa_kebiasaan') { cekStatusJurnalTanggal(); renderRekap7KebiasaanSiswa(); }
+            else if (tabId === 'tabContentSiswa_beranda') { renderPresensiSiswa(); renderBukuSakuSiswa(); renderRekap7KebiasaanSiswa(); }
           }
         } else if (currentUser.role === 'ADMIN') {
           setupAdminUi();
@@ -2415,14 +2684,14 @@
           }
         } else {
           setupGuruUi();
-          // Perbarui tampilan tab guru yang sedang aktif
+          // Perbarui tampilan tab guru yang sedang aktif secara real-time
           const activeGuruContent = document.querySelector('.tab-guru-content:not(.hidden)');
           if (activeGuruContent) {
             const tabId = activeGuruContent.id;
             if (tabId === 'tabContentGuru_presensiKbm') renderFormPresensiKbm();
             else if (tabId === 'tabContentGuru_absenEkskul') renderFormAbsenPelatih();
             else if (tabId === 'tabContentGuru_rekapWalas') renderRekapWalasEkskul();
-            else if (tabId === 'tabContentGuru_guruWali') loadValidasi7Kebiasaan();
+            else if (tabId === 'tabContentGuru_guruWali' || tabId === 'tabContentGuru_validasi7K') loadValidasi7Kebiasaan();
             else if (tabId === 'tabContentGuru_tibum') renderCheckboxMasterTibum();
           }
         }
@@ -2633,6 +2902,17 @@
       });
       const target = document.getElementById(viewId);
       if (target) target.classList.remove('hidden');
+
+      // Tampilkan mobile bottom navigation hanya saat di portal siswa
+      const mobNav = document.getElementById('mobileBottomNavSiswa');
+      if (mobNav) {
+        if (viewId === 'viewSiswa') {
+          mobNav.classList.remove('hidden');
+        } else {
+          mobNav.classList.add('hidden');
+        }
+      }
+
       window.scrollTo({ top: 0, behavior: 'smooth' });
       safeCreateIcons();
     }
@@ -2641,6 +2921,8 @@
       currentUser = null;
       document.getElementById('userProfileArea').classList.add('hidden');
       document.getElementById('btnAdminAccess').classList.remove('hidden');
+      const mobNav = document.getElementById('mobileBottomNavSiswa');
+      if (mobNav) mobNav.classList.add('hidden');
       if (document.getElementById('inputNoHpOrtuSiswa')) {
         document.getElementById('inputNoHpOrtuSiswa').value = '';
       }
@@ -2713,7 +2995,12 @@
 
       setupSiswaUi();
       showView('viewSiswa');
-      switchTabSiswa('beranda');
+
+      // Buka tab tujuan jika aplikasi dibuka dari Shortcut PWA (misal ?tab=kebiasaan)
+      const urlParams = new URLSearchParams(window.location.search);
+      const targetTab = urlParams.get('tab') || sessionStorage.getItem('pendingTab') || 'beranda';
+      sessionStorage.removeItem('pendingTab');
+      switchTabSiswa(targetTab);
       playBeepSuccess();
 
       Swal.fire({
@@ -2822,6 +3109,13 @@
         else tabBtnKelulusan.classList.add('hidden');
       }
 
+      // Tampilkan tombol pasang PWA di header siswa jika belum diinstal sebagai PWA
+      const btnHeader = document.getElementById('btnInstallPwaSiswaHeader');
+      if (btnHeader) {
+        if (!isRunningInStandalone()) btnHeader.classList.remove('hidden');
+        else btnHeader.classList.add('hidden');
+      }
+
       // Reset form 7 kebiasaan agar isian akun sebelumnya tidak tertinggal
       resetForm7Kebiasaan();
 
@@ -2858,6 +3152,17 @@
         activeBtn.classList.add('bg-blue-700', 'text-white');
       }
 
+      // Sinkronkan active state pada Mobile Bottom Navigation Bar Siswa
+      document.querySelectorAll('.mobile-nav-btn').forEach(btn => {
+        btn.classList.remove('text-blue-700', 'font-bold');
+        btn.classList.add('text-slate-500', 'font-semibold');
+      });
+      const activeMobBtn = document.getElementById(`mobileNav_${tabName}`);
+      if (activeMobBtn) {
+        activeMobBtn.classList.remove('text-slate-500', 'font-semibold');
+        activeMobBtn.classList.add('text-blue-700', 'font-bold');
+      }
+
       const activeContent = document.getElementById(`tabContentSiswa_${tabName}`);
       if (activeContent) activeContent.classList.remove('hidden');
 
@@ -2883,15 +3188,16 @@
       } else if (tabName === 'beranda') {
         renderPresensiSiswa();
         renderBukuSakuSiswa();
+        renderRekap7KebiasaanSiswa();
       } else if (tabName === 'profil') {
         if (document.getElementById('inputNoHpOrtuSiswa')) {
           document.getElementById('inputNoHpOrtuSiswa').value = (currentUser && currentUser.noHpOrtu) ? currentUser.noHpOrtu : '';
         }
       }
 
-      // Sinkronisasi data menyeluruh di latar belakang jika online
-      if (BACKEND_URL) {
-        syncDataFromGoogleSheets(true);
+      // Sinkronisasi data menyeluruh di latar belakang secara instan saat tab berganti
+      if (BACKEND_URL || isGas()) {
+        syncDataFromGoogleSheets(true, true);
       }
 
       safeCreateIcons();
@@ -3203,6 +3509,29 @@
           </tr>
         `;
       }).join('');
+
+      // Update kartu snapshot 7 Kebiasaan di Beranda Siswa secara real-time
+      const todayStr = new Date().toISOString().split('T')[0];
+      const todayLog = (log7Kebiasaan || []).find(k => isSameNisn(k.nisn, currentUser ? currentUser.nisn : '') && k.tanggal === todayStr);
+      const snapshotElem = document.getElementById('snapshotKebiasaanSiswa');
+      if (snapshotElem) {
+        if (todayLog) {
+          if (todayLog.statusValidasi === 'VALID') {
+            snapshotElem.innerText = "Sudah Valid ✓";
+            snapshotElem.className = "text-lg font-bold text-emerald-600 mt-2";
+          } else if (todayLog.statusValidasi === 'DITOLAK' || todayLog.statusValidasi === 'PERLU_PERBAIKAN') {
+            snapshotElem.innerText = "Perlu Perbaikan ✕";
+            snapshotElem.className = "text-lg font-bold text-rose-600 mt-2";
+          } else {
+            snapshotElem.innerText = "Sudah Lapor (Menunggu)";
+            snapshotElem.className = "text-lg font-bold text-amber-600 mt-2";
+          }
+        } else {
+          snapshotElem.innerText = "Belum Lapor";
+          snapshotElem.className = "text-lg font-bold text-slate-500 mt-2";
+        }
+      }
+
       safeCreateIcons();
     }
 
@@ -3333,7 +3662,7 @@
           text: res.message || 'Laporan 7 Kebiasaan ananda berhasil disimpan ke Google Sheets.',
           icon: 'success'
         });
-        syncDataFromGoogleSheets(true);
+        await syncDataFromGoogleSheets(true, true);
       } else {
         Swal.fire({
           title: 'Tersimpan Lokal',
@@ -3507,7 +3836,7 @@
 
       if (res && res.success) {
         Swal.fire('Berhasil! 🟢', `Ananda telah terdaftar di ekskul ${namaEkskul} (tercatat di Google Sheets).`, 'success');
-        syncDataFromGoogleSheets(true);
+        await syncDataFromGoogleSheets(true, true);
       } else {
         Swal.fire('Tersimpan', `Ananda terdaftar di ekskul ${namaEkskul}.`, 'info');
       }
@@ -3537,7 +3866,7 @@
 
         if (res && res.success) {
           Swal.fire('Dibatalkan 🟢', 'Pendaftaran ekstrakurikuler berhasil dibatalkan dari Google Sheets.', 'info');
-          syncDataFromGoogleSheets(true);
+          await syncDataFromGoogleSheets(true, true);
         } else {
           Swal.fire('Dibatalkan', 'Pendaftaran ekstrakurikuler berhasil dibatalkan.', 'info');
         }
@@ -3815,7 +4144,7 @@
 
       if (res && res.success) {
         Swal.fire('Tersimpan di Google Sheets! 🟢', 'Nomor WhatsApp orang tua berhasil diperbarui.', 'success');
-        syncDataFromGoogleSheets(true);
+        await syncDataFromGoogleSheets(true, true);
       } else {
         Swal.fire('Tersimpan Lokal', 'Nomor WhatsApp orang tua disimpan di perangkat ini.', 'info');
       }
@@ -3981,6 +4310,11 @@
         renderCheckboxMasterTibum();
       }
 
+      // Sinkronisasi data menyeluruh di latar belakang secara instan saat guru berganti tab
+      if (BACKEND_URL || isGas()) {
+        syncDataFromGoogleSheets(true, true);
+      }
+
       safeCreateIcons();
     }
 
@@ -4017,36 +4351,51 @@
 
     function renderFormPresensiKbm() {
       const kelas = document.getElementById('guruPresensiKbmKelas').value;
+      const tgl = (document.getElementById('guruPresensiKbmTgl') && document.getElementById('guruPresensiKbmTgl').value) || new Date().toISOString().split('T')[0];
       const siswaKelas = masterSiswa.filter(s => s.kelas === kelas);
       const tbody = document.getElementById('tableFormPresensiKbm');
       if (!tbody) return;
 
       document.getElementById('metricSiswaRombel').innerText = `${siswaKelas.length} Siswa`;
 
-      tbody.innerHTML = siswaKelas.map((s, idx) => `
-        <tr data-nisn="${s.nisn}">
-          <td class="py-2.5 px-3">${idx + 1}</td>
-          <td class="py-2.5 px-3 font-mono font-bold text-slate-600">${s.nisn}</td>
-          <td class="py-2.5 px-3 font-bold text-slate-800">${s.nama}</td>
-          <td class="py-2.5 px-3 text-center">
-            <div id="group_kbm_${s.nisn}" class="group-kbm-container inline-flex rounded-lg border border-slate-200 p-0.5 bg-slate-50 gap-1 text-[11px]">
-              <input type="radio" name="st_kbm_${s.nisn}" value="HADIR" checked class="hidden pointer-events-none">
-              <input type="radio" name="st_kbm_${s.nisn}" value="SAKIT" class="hidden pointer-events-none">
-              <input type="radio" name="st_kbm_${s.nisn}" value="IZIN" class="hidden pointer-events-none">
-              <input type="radio" name="st_kbm_${s.nisn}" value="ALPHA" class="hidden pointer-events-none">
-              <input type="radio" name="st_kbm_${s.nisn}" value="TERLAMBAT" class="hidden pointer-events-none">
-              <button type="button" onclick="setKbmStatus('${s.nisn}', 'HADIR', this)" data-val="HADIR" class="btn-st-kbm cursor-pointer px-2 py-1 rounded bg-emerald-600 text-white font-bold text-[11px] shadow-xs">H</button>
-              <button type="button" onclick="setKbmStatus('${s.nisn}', 'SAKIT', this)" data-val="SAKIT" class="btn-st-kbm cursor-pointer px-2 py-1 rounded text-slate-600 hover:bg-slate-200 font-bold text-[11px]">S</button>
-              <button type="button" onclick="setKbmStatus('${s.nisn}', 'IZIN', this)" data-val="IZIN" class="btn-st-kbm cursor-pointer px-2 py-1 rounded text-slate-600 hover:bg-slate-200 font-bold text-[11px]">I</button>
-              <button type="button" onclick="setKbmStatus('${s.nisn}', 'ALPHA', this)" data-val="ALPHA" class="btn-st-kbm cursor-pointer px-2 py-1 rounded text-slate-600 hover:bg-slate-200 font-bold text-[11px]">A</button>
-              <button type="button" onclick="setKbmStatus('${s.nisn}', 'TERLAMBAT', this)" data-val="TERLAMBAT" class="btn-st-kbm cursor-pointer px-2 py-1 rounded text-slate-600 hover:bg-slate-200 font-bold text-[11px]">T</button>
-            </div>
-          </td>
-          <td class="py-2.5 px-3">
-            <input type="text" placeholder="Keterangan opsional..." class="input-ket-kbm w-full px-2.5 py-1 bg-white border border-slate-200 rounded text-xs font-normal">
-          </td>
-        </tr>
-      `).join('');
+      const colorMap = {
+        'HADIR': 'bg-emerald-600 text-white shadow-xs',
+        'SAKIT': 'bg-amber-500 text-white shadow-xs',
+        'IZIN': 'bg-blue-600 text-white shadow-xs',
+        'ALPHA': 'bg-rose-600 text-white shadow-xs',
+        'TERLAMBAT': 'bg-purple-600 text-white shadow-xs'
+      };
+
+      tbody.innerHTML = siswaKelas.map((s, idx) => {
+        const logSaved = logPresensiHarian.find(p => p.tanggal === tgl && isSameNisn(p.nisn, s.nisn));
+        const curStatus = logSaved ? (logSaved.status || 'HADIR').toUpperCase() : 'HADIR';
+        const curKet = logSaved ? (logSaved.keterangan || '') : '';
+
+        return `
+          <tr data-nisn="${s.nisn}">
+            <td class="py-2.5 px-3">${idx + 1}</td>
+            <td class="py-2.5 px-3 font-mono font-bold text-slate-600">${s.nisn}</td>
+            <td class="py-2.5 px-3 font-bold text-slate-800">${s.nama}</td>
+            <td class="py-2.5 px-3 text-center">
+              <div id="group_kbm_${s.nisn}" class="group-kbm-container inline-flex rounded-lg border border-slate-200 p-0.5 bg-slate-50 gap-1 text-[11px]">
+                <input type="radio" name="st_kbm_${s.nisn}" value="HADIR" ${curStatus === 'HADIR' ? 'checked' : ''} class="hidden pointer-events-none">
+                <input type="radio" name="st_kbm_${s.nisn}" value="SAKIT" ${curStatus === 'SAKIT' ? 'checked' : ''} class="hidden pointer-events-none">
+                <input type="radio" name="st_kbm_${s.nisn}" value="IZIN" ${curStatus === 'IZIN' ? 'checked' : ''} class="hidden pointer-events-none">
+                <input type="radio" name="st_kbm_${s.nisn}" value="ALPHA" ${curStatus === 'ALPHA' ? 'checked' : ''} class="hidden pointer-events-none">
+                <input type="radio" name="st_kbm_${s.nisn}" value="TERLAMBAT" ${curStatus === 'TERLAMBAT' ? 'checked' : ''} class="hidden pointer-events-none">
+                <button type="button" onclick="setKbmStatus('${s.nisn}', 'HADIR', this)" data-val="HADIR" class="btn-st-kbm cursor-pointer px-2 py-1 rounded transition font-bold text-[11px] ${curStatus === 'HADIR' ? colorMap['HADIR'] : 'text-slate-600 hover:bg-slate-200'}">H</button>
+                <button type="button" onclick="setKbmStatus('${s.nisn}', 'SAKIT', this)" data-val="SAKIT" class="btn-st-kbm cursor-pointer px-2 py-1 rounded transition font-bold text-[11px] ${curStatus === 'SAKIT' ? colorMap['SAKIT'] : 'text-slate-600 hover:bg-slate-200'}">S</button>
+                <button type="button" onclick="setKbmStatus('${s.nisn}', 'IZIN', this)" data-val="IZIN" class="btn-st-kbm cursor-pointer px-2 py-1 rounded transition font-bold text-[11px] ${curStatus === 'IZIN' ? colorMap['IZIN'] : 'text-slate-600 hover:bg-slate-200'}">I</button>
+                <button type="button" onclick="setKbmStatus('${s.nisn}', 'ALPHA', this)" data-val="ALPHA" class="btn-st-kbm cursor-pointer px-2 py-1 rounded transition font-bold text-[11px] ${curStatus === 'ALPHA' ? colorMap['ALPHA'] : 'text-slate-600 hover:bg-slate-200'}">A</button>
+                <button type="button" onclick="setKbmStatus('${s.nisn}', 'TERLAMBAT', this)" data-val="TERLAMBAT" class="btn-st-kbm cursor-pointer px-2 py-1 rounded transition font-bold text-[11px] ${curStatus === 'TERLAMBAT' ? colorMap['TERLAMBAT'] : 'text-slate-600 hover:bg-slate-200'}">T</button>
+              </div>
+            </td>
+            <td class="py-2.5 px-3">
+              <input type="text" value="${curKet}" placeholder="Keterangan opsional..." class="input-ket-kbm w-full px-2.5 py-1 bg-white border border-slate-200 rounded text-xs font-normal">
+            </td>
+          </tr>
+        `;
+      }).join('');
     }
 
     async function simpanPresensiKbmSekelas() {
@@ -4101,7 +4450,7 @@
 
       if (res && res.success) {
         Swal.fire('Tersimpan di Google Sheets! 🟢', `Presensi KBM kelas ${kelas} (${dataAbsen.length} siswa) berhasil disimpan.`, 'success');
-        syncDataFromGoogleSheets(true);
+        await syncDataFromGoogleSheets(true, true);
       } else {
         Swal.fire('Tersimpan Lokal', `Presensi KBM kelas ${kelas} (${dataAbsen.length} siswa) disimpan di sesi lokal.`, 'info');
       }
@@ -4139,6 +4488,7 @@
 
     function renderFormAbsenPelatih() {
       const idEkskul = document.getElementById('pelatihAbsenCabang').value;
+      const tgl = (document.getElementById('pelatihAbsenTgl') && document.getElementById('pelatihAbsenTgl').value) || new Date().toISOString().split('T')[0];
       const peserta = anggotaEkskul.filter(a => a.idEkskul === idEkskul && a.status === 'AKTIF');
       const tbody = document.getElementById('tableFormAbsenPelatih');
       if (!tbody) return;
@@ -4150,29 +4500,42 @@
         return;
       }
 
-      tbody.innerHTML = peserta.map((p, idx) => `
-        <tr data-nisn="${p.nisn}">
-          <td class="py-2.5 px-3">${idx + 1}</td>
-          <td class="py-2.5 px-3 font-mono font-bold text-slate-600">${p.nisn}</td>
-          <td class="py-2.5 px-3 font-bold text-slate-800">${p.nama}</td>
-          <td class="py-2.5 px-3">${p.kelas}</td>
-          <td class="py-2.5 px-3 text-center">
-            <div id="group_ekskul_${p.nisn}" class="group-ekskul-container inline-flex rounded-lg border border-slate-200 p-0.5 bg-slate-50 gap-1 text-[11px]">
-              <input type="radio" name="st_ekskul_${p.nisn}" value="HADIR" checked class="hidden pointer-events-none">
-              <input type="radio" name="st_ekskul_${p.nisn}" value="SAKIT" class="hidden pointer-events-none">
-              <input type="radio" name="st_ekskul_${p.nisn}" value="IZIN" class="hidden pointer-events-none">
-              <input type="radio" name="st_ekskul_${p.nisn}" value="ALPHA" class="hidden pointer-events-none">
-              <button type="button" onclick="setEkskulStatus('${p.nisn}', 'HADIR', this)" data-val="HADIR" class="btn-st-ekskul cursor-pointer px-2.5 py-1 rounded bg-emerald-600 text-white font-bold text-[11px] shadow-xs">Hadir</button>
-              <button type="button" onclick="setEkskulStatus('${p.nisn}', 'SAKIT', this)" data-val="SAKIT" class="btn-st-ekskul cursor-pointer px-2.5 py-1 rounded text-slate-600 hover:bg-slate-200 font-bold text-[11px]">Sakit</button>
-              <button type="button" onclick="setEkskulStatus('${p.nisn}', 'IZIN', this)" data-val="IZIN" class="btn-st-ekskul cursor-pointer px-2.5 py-1 rounded text-slate-600 hover:bg-slate-200 font-bold text-[11px]">Izin</button>
-              <button type="button" onclick="setEkskulStatus('${p.nisn}', 'ALPHA', this)" data-val="ALPHA" class="btn-st-ekskul cursor-pointer px-2.5 py-1 rounded text-slate-600 hover:bg-slate-200 font-bold text-[11px]">Alpha</button>
-            </div>
-          </td>
-          <td class="py-2.5 px-3">
-            <input type="text" placeholder="Alasan tidak hadir..." class="input-ket-ekskul w-full px-2.5 py-1 bg-white border border-slate-200 rounded text-xs font-normal">
-          </td>
-        </tr>
-      `).join('');
+      const colorMap = {
+        'HADIR': 'bg-emerald-600 text-white shadow-xs',
+        'SAKIT': 'bg-amber-500 text-white shadow-xs',
+        'IZIN': 'bg-blue-600 text-white shadow-xs',
+        'ALPHA': 'bg-rose-600 text-white shadow-xs'
+      };
+
+      tbody.innerHTML = peserta.map((p, idx) => {
+        const existing = logPresensiEkskul.find(l => l.tanggal === tgl && l.idEkskul === idEkskul && isSameNisn(l.nisn, p.nisn));
+        const curStatus = existing ? (existing.status || 'HADIR').toUpperCase() : 'HADIR';
+        const curKet = existing ? (existing.keterangan || '') : '';
+
+        return `
+          <tr data-nisn="${p.nisn}">
+            <td class="py-2.5 px-3">${idx + 1}</td>
+            <td class="py-2.5 px-3 font-mono font-bold text-slate-600">${p.nisn}</td>
+            <td class="py-2.5 px-3 font-bold text-slate-800">${p.nama}</td>
+            <td class="py-2.5 px-3">${p.kelas}</td>
+            <td class="py-2.5 px-3 text-center">
+              <div id="group_ekskul_${p.nisn}" class="group-ekskul-container inline-flex rounded-lg border border-slate-200 p-0.5 bg-slate-50 gap-1 text-[11px]">
+                <input type="radio" name="st_ekskul_${p.nisn}" value="HADIR" ${curStatus === 'HADIR' ? 'checked' : ''} class="hidden pointer-events-none">
+                <input type="radio" name="st_ekskul_${p.nisn}" value="SAKIT" ${curStatus === 'SAKIT' ? 'checked' : ''} class="hidden pointer-events-none">
+                <input type="radio" name="st_ekskul_${p.nisn}" value="IZIN" ${curStatus === 'IZIN' ? 'checked' : ''} class="hidden pointer-events-none">
+                <input type="radio" name="st_ekskul_${p.nisn}" value="ALPHA" ${curStatus === 'ALPHA' ? 'checked' : ''} class="hidden pointer-events-none">
+                <button type="button" onclick="setEkskulStatus('${p.nisn}', 'HADIR', this)" data-val="HADIR" class="btn-st-ekskul cursor-pointer px-2.5 py-1 rounded transition font-bold text-[11px] ${curStatus === 'HADIR' ? colorMap['HADIR'] : 'text-slate-600 hover:bg-slate-200'}">Hadir</button>
+                <button type="button" onclick="setEkskulStatus('${p.nisn}', 'SAKIT', this)" data-val="SAKIT" class="btn-st-ekskul cursor-pointer px-2.5 py-1 rounded transition font-bold text-[11px] ${curStatus === 'SAKIT' ? colorMap['SAKIT'] : 'text-slate-600 hover:bg-slate-200'}">Sakit</button>
+                <button type="button" onclick="setEkskulStatus('${p.nisn}', 'IZIN', this)" data-val="IZIN" class="btn-st-ekskul cursor-pointer px-2.5 py-1 rounded transition font-bold text-[11px] ${curStatus === 'IZIN' ? colorMap['IZIN'] : 'text-slate-600 hover:bg-slate-200'}">Izin</button>
+                <button type="button" onclick="setEkskulStatus('${p.nisn}', 'ALPHA', this)" data-val="ALPHA" class="btn-st-ekskul cursor-pointer px-2.5 py-1 rounded transition font-bold text-[11px] ${curStatus === 'ALPHA' ? colorMap['ALPHA'] : 'text-slate-600 hover:bg-slate-200'}">Alpha</button>
+              </div>
+            </td>
+            <td class="py-2.5 px-3">
+              <input type="text" value="${curKet}" placeholder="Alasan tidak hadir..." class="input-ket-ekskul w-full px-2.5 py-1 bg-white border border-slate-200 rounded text-xs font-normal">
+            </td>
+          </tr>
+        `;
+      }).join('');
     }
 
     async function simpanAbsenPelatihEkskul() {
@@ -4234,7 +4597,7 @@
 
       if (res && res.success) {
         Swal.fire('Tersimpan di Google Sheets! 🟢', `Presensi sesi latihan berhasil disimpan oleh Pelatih (${saved} anggota diproses).`, 'success');
-        syncDataFromGoogleSheets(true);
+        await syncDataFromGoogleSheets(true, true);
       } else {
         Swal.fire('Tersimpan Lokal', `Presensi sesi latihan berhasil disimpan di sesi lokal.`, 'info');
       }
@@ -4489,7 +4852,7 @@
 
       if (res && res.success) {
         Swal.fire('Tersimpan di Google Sheets! 🟢', `Sebanyak ${dataNilaiToPost.length} nilai mapel ${mapel} kelas ${kelas} berhasil disimpan ke Google Sheets.`, 'success');
-        syncDataFromGoogleSheets(true);
+        await syncDataFromGoogleSheets(true, true);
       } else {
         Swal.fire('Tersimpan Lokal', `Nilai disimpan di memori perangkat. (Info server: ${res.error || 'Offline'})`, 'info');
       }
@@ -4705,7 +5068,7 @@
 
       if (res && res.success) {
         Swal.fire('Divalidasi! 🟢', 'Jurnal 7 Kebiasaan siswa telah disetujui di Google Sheets.', 'success');
-        syncDataFromGoogleSheets(true);
+        await syncDataFromGoogleSheets(true, true);
       } else {
         Swal.fire('Divalidasi!', 'Jurnal 7 Kebiasaan siswa telah disetujui secara lokal.', 'success');
       }
@@ -4754,7 +5117,7 @@
 
       if (res && res.success) {
         Swal.fire('Dikembalikan! ⚠️', 'Laporan 7 Kebiasaan telah ditolak dan dikembalikan ke siswa untuk diperbaiki.', 'success');
-        syncDataFromGoogleSheets(true);
+        await syncDataFromGoogleSheets(true, true);
       } else {
         Swal.fire('Tersimpan Lokal', 'Status penolakan disimpan di sesi ini.', 'info');
       }
@@ -4922,7 +5285,7 @@
       // Reset centang
       checkedItems.forEach(c => c.checked = false);
       pilihSiswaTibum(selectedTibumSiswa.nisn);
-      syncDataFromGoogleSheets(true);
+      await syncDataFromGoogleSheets(true, true);
     }
 
     // -------------------------------------------------------------
@@ -4985,6 +5348,11 @@
 
       if (tabName === 'guruWali') {
         renderAdminPlottingGuruWali();
+      }
+
+      // Sinkronisasi data menyeluruh di latar belakang secara instan saat admin berganti tab
+      if (BACKEND_URL || isGas()) {
+        syncDataFromGoogleSheets(true, true);
       }
 
       safeCreateIcons();
@@ -5222,7 +5590,7 @@
 
       if (res && res.success) {
         Swal.fire('Tersimpan! 🟢', `Guru Wali untuk ananda ${s.nama} berhasil disimpan ke Google Sheets.`, 'success');
-        syncDataFromGoogleSheets(true);
+        await syncDataFromGoogleSheets(true, true);
       } else {
         Swal.fire('Tersimpan Lokal', `Perubahan disimpan lokal. (Backend: ${res ? res.error : 'Offline'})`, 'info');
       }
@@ -5255,7 +5623,7 @@
           text: res.message || 'Seluruh penugasan Guru Wali siswa berhasil diperbarui permanen di Google Sheets.',
           icon: 'success'
         });
-        syncDataFromGoogleSheets(true);
+        await syncDataFromGoogleSheets(true, true);
       } else {
         Swal.fire({
           title: 'Tersimpan Secara Lokal',
@@ -5312,7 +5680,7 @@
 
       if (res && res.success) {
         Swal.fire('Tersimpan di Google Sheets! 🟢', 'Seluruh konfigurasi identitas sekolah dan URL database berhasil disimpan ke Google Sheets.', 'success');
-        syncDataFromGoogleSheets(true);
+        await syncDataFromGoogleSheets(true, true);
       } else {
         Swal.fire('Tersimpan Lokal', 'Konfigurasi tersimpan di browser ini.', 'success');
       }

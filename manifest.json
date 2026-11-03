@@ -1,32 +1,58 @@
 {
+  "id": "/",
   "name": "Super App Sekolah Terpadu",
   "short_name": "SuperApp",
   "description": "Sistem Informasi Sekolah Terpadu: Presensi Harian, Presensi Ekstra, Nilai Ulangan, Pengumuman Kelulusan, 7 Kebiasaan Anak Hebat, dan Tata Tertib Siswa",
   "start_url": "/",
   "scope": "/",
   "display": "standalone",
+  "display_override": ["standalone", "minimal-ui", "window-controls-overlay"],
   "orientation": "portrait-primary",
   "background_color": "#0f172a",
   "theme_color": "#1e40af",
   "lang": "id",
+  "categories": ["education", "productivity"],
   "icons": [
     {
       "src": "/icons/icon-192.png",
       "sizes": "192x192",
       "type": "image/png",
-      "purpose": "any"
+      "purpose": "any maskable"
     },
     {
       "src": "/icons/icon-512.png",
       "sizes": "512x512",
       "type": "image/png",
-      "purpose": "any"
+      "purpose": "any maskable"
     },
     {
       "src": "/icons/icon-maskable.png",
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "maskable"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "7 Kebiasaan Siswa",
+      "short_name": "7 Kebiasaan",
+      "description": "Isi Jurnal 7 Kebiasaan Anak Hebat",
+      "url": "/?tab=kebiasaan",
+      "icons": [{ "src": "/icons/icon-192.png", "sizes": "192x192" }]
+    },
+    {
+      "name": "Presensi Harian",
+      "short_name": "Presensi",
+      "description": "Cek Presensi KBM Kelas",
+      "url": "/?tab=presensi",
+      "icons": [{ "src": "/icons/icon-192.png", "sizes": "192x192" }]
+    },
+    {
+      "name": "Nilai Ulangan",
+      "short_name": "Nilai",
+      "description": "Cek Nilai Ulangan & Capaian Belajar",
+      "url": "/?tab=nilai",
+      "icons": [{ "src": "/icons/icon-192.png", "sizes": "192x192" }]
     }
   ]
 }
