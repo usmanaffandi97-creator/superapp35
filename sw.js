@@ -1,8 +1,9 @@
 // Service Worker — Super App Sekolah Terpadu (Ultra-Resilient & Instant Launch)
-const CACHE_NAME = 'superapp-sekolah-v3';
+const CACHE_NAME = 'superapp-sekolah-v4';
 const STATIC_ASSETS = [
   '/',
   '/index.html',
+  '/config.js',
   '/manifest.json',
   '/icons/icon-192.png',
   '/icons/icon-512.png',

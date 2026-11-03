@@ -27,9 +27,32 @@ const SHEET_MASTER_TIBUM  = "MASTER_TIBUM";
 const SHEET_LOG_TIBUM     = "LOG_TIBUM";
 
 /**
- * Entry Point Web App GET (Melayani Web App HTML & REST API JSON untuk Vercel)
+ * Entry Point Web App GET (Melayani Web App HTML Native & REST API JSON untuk Vercel / Eksternal)
  */
 function doGet(e) {
+  // 1. Dukungan API eksternal via GET (Vercel / Fallback / Ping / Direct Fetch)
+  if (e && e.parameter && e.parameter.action) {
+    const action = e.parameter.action;
+    let payload = {};
+    if (e.parameter.data) {
+      try { payload = JSON.parse(e.parameter.data); } catch(err) { payload = {}; }
+    } else if (e.parameter.args) {
+      try { 
+        const parsedArgs = JSON.parse(e.parameter.args);
+        payload = (Array.isArray(parsedArgs) && typeof parsedArgs[0] === 'object') ? parsedArgs[0] : parsedArgs;
+      } catch(err) { payload = {}; }
+    }
+    // Salin seluruh parameter query ke payload jika belum ada
+    for (const key in e.parameter) {
+      if (key !== 'action' && key !== 'data' && key !== 'args' && key !== '_t' && payload[key] === undefined) {
+        payload[key] = e.parameter[key];
+      }
+    }
+    payload.action = action;
+    return handleApiRequest(action, payload);
+  }
+
+  // 2. Tampilan Web App Native jika dibuka langsung di script.google.com
   try {
     const ss = getSS();
     if (!ss.getSheetByName(SHEET_CONFIG)) {
@@ -39,56 +62,32 @@ function doGet(e) {
     Logger.log("Inisialisasi auto: " + err.message);
   }
 
-  // Jika dipanggil via REST API (Vercel) dengan parameter action
-  if (e && e.parameter && e.parameter.action) {
-    const action = e.parameter.action;
-    let result = { success: false, error: "Action tidak dikenal: " + action };
-
-    try {
-      if (action === "ping") {
-        result = { success: true, message: "Super App Sekolah API Aktif", timestamp: new Date().toISOString() };
-      } else if (action === "getInitialData") {
-        result = getInitialData();
-      } else if (action === "getPresensiHarian") {
-        result = getPresensiHarian(e.parameter.kelas, e.parameter.tanggal, e.parameter.nisn);
-      } else if (action === "getPresensiEkskul") {
-        result = getPresensiEkskul(e.parameter.idEkskul, e.parameter.tanggal, e.parameter.nisn);
-      } else if (action === "getNilaiSiswa") {
-        result = getNilaiSiswa(e.parameter.nisn, e.parameter.kelas);
-      } else if (action === "getKelulusanSiswa") {
-        result = getKelulusanSiswa(e.parameter.nisn, e.parameter.tglLahir);
-      } else if (action === "get7Kebiasaan") {
-        result = get7Kebiasaan(e.parameter.nisn, e.parameter.tanggal);
-      } else if (action === "getBelumLapor7Kebiasaan") {
-        result = getBelumLapor7Kebiasaan(e.parameter.nipGuruWali, e.parameter.tanggal);
-      } else if (action === "getPelanggaranSiswa") {
-        result = getPelanggaranSiswa(e.parameter.nisn, e.parameter.tanggal, e.parameter.kelas);
-      }
-    } catch (err) {
-      result = { success: false, error: err.message };
-    }
-
-    return ContentService.createTextOutput(JSON.stringify(result))
-      .setMimeType(ContentService.MimeType.JSON);
+  try {
+    return HtmlService.createHtmlOutputFromFile('index')
+      .setTitle('Super App Sekolah Terpadu')
+      .setXFrameOptionsMode(HtmlService.XFrameOptionsMode.ALLOWALL)
+      .addMetaTag('viewport', 'width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no');
+  } catch (htmlErr) {
+    // Jika file index.html tidak diunggah langsung ke Apps Script (misal frontend di Vercel)
+    let urlService = "";
+    try { urlService = ScriptApp.getService().getUrl(); } catch(e){}
+    return HtmlService.createHtmlOutput(
+      "<!DOCTYPE html><html><head><meta charset='utf-8'><title>Super App Sekolah Backend</title></head>" +
+      "<body style='font-family:sans-serif;padding:30px;line-height:1.6;color:#1e293b;background:#f8fafc;'>" +
+      "<h2>🚀 Backend Super App Sekolah Terpadu Aktif!</h2>" +
+      "<p>Endpoint API Google Apps Script ini berhasil tersambung dengan 1 Google Sheet Database.</p>" +
+      "<p>Silakan gunakan URL ini pada file <code>config.js</code> atau setelan koneksi frontend Vercel:</p>" +
+      "<div style='background:#e2e8f0;padding:12px;border-radius:8px;word-break:break-all;font-family:monospace;'><code>" +
+      (urlService || 'URL Web App Apps Script') + "</code></div>" +
+      "</body></html>"
+    ).setTitle("Super App Sekolah Backend")
+     .setXFrameOptionsMode(HtmlService.XFrameOptionsMode.ALLOWALL)
+     .addMetaTag("viewport", "width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no");
   }
-
-  // Tampilan langsung dari Apps Script jika dibuka tanpa Vercel
-  return HtmlService.createHtmlOutput(
-    "<!DOCTYPE html><html><head><meta charset='utf-8'><title>Super App Sekolah Backend</title></head>" +
-    "<body style='font-family:sans-serif;padding:30px;line-height:1.6;color:#1e293b;background:#f8fafc;'>" +
-    "<h2>🚀 Backend Super App Sekolah Terpadu Aktif!</h2>" +
-    "<p>Endpoint API Google Apps Script ini berhasil tersambung dengan 1 Google Sheet Database.</p>" +
-    "<p>Silakan gunakan URL ini sebagai <code>APPS_SCRIPT_URL</code> pada aplikasi frontend Vercel Anda.</p>" +
-    "<div style='background:#e2e8f0;padding:12px;border-radius:8px;word-break:break-all;'><code>" +
-    ScriptApp.getService().getUrl() + "</code></div>" +
-    "</body></html>"
-  ).setTitle("Super App Sekolah Backend")
-   .setXFrameOptionsMode(HtmlService.XFrameOptionsMode.ALLOWALL)
-   .addMetaTag("viewport", "width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no");
 }
 
 /**
- * Entry Point POST (Menerima Request dari Frontend Vercel)
+ * Entry Point POST (Menerima Request dari Frontend Vercel / Eksternal)
  */
 function doPost(e) {
   let lock = LockService.getScriptLock();
@@ -114,10 +113,58 @@ function doPost(e) {
     }
 
     const action = payload.action;
-    let response = { success: false, error: "Action tidak ditentukan: " + (action || 'kosong') };
+    return handleApiRequest(action, payload);
+  } catch (err) {
+    return ContentService.createTextOutput(JSON.stringify({ 
+      success: false, 
+      error: "Kesalahan server: " + err.message 
+    })).setMimeType(ContentService.MimeType.JSON);
+  } finally {
+    try { lock.releaseLock(); } catch(e){}
+  }
+}
 
+/**
+ * Central Dispatcher API untuk GET dan POST
+ */
+function handleApiRequest(action, payload) {
+  payload = payload || {};
+  let response = executeActionCore(action, payload);
+  return ContentService.createTextOutput(JSON.stringify(response))
+    .setMimeType(ContentService.MimeType.JSON);
+}
+
+/**
+ * Direct API Call untuk Native Google Apps Script (google.script.run)
+ */
+function callBackendApi(payload) {
+  if (typeof payload === 'string') {
+    try { payload = JSON.parse(payload); } catch(e){}
+  }
+  payload = payload || {};
+  return executeActionCore(payload.action, payload);
+}
+
+/**
+ * Eksekutor Aksi Server
+ */
+function executeActionCore(action, payload) {
+  payload = payload || {};
+  let response = { success: false, error: "Action tidak ditentukan: " + (action || 'kosong') };
+
+  try {
     if (action === "ping") {
-      response = { success: true, message: "Super App Sekolah API Aktif", timestamp: new Date().toISOString() };
+      let ssName = "Database Sekolah";
+      try {
+        const ss = getSS();
+        if (ss) ssName = ss.getName();
+      } catch (e) {}
+      response = { 
+        success: true, 
+        message: "Super App Sekolah API Aktif", 
+        spreadsheetName: ssName,
+        timestamp: new Date().toISOString() 
+      };
     } else if (action === "getInitialData") {
       response = getInitialData();
     } else if (action === "loginUser") {
@@ -156,19 +203,26 @@ function doPost(e) {
       response = updateProfilSiswa(payload.nisn, payload.noHpOrtu);
     } else if (action === "verifyAdminPin") {
       response = verifyAdminPin(payload.pin);
+    } else if (action === "getPresensiHarian") {
+      response = getPresensiHarian(payload.kelas, payload.tanggal, payload.nisn);
+    } else if (action === "getPresensiEkskul") {
+      response = getPresensiEkskul(payload.idEkskul, payload.tanggal, payload.nisn);
+    } else if (action === "getNilaiSiswa") {
+      response = getNilaiSiswa(payload.nisn, payload.kelas);
+    } else if (action === "getKelulusanSiswa") {
+      response = getKelulusanSiswa(payload.nisn, payload.tglLahir);
+    } else if (action === "get7Kebiasaan") {
+      response = get7Kebiasaan(payload.nisn, payload.tanggal);
+    } else if (action === "getBelumLapor7Kebiasaan") {
+      response = getBelumLapor7Kebiasaan(payload.nipGuruWali, payload.tanggal);
+    } else if (action === "getPelanggaranSiswa") {
+      response = getPelanggaranSiswa(payload.nisn, payload.tanggal, payload.kelas);
     }
-
-    return ContentService.createTextOutput(JSON.stringify(response))
-      .setMimeType(ContentService.MimeType.JSON);
-
   } catch (err) {
-    return ContentService.createTextOutput(JSON.stringify({ 
-      success: false, 
-      error: "Kesalahan server: " + err.message 
-    })).setMimeType(ContentService.MimeType.JSON);
-  } finally {
-    try { lock.releaseLock(); } catch(e){}
+    response = { success: false, error: "Kesalahan server: " + err.message };
   }
+
+  return response;
 }
 
 /**

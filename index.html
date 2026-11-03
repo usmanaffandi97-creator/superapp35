@@ -16,6 +16,9 @@
   <link rel="icon" type="image/png" sizes="192x192" href="icons/icon-192.png">
   <link rel="icon" type="image/svg+xml" href="icons/icon.svg">
   
+  <!-- Konfigurasi Global & Backend Google Apps Script -->
+  <script src="config.js"></script>
+
   <!-- Tailwind CSS & Google Fonts -->
   <script src="https://cdn.tailwindcss.com"></script>
   <!-- Lucide Icons -->
@@ -207,6 +210,26 @@
           </div>
         </div>
 
+      </div>
+
+      <!-- Status Koneksi Database Google Spreadsheet -->
+      <div id="landingEnvStatusBar" class="flex flex-col sm:flex-row items-center justify-between gap-3 bg-white/95 backdrop-blur-sm rounded-2xl p-4 border border-slate-200 shadow-xs">
+        <div class="flex items-center gap-3">
+          <div id="landingStatusIconCircle" class="w-9 h-9 rounded-xl bg-emerald-100 text-emerald-700 flex items-center justify-center flex-shrink-0">
+            <i data-lucide="database" class="w-4 h-4"></i>
+          </div>
+          <div>
+            <div class="flex items-center gap-2">
+              <span class="text-xs font-bold text-slate-800">Status Database Sekolah:</span>
+              <span id="landingEnvBadge"></span>
+            </div>
+            <p id="landingStatusDesc" class="text-[11px] text-slate-500 mt-0.5">Memuat status koneksi Google Spreadsheet...</p>
+          </div>
+        </div>
+        <button type="button" onclick="openModalSetelBackend(event)" class="w-full sm:w-auto px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold rounded-xl text-xs transition flex items-center justify-center gap-1.5 border border-slate-200 cursor-pointer">
+          <i data-lucide="settings" class="w-3.5 h-3.5"></i>
+          <span>Kelola Koneksi Sheets</span>
+        </button>
       </div>
 
       <!-- Dua Pintu Masuk Cepat (Gateway Cards) -->
@@ -1630,30 +1653,49 @@
       </div>
 
       <div class="space-y-4">
+        <!-- Status Box Koneksi Terkini -->
+        <div id="modalConnStatusBox" class="p-3 bg-slate-50 border border-slate-200 rounded-2xl text-xs">
+          <!-- Diisi otomatis oleh openModalSetelBackend -->
+        </div>
+
         <div>
           <label class="block text-xs font-bold text-slate-700 uppercase mb-1">Web App URL Google Apps Script (/exec)</label>
           <input type="text" id="inputModalBackendUrl" placeholder="https://script.google.com/macros/s/.../exec" class="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs font-mono font-medium focus:bg-white focus:ring-2 focus:ring-blue-600 focus:outline-none">
+          <p class="text-[11px] text-slate-500 mt-1">Pastikan berakhiran <code>/exec</code> (bukan <code>/edit</code> atau <code>/dev</code>).</p>
         </div>
 
+        <!-- Box Hasil Pengujian Koneksi -->
+        <div id="modalGasTestResult" class="hidden p-3 rounded-2xl text-xs font-medium"></div>
+
         <div class="p-3.5 bg-blue-50 border border-blue-200 rounded-2xl text-[11px] text-blue-900 space-y-1.5">
-          <p class="font-bold">Cara Mendapatkan Web App URL:</p>
+          <p class="font-bold">💡 3 Langkah Mudah Mendapatkan Web App URL:</p>
           <ol class="list-decimal pl-4 space-y-0.5 text-blue-800">
             <li>Buka Spreadsheet &rarr; <b>Ekstensi</b> &rarr; <b>Apps Script</b>.</li>
             <li>Klik tombol biru <b>Deploy</b> (kanan atas) &rarr; <b>New deployment</b>.</li>
-            <li>Pilih <b>Web app</b> &rarr; pastikan <i>Who has access</i>: <b>Anyone</b>.</li>
-            <li>Klik Deploy dan salin URL yang berakhiran <b><code>/exec</code></b>.</li>
+            <li>Pilih <b>Web app</b> &rarr; pastikan <i>Who has access</i>: <b>Anyone</b> (Siapa saja).</li>
+            <li>Klik Deploy dan salin URL yang berakhiran <b><code>/exec</code></b> ke sini!</li>
           </ol>
         </div>
 
-        <div class="flex items-center gap-2 pt-2">
-          <button type="button" onclick="ujiKoneksiBackendModal()" class="w-1/2 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-800 font-bold rounded-xl text-xs transition flex items-center justify-center gap-1.5">
-            <i data-lucide="wifi" class="w-4 h-4"></i>
-            <span>Uji Respon (Ping)</span>
-          </button>
-          <button type="button" onclick="simpanBackendUrlModal()" class="w-1/2 py-2.5 bg-blue-700 hover:bg-blue-800 text-white font-bold rounded-xl text-xs transition flex items-center justify-center gap-1.5 shadow-sm">
-            <i data-lucide="check" class="w-4 h-4"></i>
-            <span>Simpan URL Ini</span>
-          </button>
+        <div class="flex flex-wrap items-center justify-between gap-2 pt-2 border-t border-slate-100">
+          <div class="flex items-center gap-1.5">
+            <button type="button" onclick="putuskanKoneksiBackendModal()" class="px-3 py-2 text-rose-600 hover:bg-rose-50 rounded-xl text-xs font-bold transition cursor-pointer">
+              Putuskan
+            </button>
+            <button type="button" onclick="resetDefaultBackendUrlModal()" class="px-3 py-2 text-slate-600 hover:bg-slate-100 rounded-xl text-xs font-bold transition cursor-pointer">
+              Reset Default
+            </button>
+          </div>
+          <div class="flex items-center gap-2">
+            <button type="button" onclick="ujiKoneksiBackendModal()" class="px-3.5 py-2 bg-slate-100 hover:bg-slate-200 text-slate-800 font-bold rounded-xl text-xs transition flex items-center gap-1.5 cursor-pointer">
+              <i data-lucide="wifi" class="w-3.5 h-3.5"></i>
+              <span>⚡ Tes Koneksi</span>
+            </button>
+            <button type="button" onclick="simpanBackendUrlModal()" class="px-4 py-2 bg-blue-700 hover:bg-blue-800 text-white font-bold rounded-xl text-xs transition flex items-center gap-1.5 shadow-sm cursor-pointer">
+              <i data-lucide="check" class="w-3.5 h-3.5"></i>
+              <span>💾 Simpan & Aktifkan</span>
+            </button>
+          </div>
         </div>
       </div>
     </div>
@@ -1742,34 +1784,127 @@
     let capturedWatermarkBase64 = null;
     let audioContext = null;
 
-    // TIPS: Tempelkan URL Web App Google Apps Script (/exec) Anda di sini
-    // agar SEMUA pengunjung website Vercel otomatis tersambung ke Google Spreadsheet sekolah tanpa perlu input manual di tiap HP!
-    const DEFAULT_BACKEND_URL = "https://script.google.com/macros/s/AKfycbw4946_UzONzK8FYaB2SqMR-7CjAhfjrxnJBGJLHpYmVRXu-Gnhf7HnqNNiJ3XuZSPp1Q/exec";
+    // ============================================================
+    // KONFIGURASI BACKEND & AUTO-ONLINE VERCEL (DUAL MODE GAS & REMOTE)
+    // ============================================================
+    const DEFAULT_GAS_API_URL = (typeof window !== 'undefined' && window.DEFAULT_GAS_API_URL) ?
+      window.DEFAULT_GAS_API_URL :
+      "https://script.google.com/macros/s/AKfycbyd3DDzkWtGAgy8zeSkYSihuNJzo1IulGOq1fOmTjIyCVpMtijWJ_Wk3Mq31DENQBxaJA/exec";
+
+    const GAS_API_KEY = "SUPERAPP_BACKEND_URL";
+
+    function isGas() {
+      return typeof google !== 'undefined' && google.script && google.script.run;
+    }
 
     function getBackendUrl() {
-      const urlParam = new URLSearchParams(window.location.search).get('api');
-      if (urlParam) {
-        let clean = urlParam.trim();
-        if (clean.endsWith('/dev')) clean = clean.slice(0, -4) + '/exec';
-        localStorage.setItem("SUPERAPP_BACKEND_URL", clean);
-        return clean;
-      }
-      let stored = (localStorage.getItem("SUPERAPP_BACKEND_URL") || "").trim();
-      // Validasi URL tersimpan: jika mengarah ke spreadsheet atau bukan URL Apps Script valid / 404 lama, bersihkan
-      if (stored && (
-        stored.includes("docs.google.com/spreadsheets") ||
-        !stored.includes("script.google.com/macros/s/") ||
-        stored.includes("AKfycbz_5qHRJ0Pba2fNwQJDmba3pxwoooRA5GVWHRZelesu0psOTEsYuCDhhHQcQ4D-VHYzHg")
-      )) {
-        localStorage.removeItem("SUPERAPP_BACKEND_URL");
-        stored = "";
-      }
-      return stored || DEFAULT_BACKEND_URL;
+      // 1. Cek parameter query URL (?api=... atau ?gas=... atau ?backend=...)
+      try {
+        const params = new URLSearchParams(window.location.search);
+        let p = params.get('api') || params.get('gas') || params.get('backend');
+        if (p && p.trim()) {
+          let clean = p.trim();
+          if (clean.endsWith('/dev')) clean = clean.slice(0, -4) + '/exec';
+          localStorage.setItem(GAS_API_KEY, clean);
+          return clean;
+        }
+      } catch (e) {}
+
+      // 2. Cek localStorage
+      try {
+        let stored = (localStorage.getItem(GAS_API_KEY) || "").trim();
+        if (stored && (
+          stored.includes("docs.google.com/spreadsheets") ||
+          !stored.includes("script.google.com/macros/s/") ||
+          stored.includes("AKfycbz_5qHRJ0Pba2fNwQJDmba3pxwoooRA5GVWHRZelesu0psOTEsYuCDhhHQcQ4D-VHYzHg")
+        )) {
+          localStorage.removeItem(GAS_API_KEY);
+          stored = "";
+        }
+        if (stored) return stored;
+      } catch (e) {}
+
+      // 3. Gunakan DEFAULT_GAS_API_URL permanen (dari config.js atau variabel default)
+      return (DEFAULT_GAS_API_URL || '').trim();
+    }
+
+    function setGasApiUrl(url) {
+      try {
+        if (url && url.trim()) {
+          let clean = url.trim();
+          if (clean.endsWith('/dev')) clean = clean.slice(0, -4) + '/exec';
+          localStorage.setItem(GAS_API_KEY, clean);
+        } else {
+          localStorage.removeItem(GAS_API_KEY);
+        }
+      } catch (e) {}
+      BACKEND_URL = getBackendUrl();
+      updateEnvBadges();
     }
 
     let BACKEND_URL = getBackendUrl();
     let isSyncingData = false;
     let lastDataSyncTimestamp = 0;
+
+    function updateEnvBadges() {
+      const isNative = isGas();
+      const currentUrl = getBackendUrl();
+      const badge = document.getElementById('backendBadge');
+      const banner = document.getElementById('bannerKoneksiDatabase');
+      const landingBadge = document.getElementById('landingEnvBadge');
+      const landingDesc = document.getElementById('landingStatusDesc');
+      const landingIcon = document.getElementById('landingStatusIconCircle');
+
+      if (isNative) {
+        if (badge) {
+          badge.innerHTML = `<span class="w-1.5 h-1.5 rounded-full bg-blue-500"></span><span>🟢 GAS Native</span>`;
+          badge.className = "inline-flex items-center gap-1 px-2.5 py-0.5 bg-blue-100 text-blue-800 rounded-full text-[10px] font-bold border border-blue-300 hover:bg-blue-200 transition cursor-pointer";
+          badge.title = "Aplikasi berjalan langsung di lingkungan native Google Apps Script";
+        }
+        if (banner) banner.classList.add('hidden');
+        if (landingBadge) {
+          landingBadge.innerHTML = `<span class="px-2.5 py-0.5 bg-blue-100 text-blue-800 rounded-full text-xs font-bold border border-blue-300">🟢 Google Apps Script (Native)</span>`;
+        }
+        if (landingDesc) {
+          landingDesc.innerText = "Berjalan langsung di Google Apps Script — Tersambung otomatis ke Google Spreadsheet.";
+        }
+        if (landingIcon) {
+          landingIcon.className = "w-9 h-9 rounded-xl bg-blue-100 text-blue-700 flex items-center justify-center flex-shrink-0";
+        }
+      } else if (currentUrl) {
+        if (badge) {
+          badge.innerHTML = `<span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span><span>🟢 Online (Sheets)</span>`;
+          badge.className = "inline-flex items-center gap-1 px-2.5 py-0.5 bg-emerald-100 text-emerald-800 rounded-full text-[10px] font-bold border border-emerald-300 hover:bg-emerald-200 transition cursor-pointer";
+          badge.title = "Terhubung ke Google Spreadsheet via Web App API. Klik untuk kelola koneksi.";
+        }
+        if (banner) banner.classList.add('hidden');
+        if (landingBadge) {
+          landingBadge.innerHTML = `<span class="px-2.5 py-0.5 bg-emerald-100 text-emerald-800 rounded-full text-xs font-bold border border-emerald-300">🟢 Online (Google Sheets)</span>`;
+        }
+        if (landingDesc) {
+          landingDesc.innerText = "Terhubung via Web App API — Data siswa, guru, presensi & nilai tersinkron online.";
+        }
+        if (landingIcon) {
+          landingIcon.className = "w-9 h-9 rounded-xl bg-emerald-100 text-emerald-700 flex items-center justify-center flex-shrink-0";
+        }
+      } else {
+        if (badge) {
+          badge.innerHTML = `<span class="w-1.5 h-1.5 rounded-full bg-amber-500 animate-pulse"></span><span>🟡 Mode Offline</span>`;
+          badge.className = "inline-flex items-center gap-1 px-2.5 py-0.5 bg-amber-100 text-amber-800 rounded-full text-[10px] font-bold border border-amber-300 hover:bg-amber-200 transition cursor-pointer";
+          badge.title = "Penyimpanan browser lokal. Klik untuk menghubungkan ke Google Spreadsheet.";
+        }
+        if (banner) banner.classList.remove('hidden');
+        if (landingBadge) {
+          landingBadge.innerHTML = `<span class="px-2.5 py-0.5 bg-amber-100 text-amber-800 rounded-full text-xs font-bold border border-amber-300">🟡 Mode Offline / Demo</span>`;
+        }
+        if (landingDesc) {
+          landingDesc.innerText = "Penyimpanan lokal browser. Klik 'Kelola Koneksi Sheets' untuk menghubungkan ke spreadsheet.";
+        }
+        if (landingIcon) {
+          landingIcon.className = "w-9 h-9 rounded-xl bg-amber-100 text-amber-700 flex items-center justify-center flex-shrink-0";
+        }
+      }
+    }
 
     // -------------------------------------------------------------
     // AUDIO ENGINE (Web Audio API) untuk Beep QR & Chime Notifikasi
@@ -1807,6 +1942,7 @@
     // INISIALISASI, AUTO-REFRESH & SINKRONISASI ONLINE REAL-TIME
     // -------------------------------------------------------------
     window.addEventListener("DOMContentLoaded", () => {
+      updateEnvBadges();
       safeCreateIcons();
       initServiceWorker();
       initPwaInstall();
@@ -1826,22 +1962,35 @@
 
       // 2. Background Real-Time Poller: periksa perubahan di Google Sheet setiap 20 detik
       setInterval(() => {
-        if (document.visibilityState === 'visible' && BACKEND_URL) {
+        if (document.visibilityState === 'visible' && (isGas() || BACKEND_URL)) {
           syncDataFromGoogleSheets(true);
         }
       }, 20000);
     });
 
     // -------------------------------------------------------------
-    // KOMUNIKASI API REST / POST KE GOOGLE APPS SCRIPT
+    // KOMUNIKASI API REST / POST KE GOOGLE APPS SCRIPT (DUAL MODE)
     // -------------------------------------------------------------
     async function callBackendPost(payload) {
+      if (isGas()) {
+        return new Promise((resolve) => {
+          google.script.run
+            .withSuccessHandler((res) => resolve(res))
+            .withFailureHandler((err) => {
+              console.error('GAS run failure:', err);
+              resolve({ success: false, error: err.message || String(err) });
+            })
+            .callBackendApi(payload);
+        });
+      }
+
       BACKEND_URL = getBackendUrl();
       if (!BACKEND_URL) {
         console.warn('Backend URL belum disetel, operasi tersimpan lokal.');
         return { success: true, localOnly: true };
       }
 
+      // 1. Coba POST (Content-Type text/plain agar tidak trigger CORS preflight OPTIONS)
       try {
         const res = await fetch(BACKEND_URL, {
           method: 'POST',
@@ -1852,29 +2001,44 @@
           },
           body: JSON.stringify(payload)
         });
-        const json = await res.json();
-        return json;
+        if (res.ok) {
+          const json = await res.json();
+          return json;
+        }
       } catch (err) {
-        console.warn('Gagal call POST backend:', err);
-        return { success: false, error: err.message };
+        console.warn('POST API gagal, mencoba fallback GET:', err);
       }
+
+      // 2. Fallback otomatis ke GET jika POST gagal (seperti pada aplikasi rekap presensi ekstra)
+      try {
+        const sep = BACKEND_URL.includes('?') ? '&' : '?';
+        const action = payload.action || 'ping';
+        const getUrl = `${BACKEND_URL}${sep}action=${encodeURIComponent(action)}&data=${encodeURIComponent(JSON.stringify(payload))}&_t=${Date.now()}`;
+        const res = await fetch(getUrl, {
+          method: 'GET',
+          mode: 'cors',
+          redirect: 'follow'
+        });
+        if (res.ok) {
+          const json = await res.json();
+          return json;
+        }
+      } catch (getErr) {
+        console.error('Koneksi Google Apps Script API gagal (POST & GET):', getErr);
+        return { success: false, error: getErr.message || String(getErr) };
+      }
+
+      return { success: false, error: 'Gagal menghubungi server Google Apps Script.' };
     }
 
     // -------------------------------------------------------------
     // MODUL FETCH DATA ONLINE REAL-TIME DARI GOOGLE SHEETS
     // -------------------------------------------------------------
     async function fetchNilaiSiswaOnline(nisn) {
-      if (!BACKEND_URL) return;
       const targetNisn = nisn || (currentUser ? currentUser.nisn : null);
       if (!targetNisn) return;
       try {
-        const sep = BACKEND_URL.includes('?') ? '&' : '?';
-        const res = await fetch(`${BACKEND_URL}${sep}action=getNilaiSiswa&nisn=${encodeURIComponent(targetNisn)}&_t=${Date.now()}_${Math.random()}`, {
-          method: 'GET',
-          cache: 'no-store'
-        });
-        if (!res.ok) return;
-        const json = await res.json();
+        const json = await callBackendPost({ action: 'getNilaiSiswa', nisn: targetNisn });
         if (json && json.success && Array.isArray(json.data)) {
           logNilai = logNilai.filter(n => n.nisn !== targetNisn).concat(json.data);
           renderNilaiSiswa();
@@ -1885,17 +2049,10 @@
     }
 
     async function fetchKelulusanSiswaOnline(nisn) {
-      if (!BACKEND_URL) return;
       const targetNisn = nisn || (currentUser ? currentUser.nisn : null);
       if (!targetNisn) return;
       try {
-        const sep = BACKEND_URL.includes('?') ? '&' : '?';
-        const res = await fetch(`${BACKEND_URL}${sep}action=getKelulusanSiswa&nisn=${encodeURIComponent(targetNisn)}&_t=${Date.now()}_${Math.random()}`, {
-          method: 'GET',
-          cache: 'no-store'
-        });
-        if (!res.ok) return;
-        const json = await res.json();
+        const json = await callBackendPost({ action: 'getKelulusanSiswa', nisn: targetNisn });
         if (json && json.success && json.siswa) {
           const idx = dataKelulusan.findIndex(k => k.nisn === targetNisn);
           if (idx !== -1) {
@@ -1911,17 +2068,12 @@
     }
 
     async function fetchPresensiHarianOnline(nisn) {
-      if (!BACKEND_URL) return;
       const targetNisn = nisn || (currentUser ? currentUser.nisn : null);
       try {
-        const sep = BACKEND_URL.includes('?') ? '&' : '?';
-        const query = targetNisn ? `&nisn=${encodeURIComponent(targetNisn)}` : (currentUser && currentUser.kelas ? `&kelas=${encodeURIComponent(currentUser.kelas)}` : '');
-        const res = await fetch(`${BACKEND_URL}${sep}action=getPresensiHarian${query}&_t=${Date.now()}_${Math.random()}`, {
-          method: 'GET',
-          cache: 'no-store'
-        });
-        if (!res.ok) return;
-        const json = await res.json();
+        const payload = { action: 'getPresensiHarian' };
+        if (targetNisn) payload.nisn = targetNisn;
+        else if (currentUser && currentUser.kelas) payload.kelas = currentUser.kelas;
+        const json = await callBackendPost(payload);
         if (json && json.success && Array.isArray(json.data)) {
           if (targetNisn) {
             logPresensiHarian = logPresensiHarian.filter(p => p.nisn !== targetNisn).concat(json.data);
@@ -1938,17 +2090,11 @@
     }
 
     async function fetchPelanggaranSiswaOnline(nisn) {
-      if (!BACKEND_URL) return;
       const targetNisn = nisn || (currentUser ? currentUser.nisn : null);
       try {
-        const sep = BACKEND_URL.includes('?') ? '&' : '?';
-        const query = targetNisn ? `&nisn=${encodeURIComponent(targetNisn)}` : '';
-        const res = await fetch(`${BACKEND_URL}${sep}action=getPelanggaranSiswa${query}&_t=${Date.now()}_${Math.random()}`, {
-          method: 'GET',
-          cache: 'no-store'
-        });
-        if (!res.ok) return;
-        const json = await res.json();
+        const payload = { action: 'getPelanggaranSiswa' };
+        if (targetNisn) payload.nisn = targetNisn;
+        const json = await callBackendPost(payload);
         if (json && json.success && Array.isArray(json.data)) {
           if (targetNisn) {
             logTibum = logTibum.filter(t => t.nisn !== targetNisn).concat(json.data);
@@ -2032,12 +2178,13 @@
     }
 
     async function syncDataFromGoogleSheets(isSilent = false, force = false) {
+      updateEnvBadges();
       BACKEND_URL = getBackendUrl();
       const badge = document.getElementById('backendBadge');
       const banner = document.getElementById('bannerKoneksiDatabase');
       const spinIcon = document.getElementById('iconRefreshSpin');
 
-      if (!BACKEND_URL) {
+      if (!isGas() && !BACKEND_URL) {
         if (badge) {
           badge.innerHTML = `<span class="w-1.5 h-1.5 rounded-full bg-amber-500 animate-pulse"></span><span>Hubungkan Sheets</span>`;
           badge.className = "inline-flex items-center gap-1 px-2 py-0.5 bg-amber-100 text-amber-800 rounded-full text-[10px] font-bold border border-amber-300 hover:bg-amber-200 transition cursor-pointer";
@@ -2060,127 +2207,52 @@
 
       try {
         let json = null;
-        const sep = BACKEND_URL.includes('?') ? '&' : '?';
 
-        // 1. Coba request GET (CORS Simple Request TANPA header kustom agar tidak diblokir CORS preflight OPTIONS oleh browser)
-        try {
-          const res = await fetch(`${BACKEND_URL}${sep}action=getInitialData&_t=${Date.now()}`, {
-            method: 'GET',
-            mode: 'cors',
-            redirect: 'follow'
+        // Mode 1: Native Google Apps Script
+        if (isGas()) {
+          json = await new Promise((resolve) => {
+            google.script.run
+              .withSuccessHandler((res) => resolve(res))
+              .withFailureHandler((err) => {
+                console.error('GAS native getInitialData error:', err);
+                resolve(null);
+              })
+              .getInitialData();
           });
-          if (res.ok) {
-            const rawText = await res.text();
-            try {
-              json = JSON.parse(rawText);
-            } catch (e) {
-              console.warn('GET response bukan JSON:', rawText.slice(0, 100));
+        } else {
+          // Mode 2: Remote via GET
+          const sep = BACKEND_URL.includes('?') ? '&' : '?';
+          try {
+            const res = await fetch(`${BACKEND_URL}${sep}action=getInitialData&_t=${Date.now()}`, {
+              method: 'GET',
+              mode: 'cors',
+              redirect: 'follow'
+            });
+            if (res.ok) {
+              const rawText = await res.text();
+              try {
+                json = JSON.parse(rawText);
+              } catch (e) {
+                console.warn('GET response bukan JSON:', rawText.slice(0, 100));
+              }
             }
+          } catch (getErr) {
+            console.warn('GET request ke GAS gagal, mencoba fallback via POST...', getErr);
           }
-        } catch (getErr) {
-          console.warn('GET request ke GAS gagal, mencoba fallback via POST...', getErr);
-        }
 
-        // 2. Fallback otomatis via POST jika GET gagal
-        if (!json || !json.success) {
-          const postResult = await callBackendPost({ action: 'getInitialData' });
-          if (postResult && postResult.success) {
-            json = postResult;
+          // Fallback via POST jika GET gagal
+          if (!json || !json.success) {
+            const postResult = await callBackendPost({ action: 'getInitialData' });
+            if (postResult && postResult.success) {
+              json = postResult;
+            }
           }
         }
 
         if (json && json.success) {
-          appConfig = Object.assign(appConfig, json.config || {});
-          if (appConfig.PIN_ADMIN !== undefined && appConfig.PIN_ADMIN !== null) {
-            appConfig.PIN_ADMIN = String(appConfig.PIN_ADMIN).trim();
-          }
-          if (json.siswa && json.siswa.length > 0) masterSiswa = json.siswa;
-          if (json.guru && json.guru.length > 0) masterGuru = json.guru;
-          if (json.ekskul && json.ekskul.length > 0) masterEkskul = json.ekskul;
-          if (json.anggotaEkskul) anggotaEkskul = json.anggotaEkskul;
-          if (json.masterTibum && json.masterTibum.length > 0) masterTibum = json.masterTibum;
-          if (json.nilai) logNilai = json.nilai;
-          if (json.kelulusan) dataKelulusan = json.kelulusan;
-          if (json.presensiHarian) logPresensiHarian = json.presensiHarian;
-          if (json.presensiEkskul) logPresensiEkskul = json.presensiEkskul;
-          if (json.logKebiasaan) log7Kebiasaan = json.logKebiasaan;
-          if (json.logTibum) logTibum = json.logTibum;
-
-          // Simpan snapshot ke LocalStorage agar saat aplikasi dibuka lagi terbuka INSTAN (0 detik)
-          try {
-            localStorage.setItem("SUPERAPP_DATA_CACHE_V1", JSON.stringify({
-              config: appConfig,
-              siswa: masterSiswa,
-              guru: masterGuru,
-              ekskul: masterEkskul,
-              anggotaEkskul: anggotaEkskul,
-              masterTibum: masterTibum,
-              nilai: logNilai,
-              kelulusan: dataKelulusan,
-              presensiHarian: logPresensiHarian,
-              presensiEkskul: logPresensiEkskul,
-              logKebiasaan: log7Kebiasaan,
-              logTibum: logTibum,
-              cachedAt: Date.now()
-            }));
-          } catch (storageErr) {
-            console.warn('Gagal simpan cache offline:', storageErr);
-          }
-
-          if (badge) {
-            badge.innerHTML = `<span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span><span>🟢 Sheets Online</span>`;
-            badge.className = "inline-flex items-center gap-1 px-2 py-0.5 bg-emerald-100 text-emerald-800 rounded-full text-[10px] font-bold border border-emerald-300 hover:bg-emerald-200 transition cursor-pointer";
-          }
-          if (banner) banner.classList.add('hidden');
-
-          applyConfigToUi();
-
-          // Refresh tampilan aktif sesuai sesi pengguna
-          if (currentUser) {
-            if (currentUser.role === 'SISWA') {
-              const me = masterSiswa.find(s => s.nisn === currentUser.nisn);
-              if (me) {
-                currentUser.nama = me.nama;
-                currentUser.kelas = me.kelas;
-                currentUser.nipGuruWali = me.nipGuruWali;
-                currentUser.noHpOrtu = me.noHpOrtu || currentUser.noHpOrtu || '';
-              }
-              setupSiswaUi();
-
-              // Perbarui tampilan tab siswa yang sedang aktif
-              const activeSiswaContent = document.querySelector('.tab-siswa-content:not(.hidden)');
-              if (activeSiswaContent) {
-                const tabId = activeSiswaContent.id;
-                if (tabId === 'tabContentSiswa_nilai') renderNilaiSiswa();
-                else if (tabId === 'tabContentSiswa_kelulusan') renderKelulusanSiswa();
-                else if (tabId === 'tabContentSiswa_presensi') renderPresensiSiswa();
-                else if (tabId === 'tabContentSiswa_tatatertib') renderBukuSakuSiswa();
-                else if (tabId === 'tabContentSiswa_ekskul') { renderKatalogEkskulSiswa(); renderEkskulSayaSiswa(); }
-                else if (tabId === 'tabContentSiswa_beranda') { renderPresensiSiswa(); renderBukuSakuSiswa(); }
-              }
-            } else if (currentUser.role === 'ADMIN') {
-              setupAdminUi();
-              const activeAdminContent = document.querySelector('.tab-admin-content:not(.hidden)');
-              if (activeAdminContent) {
-                const tabId = activeAdminContent.id;
-                if (tabId === 'tabContentAdmin_plottingWalas') renderAdminPlottingGuruWali();
-                else if (tabId === 'tabContentAdmin_masterSiswa') renderAdminMasterSiswa();
-                else if (tabId === 'tabContentAdmin_konfigurasi') applyConfigToUi();
-              }
-            } else {
-              setupGuruUi();
-              // Perbarui tampilan tab guru yang sedang aktif
-              const activeGuruContent = document.querySelector('.tab-guru-content:not(.hidden)');
-              if (activeGuruContent) {
-                const tabId = activeGuruContent.id;
-                if (tabId === 'tabContentGuru_presensiKbm') renderFormPresensiKbm();
-                else if (tabId === 'tabContentGuru_absenEkskul') renderFormAbsenPelatih();
-                else if (tabId === 'tabContentGuru_rekapWalas') renderRekapWalasEkskul();
-                else if (tabId === 'tabContentGuru_guruWali') loadValidasi7Kebiasaan();
-                else if (tabId === 'tabContentGuru_tibum') renderCheckboxMasterTibum();
-              }
-            }
-          }
+          applySyncedData(json);
+          updateEnvBadges();
+          lastDataSyncTimestamp = Date.now();
 
           if (!isSilent) {
             Swal.fire({
@@ -2209,8 +2281,96 @@
         return false;
       } finally {
         isSyncingData = false;
-        lastDataSyncTimestamp = Date.now();
         if (spinIcon) spinIcon.classList.remove('animate-spin');
+      }
+    }
+
+    function applySyncedData(json) {
+      if (!json) return;
+      appConfig = Object.assign(appConfig, json.config || {});
+      if (appConfig.PIN_ADMIN !== undefined && appConfig.PIN_ADMIN !== null) {
+        appConfig.PIN_ADMIN = String(appConfig.PIN_ADMIN).trim();
+      }
+      if (json.siswa && json.siswa.length > 0) masterSiswa = json.siswa;
+      if (json.guru && json.guru.length > 0) masterGuru = json.guru;
+      if (json.ekskul && json.ekskul.length > 0) masterEkskul = json.ekskul;
+      if (json.anggotaEkskul) anggotaEkskul = json.anggotaEkskul;
+      if (json.masterTibum && json.masterTibum.length > 0) masterTibum = json.masterTibum;
+      if (json.nilai) logNilai = json.nilai;
+      if (json.kelulusan) dataKelulusan = json.kelulusan;
+      if (json.presensiHarian) logPresensiHarian = json.presensiHarian;
+      if (json.presensiEkskul) logPresensiEkskul = json.presensiEkskul;
+      if (json.logKebiasaan) log7Kebiasaan = json.logKebiasaan;
+      if (json.logTibum) logTibum = json.logTibum;
+
+      // Simpan snapshot ke LocalStorage agar saat aplikasi dibuka lagi terbuka INSTAN (0 detik)
+      try {
+        localStorage.setItem("SUPERAPP_DATA_CACHE_V1", JSON.stringify({
+          config: appConfig,
+          siswa: masterSiswa,
+          guru: masterGuru,
+          ekskul: masterEkskul,
+          anggotaEkskul: anggotaEkskul,
+          masterTibum: masterTibum,
+          nilai: logNilai,
+          kelulusan: dataKelulusan,
+          presensiHarian: logPresensiHarian,
+          presensiEkskul: logPresensiEkskul,
+          logKebiasaan: log7Kebiasaan,
+          logTibum: logTibum,
+          cachedAt: Date.now()
+        }));
+      } catch (storageErr) {
+        console.warn('Gagal simpan cache offline:', storageErr);
+      }
+
+      applyConfigToUi();
+
+      // Refresh tampilan aktif sesuai sesi pengguna
+      if (currentUser) {
+        if (currentUser.role === 'SISWA') {
+          const me = masterSiswa.find(s => s.nisn === currentUser.nisn);
+          if (me) {
+            currentUser.nama = me.nama;
+            currentUser.kelas = me.kelas;
+            currentUser.nipGuruWali = me.nipGuruWali;
+            currentUser.noHpOrtu = me.noHpOrtu || currentUser.noHpOrtu || '';
+          }
+          setupSiswaUi();
+
+          // Perbarui tampilan tab siswa yang sedang aktif
+          const activeSiswaContent = document.querySelector('.tab-siswa-content:not(.hidden)');
+          if (activeSiswaContent) {
+            const tabId = activeSiswaContent.id;
+            if (tabId === 'tabContentSiswa_nilai') renderNilaiSiswa();
+            else if (tabId === 'tabContentSiswa_kelulusan') renderKelulusanSiswa();
+            else if (tabId === 'tabContentSiswa_presensi') renderPresensiSiswa();
+            else if (tabId === 'tabContentSiswa_tatatertib') renderBukuSakuSiswa();
+            else if (tabId === 'tabContentSiswa_ekskul') { renderKatalogEkskulSiswa(); renderEkskulSayaSiswa(); }
+            else if (tabId === 'tabContentSiswa_beranda') { renderPresensiSiswa(); renderBukuSakuSiswa(); }
+          }
+        } else if (currentUser.role === 'ADMIN') {
+          setupAdminUi();
+          const activeAdminContent = document.querySelector('.tab-admin-content:not(.hidden)');
+          if (activeAdminContent) {
+            const tabId = activeAdminContent.id;
+            if (tabId === 'tabContentAdmin_plottingWalas') renderAdminPlottingGuruWali();
+            else if (tabId === 'tabContentAdmin_masterSiswa') renderAdminMasterSiswa();
+            else if (tabId === 'tabContentAdmin_konfigurasi') applyConfigToUi();
+          }
+        } else {
+          setupGuruUi();
+          // Perbarui tampilan tab guru yang sedang aktif
+          const activeGuruContent = document.querySelector('.tab-guru-content:not(.hidden)');
+          if (activeGuruContent) {
+            const tabId = activeGuruContent.id;
+            if (tabId === 'tabContentGuru_presensiKbm') renderFormPresensiKbm();
+            else if (tabId === 'tabContentGuru_absenEkskul') renderFormAbsenPelatih();
+            else if (tabId === 'tabContentGuru_rekapWalas') renderRekapWalasEkskul();
+            else if (tabId === 'tabContentGuru_guruWali') loadValidasi7Kebiasaan();
+            else if (tabId === 'tabContentGuru_tibum') renderCheckboxMasterTibum();
+          }
+        }
       }
     }
 
@@ -5117,7 +5277,39 @@
 
     function openModalSetelBackend(e) {
       if (e) e.stopPropagation();
-      document.getElementById('inputModalBackendUrl').value = getBackendUrl();
+      const currentUrl = getBackendUrl();
+      const isNative = isGas();
+      document.getElementById('inputModalBackendUrl').value = currentUrl || '';
+
+      const statusBox = document.getElementById('modalConnStatusBox');
+      if (statusBox) {
+        if (isNative) {
+          statusBox.innerHTML = `
+            <div class="font-bold text-slate-900 mb-1">Status Koneksi:</div>
+            <span class="inline-block px-2.5 py-0.5 bg-blue-100 text-blue-800 rounded-full text-xs font-bold border border-blue-300 mb-1">🟢 Native Google Apps Script</span>
+            <p class="text-[11px] text-slate-600">Aplikasi berjalan langsung di Google Apps Script. Data otomatis terhubung langsung ke Google Spreadsheet tanpa konfigurasi URL tambahan.</p>
+          `;
+        } else if (currentUrl) {
+          statusBox.innerHTML = `
+            <div class="font-bold text-slate-900 mb-1">Status Koneksi:</div>
+            <span class="inline-block px-2.5 py-0.5 bg-emerald-100 text-emerald-800 rounded-full text-xs font-bold border border-emerald-300 mb-1">🟢 Mode Online (Google Sheets)</span>
+            <p class="text-[11px] text-slate-600">Aplikasi terhubung ke Google Apps Script Web App. Data presensi, siswa, guru & nilai disinkronkan langsung ke Google Spreadsheet.</p>
+          `;
+        } else {
+          statusBox.innerHTML = `
+            <div class="font-bold text-slate-900 mb-1">Status Koneksi:</div>
+            <span class="inline-block px-2.5 py-0.5 bg-amber-100 text-amber-800 rounded-full text-xs font-bold border border-amber-300 mb-1">🟡 Mode Offline / Browser</span>
+            <p class="text-[11px] text-slate-600">Aplikasi saat ini menggunakan penyimpanan lokal browser. Masukkan Web App URL di bawah agar tersambung ke Google Spreadsheet.</p>
+          `;
+        }
+      }
+
+      const resDiv = document.getElementById('modalGasTestResult');
+      if (resDiv) {
+        resDiv.classList.add('hidden');
+        resDiv.innerHTML = '';
+      }
+
       document.getElementById('modalSetelBackendGas').classList.remove('hidden');
       safeCreateIcons();
     }
@@ -5128,29 +5320,31 @@
 
     async function ujiKoneksiBackendModal() {
       const raw = document.getElementById('inputModalBackendUrl').value.trim();
+      const resDiv = document.getElementById('modalGasTestResult');
+      if (resDiv) {
+        resDiv.classList.remove('hidden');
+        resDiv.className = 'p-3 rounded-2xl text-xs font-medium bg-blue-50 text-blue-800 border border-blue-200';
+        resDiv.innerHTML = '⏳ Menghubungi Google Apps Script...';
+      }
+
       if (!raw) {
-        Swal.fire('Perhatian', 'Silakan tempel URL Web App Google Apps Script Anda!', 'warning');
+        if (resDiv) {
+          resDiv.className = 'p-3 rounded-2xl text-xs font-medium bg-rose-50 text-rose-800 border border-rose-200';
+          resDiv.innerHTML = '⚠️ Masukkan URL Web App Google Apps Script terlebih dahulu.';
+        } else {
+          Swal.fire('Perhatian', 'Silakan tempel URL Web App Google Apps Script Anda!', 'warning');
+        }
         return;
       }
 
       if (raw.includes('docs.google.com/spreadsheets')) {
-        Swal.fire({
-          title: 'Salah Format Link! ⚠️',
-          html: `
-            <div class="text-left text-xs space-y-2 text-slate-700">
-              <p>Link yang Anda tempel adalah <b>Link Google Spreadsheet</b>:</p>
-              <code class="text-rose-600 block bg-slate-100 p-2 rounded text-[10px] break-all">${raw}</code>
-              <p class="font-bold text-slate-800">Yang dibutuhkan adalah Web App URL Google Apps Script (/exec):</p>
-              <ol class="list-decimal pl-4 space-y-1 text-slate-600">
-                <li>Buka Spreadsheet &gt; <b>Ekstensi</b> &gt; <b>Apps Script</b>.</li>
-                <li>Klik tombol biru <b>Deploy &gt; New deployment</b>.</li>
-                <li>Pilih <b>Web app</b> &gt; pastikan <i>Who has access</i>: <b>Anyone</b>.</li>
-                <li>Salin link berakhiran <b><code>/exec</code></b>.</li>
-              </ol>
-            </div>
-          `,
-          icon: 'warning'
-        });
+        const msg = '⚠️ Link yang Anda masukkan adalah Link Google Spreadsheet. Yang dibutuhkan adalah Web App URL Google Apps Script yang berakhiran /exec.';
+        if (resDiv) {
+          resDiv.className = 'p-3 rounded-2xl text-xs font-medium bg-rose-50 text-rose-800 border border-rose-200';
+          resDiv.innerHTML = msg;
+        } else {
+          Swal.fire('Salah Format Link ⚠️', msg, 'warning');
+        }
         return;
       }
 
@@ -5168,22 +5362,21 @@
       });
 
       try {
+        let json = null;
+        // 1. Coba request GET ping
         const sep = testUrl.includes('?') ? '&' : '?';
         const pingUrl = `${testUrl}${sep}action=ping&_t=${Date.now()}`;
-        let json = null;
-
-        // 1. Coba tes GET
         try {
           const resp = await fetch(pingUrl, { method: 'GET', mode: 'cors', redirect: 'follow' });
           if (resp.ok) {
             const rawText = await resp.text();
-            try { json = JSON.parse(rawText); } catch (e) {}
+            try { json = JSON.parse(rawText); } catch(e){}
           }
         } catch (getErr) {
-          console.warn("Uji koneksi GET gagal, mencoba POST:", getErr);
+          console.warn('Uji GET ping gagal, mencoba POST...', getErr);
         }
 
-        // 2. Fallback tes POST jika GET gagal
+        // 2. Fallback POST jika GET gagal
         if (!json || !json.success) {
           try {
             const postResp = await fetch(testUrl, {
@@ -5195,23 +5388,32 @@
             });
             if (postResp.ok) {
               const rawPost = await postResp.text();
-              try { json = JSON.parse(rawPost); } catch (e) {}
+              try { json = JSON.parse(rawPost); } catch(e){}
             }
-          } catch (postErr) {
-            console.warn("Uji koneksi POST juga gagal:", postErr);
+          } catch(postErr) {
+            console.warn('Uji POST ping juga gagal:', postErr);
           }
         }
 
         if (json && json.success) {
+          const ssName = json.spreadsheetName || 'Database Sekolah';
+          if (resDiv) {
+            resDiv.className = 'p-3 rounded-2xl text-xs font-medium bg-emerald-50 text-emerald-800 border border-emerald-200';
+            resDiv.innerHTML = `✅ <b>Koneksi Berhasil!</b> Google Spreadsheet siap digunakan: <b>${ssName}</b>`;
+          }
           Swal.fire({
             title: 'Koneksi Berhasil! 🟢',
-            text: 'Backend Apps Script merespons aktif! Silakan klik tombol "Simpan URL Ini".',
+            html: `Backend Apps Script aktif!<br>Tersambung ke Google Spreadsheet: <b>${ssName}</b><br><br>Silakan klik tombol <b>"Simpan & Aktifkan"</b>.`,
             icon: 'success'
           });
         } else {
-          throw new Error('Tidak ada respon aktif dari Apps Script. Pastikan Who has access: Anyone.');
+          throw new Error((json && json.error) || 'Tidak ada respon aktif dari Apps Script. Pastikan opsi "Who has access" disetel "Anyone".');
         }
       } catch (err) {
+        if (resDiv) {
+          resDiv.className = 'p-3 rounded-2xl text-xs font-medium bg-rose-50 text-rose-800 border border-rose-200';
+          resDiv.innerHTML = `❌ <b>Gagal Terhubung:</b> ${err.message}<br><small>Pastikan deployment Google Apps Script diatur dengan hak akses: <i>"Anyone"</i>.</small>`;
+        }
         Swal.fire({
           title: 'Uji Koneksi Gagal 🔴',
           html: `
@@ -5233,38 +5435,73 @@
     function simpanBackendUrlModal() {
       const raw = document.getElementById('inputModalBackendUrl').value.trim();
       if (!raw) {
-        localStorage.removeItem("SUPERAPP_BACKEND_URL");
-        BACKEND_URL = "";
+        setGasApiUrl('');
         closeModalSetelBackend();
-        Swal.fire('Info', 'URL Backend dihapus, aplikasi beralih ke data lokal.', 'info');
+        Swal.fire('Mode Offline', 'URL Backend dikosongkan. Aplikasi beralih ke penyimpanan lokal browser.', 'info');
         loadInitialData();
         return;
       }
 
       if (raw.includes('docs.google.com/spreadsheets')) {
-        Swal.fire('Salah Format Link', 'Link yang ditempel adalah link Spreadsheet, bukan URL Web App (/exec)!', 'warning');
+        Swal.fire('Salah Format Link', 'Link yang ditempel adalah link Google Spreadsheet, bukan URL Web App (/exec)!', 'warning');
         return;
       }
 
       let finalUrl = raw;
       if (finalUrl.endsWith('/dev')) finalUrl = finalUrl.slice(0, -4) + '/exec';
 
-      BACKEND_URL = finalUrl;
-      localStorage.setItem("SUPERAPP_BACKEND_URL", finalUrl);
+      setGasApiUrl(finalUrl);
       if (document.getElementById('inputBackendUrlConfig')) {
         document.getElementById('inputBackendUrlConfig').value = finalUrl;
       }
 
       closeModalSetelBackend();
-      Swal.fire('Tersimpan! 🟢', 'URL Google Apps Script berhasil disimpan secara permanen. Memuat data dari Google Spreadsheet...', 'success');
-      loadInitialData();
+      Swal.fire({
+        title: 'Menyambungkan Database... ⏳',
+        text: 'Mengunduh data siswa, guru, presensi & nilai dari Google Sheets...',
+        allowOutsideClick: false,
+        didOpen: () => Swal.showLoading()
+      });
+
+      syncDataFromGoogleSheets(false, true).then((ok) => {
+        if (ok) {
+          Swal.fire('Tersambung ke Google Sheets! 🟢', 'Aplikasi berhasil terhubung dan tersinkronisasi online.', 'success');
+        } else {
+          Swal.fire('URL Tersimpan', 'URL berhasil disimpan, namun sinkronisasi awal membutuhkan waktu. Pastikan hak akses Apps Script adalah Anyone.', 'info');
+        }
+      });
+    }
+
+    function resetDefaultBackendUrlModal() {
+      const defUrl = (typeof window !== 'undefined' && window.DEFAULT_GAS_API_URL) ? window.DEFAULT_GAS_API_URL : DEFAULT_GAS_API_URL;
+      document.getElementById('inputModalBackendUrl').value = defUrl || '';
+      Swal.fire('Reset ke Default', 'URL dikembalikan ke konfigurasi default (config.js). Silakan klik "Simpan & Aktifkan".', 'info');
+    }
+
+    function putuskanKoneksiBackendModal() {
+      Swal.fire({
+        title: 'Putuskan Koneksi Sheets?',
+        text: 'Aplikasi akan beralih ke Mode Offline (Penyimpanan Browser Lokal).',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonText: 'Ya, Putuskan',
+        cancelButtonText: 'Batal'
+      }).then((result) => {
+        if (result.isConfirmed) {
+          setGasApiUrl('');
+          if (document.getElementById('inputBackendUrlConfig')) {
+            document.getElementById('inputBackendUrlConfig').value = '';
+          }
+          closeModalSetelBackend();
+          Swal.fire('Mode Offline', 'Aplikasi sekarang berjalan dalam mode offline lokal.', 'info');
+        }
+      });
     }
 
     function handleSimpanBackendUrl() {
       const url = document.getElementById('inputBackendUrlConfig').value.trim();
       if (!url) {
-        localStorage.removeItem("SUPERAPP_BACKEND_URL");
-        BACKEND_URL = "";
+        setGasApiUrl('');
         Swal.fire('Info', 'URL Backend dihapus, aplikasi beralih ke mode offline/demo.', 'info');
         loadInitialData();
         return;
@@ -5278,8 +5515,7 @@
       let finalUrl = url;
       if (finalUrl.endsWith('/dev')) finalUrl = finalUrl.slice(0, -4) + '/exec';
 
-      BACKEND_URL = finalUrl;
-      localStorage.setItem("SUPERAPP_BACKEND_URL", finalUrl);
+      setGasApiUrl(finalUrl);
       document.getElementById('inputBackendUrlConfig').value = finalUrl;
       Swal.fire('Endpoint Tersimpan! 🟢', 'URL backend Apps Script tersimpan permanen. Menghubungkan ke Google Sheets...', 'success');
       loadInitialData();

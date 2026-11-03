@@ -46,16 +46,27 @@ Seluruh sistem Super App berjalan di atas **1 file Google Spreadsheet tunggal**.
 
 ---
 
-## 🔗 Langkah 2: Menghubungkan Web App ke Frontend
+## 🔗 Langkah 2: Menghubungkan Web App ke Frontend (Auto-Online seperti Rekap Presensi Ekstra)
 
-1. Buka aplikasi web Super App di browser Anda (buka file `index.html` atau link hosting Vercel Anda).
-2. Klik tombol **Gembok (Kunci)** di pojok kanan atas header untuk membuka akses Administrator.
-3. Masukkan PIN Admin default: **`123456`**.
-4. Pada Panel Kendali Admin, temukan kartu **Koneksi Google Apps Script**.
-5. Tempelkan URL Web App `/exec` yang telah Anda salin pada Langkah 1.
-6. Klik tombol **"Uji & Simpan Endpoint"**.
-7. Lencana di bilah atas akan otomatis berubah menjadi hijau: **`Tersambung`**.  
-   *Seluruh transaksi (presensi, 7 kebiasaan, nilai, kelulusan, dan pelanggaran) kini tersinkronisasi online secara real-time ke Google Spreadsheet sekolah Anda!*
+Sistem koneksi Super App kini menggunakan arsitektur **Dual-Mode Hybrid** yang identik dengan aplikasi Rekap Presensi Ekstra:
+
+### Opsi A: Otomatis untuk Semua Pengunjung (Rekomendasi Utama)
+1. Buka file [`config.js`](file:///F:/super-app-sekolah/config.js).
+2. Tempelkan URL Web App `/exec` Anda pada baris:
+   ```javascript
+   window.DEFAULT_GAS_API_URL = "https://script.google.com/macros/s/AKfycb.../exec";
+   ```
+3. Simpan file. Setiap siswa, guru, atau wali kelas yang membuka aplikasi di HP/laptop akan **langsung terhubung 100% otomatis** tanpa perlu setel manual!
+
+### Opsi B: Atur Langsung dari Browser (Modal Koneksi Real-Time)
+1. Buka aplikasi di browser (buka `index.html` atau URL Vercel).
+2. Klik tombol lencana **`🟢 Online (Sheets)`** atau **`🟡 Mode Offline`** di bilah atas atau kartu status database di beranda depan.
+3. Tempelkan Web App URL `/exec` Anda di kolom yang tersedia.
+4. Klik **`⚡ Tes Koneksi`** — sistem akan memverifikasi respon dan menampilkan nama Google Spreadsheet yang terhubung.
+5. Klik **`💾 Simpan & Aktifkan`** — seluruh data 664 siswa, guru, ekskul, dan nilai akan langsung disinkronkan.
+
+### Opsi C: Jalankan Langsung di Google Apps Script (Native GAS)
+Jika Anda mengunggah `index.html` langsung ke Google Apps Script Editor, aplikasi akan mendeteksi `google.script.run` secara native (`🟢 GAS Native`) dan berjalan langsung tanpa HTTP fetch/CORS.
 
 ---
 
