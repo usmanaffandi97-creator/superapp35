@@ -25,6 +25,7 @@ const SHEET_EKSKUL_ABSENSI= "EKSKUL_ABSENSI";
 const SHEET_LOG_KEBIASAAN = "LOG_KEBIASAAN";
 const SHEET_MASTER_TIBUM  = "MASTER_TIBUM";
 const SHEET_LOG_TIBUM     = "LOG_TIBUM";
+const SHEET_PENGUMUMAN    = "PENGUMUMAN";
 
 /**
  * Entry Point Web App GET (Melayani Web App HTML Native & REST API JSON untuk Vercel / Eksternal)
@@ -184,7 +185,13 @@ function executeActionCore(action, payload) {
     } else if (action === "simpan7Kebiasaan") {
       response = simpan7Kebiasaan(payload.laporan);
     } else if (action === "validasi7Kebiasaan") {
-      response = validasi7Kebiasaan(payload.idLog, payload.statusValidasi, payload.catatanGuru, payload.nipValidator);
+      response = validasi7Kebiasaan(payload.idLog, payload.statusValidasi, payload.catatanGuru, payload.nipValidator, payload.nisn, payload.tanggal);
+    } else if (action === "simpanPengumuman") {
+      response = simpanPengumuman(payload.pengumuman);
+    } else if (action === "hapusPengumuman") {
+      response = hapusPengumuman(payload.idPengumuman, payload.pin);
+    } else if (action === "editPengumuman") {
+      response = editPengumuman(payload.pengumuman, payload.pin);
     } else if (action === "simpanPelanggaran") {
       response = simpanPelanggaran(payload.pelanggaran);
     } else if (action === "updateStatusBK") {
@@ -790,6 +797,27 @@ function getInitialData() {
     }
   }
 
+  // 12. Log Pengumuman Sekolah
+  const sheetPengumuman = ss.getSheetByName(SHEET_PENGUMUMAN);
+  const dataPengumuman = [];
+  if (sheetPengumuman && sheetPengumuman.getLastRow() > 1) {
+    const raw = sheetPengumuman.getDataRange().getValues();
+    for (let i = 1; i < raw.length; i++) {
+      if (!raw[i][0]) continue;
+      dataPengumuman.push({
+        id: String(raw[i][0]),
+        judul: String(raw[i][1] || ""),
+        isi: String(raw[i][2] || ""),
+        targetAudience: String(raw[i][3] || "SEMUA").split(",").map(t => t.trim()),
+        tglMulai: formatTglFast(raw[i][4]),
+        tglSelesai: formatTglFast(raw[i][5]),
+        dibuatOleh: String(raw[i][6] || ""),
+        rolePembuat: String(raw[i][7] || ""),
+        tglDibuat: String(raw[i][8] || "")
+      });
+    }
+  }
+
   return {
     success: true,
     config: config,
@@ -804,6 +832,7 @@ function getInitialData() {
     presensiEkskul: dataPresensiEkskul,
     logKebiasaan: dataKebiasaan,
     logTibum: dataLogTibum,
+    pengumuman: dataPengumuman,
     timestamp: new Date().toISOString()
   };
 }
@@ -1115,7 +1144,8 @@ function simpanNilaiUlangan(dataNilai, inputOleh) {
   if (Array.isArray(dataNilai) && dataNilai.length > 0) {
     const rowsToAdd = dataNilai.map(item => {
       const idNilai = "NL-" + Utilities.getUuid().slice(0, 8);
-      const angka = Number(item.nilaiAngka);
+      const rawVal = item.nilaiAngka !== undefined ? item.nilaiAngka : item.nilai;
+      const angka = Number(String(rawVal || 0).replace(',', '.'));
       let huruf = "C";
       if (angka >= 90) huruf = "A";
       else if (angka >= 80) huruf = "B";
@@ -1130,7 +1160,7 @@ function simpanNilaiUlangan(dataNilai, inputOleh) {
         item.jenisAsesmen || "Penilaian Akhir Semester (PAS)",
         angka,
         huruf,
-        item.catatanGuru || "",
+        item.catatanGuru || item.catatan || "",
         now
       ];
     });
@@ -1355,16 +1385,23 @@ function simpan7Kebiasaan(laporan) {
 }
 
 function simpanFotoBuktiKeDrive(nisn, nama, tanggal, base64Data) {
-  const folderName = "SuperApp_7Kebiasaan_Bukti";
-  const folders = DriveApp.getFoldersByName(folderName);
-  let folder = folders.hasNext() ? folders.next() : DriveApp.createFolder(folderName);
+  if (!base64Data) return "";
+  try {
+    const folderName = "SuperApp_7Kebiasaan_Bukti";
+    const folders = DriveApp.getFoldersByName(folderName);
+    let folder = folders.hasNext() ? folders.next() : DriveApp.createFolder(folderName);
 
-  const cleanBase64 = base64Data.replace(/^data:image\/(png|jpeg|jpg|webp);base64,/, "");
-  const decoded = Utilities.base64Decode(cleanBase64);
-  const blob = Utilities.newBlob(decoded, "image/jpeg", `${tanggal}_${nisn}_${nama.replace(/\s+/g, "_")}.jpg`);
-  const file = folder.createFile(blob);
-  file.setSharing(DriveApp.Access.ANYONE_WITH_LINK, DriveApp.Permission.VIEW);
-  return file.getUrl();
+    const cleanBase64 = base64Data.replace(/^data:image\/(png|jpeg|jpg|webp);base64,/, "");
+    const decoded = Utilities.base64Decode(cleanBase64);
+    const blob = Utilities.newBlob(decoded, "image/jpeg", `${tanggal}_${nisn}_${String(nama || "siswa").replace(/\s+/g, "_")}.jpg`);
+    const file = folder.createFile(blob);
+    file.setSharing(DriveApp.Access.ANYONE_WITH_LINK, DriveApp.Permission.VIEW);
+    return "https://lh3.googleusercontent.com/d/" + file.getId();
+  } catch(err) {
+    Logger.log("Fallback foto Drive (tersimpan base64 langsung): " + err.message);
+    // Simpan data base64 langsung ke spreadsheet jika Drive tidak dapat diakses
+    return base64Data.length < 48000 ? base64Data : base64Data.substring(0, 48000);
+  }
 }
 
 function get7Kebiasaan(nisn, tanggal) {
@@ -1454,18 +1491,27 @@ function getBelumLapor7Kebiasaan(nipGuruWali, tanggal) {
   };
 }
 
-function validasi7Kebiasaan(idLog, statusValidasi, catatanGuru, nipValidator) {
+function validasi7Kebiasaan(idLog, statusValidasi, catatanGuru, nipValidator, nisn, tanggal) {
   const sheet = getSS().getSheetByName(SHEET_LOG_KEBIASAAN);
   if (!sheet) return { success: false, error: "Sheet LOG_KEBIASAAN tidak ditemukan." };
 
   const raw = sheet.getDataRange().getValues();
   const searchKey = String(idLog || "").trim();
+  const searchNisn = nisn ? String(nisn).padStart(10, "0") : "";
+  const searchTgl = tanggal ? String(tanggal).trim() : "";
   const status = (statusValidasi || "VALID").toUpperCase();
 
   for (let i = 1; i < raw.length; i++) {
     const rowId = String(raw[i][0]).trim();
+    const rowTgl = raw[i][1] instanceof Date ? Utilities.formatDate(raw[i][1], "GMT+7", "yyyy-MM-dd") : String(raw[i][1]).trim();
     const rowNisn = String(raw[i][2]).padStart(10, "0");
-    if (rowId === searchKey || rowNisn === searchKey.padStart(10, "0")) {
+
+    let isMatch = false;
+    if (searchKey && rowId === searchKey) isMatch = true;
+    else if (searchNisn && searchTgl && rowNisn === searchNisn && rowTgl === searchTgl) isMatch = true;
+    else if (searchKey && rowNisn === searchKey.padStart(10, "0") && (!searchTgl || rowTgl === searchTgl)) isMatch = true;
+
+    if (isMatch) {
       sheet.getRange(i + 1, 15).setValue(status);
       sheet.getRange(i + 1, 16).setValue(catatanGuru || "");
       sheet.getRange(i + 1, 17).setValue(nipValidator || "");
@@ -1478,6 +1524,87 @@ function validasi7Kebiasaan(idLog, statusValidasi, catatanGuru, nipValidator) {
   }
 
   return { success: false, error: "Data log 7 kebiasaan tidak ditemukan." };
+}
+
+/**
+ * MODUL PENGUMUMAN SEKOLAH TERPADU
+ */
+function simpanPengumuman(pengumuman) {
+  if (!pengumuman || !pengumuman.judul) {
+    return { success: false, error: "Judul pengumuman wajib diisi." };
+  }
+  const role = String(pengumuman.rolePembuat || "").toUpperCase();
+  if (role === "SISWA") {
+    return { success: false, error: "Siswa tidak memiliki izin untuk mempublikasikan pengumuman." };
+  }
+
+  const ss = getSS();
+  let sheet = ss.getSheetByName(SHEET_PENGUMUMAN);
+  if (!sheet) {
+    sheet = ss.insertSheet(SHEET_PENGUMUMAN);
+    sheet.appendRow(["ID", "Judul", "Isi", "Target_Audience", "Tgl_Mulai", "Tgl_Selesai", "Dibuat_Oleh", "Role_Pembuat", "Tgl_Dibuat"]);
+  }
+
+  const id = pengumuman.id || ("ANN-" + Utilities.getUuid().slice(0, 8));
+  const now = new Date();
+  const tglDibuat = Utilities.formatDate(now, "GMT+7", "yyyy-MM-dd HH:mm");
+  const targetStr = Array.isArray(pengumuman.targetAudience) ? pengumuman.targetAudience.join(",") : String(pengumuman.targetAudience || "SEMUA");
+
+  sheet.appendRow([
+    id,
+    pengumuman.judul,
+    pengumuman.isi || "",
+    targetStr,
+    pengumuman.tglMulai || Utilities.formatDate(now, "GMT+7", "yyyy-MM-dd"),
+    pengumuman.tglSelesai || Utilities.formatDate(now, "GMT+7", "yyyy-MM-dd"),
+    pengumuman.dibuatOleh || "Pendidik",
+    pengumuman.rolePembuat || "GURU",
+    tglDibuat
+  ]);
+  SpreadsheetApp.flush();
+
+  return { success: true, message: "Pengumuman berhasil dipublikasikan.", id: id };
+}
+
+function hapusPengumuman(idPengumuman, pin) {
+  if (!isValidAdminPin(pin)) {
+    return { success: false, error: "Hanya Administrator yang memiliki wewenang menghapus pengumuman." };
+  }
+  const sheet = getSS().getSheetByName(SHEET_PENGUMUMAN);
+  if (!sheet || sheet.getLastRow() <= 1) return { success: false, error: "Sheet pengumuman kosong." };
+
+  const raw = sheet.getDataRange().getValues();
+  for (let i = 1; i < raw.length; i++) {
+    if (String(raw[i][0]).trim() === String(idPengumuman).trim()) {
+      sheet.deleteRow(i + 1);
+      SpreadsheetApp.flush();
+      return { success: true, message: "Pengumuman berhasil dihapus oleh Administrator." };
+    }
+  }
+  return { success: false, error: "Data pengumuman tidak ditemukan." };
+}
+
+function editPengumuman(pengumuman, pin) {
+  if (!isValidAdminPin(pin)) {
+    return { success: false, error: "Hanya Administrator yang berwenang mengedit pengumuman." };
+  }
+  const sheet = getSS().getSheetByName(SHEET_PENGUMUMAN);
+  if (!sheet) return { success: false, error: "Sheet pengumuman tidak ditemukan." };
+
+  const raw = sheet.getDataRange().getValues();
+  for (let i = 1; i < raw.length; i++) {
+    if (String(raw[i][0]).trim() === String(pengumuman.id).trim()) {
+      sheet.getRange(i + 1, 2).setValue(pengumuman.judul || "");
+      sheet.getRange(i + 1, 3).setValue(pengumuman.isi || "");
+      const targetStr = Array.isArray(pengumuman.targetAudience) ? pengumuman.targetAudience.join(",") : String(pengumuman.targetAudience || "SEMUA");
+      sheet.getRange(i + 1, 4).setValue(targetStr);
+      sheet.getRange(i + 1, 5).setValue(pengumuman.tglMulai || "");
+      sheet.getRange(i + 1, 6).setValue(pengumuman.tglSelesai || "");
+      SpreadsheetApp.flush();
+      return { success: true, message: "Pengumuman berhasil diperbarui oleh Administrator." };
+    }
+  }
+  return { success: false, error: "Data pengumuman tidak ditemukan." };
 }
 
 /**

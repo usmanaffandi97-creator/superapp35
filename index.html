@@ -90,6 +90,33 @@
     .envelope-open .envelope-flap {
       transform: rotateX(180deg);
     }
+
+    /* Modern Sleek Dropdown Styling */
+    .modern-select {
+      appearance: none;
+      -webkit-appearance: none;
+      -moz-appearance: none;
+      background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23475569' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+      background-repeat: no-repeat;
+      background-position: right 0.75rem center;
+      background-size: 1rem 1rem;
+      padding-right: 2.25rem !important;
+      border-radius: 0.85rem;
+      border: 1.5px solid #e2e8f0;
+      background-color: #ffffff;
+      font-weight: 600;
+      color: #1e293b;
+      box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.04);
+      transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    .modern-select:hover {
+      border-color: #cbd5e1;
+    }
+    .modern-select:focus {
+      outline: none;
+      border-color: #3b82f6;
+      box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.15);
+    }
   </style>
 </head>
 <body class="bg-slate-50 text-slate-800 min-h-screen flex flex-col antialiased selection:bg-blue-600 selection:text-white">
@@ -595,6 +622,26 @@
           </div>
         </div>
 
+        <!-- Papan Pengumuman Sekolah di Beranda Siswa -->
+        <div class="bg-white rounded-3xl border border-slate-200 shadow-xs p-6 space-y-4">
+          <div class="flex items-center justify-between pb-3 border-b border-slate-100">
+            <div class="flex items-center gap-2">
+              <span class="w-8 h-8 rounded-xl bg-amber-100 text-amber-600 flex items-center justify-center font-bold">📢</span>
+              <div>
+                <h4 class="font-extrabold text-sm sm:text-base text-slate-900">Pengumuman & Informasi Sekolah</h4>
+                <p class="text-xs text-slate-400">Edaran resmi, agenda sekolah, dan informasi penting</p>
+              </div>
+            </div>
+            <button type="button" onclick="switchTabSiswa('pengumuman')" class="text-xs font-bold text-blue-600 hover:text-blue-800 transition flex items-center gap-1">
+              <span>Arsip Pengumuman</span>
+              <i data-lucide="chevron-right" class="w-3.5 h-3.5"></i>
+            </button>
+          </div>
+          <div id="feedPengumumanSiswaBeranda" class="space-y-3">
+            <!-- Diisi otomatis oleh renderPengumumanSiswa -->
+          </div>
+        </div>
+
       </div>
 
       <!-- KONTEN TAB 2 SISWA: 7 KEBIASAAN -->
@@ -669,36 +716,36 @@
               </div>
 
               <!-- 3. Berolahraga -->
-              <div class="p-4 bg-slate-50 rounded-2xl border border-slate-200 flex items-center justify-between">
+              <div class="p-4 bg-slate-50 rounded-2xl border border-slate-200 flex items-center justify-between gap-3">
                 <span class="font-bold text-sm text-slate-800">🏃 3. Berolahraga</span>
-                <select id="kbOlahraga" class="px-3 py-1.5 bg-white border border-slate-200 rounded-lg text-sm font-semibold">
+                <select id="kbOlahraga" class="modern-select text-xs font-bold text-slate-700 py-2 pl-3 cursor-pointer shadow-xs border-slate-200">
                   <option value="Ya">Ya, Berolahraga</option>
                   <option value="Tidak">Tidak</option>
                 </select>
               </div>
 
               <!-- 4. Makan Sehat -->
-              <div class="p-4 bg-slate-50 rounded-2xl border border-slate-200 flex items-center justify-between">
+              <div class="p-4 bg-slate-50 rounded-2xl border border-slate-200 flex items-center justify-between gap-3">
                 <span class="font-bold text-sm text-slate-800">🥗 4. Makan Sehat & Bergizi</span>
-                <select id="kbMakan" class="px-3 py-1.5 bg-white border border-slate-200 rounded-lg text-sm font-semibold">
+                <select id="kbMakan" class="modern-select text-xs font-bold text-slate-700 py-2 pl-3 cursor-pointer shadow-xs border-slate-200">
                   <option value="Ya">Ya, Makan Sehat</option>
                   <option value="Tidak">Tidak</option>
                 </select>
               </div>
 
               <!-- 5. Gemar Belajar -->
-              <div class="p-4 bg-slate-50 rounded-2xl border border-slate-200 flex items-center justify-between">
+              <div class="p-4 bg-slate-50 rounded-2xl border border-slate-200 flex items-center justify-between gap-3">
                 <span class="font-bold text-sm text-slate-800">📚 5. Gemar Belajar & Literasi</span>
-                <select id="kbBelajar" class="px-3 py-1.5 bg-white border border-slate-200 rounded-lg text-sm font-semibold">
+                <select id="kbBelajar" class="modern-select text-xs font-bold text-slate-700 py-2 pl-3 cursor-pointer shadow-xs border-slate-200">
                   <option value="Ya">Ya, Belajar / Mengaji</option>
                   <option value="Tidak">Tidak</option>
                 </select>
               </div>
 
               <!-- 6. Gotong Royong / Bantu Ortu -->
-              <div class="p-4 bg-slate-50 rounded-2xl border border-slate-200 flex items-center justify-between">
+              <div class="p-4 bg-slate-50 rounded-2xl border border-slate-200 flex items-center justify-between gap-3">
                 <span class="font-bold text-sm text-slate-800">🤝 6. Gotong Royong / Bantu Ortu</span>
-                <select id="kbBantuOrtu" class="px-3 py-1.5 bg-white border border-slate-200 rounded-lg text-sm font-semibold">
+                <select id="kbBantuOrtu" class="modern-select text-xs font-bold text-slate-700 py-2 pl-3 cursor-pointer shadow-xs border-slate-200">
                   <option value="Ya">Ya, Membantu Orang Tua</option>
                   <option value="Tidak">Tidak</option>
                 </select>
@@ -1047,6 +1094,7 @@
         <button onclick="switchTabGuru('absenEkskul')" id="tabBtnGuru_absenEkskul" class="tab-guru-btn px-4 py-2 bg-white text-slate-600 hover:bg-slate-100 font-semibold rounded-xl text-xs whitespace-nowrap border border-slate-200">⚽ Absensi Ekskul (Pelatih)</button>
         <button onclick="switchTabGuru('rekapWalas')" id="tabBtnGuru_rekapWalas" class="tab-guru-btn px-4 py-2 bg-white text-slate-600 hover:bg-slate-100 font-semibold rounded-xl text-xs whitespace-nowrap border border-slate-200">📋 Rekap Ekskul (Walas)</button>
         <button onclick="switchTabGuru('nilaiUlangan')" id="tabBtnGuru_nilaiUlangan" class="tab-guru-btn px-4 py-2 bg-white text-slate-600 hover:bg-slate-100 font-semibold rounded-xl text-xs whitespace-nowrap border border-slate-200">📊 Paste Leger Nilai</button>
+        <button onclick="switchTabGuru('penilaianTopik')" id="tabBtnGuru_penilaianTopik" class="tab-guru-btn px-4 py-2 bg-white text-slate-600 hover:bg-slate-100 font-semibold rounded-xl text-xs whitespace-nowrap border border-slate-200">📝 Nilai Topik & Rubrik</button>
         <button onclick="switchTabGuru('guruWali')" id="tabBtnGuru_guruWali" class="tab-guru-btn px-4 py-2 bg-white text-slate-600 hover:bg-slate-100 font-semibold rounded-xl text-xs whitespace-nowrap border border-slate-200">🌟 Guru Wali (7 Kebiasaan & WA)</button>
         <button onclick="switchTabGuru('tibum')" id="tabBtnGuru_tibum" class="tab-guru-btn px-4 py-2 bg-white text-slate-600 hover:bg-slate-100 font-semibold rounded-xl text-xs whitespace-nowrap border border-slate-200">⚖️ Catat Pelanggaran / Scan QR</button>
         <button onclick="switchTabGuru('pengumuman')" id="tabBtnGuru_pengumuman" class="tab-guru-btn px-4 py-2 bg-white text-slate-600 hover:bg-slate-100 font-semibold rounded-xl text-xs whitespace-nowrap border border-slate-200">📢 Pengumuman Sekolah</button>
@@ -1078,6 +1126,27 @@
             <p class="text-[11px] text-rose-600 font-semibold mt-1">Catatan Tata Tertib</p>
           </div>
         </div>
+
+        <!-- Papan Pengumuman Sekolah di Beranda Guru & Karyawan -->
+        <div class="bg-white rounded-3xl border border-slate-200 shadow-xs p-6 space-y-4">
+          <div class="flex items-center justify-between pb-3 border-b border-slate-100">
+            <div class="flex items-center gap-2">
+              <span class="w-8 h-8 rounded-xl bg-indigo-100 text-indigo-600 flex items-center justify-center font-bold">📢</span>
+              <div>
+                <h4 class="font-extrabold text-sm sm:text-base text-slate-900">Pengumuman & Edaran Kedinasan</h4>
+                <p class="text-xs text-slate-400">Pemberitahuan resmi untuk Pendidik, Walikelas, Pembina & Tenaga Kependidikan</p>
+              </div>
+            </div>
+            <button type="button" onclick="switchTabGuru('pengumuman')" class="px-3.5 py-1.5 bg-amber-50 hover:bg-amber-100 text-amber-800 border border-amber-200 rounded-xl text-xs font-bold transition flex items-center gap-1.5 cursor-pointer">
+              <i data-lucide="plus-circle" class="w-3.5 h-3.5"></i>
+              <span>+ Buat Pengumuman Baru</span>
+            </button>
+          </div>
+          <div id="feedPengumumanGuruBeranda" class="space-y-3">
+            <!-- Diisi otomatis oleh renderPengumumanGuru -->
+          </div>
+        </div>
+
       </div>
 
       <!-- KONTEN TAB 2 GURU: PRESENSI HARIAN KBM (WALI KELAS) -->
@@ -1090,7 +1159,7 @@
             </div>
             <div class="flex items-center gap-2">
               <input type="date" id="guruPresensiKbmTgl" onchange="renderFormPresensiKbm()" onclick="try{this.showPicker()}catch(e){}" class="px-3 py-1.5 bg-slate-50 border border-slate-200 rounded-xl text-xs font-bold cursor-pointer">
-              <select id="guruPresensiKbmKelas" onchange="renderFormPresensiKbm()" class="px-3 py-1.5 bg-slate-50 border border-slate-200 rounded-xl text-xs font-bold">
+              <select id="guruPresensiKbmKelas" onchange="renderFormPresensiKbm()" class="modern-select px-3 py-1.5 text-xs font-bold cursor-pointer">
                 <option value="8-A">Kelas 8-A</option>
                 <option value="8-B">Kelas 8-B</option>
                 <option value="9-A">Kelas 9-A</option>
@@ -1148,7 +1217,7 @@
             </div>
             <div class="flex items-center gap-2">
               <input type="date" id="pelatihAbsenTgl" onchange="renderFormAbsenPelatih()" onclick="try{this.showPicker()}catch(e){}" class="px-3 py-1.5 bg-slate-50 border border-slate-200 rounded-xl text-xs font-bold cursor-pointer">
-              <select id="pelatihAbsenCabang" onchange="renderFormAbsenPelatih()" class="px-3 py-1.5 bg-slate-50 border border-slate-200 rounded-xl text-xs font-bold">
+              <select id="pelatihAbsenCabang" onchange="renderFormAbsenPelatih()" class="modern-select px-3 py-1.5 text-xs font-bold cursor-pointer">
                 <!-- Diisi JS dari data ekskul pembina -->
               </select>
             </div>
@@ -1204,7 +1273,7 @@
               <p class="text-xs text-slate-500">Wali Kelas memantau keaktifan siswa kelas binaan di seluruh cabang ekskul untuk nilai buku rapor.</p>
             </div>
             <div class="flex items-center gap-2">
-              <select id="rekapWalasSelectKelas" onchange="renderRekapWalasEkskul()" class="px-3 py-1.5 bg-slate-50 border border-slate-200 rounded-xl text-xs font-bold text-slate-700 cursor-pointer">
+              <select id="rekapWalasSelectKelas" onchange="renderRekapWalasEkskul()" class="modern-select px-3 py-1.5 text-xs font-bold text-slate-700 cursor-pointer">
                 <option value="8-A">Kelas 8-A</option>
               </select>
               <button onclick="eksporCsvRekapWalas()" class="px-3.5 py-2 bg-emerald-50 hover:bg-emerald-100 text-emerald-700 font-bold rounded-xl text-xs border border-emerald-200 transition flex items-center gap-1.5 cursor-pointer">
@@ -1278,7 +1347,7 @@
             <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
               <div>
                 <label class="block text-xs font-bold text-slate-700 uppercase mb-1">Mata Pelajaran</label>
-                <select id="inputNilaiMapel" class="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs font-bold">
+                <select id="inputNilaiMapel" class="modern-select w-full px-3 py-2 text-xs font-bold cursor-pointer">
                   <option value="Matematika">Matematika</option>
                   <option value="IPA">IPA</option>
                   <option value="Bahasa Indonesia">Bahasa Indonesia</option>
@@ -1293,7 +1362,7 @@
               </div>
               <div>
                 <label class="block text-xs font-bold text-slate-700 uppercase mb-1">Jenis Asesmen</label>
-                <select id="inputNilaiJenis" class="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs font-bold">
+                <select id="inputNilaiJenis" class="modern-select w-full px-3 py-2 text-xs font-bold cursor-pointer">
                   <option value="Asesmen Harian 1">Asesmen Harian 1 (PH 1)</option>
                   <option value="Asesmen Harian 2">Asesmen Harian 2 (PH 2)</option>
                   <option value="Asesmen Harian 3">Asesmen Harian 3 (PH 3)</option>
@@ -1304,7 +1373,7 @@
               </div>
               <div>
                 <label class="block text-xs font-bold text-slate-700 uppercase mb-1">Kelas / Rombel</label>
-                <select id="inputNilaiKelas" class="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs font-bold">
+                <select id="inputNilaiKelas" class="modern-select w-full px-3 py-2 text-xs font-bold cursor-pointer">
                   <!-- Diisi dinamis dari master siswa -->
                 </select>
               </div>
@@ -1355,7 +1424,7 @@
                 <p class="text-[11px] text-slate-500 mt-0.5">Pilih siswa rombel untuk mencetak Lembar Formatif (Harian) atau Lembar Rapor Tengah Semester (PTS/STS).</p>
               </div>
               <div class="flex flex-wrap items-center gap-2">
-                <select id="selectSiswaCetakRaporGuru" class="px-3 py-1.5 bg-white border border-slate-300 rounded-xl text-xs font-bold text-slate-700">
+                <select id="selectSiswaCetakRaporGuru" class="modern-select px-3 py-1.5 text-xs font-bold text-slate-700 cursor-pointer">
                   <option value="">-- Pilih Siswa Kelas --</option>
                 </select>
                 <button type="button" onclick="handleCetakRaporHarianGuru()" class="px-3 py-1.5 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl text-xs font-bold shadow-xs transition flex items-center gap-1 cursor-pointer">
@@ -1369,6 +1438,176 @@
           </div>
         </div>
       </div>
+
+      <!-- KONTEN TAB: PENILAIAN PEMBELAJARAN PER TOPIK & RUBRIK -->
+      <div id="tabContentGuru_penilaianTopik" class="tab-guru-content hidden space-y-6">
+        <!-- Banner Header -->
+        <div class="bg-gradient-to-r from-teal-800 via-emerald-800 to-slate-900 rounded-3xl p-6 text-white shadow-md">
+          <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+            <div>
+              <div class="inline-flex items-center gap-1.5 px-3 py-1 bg-white/20 backdrop-blur-md rounded-full text-xs font-bold mb-2">
+                <i data-lucide="award" class="w-3.5 h-3.5 text-amber-300"></i>
+                <span>KURIKULUM MERDEKA & ASESMEN PEMBELAJARAN</span>
+              </div>
+              <h3 class="text-xl sm:text-2xl font-black">Penilaian Pembelajaran per Topik / Materi & Rubrik</h3>
+              <p class="text-xs sm:text-sm text-teal-100 mt-1 max-w-2xl leading-relaxed">
+                Input asesmen formatif dan sumatif lingkup materi secara terstruktur. Nilai angka terintegrasi langsung dengan 4 jenjang kriteria rubrik ketuntasan belajar (Perlu Bimbingan, Cukup, Baik, Sangat Baik).
+              </p>
+            </div>
+            <div class="flex items-center gap-2">
+              <button type="button" onclick="cetakRekapNilaiTopikPdf()" class="px-4 py-2.5 bg-white/10 hover:bg-white/20 text-white font-bold rounded-xl text-xs border border-white/20 transition flex items-center gap-1.5 cursor-pointer shadow-xs">
+                <i data-lucide="printer" class="w-4 h-4"></i>
+                <span>Cetak Lembar Nilai</span>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Filter & Parameter Penilaian Card -->
+        <div class="bg-white p-6 rounded-3xl border border-slate-200 shadow-xs space-y-4">
+          <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+            <div>
+              <label class="block text-xs font-bold text-slate-700 uppercase mb-1">Mata Pelajaran</label>
+              <select id="penilaianTopikMapel" onchange="renderFormPenilaianTopik()" class="modern-select w-full px-3.5 py-2.5 text-xs font-bold cursor-pointer">
+                <option value="Matematika">Matematika</option>
+                <option value="IPA">IPA</option>
+                <option value="Bahasa Indonesia">Bahasa Indonesia</option>
+                <option value="Bahasa Inggris">Bahasa Inggris</option>
+                <option value="Pendidikan Agama & Budi Pekerti">Pendidikan Agama & Budi Pekerti</option>
+                <option value="Pendidikan Pancasila">Pendidikan Pancasila (PPKn)</option>
+                <option value="IPS">IPS</option>
+                <option value="Informatika">Informatika</option>
+                <option value="PJOK">PJOK</option>
+                <option value="Seni Budaya">Seni Budaya</option>
+              </select>
+            </div>
+
+            <div>
+              <label class="block text-xs font-bold text-slate-700 uppercase mb-1">Kelas / Rombel</label>
+              <select id="penilaianTopikKelas" onchange="renderFormPenilaianTopik()" class="modern-select w-full px-3.5 py-2.5 text-xs font-bold cursor-pointer">
+                <option value="8-A">Kelas 8-A</option>
+                <option value="8-B">Kelas 8-B</option>
+                <option value="9-A">Kelas 9-A</option>
+              </select>
+            </div>
+
+            <div class="sm:col-span-2">
+              <label class="block text-xs font-bold text-slate-700 uppercase mb-1">Topik / Lingkup Materi / TP</label>
+              <div class="flex gap-2">
+                <input type="text" id="penilaianTopikJudul" value="Lingkup Materi 1: Pemahaman Konsep & Karakteristik Materi" placeholder="Contoh: Bab 1 - Persamaan Linear Satu Variabel" class="flex-1 px-3.5 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs font-bold text-slate-800 focus:outline-none focus:border-teal-500">
+                <button type="button" onclick="renderFormPenilaianTopik()" class="px-3.5 py-2 bg-teal-50 hover:bg-teal-100 text-teal-800 font-bold rounded-xl text-xs border border-teal-200 transition cursor-pointer">Terapkan</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Quick TP suggestions pills -->
+          <div class="flex flex-wrap items-center gap-1.5 pt-2 border-t border-slate-100 text-[11px]">
+            <span class="font-bold text-slate-500">Pilihan Cepat Materi:</span>
+            <button type="button" onclick="setTopikInput('Lingkup Materi 1: Pemahaman Konsep Teori')" class="px-2.5 py-1 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-lg font-medium transition cursor-pointer">Materi 1: Konsep Dasar</button>
+            <button type="button" onclick="setTopikInput('Lingkup Materi 2: Analisis & Penerapan Soal Cerita')" class="px-2.5 py-1 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-lg font-medium transition cursor-pointer">Materi 2: Analisis Kasus</button>
+            <button type="button" onclick="setTopikInput('Lingkup Materi 3: Praktik / Proyek Mandiri')" class="px-2.5 py-1 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-lg font-medium transition cursor-pointer">Materi 3: Proyek Praktik</button>
+            <button type="button" onclick="setTopikInput('Sumatif Lingkup Materi (Ulangan Bab)')" class="px-2.5 py-1 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-lg font-medium transition cursor-pointer">Sumatif Akhir Bab</button>
+          </div>
+        </div>
+
+        <!-- Pedoman Rubrik Penilaian Card -->
+        <div class="bg-gradient-to-br from-slate-50 to-teal-50/40 p-5 rounded-3xl border border-teal-200/70 shadow-xs space-y-3">
+          <div class="flex items-center justify-between">
+            <div class="flex items-center gap-2">
+              <span class="w-7 h-7 rounded-lg bg-teal-600 text-white flex items-center justify-center text-xs font-bold">ðŸ“‹</span>
+              <h4 class="font-bold text-sm text-slate-900">Pedoman Kriteria Rubrik Penilaian (Kurikulum Merdeka)</h4>
+            </div>
+            <span class="text-xs text-teal-800 font-bold bg-teal-100 px-2.5 py-0.5 rounded-full">KKTP Standar: 75</span>
+          </div>
+
+          <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 text-xs">
+            <div class="p-3.5 bg-rose-50 border border-rose-200 rounded-2xl shadow-xs">
+              <div class="flex items-center justify-between font-black text-rose-800 mb-1">
+                <span>ðŸ”´ Perlu Bimbingan</span>
+                <span class="px-2 py-0.5 bg-white text-rose-700 rounded-md font-mono text-[11px] border border-rose-200">&lt; 66</span>
+              </div>
+              <p class="text-[11px] text-rose-700 leading-snug">Belum mencapai ketuntasan minimum, memerlukan intervensi dan bimbingan guru secara bertahap.</p>
+            </div>
+
+            <div class="p-3.5 bg-amber-50 border border-amber-200 rounded-2xl shadow-xs">
+              <div class="flex items-center justify-between font-black text-amber-800 mb-1">
+                <span>ðŸŸ¡ Cukup</span>
+                <span class="px-2 py-0.5 bg-white text-amber-700 rounded-md font-mono text-[11px] border border-amber-200">66 - 75</span>
+              </div>
+              <p class="text-[11px] text-amber-700 leading-snug">Mencapai sebagian kriteria ketuntasan minimal, masih membutuhkan penguatan dan latihan tambahan.</p>
+            </div>
+
+            <div class="p-3.5 bg-emerald-50 border border-emerald-200 rounded-2xl shadow-xs">
+              <div class="flex items-center justify-between font-black text-emerald-800 mb-1">
+                <span>ðŸŸ¢ Baik</span>
+                <span class="px-2 py-0.5 bg-white text-emerald-700 rounded-md font-mono text-[11px] border border-emerald-200">76 - 88</span>
+              </div>
+              <p class="text-[11px] text-emerald-700 leading-snug">Memenuhi kriteria ketuntasan tujuan pembelajaran secara memuaskan, mandiri, dan tepat sasaran.</p>
+            </div>
+
+            <div class="p-3.5 bg-blue-50 border border-blue-200 rounded-2xl shadow-xs">
+              <div class="flex items-center justify-between font-black text-blue-800 mb-1">
+                <span>ðŸ”µ Sangat Baik</span>
+                <span class="px-2 py-0.5 bg-white text-blue-700 rounded-md font-mono text-[11px] border border-blue-200">89 - 100</span>
+              </div>
+              <p class="text-[11px] text-blue-700 leading-snug">Melampaui kriteria ketuntasan pembelajaran, berpikir kritis serta mampu membimbing rekan sebaya.</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Tabel Siswa & Input Nilai Rubrik -->
+        <div class="bg-white p-6 rounded-3xl border border-slate-200 shadow-xs space-y-4">
+          <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between pb-3 border-b border-slate-100 gap-3">
+            <div>
+              <h4 class="font-extrabold text-base text-slate-900">Daftar Penilaian Siswa</h4>
+              <p class="text-xs text-slate-400">Pilih tombol rubrik untuk mengisi otomatis atau masukkan angka secara manual.</p>
+            </div>
+            <div class="flex flex-wrap items-center gap-2">
+              <button type="button" onclick="setSemuaNilaiTopik(82, 'BAIK')" class="px-3 py-1.5 bg-emerald-50 hover:bg-emerald-100 text-emerald-800 border border-emerald-200 rounded-xl text-xs font-bold transition cursor-pointer">
+                âš¡ Set Semua "Baik (82)"
+              </button>
+              <button type="button" onclick="hitungStatistikPenilaianTopik()" class="px-3 py-1.5 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-xl text-xs font-bold transition cursor-pointer">
+                ðŸ“Š Hitung Rata-Rata
+              </button>
+            </div>
+          </div>
+
+          <div class="overflow-x-auto">
+            <table class="w-full text-left border-collapse text-xs">
+              <thead>
+                <tr class="border-b border-slate-200 text-slate-500 text-[11px] uppercase tracking-wider bg-slate-50/70">
+                  <th class="py-3 px-3 w-12 font-bold">No</th>
+                  <th class="py-3 px-3 w-28 font-bold">NISN</th>
+                  <th class="py-3 px-3 min-w-[150px] font-bold">Nama Siswa</th>
+                  <th class="py-3 px-3 min-w-[280px] font-bold">Tingkat Capaian Rubrik</th>
+                  <th class="py-3 px-3 w-28 text-center font-bold">Nilai (0-100)</th>
+                  <th class="py-3 px-3 min-w-[220px] font-bold">Deskripsi Capaian Kompetensi</th>
+                  <th class="py-3 px-3 w-28 text-center font-bold">Status</th>
+                </tr>
+              </thead>
+              <tbody id="tbodyPenilaianTopik" class="divide-y divide-slate-100">
+                <!-- Diisi dinamis oleh JS -->
+              </tbody>
+            </table>
+          </div>
+
+          <!-- Summary & Simpan Card -->
+          <div class="pt-4 border-t border-slate-100 flex flex-col sm:flex-row items-center justify-between gap-4">
+            <div class="flex flex-wrap items-center gap-4 text-xs">
+              <span class="text-slate-500">Total Siswa: <b id="statTopikTotal" class="text-slate-800 font-mono">0</b></span>
+              <span class="text-slate-500">Rata-rata: <b id="statTopikRata" class="text-teal-700 font-bold font-mono">0.0</b></span>
+              <span class="text-slate-500">Tuntas: <b id="statTopikTuntas" class="text-emerald-700 font-bold font-mono">0</b></span>
+              <span class="text-slate-500">Perlu Bimbingan: <b id="statTopikBimbingan" class="text-rose-700 font-bold font-mono">0</b></span>
+            </div>
+
+            <button type="button" onclick="handleSimpanNilaiTopik()" class="w-full sm:w-auto px-6 py-3 bg-gradient-to-r from-teal-600 to-emerald-600 hover:from-teal-700 hover:to-emerald-700 text-white font-black rounded-xl text-xs shadow-md shadow-teal-200 transition flex items-center justify-center gap-2 cursor-pointer">
+              <i data-lucide="save" class="w-4 h-4"></i>
+              <span>Simpan Penilaian ke Database</span>
+            </button>
+          </div>
+        </div>
+      </div>
+
 
       <!-- KONTEN TAB 6 GURU: PORTAL GURU WALI (7 KEBIASAAN, REKAP MINGGUAN A4 & WA) -->
       <div id="tabContentGuru_guruWali" class="tab-guru-content hidden space-y-6">
@@ -1522,7 +1761,7 @@
             </div>
             <div>
               <label class="block text-xs font-bold text-slate-700 uppercase mb-1">Atau Pilih Berdasarkan Rombel</label>
-              <select id="selectTibumSiswa" onchange="handleTibumSelectChange()" class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs font-semibold">
+              <select id="selectTibumSiswa" onchange="handleTibumSelectChange()" class="modern-select w-full px-4 py-2.5 text-xs font-semibold cursor-pointer">
                 <!-- Diisi JS -->
               </select>
             </div>
@@ -1697,12 +1936,12 @@
               <div class="grid grid-cols-2 gap-2">
                 <div>
                   <label class="block text-[10px] font-bold text-slate-500 uppercase mb-1">Pilih Kelas</label>
-                  <select id="selectBulkKelas" class="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs font-bold text-slate-800">
+                  <select id="selectBulkKelas" class="modern-select w-full px-3 py-2 text-xs font-bold text-slate-800 cursor-pointer">
                   </select>
                 </div>
                 <div>
                   <label class="block text-[10px] font-bold text-slate-500 uppercase mb-1">Pilih Guru Wali</label>
-                  <select id="selectBulkGuruWaliKelas" class="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs font-semibold text-slate-800">
+                  <select id="selectBulkGuruWaliKelas" class="modern-select w-full px-3 py-2 text-xs font-semibold text-slate-800 cursor-pointer">
                     <option value="">-- Pilih Guru Wali --</option>
                   </select>
                 </div>
@@ -1721,7 +1960,7 @@
               </div>
               <div>
                 <label class="block text-[10px] font-bold text-slate-500 uppercase mb-1">Pilih Guru Wali Tujuan</label>
-                <select id="selectBulkGuruWaliSelected" class="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs font-semibold text-slate-800">
+                <select id="selectBulkGuruWaliSelected" class="modern-select w-full px-3 py-2 text-xs font-semibold text-slate-800 cursor-pointer">
                   <option value="">-- Pilih Guru Wali Tujuan --</option>
                 </select>
               </div>
@@ -1743,10 +1982,10 @@
             <!-- Filter & Pencarian -->
             <div class="flex flex-wrap items-center gap-2">
               <input type="text" id="searchAdminPlottingSiswa" oninput="renderAdminPlottingGuruWali()" placeholder="Cari Siswa / NISN..." class="px-3.5 py-1.5 bg-slate-50 border border-slate-200 rounded-xl text-xs font-semibold">
-              <select id="filterAdminPlottingKelas" onchange="renderAdminPlottingGuruWali()" class="px-3 py-1.5 bg-slate-50 border border-slate-200 rounded-xl text-xs font-bold text-slate-700">
+              <select id="filterAdminPlottingKelas" onchange="renderAdminPlottingGuruWali()" class="modern-select px-3 py-1.5 text-xs font-bold text-slate-700 cursor-pointer">
                 <option value="semua">Semua Kelas</option>
               </select>
-              <select id="filterAdminPlottingStatus" onchange="renderAdminPlottingGuruWali()" class="px-3 py-1.5 bg-slate-50 border border-slate-200 rounded-xl text-xs font-bold text-slate-700">
+              <select id="filterAdminPlottingStatus" onchange="renderAdminPlottingGuruWali()" class="modern-select px-3 py-1.5 text-xs font-bold text-slate-700 cursor-pointer">
                 <option value="semua">Semua Status</option>
                 <option value="sudah">Sudah Ada Guru Wali</option>
                 <option value="belum">Belum Ditugaskan</option>
@@ -1940,7 +2179,7 @@
           <div class="flex flex-wrap items-center gap-3 w-full md:w-auto">
             <div>
               <label class="block text-[11px] font-bold text-slate-600 uppercase mb-1">Pilih Rombel / Kelas</label>
-              <select id="filterKelasQrAdmin" onchange="renderAdminQrNisn()" class="px-3.5 py-2 bg-slate-50 border border-slate-300 rounded-xl text-xs font-bold text-slate-800">
+              <select id="filterKelasQrAdmin" onchange="renderAdminQrNisn()" class="modern-select px-3.5 py-2 text-xs font-bold text-slate-800 cursor-pointer">
                 <option value="ALL">-- Seluruh Siswa (Semua Kelas) --</option>
               </select>
             </div>
@@ -2273,6 +2512,10 @@
       <button type="button" onclick="switchTabGuru('nilaiUlangan')" id="mobileNavGuru_nilaiUlangan" class="mobile-nav-btn flex flex-col items-center justify-center py-1 px-2.5 rounded-xl transition text-slate-500 hover:text-indigo-600 font-medium min-w-[56px] flex-shrink-0">
         <i data-lucide="bar-chart-3" class="w-4 h-4 mb-0.5"></i>
         <span class="text-[10px] leading-tight">Leger Nilai</span>
+      </button>
+      <button type="button" onclick="switchTabGuru('penilaianTopik')" id="mobileNavGuru_penilaianTopik" class="mobile-nav-btn flex flex-col items-center justify-center py-1 px-2.5 rounded-xl transition text-slate-500 hover:text-indigo-600 font-medium min-w-[56px] flex-shrink-0">
+        <i data-lucide="award" class="w-4 h-4 mb-0.5"></i>
+        <span class="text-[10px] leading-tight">Nilai Topik</span>
       </button>
       <button type="button" onclick="switchTabGuru('guruWali')" id="mobileNavGuru_guruWali" class="mobile-nav-btn flex flex-col items-center justify-center py-1 px-2.5 rounded-xl transition text-slate-500 hover:text-indigo-600 font-medium min-w-[56px] flex-shrink-0">
         <i data-lucide="star" class="w-4 h-4 mb-0.5"></i>
@@ -3152,7 +3395,7 @@
               toast: true,
               position: 'top-end',
               icon: 'success',
-              title: 'Data Tersinkronisasi dari Sheets! 🟢',
+              title: 'Data Berhasil Disinkronkan! 🟢',
               showConfirmButton: false,
               timer: 1500
             });
@@ -3169,7 +3412,7 @@
           badge.className = "inline-flex items-center gap-1 px-2 py-0.5 bg-rose-100 text-rose-800 rounded-full text-[10px] font-bold border border-rose-300 hover:bg-rose-200 transition cursor-pointer";
         }
         if (!isSilent) {
-          Swal.fire('Gagal Menyinkronkan', 'Tidak dapat mengambil data terbaru dari Google Sheets: ' + err.message, 'warning');
+          Swal.fire('Gagal Menyinkronkan', 'Tidak dapat mengambil data terbaru dari database: ' + err.message, 'warning');
         }
         return false;
       } finally {
@@ -3808,6 +4051,7 @@
         renderPresensiSiswa();
         renderBukuSakuSiswa();
         renderRekap7KebiasaanSiswa();
+        renderPengumumanSiswa();
       } else if (tabName === 'profil') {
         if (document.getElementById('inputNoHpOrtuSiswa')) {
           document.getElementById('inputNoHpOrtuSiswa').value = (currentUser && currentUser.noHpOrtu) ? currentUser.noHpOrtu : '';
@@ -4015,22 +4259,22 @@
           submitBtn.innerHTML = `<i data-lucide="refresh-cw" class="w-4 h-4"></i><span>Kirim Perbaikan Jurnal 7 Kebiasaan 🚀</span>`;
         }
       } else {
-        // PENDING / MENUNGGU
+        // PENDING / MENUNGGU - Sesuai peraturan sekolah hanya bisa diisi 1x sehari
         if (bannerArea) {
           bannerArea.innerHTML = `
             <div class="p-3.5 bg-amber-50 border border-amber-300 rounded-2xl text-amber-900 text-xs font-bold flex items-center gap-2.5 shadow-xs">
-              <i data-lucide="clock" class="w-5 h-5 text-amber-600 shrink-0"></i>
+              <i data-lucide="check-circle" class="w-5 h-5 text-amber-600 shrink-0"></i>
               <div>
-                <span>Jurnal tanggal <b>${tgl}</b> sedang menunggu validasi Guru Wali.</span>
-                <p class="text-[11px] font-normal text-amber-700 mt-0.5">Anda masih dapat memperbarui data sebelum disetujui oleh Guru Wali.</p>
+                <span>Jurnal tanggal <b>${tgl}</b> sudah Anda isi (Menunggu Validasi Guru Wali).</span>
+                <p class="text-[11px] font-normal text-amber-700 mt-0.5">Sesuai peraturan sekolah, pengisian jurnal harian hanya dapat dilakukan 1 kali setiap hari.</p>
               </div>
             </div>
           `;
         }
         if (submitBtn) {
-          submitBtn.disabled = false;
-          submitBtn.className = "w-full py-3.5 bg-gradient-to-r from-blue-600 to-indigo-700 hover:from-blue-700 hover:to-indigo-800 text-white font-bold rounded-xl shadow-md shadow-blue-200 transition flex items-center justify-center gap-2";
-          submitBtn.innerHTML = `<i data-lucide="save" class="w-4 h-4"></i><span>Perbarui Jurnal 7 Kebiasaan 🚀</span>`;
+          submitBtn.disabled = true;
+          submitBtn.className = "w-full py-3.5 bg-slate-200 text-slate-500 font-bold rounded-xl cursor-not-allowed flex items-center justify-center gap-2";
+          submitBtn.innerHTML = `<i data-lucide="check-circle-2" class="w-4 h-4 text-emerald-600"></i><span>Jurnal Sudah Diisi Hari Ini (1x per Hari)</span>`;
         }
       }
       safeCreateIcons();
@@ -4115,14 +4359,14 @@
         } else {
           badgeValidasi = `
             <div class="flex flex-col items-center gap-1">
-              <span class="px-2 py-0.5 bg-amber-100 text-amber-800 rounded-md font-bold text-[10px]">⏳ Menunggu</span>
-              <button type="button" onclick="editJurnalSiswa('${k.tanggal}')" class="px-2 py-0.5 bg-blue-50 hover:bg-blue-100 text-blue-700 rounded-lg text-[10px] font-bold border border-blue-200 shadow-xs transition">✏️ Edit Jurnal</button>
+              <span class="px-2 py-0.5 bg-amber-100 text-amber-800 rounded-md font-bold text-[10px]">⏳ Menunggu Validasi</span>
             </div>
           `;
         }
 
-        const fotoBtn = k.fotoBase64
-          ? `<button onclick="lihatFotoBuktiModal('${k.fotoBase64}')" class="px-2.5 py-1 bg-blue-50 hover:bg-blue-100 text-blue-700 rounded-lg text-[11px] font-bold border border-blue-200 inline-flex items-center gap-1 shadow-xs"><i data-lucide="image" class="w-3 h-3"></i><span>Lihat</span></button>`
+        const hasFoto = Boolean(k.fotoBuktiUrl || k.fotoBase64);
+        const fotoBtn = hasFoto
+          ? `<button onclick="lihatFotoBuktiModal('${k.idLog || ''}', '${k.tanggal}', '${k.nisn}')" class="px-2.5 py-1 bg-blue-50 hover:bg-blue-100 text-blue-700 rounded-lg text-[11px] font-bold border border-blue-200 inline-flex items-center gap-1 shadow-xs cursor-pointer"><i data-lucide="image" class="w-3 h-3"></i><span>Lihat</span></button>`
           : `<span class="text-slate-400 text-[11px] italic">Tidak ada</span>`;
 
         return `
@@ -4242,6 +4486,14 @@
         });
         return;
       }
+      if (existing && existing.statusValidasi !== 'DITOLAK' && existing.statusValidasi !== 'PERLU_PERBAIKAN') {
+        Swal.fire({
+          icon: 'warning',
+          title: 'Hanya Bisa Diisi 1 Kali Sehari ⚠️',
+          text: 'Sesuai peraturan sekolah, Jurnal 7 Kebiasaan hanya dapat diisi 1 kali setiap harinya. Laporan untuk tanggal ini sudah tercatat.'
+        });
+        return;
+      }
 
       const shalatList = [];
       if (document.getElementById('shSubuh').checked) shalatList.push('Subuh');
@@ -4283,7 +4535,7 @@
       isUserEditing = true;
       playChimeBell();
       Swal.fire({
-        title: 'Mengirim ke Google Sheets & Drive... ⏳',
+        title: 'Menyimpan ke Database...',
         text: 'Mengunggah jurnal dan foto bukti terkompresi...',
         didOpen: () => Swal.showLoading(),
         allowOutsideClick: false
@@ -4301,7 +4553,7 @@
         renderRekap7KebiasaanSiswa();
         Swal.fire({
           title: 'Alhamdulillah! 🟢',
-          text: res.message || 'Laporan 7 Kebiasaan ananda berhasil disimpan ke Google Sheets.',
+          text: res.message || 'Laporan 7 Kebiasaan ananda berhasil disimpan ke Database.',
           icon: 'success'
         });
         await syncDataFromGoogleSheets(true, true);
@@ -4478,7 +4730,7 @@
       });
 
       if (res && res.success) {
-        Swal.fire('Berhasil! 🟢', `Ananda telah terdaftar di ekskul ${namaEkskul} (tercatat di Google Sheets).`, 'success');
+        Swal.fire('Berhasil! 🟢', `Ananda telah terdaftar di ekskul ${namaEkskul} (tersimpan di database).`, 'success');
         await syncDataFromGoogleSheets(true, true);
       } else {
         Swal.fire('Tersimpan', `Ananda terdaftar di ekskul ${namaEkskul}.`, 'info');
@@ -4508,7 +4760,7 @@
         });
 
         if (res && res.success) {
-          Swal.fire('Dibatalkan 🟢', 'Pendaftaran ekstrakurikuler berhasil dibatalkan dari Google Sheets.', 'info');
+          Swal.fire('Dibatalkan 🟢', 'Pendaftaran ekstrakurikuler berhasil dibatalkan dari database.', 'info');
           await syncDataFromGoogleSheets(true, true);
         } else {
           Swal.fire('Dibatalkan', 'Pendaftaran ekstrakurikuler berhasil dibatalkan.', 'info');
@@ -4804,7 +5056,7 @@
       });
 
       if (res && res.success) {
-        Swal.fire('Tersimpan di Google Sheets! 🟢', 'Nomor WhatsApp orang tua berhasil diperbarui.', 'success');
+        Swal.fire('Tersimpan di Database! 🟢', 'Nomor WhatsApp orang tua berhasil diperbarui.', 'success');
         await syncDataFromGoogleSheets(true, true);
       } else {
         Swal.fire('Tersimpan Lokal', 'Nomor WhatsApp orang tua disimpan di perangkat ini.', 'info');
@@ -4972,6 +5224,9 @@
       // Refresh submodul spesifik saat tab dibuka
       if (tabName === 'beranda') {
         renderBannerPeringatanAlpaGuru();
+        renderPengumumanGuru();
+      } else if (tabName === 'penilaianTopik' || tabName === 'penilaian-topik') {
+        renderFormPenilaianTopik();
       } else if (tabName === 'presensiKbm') {
         renderFormPresensiKbm();
         renderBannerPeringatanAlpaGuru();
@@ -5130,7 +5385,7 @@
       });
 
       if (res && res.success) {
-        Swal.fire('Tersimpan di Google Sheets! 🟢', `Presensi KBM kelas ${kelas} (${dataAbsen.length} siswa) berhasil disimpan.`, 'success');
+        Swal.fire('Tersimpan di Database! 🟢', `Presensi KBM kelas ${kelas} (${dataAbsen.length} siswa) berhasil disimpan.`, 'success');
         await syncDataFromGoogleSheets(true, true);
       } else {
         Swal.fire('Tersimpan Lokal', `Presensi KBM kelas ${kelas} (${dataAbsen.length} siswa) disimpan di sesi lokal.`, 'info');
@@ -5277,7 +5532,7 @@
       });
 
       if (res && res.success) {
-        Swal.fire('Tersimpan di Google Sheets! 🟢', `Presensi sesi latihan berhasil disimpan oleh Pelatih (${saved} anggota diproses).`, 'success');
+        Swal.fire('Tersimpan di Database! 🟢', `Presensi sesi latihan berhasil disimpan oleh Pelatih (${saved} anggota diproses).`, 'success');
         await syncDataFromGoogleSheets(true, true);
       } else {
         Swal.fire('Tersimpan Lokal', `Presensi sesi latihan berhasil disimpan di sesi lokal.`, 'info');
@@ -5287,18 +5542,33 @@
     // Modul Rekap Walas (Walas HANYA Menerima Rekap Terintegrasi)
     function renderRekapWalasEkskul() {
       const rombelSelect = document.getElementById('rekapWalasSelectKelas');
-      const rombel = (rombelSelect ? rombelSelect.value : (currentUser && currentUser.rombelWali)) || "8-A";
+      let rombel = "8-A";
+
+      // Walikelas hanya bisa melihat rekap ekstra siswanya saja
+      if (currentUser && currentUser.rombelWali) {
+        rombel = currentUser.rombelWali;
+        if (rombelSelect) {
+          rombelSelect.innerHTML = `<option value="${currentUser.rombelWali}">Kelas ${currentUser.rombelWali} (Kelas Binaan Anda)</option>`;
+          rombelSelect.disabled = true;
+          rombelSelect.classList.add('bg-slate-100', 'cursor-not-allowed', 'opacity-85');
+        }
+      } else {
+        if (rombelSelect) {
+          if (rombelSelect.options.length <= 1) {
+            const uniqueClasses = Array.from(new Set(masterSiswa.map(s => s.kelas))).filter(Boolean).sort();
+            if (uniqueClasses.length > 0) {
+              rombelSelect.innerHTML = uniqueClasses.map(c => `<option value="${c}" ${c === rombelSelect.value ? 'selected' : ''}>Kelas ${c}</option>`).join('');
+            }
+          }
+          rombel = rombelSelect.value || "8-A";
+          rombelSelect.disabled = false;
+          rombelSelect.classList.remove('bg-slate-100', 'cursor-not-allowed', 'opacity-85');
+        }
+      }
+
       const siswaRombel = masterSiswa.filter(s => s.kelas === rombel);
       const tbody = document.getElementById('tableRekapWalasEkskul');
       if (!tbody) return;
-
-      // Isi pilihan kelas jika belum ada
-      if (rombelSelect && rombelSelect.options.length <= 1) {
-        const uniqueClasses = Array.from(new Set(masterSiswa.map(s => s.kelas))).filter(Boolean).sort();
-        if (uniqueClasses.length > 0) {
-          rombelSelect.innerHTML = uniqueClasses.map(c => `<option value="${c}" ${c === rombel ? 'selected' : ''}>Kelas ${c}</option>`).join('');
-        }
-      }
 
       let countAlphaSiswa = 0;
       const listPerluPerhatian = [];
@@ -5323,19 +5593,35 @@
           }
 
           let rincianHtml = '';
+          const absents = logs.filter(p => String(p.status || '').toUpperCase() !== 'HADIR');
           if (alpha >= 5) {
-            rincianHtml = `<span class="px-2 py-0.5 bg-rose-100 text-rose-800 rounded font-bold text-[10px] inline-flex items-center gap-1 animate-pulse">⚠️ ${alpha}x ALPHA (Peringatan Khusus BK)</span>`;
-          } else if (sakit + izin + alpha === 0) {
+            rincianHtml = `
+              <div class="flex flex-wrap items-center gap-1">
+                <span class="px-2 py-0.5 bg-rose-600 text-white rounded-md font-bold text-[10px] inline-flex items-center gap-1 shadow-xs animate-pulse">⚠️ ${alpha}x ALPHA (SP BK)</span>
+                ${sakit > 0 ? `<span class="px-2 py-0.5 bg-amber-50 text-amber-700 border border-amber-200 rounded-md font-bold text-[10px]">${sakit}x Sakit</span>` : ''}
+                ${izin > 0 ? `<span class="px-2 py-0.5 bg-sky-50 text-sky-700 border border-sky-200 rounded-md font-bold text-[10px]">${izin}x Izin</span>` : ''}
+              </div>
+            `;
+          } else if (absents.length === 0) {
             rincianHtml = hadir > 0 
-              ? `<span class="text-emerald-700 font-semibold text-[11px]">✓ Hadir Penuh (${hadir}x sesi)</span>` 
-              : `<span class="text-slate-400 text-[11px] italic">Belum ada catatan presensi</span>`;
+              ? `<span class="px-2.5 py-0.5 bg-emerald-50 text-emerald-700 border border-emerald-200 rounded-full font-bold text-[10px] inline-flex items-center gap-1">✓ Disiplin (${hadir}x Hadir)</span>` 
+              : `<span class="text-slate-400 text-[10px] italic">Belum ada sesi</span>`;
           } else {
-            const ketList = logs.filter(p => String(p.status || '').toUpperCase() !== 'HADIR').map(p => {
+            const tooltipDetail = absents.map(p => {
               const e = masterEkskul.find(x => x.id === p.idEkskul);
-              const namaEks = e ? e.nama : p.idEkskul;
-              return `${namaEks}: ${p.status} (${p.tanggal})`;
-            }).join('; ');
-            rincianHtml = `<span class="text-slate-600 text-[11px]">${ketList}</span>`;
+              return `${e ? e.nama : p.idEkskul}: ${p.status} (${p.tanggal})`;
+            }).join(' | ');
+
+            const pills = [];
+            if (sakit > 0) pills.push(`<span class="px-2 py-0.5 bg-amber-50 text-amber-700 border border-amber-200 rounded-md font-bold text-[10px]">${sakit}x Sakit</span>`);
+            if (izin > 0) pills.push(`<span class="px-2 py-0.5 bg-sky-50 text-sky-700 border border-sky-200 rounded-md font-bold text-[10px]">${izin}x Izin</span>`);
+            if (alpha > 0) pills.push(`<span class="px-2 py-0.5 bg-rose-50 text-rose-700 border border-rose-200 rounded-md font-bold text-[10px]">${alpha}x Alpha</span>`);
+
+            rincianHtml = `
+              <div class="flex flex-wrap items-center gap-1" title="${escapeHtml(tooltipDetail)}">
+                ${pills.join(' ')}
+              </div>
+            `;
           }
 
           return `
@@ -5601,11 +5887,477 @@
         document.getElementById('pasteExcelTextarea').value = '';
         document.getElementById('previewPastedNilaiArea').classList.add('hidden');
         parsedNilaiCache = [];
-        Swal.fire('Tersimpan di Google Sheets! 🟢', `Sebanyak ${dataNilaiToPost.length} nilai mapel ${mapel} kelas ${kelas} berhasil disimpan ke Google Sheets.`, 'success');
+        Swal.fire('Tersimpan di Database! 🟢', `Sebanyak ${dataNilaiToPost.length} nilai mapel ${mapel} kelas ${kelas} berhasil disimpan ke Database.`, 'success');
         await syncDataFromGoogleSheets(true, true);
       } else {
-        Swal.fire('Tersimpan di Sesi Lokal ⚠️', `Nilai tersimpan di memori perangkat karena sinkronisasi Google Sheets belum terhubung (${res.error || 'Timeout/Offline'}). Data paste Anda tetap aman untuk dicoba simpan ulang.`, 'warning');
+        Swal.fire('Tersimpan di Sesi Lokal ⚠️', `Nilai tersimpan di memori perangkat karena sinkronisasi database belum terhubung (${res.error || 'Timeout/Offline'}). Data paste Anda tetap aman untuk dicoba simpan ulang.`, 'warning');
       }
+    }
+
+    // MODUL PENILAIAN PEMBELAJARAN PER TOPIK & RUBRIK (KURIKULUM MERDEKA)
+    function setTopikInput(val) {
+      const input = document.getElementById('penilaianTopikJudul');
+      if (input) input.value = val;
+      renderFormPenilaianTopik();
+    }
+
+    function renderFormPenilaianTopik() {
+      const mapelSelect = document.getElementById('penilaianTopikMapel');
+      const kelasSelect = document.getElementById('penilaianTopikKelas');
+      const topikInput = document.getElementById('penilaianTopikJudul');
+      const tbody = document.getElementById('tbodyPenilaianTopik');
+      if (!tbody) return;
+
+      // Populate kelas if needed
+      if (kelasSelect && kelasSelect.options.length <= 1) {
+        const uniqueClasses = Array.from(new Set(masterSiswa.map(s => s.kelas))).filter(Boolean).sort();
+        if (uniqueClasses.length > 0) {
+          kelasSelect.innerHTML = uniqueClasses.map(c => `<option value="${c}">${c}</option>`).join('');
+        }
+      }
+
+      const mapel = mapelSelect ? mapelSelect.value : 'Matematika';
+      const kelas = kelasSelect ? kelasSelect.value : '8-A';
+      const topik = topikInput ? topikInput.value.trim() : 'Materi Pembelajaran';
+
+      const siswaList = masterSiswa.filter(s => s.kelas === kelas);
+
+      if (siswaList.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="7" class="py-8 text-center text-slate-400">Tidak ada siswa ditemukan di kelas ${kelas}.</td></tr>`;
+        hitungStatistikPenilaianTopik();
+        return;
+      }
+
+      // Check existing scores in logNilai
+      tbody.innerHTML = siswaList.map((s, idx) => {
+        const existing = (logNilai || []).find(n => 
+          isSameNisn(n.nisn, s.nisn) && 
+          n.kelas === kelas && 
+          n.mapel === mapel && 
+          (n.jenis === ("Formatif: " + topik) || (n.jenis && n.jenis.includes(topik)))
+        );
+
+        const score = existing ? (existing.nilai !== undefined ? existing.nilai : 80) : '';
+        let initialLevel = 'BAIK';
+        if (score !== '') {
+          const num = Number(score);
+          if (num < 66) initialLevel = 'BIMBINGAN';
+          else if (num <= 75) initialLevel = 'CUKUP';
+          else if (num <= 88) initialLevel = 'BAIK';
+          else initialLevel = 'SANGAT_BAIK';
+        }
+
+        const autoDesc = getDeskripsiOtomatisTopik(initialLevel, topik);
+        const desc = existing && existing.catatan ? existing.catatan.replace(/^\[.*?\]\s*/, '') : autoDesc;
+
+        return `
+          <tr id="rowTopik_${s.nisn}" class="hover:bg-slate-50/80 transition" data-nisn="${s.nisn}" data-nama="${escapeHtml(s.nama)}">
+            <td class="py-3 px-3 font-semibold text-slate-500">${idx + 1}</td>
+            <td class="py-3 px-3 font-mono font-bold text-slate-600">${s.nisn}</td>
+            <td class="py-3 px-3 font-bold text-slate-800">${escapeHtml(s.nama)}</td>
+            <td class="py-3 px-3">
+              <div class="flex flex-wrap items-center gap-1">
+                <button type="button" onclick="setRubrikSiswa('${s.nisn}', 'BIMBINGAN', 60)" id="btnRubrik_${s.nisn}_BIMBINGAN" class="rubrik-btn-${s.nisn} px-2 py-1 rounded-md text-[10px] font-bold border transition cursor-pointer ${initialLevel === 'BIMBINGAN' ? 'bg-rose-600 text-white border-rose-600 shadow-xs' : 'bg-rose-50 text-rose-700 border-rose-200 hover:bg-rose-100'}">
+                  🔴 Bimbingan
+                </button>
+                <button type="button" onclick="setRubrikSiswa('${s.nisn}', 'CUKUP', 72)" id="btnRubrik_${s.nisn}_CUKUP" class="rubrik-btn-${s.nisn} px-2 py-1 rounded-md text-[10px] font-bold border transition cursor-pointer ${initialLevel === 'CUKUP' ? 'bg-amber-500 text-white border-amber-500 shadow-xs' : 'bg-amber-50 text-amber-700 border-amber-200 hover:bg-amber-100'}">
+                  🟡 Cukup
+                </button>
+                <button type="button" onclick="setRubrikSiswa('${s.nisn}', 'BAIK', 82)" id="btnRubrik_${s.nisn}_BAIK" class="rubrik-btn-${s.nisn} px-2 py-1 rounded-md text-[10px] font-bold border transition cursor-pointer ${initialLevel === 'BAIK' ? 'bg-emerald-600 text-white border-emerald-600 shadow-xs' : 'bg-emerald-50 text-emerald-700 border-emerald-200 hover:bg-emerald-100'}">
+                  🟢 Baik
+                </button>
+                <button type="button" onclick="setRubrikSiswa('${s.nisn}', 'SANGAT_BAIK', 92)" id="btnRubrik_${s.nisn}_SANGAT_BAIK" class="rubrik-btn-${s.nisn} px-2 py-1 rounded-md text-[10px] font-bold border transition cursor-pointer ${initialLevel === 'SANGAT_BAIK' ? 'bg-blue-600 text-white border-blue-600 shadow-xs' : 'bg-blue-50 text-blue-700 border-blue-200 hover:bg-blue-100'}">
+                  🔵 Sangat Baik
+                </button>
+              </div>
+            </td>
+            <td class="py-3 px-3 text-center">
+              <input type="number" min="0" max="100" id="topikScore_${s.nisn}" oninput="syncRubrikFromInput('${s.nisn}')" value="${score !== '' ? score : 82}" class="w-16 px-2 py-1.5 text-center font-bold text-slate-800 bg-white border border-slate-300 rounded-lg focus:outline-none focus:border-teal-500 shadow-xs">
+            </td>
+            <td class="py-3 px-3">
+              <input type="text" id="topikDesc_${s.nisn}" value="${escapeHtml(desc)}" placeholder="Deskripsi capaian kompetensi..." class="w-full px-2.5 py-1.5 bg-slate-50 border border-slate-200 rounded-lg text-xs text-slate-700 focus:outline-none focus:bg-white focus:border-teal-500">
+            </td>
+            <td class="py-3 px-3 text-center">
+              <span id="topikBadge_${s.nisn}" class="px-2 py-0.5 rounded-full font-bold text-[10px] inline-flex items-center gap-1 ${getBadgeClassTopik(initialLevel)}">
+                ${getBadgeTextTopik(initialLevel)}
+              </span>
+            </td>
+          </tr>
+        `;
+      }).join('');
+
+      hitungStatistikPenilaianTopik();
+      safeCreateIcons();
+    }
+
+    function getDeskripsiOtomatisTopik(level, topik) {
+      if (level === 'BIMBINGAN') {
+        return `Perlu bimbingan dan intervensi lebih lanjut dalam memahami ${topik}.`;
+      } else if (level === 'CUKUP') {
+        return `Mencapai ketuntasan minimal pada ${topik}, masih memerlukan penguatan latihan soal.`;
+      } else if (level === 'BAIK') {
+        return `Memahami konsep dan mampu menyelesaikan tugas materi ${topik} secara mandiri.`;
+      } else {
+        return `Sangat menguasai materi ${topik} secara komprehensif, teliti, dan berpikir kritis.`;
+      }
+    }
+
+    function getBadgeClassTopik(level) {
+      if (level === 'BIMBINGAN') return 'bg-rose-100 text-rose-800 border border-rose-200';
+      if (level === 'CUKUP') return 'bg-amber-100 text-amber-800 border border-amber-200';
+      if (level === 'BAIK') return 'bg-emerald-100 text-emerald-800 border border-emerald-200';
+      return 'bg-blue-100 text-blue-800 border border-blue-200';
+    }
+
+    function getBadgeTextTopik(level) {
+      if (level === 'BIMBINGAN') return 'Bimbingan';
+      if (level === 'CUKUP') return 'Cukup';
+      if (level === 'BAIK') return 'Tuntas';
+      return 'Sangat Baik';
+    }
+
+    function setRubrikSiswa(nisn, level, defaultScore) {
+      const scoreInput = document.getElementById(`topikScore_${nisn}`);
+      if (scoreInput) scoreInput.value = defaultScore;
+
+      const topikInput = document.getElementById('penilaianTopikJudul');
+      const topik = topikInput ? topikInput.value.trim() : 'Materi Pembelajaran';
+
+      const descInput = document.getElementById(`topikDesc_${nisn}`);
+      if (descInput) descInput.value = getDeskripsiOtomatisTopik(level, topik);
+
+      highlightRubrikButtons(nisn, level);
+      updateBadgeTopik(nisn, level);
+      hitungStatistikPenilaianTopik();
+    }
+
+    function syncRubrikFromInput(nisn) {
+      const scoreInput = document.getElementById(`topikScore_${nisn}`);
+      if (!scoreInput) return;
+      const val = Number(scoreInput.value || 0);
+
+      let level = 'BAIK';
+      if (val < 66) level = 'BIMBINGAN';
+      else if (val <= 75) level = 'CUKUP';
+      else if (val <= 88) level = 'BAIK';
+      else level = 'SANGAT_BAIK';
+
+      highlightRubrikButtons(nisn, level);
+      updateBadgeTopik(nisn, level);
+      hitungStatistikPenilaianTopik();
+    }
+
+    function highlightRubrikButtons(nisn, level) {
+      const btns = document.querySelectorAll(`.rubrik-btn-${nisn}`);
+      btns.forEach(b => {
+        b.className = b.className.replace(/bg-(rose|amber|emerald|blue)-600 text-white shadow-xs/g, '');
+        if (b.id.includes('BIMBINGAN')) b.className = `rubrik-btn-${nisn} px-2 py-1 rounded-md text-[10px] font-bold border transition cursor-pointer ${level === 'BIMBINGAN' ? 'bg-rose-600 text-white border-rose-600 shadow-xs' : 'bg-rose-50 text-rose-700 border-rose-200 hover:bg-rose-100'}`;
+        if (b.id.includes('CUKUP')) b.className = `rubrik-btn-${nisn} px-2 py-1 rounded-md text-[10px] font-bold border transition cursor-pointer ${level === 'CUKUP' ? 'bg-amber-500 text-white border-amber-500 shadow-xs' : 'bg-amber-50 text-amber-700 border-amber-200 hover:bg-amber-100'}`;
+        if (b.id.includes('BAIK') && !b.id.includes('SANGAT')) b.className = `rubrik-btn-${nisn} px-2 py-1 rounded-md text-[10px] font-bold border transition cursor-pointer ${level === 'BAIK' ? 'bg-emerald-600 text-white border-emerald-600 shadow-xs' : 'bg-emerald-50 text-emerald-700 border-emerald-200 hover:bg-emerald-100'}`;
+        if (b.id.includes('SANGAT_BAIK')) b.className = `rubrik-btn-${nisn} px-2 py-1 rounded-md text-[10px] font-bold border transition cursor-pointer ${level === 'SANGAT_BAIK' ? 'bg-blue-600 text-white border-blue-600 shadow-xs' : 'bg-blue-50 text-blue-700 border-blue-200 hover:bg-blue-100'}`;
+      });
+    }
+
+    function updateBadgeTopik(nisn, level) {
+      const badge = document.getElementById(`topikBadge_${nisn}`);
+      if (!badge) return;
+      badge.className = `px-2 py-0.5 rounded-full font-bold text-[10px] inline-flex items-center gap-1 ${getBadgeClassTopik(level)}`;
+      badge.innerText = getBadgeTextTopik(level);
+    }
+
+    function setSemuaNilaiTopik(score, level) {
+      const tbody = document.getElementById('tbodyPenilaianTopik');
+      if (!tbody) return;
+      const rows = tbody.querySelectorAll('tr[data-nisn]');
+      rows.forEach(r => {
+        const nisn = r.getAttribute('data-nisn');
+        setRubrikSiswa(nisn, level, score);
+      });
+    }
+
+    function hitungStatistikPenilaianTopik() {
+      const tbody = document.getElementById('tbodyPenilaianTopik');
+      if (!tbody) return;
+      const scoreInputs = tbody.querySelectorAll('input[id^="topikScore_"]');
+      let total = scoreInputs.length;
+      let sum = 0;
+      let tuntas = 0;
+      let bimbingan = 0;
+
+      scoreInputs.forEach(inp => {
+        const val = Number(inp.value || 0);
+        sum += val;
+        if (val >= 75) tuntas++;
+        else bimbingan++;
+      });
+
+      const rata = total > 0 ? (sum / total).toFixed(1) : '0.0';
+
+      const statTotal = document.getElementById('statTopikTotal');
+      const statRata = document.getElementById('statTopikRata');
+      const statTuntas = document.getElementById('statTopikTuntas');
+      const statBimbingan = document.getElementById('statTopikBimbingan');
+
+      if (statTotal) statTotal.innerText = total;
+      if (statRata) statRata.innerText = rata;
+      if (statTuntas) statTuntas.innerText = tuntas;
+      if (statBimbingan) statBimbingan.innerText = bimbingan;
+    }
+
+    async function handleSimpanNilaiTopik() {
+      const mapelSelect = document.getElementById('penilaianTopikMapel');
+      const kelasSelect = document.getElementById('penilaianTopikKelas');
+      const topikInput = document.getElementById('penilaianTopikJudul');
+      const tbody = document.getElementById('tbodyPenilaianTopik');
+
+      const mapel = mapelSelect ? mapelSelect.value : 'Matematika';
+      const kelas = kelasSelect ? kelasSelect.value : '8-A';
+      const topik = topikInput ? topikInput.value.trim() : 'Materi Pembelajaran';
+
+      const rows = tbody ? tbody.querySelectorAll('tr[data-nisn]') : [];
+      if (rows.length === 0) {
+        Swal.fire('Data Kosong', 'Tidak ada daftar siswa untuk disimpan.', 'warning');
+        return;
+      }
+
+      const payload = [];
+      const now = new Date().toISOString().split('T')[0];
+
+      rows.forEach(r => {
+        const nisn = r.getAttribute('data-nisn');
+        const scoreInp = document.getElementById(`topikScore_${nisn}`);
+        const descInp = document.getElementById(`topikDesc_${nisn}`);
+        const score = scoreInp ? Number(scoreInp.value || 0) : 0;
+        const desc = descInp ? descInp.value.trim() : '';
+
+        let levelName = 'Baik';
+        if (score < 66) levelName = 'Perlu Bimbingan';
+        else if (score <= 75) levelName = 'Cukup';
+        else if (score <= 88) levelName = 'Baik';
+        else levelName = 'Sangat Baik';
+
+        let huruf = 'B';
+        if (score >= 90) huruf = 'A';
+        else if (score >= 80) huruf = 'B';
+        else if (score >= 70) huruf = 'C';
+        else huruf = 'D';
+
+        const item = {
+          id: 'NL-TP-' + Date.now().toString().slice(-6) + Math.random().toString(36).slice(2, 5),
+          nisn: nisn,
+          kelas: kelas,
+          mapel: mapel,
+          mataPelajaran: mapel,
+          jenis: 'Formatif: ' + topik,
+          jenisAsesmen: 'Formatif: ' + topik,
+          nilai: score,
+          nilaiAngka: score,
+          huruf: huruf,
+          catatan: `[${levelName}] ${desc}`,
+          catatanGuru: `[${levelName}] ${desc}`,
+          tglInput: now
+        };
+
+        payload.push(item);
+
+        // Update local logNilai
+        const existIdx = logNilai.findIndex(x => isSameNisn(x.nisn, nisn) && x.kelas === kelas && x.mapel === mapel && x.jenis === item.jenis);
+        if (existIdx !== -1) {
+          logNilai[existIdx] = Object.assign(logNilai[existIdx], item);
+        } else {
+          logNilai.push(item);
+        }
+      });
+
+      playChimeBell();
+      Swal.fire({
+        title: 'Menyimpan ke Database...',
+        text: `Menyimpan ${payload.length} penilaian pembelajaran materi ${topik}...`,
+        didOpen: () => Swal.showLoading(),
+        allowOutsideClick: false
+      });
+
+      const res = await callBackendPost({
+        action: 'simpanNilaiUlangan',
+        dataNilai: payload,
+        inputOleh: currentUser ? currentUser.nama : 'Guru Pengampu'
+      });
+
+      if (res && res.success) {
+        Swal.fire({
+          icon: 'success',
+          title: 'Tersimpan di Database! 🟢',
+          text: `Sebanyak ${payload.length} penilaian pembelajaran topik "${topik}" kelas ${kelas} berhasil disimpan permanen.`,
+          timer: 2500,
+          showConfirmButton: false
+        });
+        await syncDataFromGoogleSheets(true, true);
+      } else {
+        Swal.fire({
+          icon: 'info',
+          title: 'Tersimpan Lokal 💾',
+          text: `Penilaian tersimpan di perangkat lokal (${res ? (res.error || 'Offline') : 'Offline'}). Anda dapat mencetak atau menyinkronkan ulang kapan saja.`
+        });
+      }
+    }
+
+    function cetakRekapNilaiTopikPdf() {
+      const mapelSelect = document.getElementById('penilaianTopikMapel');
+      const kelasSelect = document.getElementById('penilaianTopikKelas');
+      const topikInput = document.getElementById('penilaianTopikJudul');
+      const tbody = document.getElementById('tbodyPenilaianTopik');
+
+      const mapel = mapelSelect ? mapelSelect.value : 'Matematika';
+      const kelas = kelasSelect ? kelasSelect.value : '8-A';
+      const topik = topikInput ? topikInput.value.trim() : 'Materi Pembelajaran';
+
+      const rows = tbody ? tbody.querySelectorAll('tr[data-nisn]') : [];
+      if (rows.length === 0) {
+        Swal.fire('Data Kosong', 'Tidak ada data penilaian untuk dicetak.', 'warning');
+        return;
+      }
+
+      const logoKiri = appConfig.LOGO_KIRI_PEMDA || 'icons/icon-192.png';
+      const logoKanan = appConfig.LOGO_KANAN_SEKOLAH || 'icons/icon-192.png';
+      const namaSekolah = appConfig.NAMA_SEKOLAH || 'SMP NEGERI 1 INDONESIA HEBAT';
+      const alamatSekolah = appConfig.ALAMAT_SEKOLAH || 'Jl. Pendidikan Karakter No. 1 Indonesia Hebat';
+      const namaGuru = currentUser ? currentUser.nama : 'Guru Mata Pelajaran';
+      const nipGuru = currentUser ? (currentUser.nip || '-') : '-';
+      const namaKepsek = appConfig.NAMA_KEPSEK || 'Drs. H. Mulyadi, M.Pd.';
+      const nipKepsek = appConfig.NIP_KEPSEK || '19700101 199503 1 001';
+
+      let rowHtml = '';
+      let sum = 0;
+      let tuntasCount = 0;
+
+      rows.forEach((r, idx) => {
+        const nisn = r.getAttribute('data-nisn');
+        const nama = r.getAttribute('data-nama');
+        const scoreInp = document.getElementById(`topikScore_${nisn}`);
+        const descInp = document.getElementById(`topikDesc_${nisn}`);
+        const score = scoreInp ? Number(scoreInp.value || 0) : 0;
+        const desc = descInp ? descInp.value.trim() : '';
+
+        sum += score;
+        if (score >= 75) tuntasCount++;
+
+        let statusText = score >= 75 ? 'TUNTAS' : 'BELUM TUNTAS';
+
+        rowHtml += `
+          <tr style="border-bottom: 1px solid #cbd5e1; page-break-inside: avoid;">
+            <td style="padding: 6px; text-align: center; font-size: 11px;">${idx + 1}</td>
+            <td style="padding: 6px; font-family: monospace; font-size: 11px;">${nisn}</td>
+            <td style="padding: 6px; font-weight: bold; font-size: 11px;">${nama}</td>
+            <td style="padding: 6px; text-align: center; font-weight: bold; font-size: 12px;">${score}</td>
+            <td style="padding: 6px; font-size: 10.5px; line-height: 1.3;">${desc}</td>
+            <td style="padding: 6px; text-align: center; font-weight: bold; font-size: 10px;">${statusText}</td>
+          </tr>
+        `;
+      });
+
+      const rata = rows.length > 0 ? (sum / rows.length).toFixed(1) : '0';
+      const tglCetak = new Date().toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' });
+
+      const printArea = document.getElementById('printArea');
+      if (!printArea) return;
+
+      printArea.innerHTML = `
+        <div style="font-family: Arial, sans-serif; color: #000; padding: 10px;">
+          <!-- Kop Surat Resmi 2 Logo -->
+          <div style="display: flex; align-items: center; justify-content: space-between; border-bottom: 3px double #000; padding-bottom: 8px; margin-bottom: 12px;">
+            <img src="${logoKiri}" style="width: 65px; height: 65px; object-fit: contain;">
+            <div style="text-align: center; flex: 1; padding: 0 10px;">
+              <h4 style="margin: 0; font-size: 13px; font-weight: bold; text-transform: uppercase;">PEMERINTAH PROVINSI / KABUPATEN</h4>
+              <h4 style="margin: 0; font-size: 13px; font-weight: bold; text-transform: uppercase;">DINAS PENDIDIKAN DAN KEBUDAYAAN</h4>
+              <h2 style="margin: 2px 0; font-size: 16px; font-weight: 900; text-transform: uppercase;">${namaSekolah}</h2>
+              <p style="margin: 0; font-size: 10px; color: #333;">${alamatSekolah}</p>
+            </div>
+            <img src="${logoKanan}" style="width: 65px; height: 65px; object-fit: contain;">
+          </div>
+
+          <!-- Judul Dokumen -->
+          <div style="text-align: center; margin-bottom: 14px;">
+            <h3 style="margin: 0; font-size: 13px; font-weight: bold; text-transform: uppercase; text-decoration: underline;">LEMBAR PENILAIAN PEMBELAJARAN & RUBRIK ASESMEN</h3>
+            <span style="font-size: 10px; font-weight: bold; color: #444;">KURIKULUM MERDEKA TAHUN AJARAN 2026/2027</span>
+          </div>
+
+          <!-- Informasi Identitas Asesmen -->
+          <table style="width: 100%; font-size: 11px; margin-bottom: 12px; border-collapse: collapse;">
+            <tr>
+              <td style="width: 20%; padding: 2px 0;"><b>Mata Pelajaran</b></td>
+              <td style="width: 30%; padding: 2px 0;">: ${mapel}</td>
+              <td style="width: 20%; padding: 2px 0;"><b>Kelas / Rombel</b></td>
+              <td style="width: 30%; padding: 2px 0;">: Kelas ${kelas}</td>
+            </tr>
+            <tr>
+              <td style="padding: 2px 0;"><b>Topik / Materi (TP)</b></td>
+              <td style="padding: 2px 0;">: ${topik}</td>
+              <td style="padding: 2px 0;"><b>Tanggal Asesmen</b></td>
+              <td style="padding: 2px 0;">: ${tglCetak}</td>
+            </tr>
+            <tr>
+              <td style="padding: 2px 0;"><b>Guru Pengampu</b></td>
+              <td style="padding: 2px 0;">: ${namaGuru}</td>
+              <td style="padding: 2px 0;"><b>Kriteria Ketuntasan (KKTP)</b></td>
+              <td style="padding: 2px 0;">: 75.0 (Baik)</td>
+            </tr>
+          </table>
+
+          <!-- Pedoman Rubrik Ringkas -->
+          <div style="border: 1px solid #94a3b8; border-radius: 4px; padding: 6px 10px; margin-bottom: 12px; font-size: 9.5px; background: #f8fafc;">
+            <b>Kriteria Penilaian Rubrik:</b> 
+            <b>1. Perlu Bimbingan (&lt;66)</b>: Belum tuntas dasar materi | 
+            <b>2. Cukup (66-75)</b>: Tuntas sebagian konsep dasar | 
+            <b>3. Baik (76-88)</b>: Tuntas mandiri sesuai target | 
+            <b>4. Sangat Baik (89-100)</b>: Melampaui target pembelajaran
+          </div>
+
+          <!-- Tabel Nilai -->
+          <table style="width: 100%; border-collapse: collapse; font-size: 11px; margin-bottom: 14px; border: 1px solid #64748b;">
+            <thead>
+              <tr style="background: #e2e8f0; border-bottom: 1.5px solid #475569;">
+                <th style="padding: 6px; width: 35px; text-align: center;">No</th>
+                <th style="padding: 6px; width: 95px; text-align: center;">NISN</th>
+                <th style="padding: 6px; width: 170px; text-align: left;">Nama Peserta Didik</th>
+                <th style="padding: 6px; width: 60px; text-align: center;">Nilai</th>
+                <th style="padding: 6px; text-align: left;">Deskripsi Capaian Kompetensi Pembelajaran</th>
+                <th style="padding: 6px; width: 85px; text-align: center;">Ketuntasan</th>
+              </tr>
+            </thead>
+            <tbody>
+              ${rowHtml}
+            </tbody>
+          </table>
+
+          <!-- Statistik Ringkas -->
+          <div style="font-size: 10.5px; margin-bottom: 25px; padding: 6px 10px; border: 1px solid #cbd5e1; border-radius: 4px; display: flex; justify-content: space-around;">
+            <span>Total Siswa: <b>${rows.length}</b></span>
+            <span>Rata-Rata Kelas: <b>${rata}</b></span>
+            <span>Jumlah Tuntas: <b>${tuntasCount} siswa</b> (${rows.length > 0 ? ((tuntasCount/rows.length)*100).toFixed(0) : 0}%)</span>
+            <span>Perlu Bimbingan: <b>${rows.length - tuntasCount} siswa</b></span>
+          </div>
+
+          <!-- Tanda Tangan Resmi -->
+          <table style="width: 100%; font-size: 11px; text-align: center; margin-top: 15px; page-break-inside: avoid;">
+            <tr>
+              <td style="width: 50%;">
+                Mengetahui,<br>
+                Kepala Sekolah<br><br><br><br>
+                <b><u>${namaKepsek}</u></b><br>
+                NIP. ${nipKepsek}
+              </td>
+              <td style="width: 50%;">
+                Kota Sekolah, ${tglCetak}<br>
+                Guru Mata Pelajaran<br><br><br><br>
+                <b><u>${namaGuru}</u></b><br>
+                NIP. ${nipGuru}
+              </td>
+            </tr>
+          </table>
+        </div>
+      `;
+
+      window.print();
     }
 
     // Modul Portal Guru Wali: Validasi 7 Kebiasaan, Bimbingan & Rekap Mingguan A4
@@ -5786,16 +6538,29 @@
     }
 
     function lihatFotoBuktiModal(idLog, tanggal, nisn) {
+      // Jika dipanggil langsung dengan data URI base64 atau URL
+      if (typeof idLog === 'string' && (idLog.startsWith('data:image') || idLog.startsWith('http://') || idLog.startsWith('https://'))) {
+        Swal.fire({
+          title: 'Foto Bukti Kamera Ter-watermark',
+          imageUrl: idLog,
+          imageAlt: 'Bukti 7 Kebiasaan',
+          text: (tanggal ? `Laporan: ${tanggal}` : 'Foto Bukti Siswa'),
+          confirmButtonText: 'Tutup'
+        });
+        return;
+      }
+
       let kb = null;
       if (idLog) kb = log7Kebiasaan.find(k => k.idLog === idLog);
       if (!kb && nisn && tanggal) kb = log7Kebiasaan.find(k => isSameNisn(k.nisn, nisn) && k.tanggal === tanggal);
+      if (!kb && currentUser && tanggal) kb = log7Kebiasaan.find(k => isSameNisn(k.nisn, currentUser.nisn) && k.tanggal === tanggal);
       if (!kb && nisn) kb = log7Kebiasaan.find(k => isSameNisn(k.nisn, nisn));
 
       const src = kb ? (kb.fotoBuktiUrl || kb.fotoBase64) : null;
       if (!src || src === 'Foto tersimpan di kanvas lokal') {
         Swal.fire({
           title: 'Foto Bukti Kamera',
-          text: kb ? `Laporan ananda ${kb.nama} (${kb.tanggal}) tercatat, namun file foto tidak dapat dibuka secara offline.` : 'Foto bukti tidak ditemukan.',
+          text: kb ? `Laporan ananda ${kb.nama || ''} (${kb.tanggal}) tercatat, namun file foto tidak dapat dibuka secara offline.` : 'Foto bukti tidak ditemukan.',
           icon: 'info'
         });
         return;
@@ -5805,7 +6570,7 @@
         title: 'Foto Bukti Kamera Ter-watermark',
         imageUrl: src,
         imageAlt: 'Bukti 7 Kebiasaan',
-        text: kb ? (kb.watermarkInfo || `${kb.nama} - ${kb.tanggal}`) : 'Foto Bukti',
+        text: kb ? (kb.watermarkInfo || `${kb.nama || ''} - ${kb.tanggal}`) : 'Foto Bukti',
         confirmButtonText: 'Tutup'
       });
     }
@@ -5843,7 +6608,7 @@
       });
 
       if (res && res.success) {
-        Swal.fire('Divalidasi! 🟢', 'Jurnal 7 Kebiasaan siswa telah disetujui di Google Sheets.', 'success');
+        Swal.fire('Divalidasi! 🟢', 'Jurnal 7 Kebiasaan siswa telah disetujui di Database.', 'success');
         await syncDataFromGoogleSheets(true, true);
       } else {
         Swal.fire('Divalidasi! 💾', 'Jurnal 7 Kebiasaan siswa telah disetujui di sesi lokal.', 'info');
@@ -6386,7 +7151,7 @@
       });
 
       if (res && res.success) {
-        Swal.fire('Tersimpan! 🟢', `Guru Wali untuk ananda ${s.nama} berhasil disimpan ke Google Sheets.`, 'success');
+        Swal.fire('Tersimpan! 🟢', `Guru Wali untuk ananda ${s.nama} berhasil disimpan ke Database.`, 'success');
         await syncDataFromGoogleSheets(true, true);
       } else {
         Swal.fire('Tersimpan Lokal', `Perubahan disimpan lokal. (Backend: ${res ? res.error : 'Offline'})`, 'info');
@@ -6476,7 +7241,7 @@
       });
 
       if (res && res.success) {
-        Swal.fire('Tersimpan di Google Sheets! 🟢', 'Seluruh konfigurasi identitas sekolah dan URL database berhasil disimpan ke Google Sheets.', 'success');
+        Swal.fire('Tersimpan di Database! 🟢', 'Seluruh konfigurasi identitas sekolah berhasil disimpan ke Database.', 'success');
         await syncDataFromGoogleSheets(true, true);
       } else {
         Swal.fire('Tersimpan Lokal', 'Konfigurasi tersimpan di browser ini.', 'success');
@@ -7325,81 +8090,79 @@
 
     function renderPengumumanSiswa() {
       const container = document.getElementById('containerPengumumanSiswa');
-      if (!container) return;
+      const feedBeranda = document.getElementById('feedPengumumanSiswaBeranda');
 
       const list = logPengumuman.filter(p => isPengumumanActiveForUser(p, currentUser))
         .sort((a, b) => (b.tglDibuat || '').localeCompare(a.tglDibuat || ''));
 
-      if (list.length === 0) {
-        container.innerHTML = `
-          <div class="bg-white p-8 rounded-3xl border border-slate-200 text-center text-slate-400">
-            <i data-lucide="bell-off" class="w-10 h-10 mx-auto mb-2 text-slate-300"></i>
-            <p class="font-bold text-sm text-slate-600">Belum Ada Pengumuman Baru</p>
-            <p class="text-xs text-slate-400 mt-0.5">Seluruh informasi resmi sekolah akan tampil di halaman ini.</p>
+      const htmlContent = list.length === 0
+        ? `
+          <div class="bg-white p-6 rounded-2xl border border-slate-200 text-center text-slate-400">
+            <i data-lucide="bell-off" class="w-8 h-8 mx-auto mb-1.5 text-slate-300"></i>
+            <p class="font-bold text-xs text-slate-600">Belum Ada Pengumuman Baru</p>
+            <p class="text-[11px] text-slate-400 mt-0.5">Seluruh informasi resmi sekolah akan tampil di halaman ini.</p>
           </div>
-        `;
-        safeCreateIcons();
-        return;
-      }
-
-      container.innerHTML = list.map(p => `
-        <div class="bg-white p-6 rounded-3xl border border-slate-200 shadow-xs hover:border-blue-300 transition space-y-3">
-          <div class="flex flex-wrap items-center justify-between gap-2">
-            <div class="flex items-center gap-2">
-              <span class="px-2.5 py-0.5 bg-blue-100 text-blue-800 rounded-md text-[10px] font-black uppercase tracking-wider">PENGUMUMAN</span>
-              <span class="text-xs text-slate-400 font-medium">📅 Berlaku: ${p.tglMulai || '-'} s/d ${p.tglSelesai || '-'}</span>
+        `
+        : list.map(p => `
+          <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-xs hover:border-blue-300 transition space-y-2.5">
+            <div class="flex flex-wrap items-center justify-between gap-2">
+              <div class="flex items-center gap-2">
+                <span class="px-2 py-0.5 bg-blue-100 text-blue-800 rounded-md text-[10px] font-black uppercase tracking-wider">PENGUMUMAN</span>
+                <span class="text-[11px] text-slate-400 font-medium">📅 Berlaku: ${p.tglMulai || '-'} s/d ${p.tglSelesai || '-'}</span>
+              </div>
+              <span class="text-[11px] text-slate-400 font-medium">Oleh: <b class="text-slate-700">${escapeHtml(p.dibuatOleh || 'Pendidik')}</b></span>
             </div>
-            <span class="text-[11px] text-slate-400 font-medium">Oleh: <b class="text-slate-700">${escapeHtml(p.dibuatOleh || 'Pendidik')}</b></span>
+            <h4 class="font-extrabold text-sm sm:text-base text-slate-900 leading-snug">${escapeHtml(p.judul)}</h4>
+            <p class="text-xs text-slate-600 leading-relaxed whitespace-pre-line">${escapeHtml(p.isi)}</p>
           </div>
-          <h4 class="font-extrabold text-base text-slate-900">${escapeHtml(p.judul)}</h4>
-          <p class="text-xs text-slate-600 leading-relaxed whitespace-pre-line">${escapeHtml(p.isi)}</p>
-        </div>
-      `).join('');
+        `).join('');
+
+      if (container) container.innerHTML = htmlContent;
+      if (feedBeranda) feedBeranda.innerHTML = htmlContent;
 
       safeCreateIcons();
     }
 
     function renderPengumumanGuru() {
       const container = document.getElementById('containerPengumumanGuru');
-      if (!container) return;
+      const feedBeranda = document.getElementById('feedPengumumanGuruBeranda');
 
       const list = logPengumuman.filter(p => isPengumumanActiveForUser(p, currentUser))
         .sort((a, b) => (b.tglDibuat || '').localeCompare(a.tglDibuat || ''));
 
-      if (list.length === 0) {
-        container.innerHTML = `
-          <div class="bg-white p-8 rounded-3xl border border-slate-200 text-center text-slate-400">
-            <i data-lucide="bell-off" class="w-10 h-10 mx-auto mb-2 text-slate-300"></i>
-            <p class="font-bold text-sm text-slate-600">Belum Ada Pengumuman</p>
-            <p class="text-xs text-slate-400 mt-0.5">Klik tombol "+ Buat Pengumuman Baru" di atas untuk memposting pengumuman.</p>
+      const htmlContent = list.length === 0
+        ? `
+          <div class="bg-white p-6 rounded-2xl border border-slate-200 text-center text-slate-400">
+            <i data-lucide="bell-off" class="w-8 h-8 mx-auto mb-1.5 text-slate-300"></i>
+            <p class="font-bold text-xs text-slate-600">Belum Ada Pengumuman</p>
+            <p class="text-[11px] text-slate-400 mt-0.5">Klik menu "+ Buat Pengumuman Baru" untuk memposting pengumuman.</p>
           </div>
-        `;
-        safeCreateIcons();
-        return;
-      }
+        `
+        : list.map(p => {
+          const targets = Array.isArray(p.targetAudience) ? p.targetAudience : String(p.targetAudience || 'SEMUA').split(',');
+          const targetBadges = targets.map(t => `<span class="px-2 py-0.5 bg-slate-100 text-slate-700 rounded text-[10px] font-bold uppercase">${t.trim()}</span>`).join(' ');
 
-      container.innerHTML = list.map(p => {
-        const targets = Array.isArray(p.targetAudience) ? p.targetAudience : String(p.targetAudience || 'SEMUA').split(',');
-        const targetBadges = targets.map(t => `<span class="px-2 py-0.5 bg-slate-100 text-slate-700 rounded text-[10px] font-bold uppercase">${t.trim()}</span>`).join(' ');
-
-        return `
-          <div class="bg-white p-6 rounded-3xl border border-slate-200 shadow-xs space-y-3">
-            <div class="flex flex-wrap items-center justify-between gap-2">
-              <div class="flex flex-wrap items-center gap-1.5">
-                <span class="px-2.5 py-0.5 bg-indigo-100 text-indigo-800 rounded-md text-[10px] font-black uppercase tracking-wider">RESMI</span>
-                ${targetBadges}
+          return `
+            <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-xs space-y-2.5">
+              <div class="flex flex-wrap items-center justify-between gap-2">
+                <div class="flex flex-wrap items-center gap-1.5">
+                  <span class="px-2 py-0.5 bg-indigo-100 text-indigo-800 rounded-md text-[10px] font-black uppercase tracking-wider">RESMI</span>
+                  ${targetBadges}
+                </div>
+                <span class="text-[11px] text-slate-400 font-medium">📅 ${p.tglMulai || '-'} s/d ${p.tglSelesai || '-'}</span>
               </div>
-              <span class="text-xs text-slate-400 font-medium">📅 ${p.tglMulai || '-'} s/d ${p.tglSelesai || '-'}</span>
+              <h4 class="font-extrabold text-sm sm:text-base text-slate-900 leading-snug">${escapeHtml(p.judul)}</h4>
+              <p class="text-xs text-slate-600 leading-relaxed whitespace-pre-line">${escapeHtml(p.isi)}</p>
+              <div class="pt-2 border-t border-slate-100 flex items-center justify-between text-[10px] text-slate-400">
+                <span>Dibuat oleh: <b class="text-slate-700">${escapeHtml(p.dibuatOleh || 'Pendidik')}</b> (${escapeHtml(p.rolePembuat || 'GURU')})</span>
+                <span>Diposting: ${p.tglDibuat || '-'}</span>
+              </div>
             </div>
-            <h4 class="font-extrabold text-base text-slate-900">${escapeHtml(p.judul)}</h4>
-            <p class="text-xs text-slate-600 leading-relaxed whitespace-pre-line">${escapeHtml(p.isi)}</p>
-            <div class="pt-2 border-t border-slate-100 flex items-center justify-between text-[11px] text-slate-400">
-              <span>Dibuat oleh: <b class="text-slate-700">${escapeHtml(p.dibuatOleh || 'Pendidik')}</b> (${escapeHtml(p.rolePembuat || 'GURU')})</span>
-              <span>Diposting: ${p.tglDibuat || '-'}</span>
-            </div>
-          </div>
-        `;
-      }).join('');
+          `;
+        }).join('');
+
+      if (container) container.innerHTML = htmlContent;
+      if (feedBeranda) feedBeranda.innerHTML = htmlContent;
 
       safeCreateIcons();
     }
