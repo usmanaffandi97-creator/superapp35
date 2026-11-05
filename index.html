@@ -122,58 +122,59 @@
 <body class="bg-slate-50 text-slate-800 min-h-screen flex flex-col antialiased selection:bg-blue-600 selection:text-white">
 
   <!-- TOP BAR / HEADER UTAMA -->
-  <header class="bg-white border-b border-slate-200 sticky top-0 z-40 shadow-xs">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <div class="flex items-center justify-between h-16">
+  <header class="bg-white/95 backdrop-blur-md border-b border-slate-200/80 sticky top-0 z-40 shadow-xs transition-all">
+    <div class="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8">
+      <div class="flex items-center justify-between h-14 sm:h-16 gap-2">
         
         <!-- Logo & Identitas Sekolah -->
-        <div class="flex items-center space-x-3 cursor-pointer" onclick="navigateHome()">
-          <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-blue-700 to-indigo-600 flex items-center justify-center text-white shadow-md shadow-blue-100 flex-shrink-0">
-            <i data-lucide="shield-check" class="w-6 h-6"></i>
+        <div class="flex items-center gap-2 sm:gap-3 cursor-pointer group select-none min-w-0 flex-1 mr-1" onclick="navigateHome()" title="Kembali ke Beranda">
+          <div class="w-8 h-8 sm:w-10 sm:h-10 rounded-xl sm:rounded-2xl bg-gradient-to-tr from-blue-700 via-indigo-600 to-sky-500 flex items-center justify-center text-white shadow-sm ring-2 ring-indigo-50/80 flex-shrink-0 group-hover:scale-105 transition-transform">
+            <i data-lucide="shield-check" class="w-4 h-4 sm:w-6 sm:h-6"></i>
           </div>
-          <div>
-            <h1 id="navSchoolName" class="font-bold text-sm sm:text-base text-slate-900 leading-tight line-clamp-1">SMP NEGERI 1 INDONESIA HEBAT</h1>
-            <p class="text-xs text-blue-700 font-medium flex items-center gap-1.5 mt-0.5">
-              <span>Super App Sekolah</span>
-              <button id="backendBadge" onclick="openModalSetelBackend(event)" title="Koneksi Google Spreadsheet (Akses Kelola: Khusus Admin)" class="inline-flex items-center gap-1 px-2 py-0.5 bg-amber-100 text-amber-800 rounded-full text-[10px] font-bold border border-amber-300 hover:bg-amber-200 transition cursor-pointer">
+          <div class="min-w-0 flex-1">
+            <h1 id="navSchoolName" class="font-black text-xs sm:text-sm md:text-base text-slate-900 leading-tight tracking-tight truncate group-hover:text-indigo-700 transition-colors">SMP NEGERI 1 INDONESIA HEBAT</h1>
+            <div class="flex items-center gap-1.5 mt-0.5">
+              <span class="text-[10px] sm:text-[11px] font-semibold text-slate-500 hidden sm:inline">SuperApp</span>
+              <span class="text-slate-300 hidden sm:inline">•</span>
+              <button id="backendBadge" onclick="openModalSetelBackend(event)" title="Koneksi Google Spreadsheet (Akses Kelola: Khusus Admin)" class="inline-flex items-center gap-1 px-2 py-0.5 bg-amber-100 text-amber-800 rounded-full text-[9px] sm:text-[10px] font-extrabold border border-amber-300 hover:bg-amber-200 transition cursor-pointer flex-shrink-0 max-w-[130px] truncate">
                 <span class="w-1.5 h-1.5 rounded-full bg-amber-500 animate-pulse"></span>
-                <span>Hubungkan Sheets</span>
+                <span>Hubungkan</span>
               </button>
-            </p>
+            </div>
           </div>
         </div>
 
-        <!-- Tombol Aksi Kanan & Akun -->
-        <div class="flex items-center space-x-2 sm:space-x-3">
+        <!-- Tombol Aksi Kanan & Akun (Rapi, Sejajar & Simetris di Mode Mobile Maupun Desktop) -->
+        <div class="flex items-center gap-1.5 sm:gap-2 flex-shrink-0">
           <!-- Tombol Segarkan Data dari Spreadsheet -->
-          <button id="btnRefreshOnline" onclick="manualRefreshData()" title="Segarkan Data dari Google Sheets" class="p-2 text-slate-500 hover:text-blue-700 hover:bg-blue-50 rounded-xl transition flex items-center gap-1.5 cursor-pointer">
-            <i data-lucide="refresh-cw" id="iconRefreshSpin" class="w-4 h-4"></i>
-            <span class="text-xs font-semibold hidden md:inline">Segarkan Data</span>
+          <button id="btnRefreshOnline" onclick="manualRefreshData()" title="Segarkan Data dari Database" class="h-8 sm:h-9 px-2 sm:px-2.5 text-slate-600 hover:text-blue-700 hover:bg-blue-50/80 border border-slate-200 rounded-xl transition flex items-center justify-center gap-1.5 cursor-pointer shadow-2xs flex-shrink-0">
+            <i data-lucide="refresh-cw" id="iconRefreshSpin" class="w-3.5 h-3.5 sm:w-4 sm:h-4 text-slate-500"></i>
+            <span class="text-xs font-bold hidden md:inline">Segarkan</span>
           </button>
 
           <!-- Tombol Pasang PWA (jika didukung) -->
-          <button id="btnInstallPwa" onclick="triggerPwaInstall()" class="hidden px-2.5 py-1.5 bg-blue-50 text-blue-700 hover:bg-blue-100 border border-blue-200 rounded-lg text-xs font-semibold flex items-center gap-1.5 transition">
-            <i data-lucide="download" class="w-4 h-4"></i>
-            <span class="hidden sm:inline">Pasang di HP</span>
+          <button id="btnInstallPwa" onclick="triggerPwaInstall()" class="hidden h-8 sm:h-9 px-2.5 bg-emerald-50 text-emerald-700 hover:bg-emerald-100 border border-emerald-200 rounded-xl text-xs font-bold flex items-center gap-1.5 transition shadow-2xs flex-shrink-0">
+            <i data-lucide="download" class="w-3.5 h-3.5"></i>
+            <span class="hidden sm:inline">Pasang App</span>
           </button>
 
           <!-- Status Akun Aktif -->
-          <div id="userProfileArea" class="hidden items-center space-x-2 bg-slate-100 px-3 py-1.5 rounded-xl border border-slate-200">
-            <div id="userAvatar" class="w-7 h-7 rounded-full bg-blue-600 text-white flex items-center justify-center text-xs font-bold">
+          <div id="userProfileArea" class="hidden items-center gap-1.5 h-8 sm:h-9 bg-slate-50 hover:bg-slate-100/80 pl-1.5 pr-1 sm:px-2 rounded-xl border border-slate-200 shadow-2xs transition flex-shrink-0">
+            <div id="userAvatar" class="w-6 h-6 sm:w-7 sm:h-7 rounded-lg bg-gradient-to-tr from-blue-600 to-indigo-600 text-white flex items-center justify-center text-[11px] sm:text-xs font-black shadow-xs flex-shrink-0">
               U
             </div>
-            <div class="text-left hidden md:block">
-              <div id="userName" class="text-xs font-bold text-slate-800 leading-tight">Nama Pengguna</div>
-              <div id="userRoleBadge" class="text-[10px] text-slate-500 font-medium">Peran</div>
+            <div class="text-left hidden lg:block max-w-[130px]">
+              <div id="userName" class="text-xs font-extrabold text-slate-800 leading-tight truncate">Nama Pengguna</div>
+              <div id="userRoleBadge" class="text-[9px] text-indigo-600 font-bold truncate">Peran</div>
             </div>
-            <button onclick="logoutSession()" title="Keluar Akun" class="text-slate-400 hover:text-rose-600 p-1 transition ml-1">
-              <i data-lucide="log-out" class="w-4 h-4"></i>
+            <button onclick="logoutSession()" title="Keluar Akun" class="text-slate-400 hover:text-rose-600 hover:bg-rose-50 p-1 rounded-lg transition cursor-pointer">
+              <i data-lucide="log-out" class="w-3.5 h-3.5"></i>
             </button>
           </div>
 
           <!-- Tombol Akses Admin (Gembok) -->
-          <button id="btnAdminAccess" onclick="openAdminPinModal()" title="Panel Administrator" class="p-2 text-slate-500 hover:text-blue-700 hover:bg-blue-50 rounded-xl transition">
-            <i data-lucide="lock" class="w-5 h-5"></i>
+          <button id="btnAdminAccess" onclick="openAdminPinModal()" title="Panel Administrator (Gembok)" class="h-8 w-8 sm:h-9 sm:w-9 flex items-center justify-center rounded-xl bg-slate-50 hover:bg-indigo-50 border border-slate-200 hover:border-indigo-300 text-slate-600 hover:text-indigo-600 transition shadow-2xs cursor-pointer flex-shrink-0" aria-label="Akses Admin">
+            <i data-lucide="lock" class="w-3.5 h-3.5 sm:w-4 sm:h-4"></i>
           </button>
         </div>
 
@@ -182,24 +183,24 @@
   </header>
 
   <!-- BANNER JIKA DATABASE BELUM TERHUBUNG -->
-  <div id="bannerKoneksiDatabase" class="bg-amber-400 text-slate-950 text-xs py-2 px-4 flex items-center justify-between font-semibold shadow-xs">
-    <div class="flex items-center gap-2">
-      <i data-lucide="database" class="w-4 h-4 flex-shrink-0 animate-pulse text-amber-900"></i>
-      <span><b>Database Spreadsheet Belum Terhubung:</b> Masih menggunakan data simulasi lokal. Hubungkan Web App Google Apps Script Anda agar data tersimpan online!</span>
+  <div id="bannerKoneksiDatabase" class="bg-gradient-to-r from-amber-400 via-amber-300 to-yellow-400 text-slate-950 text-xs py-2 px-4 flex flex-col sm:flex-row items-center justify-between gap-2 font-semibold shadow-xs border-b border-amber-500/20">
+    <div class="flex items-center gap-2 text-center sm:text-left">
+      <i data-lucide="database" class="w-4 h-4 flex-shrink-0 text-amber-950"></i>
+      <span><b>Database Spreadsheet Belum Terhubung:</b> Masih menggunakan data simulasi lokal. Hubungkan Web App Google Apps Script agar data tersimpan online!</span>
     </div>
-    <button onclick="openModalSetelBackend(event)" class="bg-slate-900 text-white hover:bg-slate-800 font-bold px-3 py-1 rounded-lg text-xs shadow-xs transition flex-shrink-0 ml-3 flex items-center gap-1.5 cursor-pointer">
+    <button onclick="openModalSetelBackend(event)" class="bg-slate-950 text-white hover:bg-slate-800 font-extrabold px-3 py-1 rounded-xl text-xs shadow-xs transition flex-shrink-0 flex items-center gap-1.5 cursor-pointer">
       <i data-lucide="lock" class="w-3 h-3 text-amber-400"></i>
       <span>Hubungkan (Khusus Admin)</span>
     </button>
   </div>
 
   <!-- RUNNING TEXT PENGUMUMAN SEKOLAH -->
-  <div id="newsTickerArea" class="bg-blue-900 text-white text-xs py-1.5 px-4 overflow-hidden flex items-center shadow-inner">
-    <div class="flex items-center gap-1.5 font-bold text-amber-300 mr-3 flex-shrink-0">
-      <i data-lucide="bell-ring" class="w-3.5 h-3.5 animate-bounce"></i>
+  <div id="newsTickerArea" class="bg-slate-900 text-white text-xs py-1.5 px-4 overflow-hidden flex items-center shadow-inner border-b border-slate-800">
+    <div class="flex items-center gap-1.5 font-black text-amber-300 mr-3 flex-shrink-0 tracking-wider text-[11px] uppercase">
+      <i data-lucide="bell-ring" class="w-3.5 h-3.5 animate-bounce text-amber-400"></i>
       <span>PENGUMUMAN:</span>
     </div>
-    <div class="truncate w-full font-medium text-blue-100" id="newsTickerText">
+    <div class="truncate w-full font-medium text-slate-200" id="newsTickerText">
       Selamat datang di Super App Sekolah Terpadu! Pantau presensi, kebiasaan karakter, dan capaian belajar ananda.
     </div>
   </div>
@@ -212,48 +213,43 @@
     <!-- ========================================================================= -->
     <section id="viewLanding" class="space-y-6">
       
-      <!-- Hero Banner Kop Resmi Sekolah Digital (Modern, Simetris & Responsif) -->
-      <div class="relative overflow-hidden rounded-3xl bg-gradient-to-br from-slate-950 via-slate-900 to-indigo-950 p-6 sm:p-8 text-white shadow-2xl border border-white/10">
+      <!-- Hero Banner Kop Resmi Sekolah Digital (Modern, Rata Tengah & Sejajar di Semua Mode Web/Browser) -->
+      <div class="relative overflow-hidden rounded-3xl bg-gradient-to-br from-slate-950 via-slate-900 to-indigo-950 p-5 sm:p-7 md:p-8 text-white shadow-2xl border border-white/10">
         <!-- High-Tech Ambient Glow Mesh & Cyber Accent -->
         <div class="absolute -top-24 -left-24 w-80 h-80 bg-blue-600/20 rounded-full blur-3xl pointer-events-none"></div>
         <div class="absolute -bottom-24 -right-24 w-80 h-80 bg-indigo-600/20 rounded-full blur-3xl pointer-events-none"></div>
         <div class="absolute inset-0 bg-[radial-gradient(#38bdf8_1px,transparent_1px)] [background-size:24px_24px] opacity-10 pointer-events-none"></div>
         
-        <!-- Header Grid: Simetris & Proporsional di Semua Ukuran Layar -->
-        <div class="relative z-10 flex flex-col md:flex-row items-center justify-between gap-5 sm:gap-6">
+        <!-- Header Grid: Simetris, Rata Tengah & Sejajar Satu Sama Lain di Web Maupun Browser Mobile -->
+        <div class="relative z-10 flex items-center justify-between gap-3 sm:gap-6 w-full">
           
-          <!-- Logo Bar Mobile & Desktop -->
-          <div class="flex items-center justify-between w-full md:w-auto">
-            <!-- Logo Kiri: Pemda / Tut Wuri Handayani (Glass Shield) -->
-            <div class="w-16 h-16 sm:w-20 sm:h-20 rounded-2xl bg-white/10 backdrop-blur-md p-2 flex items-center justify-center border border-white/20 shadow-xl shadow-black/20 flex-shrink-0 group hover:scale-105 transition">
-              <img id="landingLogoPemda" src="https://upload.wikimedia.org/wikipedia/commons/thumb/b/be/Coat_of_arms_of_Indonesia.svg/200px-Coat_of_arms_of_Indonesia.svg.png" alt="Logo Pemda" class="max-w-full max-h-full object-contain filter drop-shadow">
-            </div>
-
-            <!-- Logo Kanan Mobile (Tampil di layar HP < md agar KOP seimbang dan simetris) -->
-            <div class="md:hidden w-16 h-16 sm:w-20 sm:h-20 rounded-2xl bg-white/10 backdrop-blur-md p-2 flex items-center justify-center border border-white/20 shadow-xl shadow-black/20 flex-shrink-0 group hover:scale-105 transition">
-              <img id="landingLogoSekolahMob" src="https://upload.wikimedia.org/wikipedia/commons/thumb/9/9c/Logo_of_Ministry_of_Education_and_Culture_of_Republic_of_Indonesia.svg/200px-Logo_of_Ministry_of_Education_and_Culture_of_Republic_of_Indonesia.svg.png" alt="Logo Sekolah" class="max-w-full max-h-full object-contain filter drop-shadow">
-            </div>
+          <!-- Logo Kiri: Pemda / Tut Wuri Handayani -->
+          <div class="w-12 h-12 sm:w-16 sm:h-16 md:w-20 md:h-20 rounded-xl sm:rounded-2xl bg-white/10 backdrop-blur-md p-1.5 sm:p-2 flex items-center justify-center border border-white/20 shadow-xl shadow-black/20 flex-shrink-0 group hover:scale-105 transition">
+            <img id="landingLogoPemda" src="https://upload.wikimedia.org/wikipedia/commons/thumb/b/be/Coat_of_arms_of_Indonesia.svg/200px-Coat_of_arms_of_Indonesia.svg.png" alt="Logo Pemda" class="max-w-full max-h-full object-contain filter drop-shadow">
           </div>
 
-          <!-- Teks Identitas Resmi Sekolah -->
-          <div class="text-center md:text-left flex-1 min-w-0">
-            <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-cyan-500/10 border border-cyan-400/30 text-cyan-300 text-[10px] sm:text-xs font-extrabold tracking-wider uppercase mb-2 backdrop-blur-md">
-              <span class="w-2 h-2 rounded-full bg-cyan-400 animate-pulse"></span>
-              <span id="landingInstansi">PEMERINTAH KOTA / KABUPATEN - DINAS PENDIDIKAN</span>
+          <!-- Teks Identitas Resmi Sekolah: Rata Tengah Penuh di Semua Mode -->
+          <div class="text-center flex-1 min-w-0 px-1 sm:px-4">
+            <div class="inline-flex items-center justify-center gap-1.5 px-2.5 py-0.5 sm:px-3 sm:py-1 rounded-full bg-cyan-500/10 border border-cyan-400/30 text-cyan-300 text-[9px] sm:text-xs font-extrabold tracking-wider uppercase mb-1 sm:mb-2 backdrop-blur-md mx-auto max-w-full">
+              <span class="w-1.5 h-1.5 sm:w-2 sm:h-2 rounded-full bg-cyan-400 animate-pulse flex-shrink-0"></span>
+              <span id="landingInstansi" class="truncate">PEMERINTAH KOTA / KABUPATEN - DINAS PENDIDIKAN</span>
             </div>
-            <h2 id="landingSchoolTitle" class="text-2xl sm:text-3xl lg:text-4xl font-black text-transparent bg-clip-text bg-gradient-to-r from-white via-slate-100 to-cyan-200 tracking-tight leading-tight">
+            <h2 id="landingSchoolTitle" class="text-base sm:text-2xl md:text-3xl lg:text-4xl font-black text-transparent bg-clip-text bg-gradient-to-r from-white via-slate-100 to-cyan-200 tracking-tight leading-snug sm:leading-tight text-center mx-auto">
               SMP NEGERI 1 INDONESIA HEBAT
             </h2>
-            <div class="flex items-center justify-center md:justify-start gap-2 mt-2 text-xs sm:text-sm text-slate-300">
-              <span class="w-5 h-5 rounded-lg bg-white/10 flex items-center justify-center text-cyan-400 flex-shrink-0"><i data-lucide="map-pin" class="w-3.5 h-3.5"></i></span>
+            <div class="flex items-center justify-center gap-1 sm:gap-2 mt-1 sm:mt-2 text-[10px] sm:text-xs md:text-sm text-slate-300 text-center mx-auto">
+              <span class="w-4 h-4 sm:w-5 sm:h-5 rounded-md sm:rounded-lg bg-white/10 flex items-center justify-center text-cyan-400 flex-shrink-0">
+                <i data-lucide="map-pin" class="w-2.5 h-2.5 sm:w-3.5 sm:h-3.5"></i>
+              </span>
               <span id="landingAlamat" class="line-clamp-1">Jl. Pendidikan Karakter No. 07, Kota Cerdas</span>
             </div>
           </div>
 
-          <!-- Logo Kanan Sekolah Desktop (Tampil di layar Desktop >= md) -->
-          <div class="hidden md:flex w-20 h-20 rounded-2xl bg-white/10 backdrop-blur-md p-2 items-center justify-center border border-white/20 shadow-xl shadow-black/20 flex-shrink-0 group hover:scale-105 transition">
+          <!-- Logo Kanan: Sekolah (Sejajar dan Simetris di Web Maupun Browser Mobile) -->
+          <div class="w-12 h-12 sm:w-16 sm:h-16 md:w-20 md:h-20 rounded-xl sm:rounded-2xl bg-white/10 backdrop-blur-md p-1.5 sm:p-2 flex items-center justify-center border border-white/20 shadow-xl shadow-black/20 flex-shrink-0 group hover:scale-105 transition">
             <img id="landingLogoSekolah" src="https://upload.wikimedia.org/wikipedia/commons/thumb/9/9c/Logo_of_Ministry_of_Education_and_Culture_of_Republic_of_Indonesia.svg/200px-Logo_of_Ministry_of_Education_and_Culture_of_Republic_of_Indonesia.svg.png" alt="Logo Sekolah" class="max-w-full max-h-full object-contain filter drop-shadow">
           </div>
+
         </div>
 
         <!-- Widget Countdown Kelulusan (Kondisional jika aktif) -->
@@ -570,6 +566,35 @@
       <!-- KONTEN TAB 1 SISWA: BERANDA SNAPSHOT -->
       <div id="tabContentSiswa_beranda" class="tab-siswa-content space-y-6">
         
+        <!-- POINT OF INTEREST: PUSAT PENGUMUMAN & INFORMASI RESMI SEKOLAH (DI BAWAH IDENTITAS USER) -->
+        <div class="relative overflow-hidden rounded-3xl p-5 border-2 border-amber-400/60 bg-gradient-to-br from-amber-500/10 via-indigo-500/10 to-teal-500/10 backdrop-blur-md shadow-lg shadow-amber-500/5 space-y-4">
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between pb-3 border-b border-amber-200/50 gap-3">
+            <div class="flex items-center gap-3">
+              <div class="relative flex items-center justify-center w-10 h-10 rounded-2xl bg-gradient-to-tr from-amber-500 to-orange-500 text-white shadow-md shadow-amber-500/20">
+                <span class="text-xl">📢</span>
+                <span class="absolute -top-1 -right-1 flex h-3.5 w-3.5">
+                  <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-rose-400 opacity-75"></span>
+                  <span class="relative inline-flex rounded-full h-3.5 w-3.5 bg-rose-500 border-2 border-white"></span>
+                </span>
+              </div>
+              <div>
+                <div class="flex items-center gap-2">
+                  <h4 class="font-black text-sm sm:text-base text-slate-900">Pusat Informasi & Pengumuman Sekolah</h4>
+                  <span class="px-2 py-0.5 bg-rose-500 text-white text-[10px] font-black uppercase rounded-full animate-pulse tracking-wider">LIVE</span>
+                </div>
+                <p class="text-xs text-slate-500">Pemberitahuan resmi terbaru untuk ananda peserta didik dan wali murid</p>
+              </div>
+            </div>
+            <button type="button" onclick="switchTabSiswa('pengumuman')" class="self-start sm:self-auto px-3.5 py-1.5 bg-white/90 hover:bg-white text-indigo-700 hover:text-indigo-900 border border-indigo-200 rounded-xl text-xs font-bold transition flex items-center gap-1.5 shadow-xs cursor-pointer">
+              <span>Buka Arsip Lengkap</span>
+              <i data-lucide="arrow-right" class="w-3.5 h-3.5"></i>
+            </button>
+          </div>
+          <div id="feedPengumumanSiswaBeranda" class="space-y-3">
+            <!-- Diisi otomatis oleh renderPengumumanSiswa -->
+          </div>
+        </div>
+
         <!-- Snapshot Hari Ini (4 Kartu Cepat) -->
         <div class="grid grid-cols-2 lg:grid-cols-4 gap-4">
           <div class="bg-white p-4 rounded-2xl border border-slate-200 shadow-xs">
@@ -619,26 +644,6 @@
             <p id="catatanWaliTerbaru" class="text-xs sm:text-sm text-blue-800 mt-1 italic">
               "Tetap semangat ananda hebat! Pertahankan konsistensi bangun fajar dan beribadah tepat waktu."
             </p>
-          </div>
-        </div>
-
-        <!-- Papan Pengumuman Sekolah di Beranda Siswa -->
-        <div class="bg-white rounded-3xl border border-slate-200 shadow-xs p-6 space-y-4">
-          <div class="flex items-center justify-between pb-3 border-b border-slate-100">
-            <div class="flex items-center gap-2">
-              <span class="w-8 h-8 rounded-xl bg-amber-100 text-amber-600 flex items-center justify-center font-bold">📢</span>
-              <div>
-                <h4 class="font-extrabold text-sm sm:text-base text-slate-900">Pengumuman & Informasi Sekolah</h4>
-                <p class="text-xs text-slate-400">Edaran resmi, agenda sekolah, dan informasi penting</p>
-              </div>
-            </div>
-            <button type="button" onclick="switchTabSiswa('pengumuman')" class="text-xs font-bold text-blue-600 hover:text-blue-800 transition flex items-center gap-1">
-              <span>Arsip Pengumuman</span>
-              <i data-lucide="chevron-right" class="w-3.5 h-3.5"></i>
-            </button>
-          </div>
-          <div id="feedPengumumanSiswaBeranda" class="space-y-3">
-            <!-- Diisi otomatis oleh renderPengumumanSiswa -->
           </div>
         </div>
 
@@ -1039,21 +1044,68 @@
         </div>
       </div>
 
-      <!-- KONTEN TAB 8 SISWA: UPDATE PROFIL MANDIRI -->
+      <!-- KONTEN TAB 8 SISWA: UPDATE PROFIL & GANTI PIN MANDIRI -->
       <div id="tabContentSiswa_profil" class="tab-siswa-content hidden space-y-6">
-        <div class="bg-white p-6 rounded-3xl border border-slate-200 shadow-xs max-w-md mx-auto">
-          <h3 class="font-extrabold text-lg text-slate-900 mb-1">Perbarui Kontak Orang Tua</h3>
-          <p class="text-xs text-slate-500 mb-4">Pastikan nomor WhatsApp aktif untuk pengiriman laporan dan notifikasi resmi sekolah.</p>
-
-          <form onsubmit="handleUpdateProfilSiswa(event)" class="space-y-4">
-            <div>
-              <label class="block text-xs font-bold text-slate-700 uppercase mb-1">No. WhatsApp Orang Tua</label>
-              <input type="text" id="inputNoHpOrtuSiswa" required placeholder="08xxxxxxxxxx" class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm font-semibold">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-4xl mx-auto">
+          <!-- Card 1: Ganti Password / PIN Siswa Mandiri -->
+          <div class="bg-white p-6 rounded-3xl border border-slate-200 shadow-xs space-y-4">
+            <div class="flex items-center gap-3 pb-3 border-b border-slate-100">
+              <div class="w-10 h-10 rounded-2xl bg-indigo-100 text-indigo-700 flex items-center justify-center font-bold">
+                <i data-lucide="key" class="w-5 h-5"></i>
+              </div>
+              <div>
+                <h3 class="font-extrabold text-base text-slate-900">Ubah PIN / Password Mandiri</h3>
+                <p class="text-xs text-slate-400">Jaga keamanan akun siswa Anda secara berkala</p>
+              </div>
             </div>
-            <button type="submit" class="w-full py-3 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-xl text-xs transition">
-              Simpan Perubahan Kontak
-            </button>
-          </form>
+
+            <form id="formGantiPinSiswa" onsubmit="handleGantiPinSiswa(event)" class="space-y-3.5">
+              <div>
+                <label class="block text-xs font-bold text-slate-700 uppercase mb-1">PIN Lama</label>
+                <input type="password" id="inputPinLamaSiswa" required placeholder="Default: 4 digit terakhir NISN" class="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs font-bold focus:outline-none focus:border-indigo-500">
+              </div>
+              <div>
+                <label class="block text-xs font-bold text-slate-700 uppercase mb-1">PIN Baru (Minimal 4 Angka)</label>
+                <input type="password" id="inputPinBaruSiswa" required minlength="4" placeholder="Masukkan PIN baru Anda" class="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs font-bold focus:outline-none focus:border-indigo-500">
+              </div>
+              <div>
+                <label class="block text-xs font-bold text-slate-700 uppercase mb-1">Konfirmasi PIN Baru</label>
+                <input type="password" id="inputPinKonfirmasiSiswa" required minlength="4" placeholder="Ketik ulang PIN baru" class="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs font-bold focus:outline-none focus:border-indigo-500">
+              </div>
+              <button type="submit" class="w-full py-3 bg-gradient-to-r from-indigo-600 to-blue-600 hover:from-indigo-700 hover:to-blue-700 text-white font-extrabold rounded-xl text-xs shadow-md shadow-indigo-200 transition flex items-center justify-center gap-2 cursor-pointer">
+                <i data-lucide="lock" class="w-4 h-4"></i>
+                <span>Simpan PIN Baru Siswa</span>
+              </button>
+            </form>
+          </div>
+
+          <!-- Card 2: Update Kontak No. WhatsApp Ortu -->
+          <div class="bg-white p-6 rounded-3xl border border-slate-200 shadow-xs space-y-4">
+            <div class="flex items-center gap-3 pb-3 border-b border-slate-100">
+              <div class="w-10 h-10 rounded-2xl bg-emerald-100 text-emerald-700 flex items-center justify-center font-bold">
+                <i data-lucide="phone" class="w-5 h-5"></i>
+              </div>
+              <div>
+                <h3 class="font-extrabold text-base text-slate-900">Perbarui Kontak Orang Tua</h3>
+                <p class="text-xs text-slate-400">Untuk notifikasi WhatsApp presensi & 7 Kebiasaan</p>
+              </div>
+            </div>
+
+            <form onsubmit="handleUpdateProfilSiswa(event)" class="space-y-4">
+              <div>
+                <label class="block text-xs font-bold text-slate-700 uppercase mb-1">No. WhatsApp Orang Tua</label>
+                <input type="text" id="inputNoHpOrtuSiswa" required placeholder="08xxxxxxxxxx" class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm font-semibold focus:outline-none focus:border-emerald-500">
+              </div>
+              <div class="p-3 bg-emerald-50 border border-emerald-200 rounded-xl text-xs text-emerald-800 space-y-1">
+                <p class="font-bold">💡 Informasi Penting:</p>
+                <p class="text-[11px] leading-relaxed">Nomor WhatsApp ini digunakan guru wali untuk mengirimkan notifikasi capaian 7 Kebiasaan dan laporan berkala.</p>
+              </div>
+              <button type="submit" class="w-full py-3 bg-emerald-600 hover:bg-emerald-700 text-white font-bold rounded-xl text-xs shadow-md shadow-emerald-200 transition flex items-center justify-center gap-2 cursor-pointer">
+                <i data-lucide="save" class="w-4 h-4"></i>
+                <span>Simpan Perubahan Kontak</span>
+              </button>
+            </form>
+          </div>
         </div>
       </div>
 
@@ -1081,9 +1133,15 @@
               <p class="text-xs text-slate-300 mt-0.5">NIP: <span id="profileNipGuru" class="font-mono font-bold">198001012005011001</span></p>
             </div>
           </div>
-          <button onclick="logoutSession()" class="px-3.5 py-2 bg-rose-500/80 hover:bg-rose-600 rounded-xl text-xs font-semibold backdrop-blur-md transition">
-            Keluar Akun
-          </button>
+          <div class="flex items-center gap-2">
+            <button onclick="switchTabGuru('profil')" class="px-3.5 py-2 bg-white/10 hover:bg-white/20 rounded-xl text-xs font-semibold backdrop-blur-md transition flex items-center gap-1.5 cursor-pointer">
+              <i data-lucide="key" class="w-3.5 h-3.5 text-amber-300"></i>
+              <span>Ganti PIN / Profil</span>
+            </button>
+            <button onclick="logoutSession()" class="px-3.5 py-2 bg-rose-500/80 hover:bg-rose-600 rounded-xl text-xs font-semibold backdrop-blur-md transition cursor-pointer">
+              Keluar Akun
+            </button>
+          </div>
         </div>
       </div>
 
@@ -1098,10 +1156,46 @@
         <button onclick="switchTabGuru('guruWali')" id="tabBtnGuru_guruWali" class="tab-guru-btn px-4 py-2 bg-white text-slate-600 hover:bg-slate-100 font-semibold rounded-xl text-xs whitespace-nowrap border border-slate-200">🌟 Guru Wali (7 Kebiasaan & WA)</button>
         <button onclick="switchTabGuru('tibum')" id="tabBtnGuru_tibum" class="tab-guru-btn px-4 py-2 bg-white text-slate-600 hover:bg-slate-100 font-semibold rounded-xl text-xs whitespace-nowrap border border-slate-200">⚖️ Catat Pelanggaran / Scan QR</button>
         <button onclick="switchTabGuru('pengumuman')" id="tabBtnGuru_pengumuman" class="tab-guru-btn px-4 py-2 bg-white text-slate-600 hover:bg-slate-100 font-semibold rounded-xl text-xs whitespace-nowrap border border-slate-200">📢 Pengumuman Sekolah</button>
+        <button onclick="switchTabGuru('profil')" id="tabBtnGuru_profil" class="tab-guru-btn px-4 py-2 bg-white text-slate-600 hover:bg-slate-100 font-semibold rounded-xl text-xs whitespace-nowrap border border-slate-200">👤 Profil & PIN</button>
       </div>
 
       <!-- KONTEN TAB 1 GURU: BERANDA KENDALI -->
       <div id="tabContentGuru_beranda" class="tab-guru-content space-y-6">
+        
+        <!-- POINT OF INTEREST: PUSAT PENGUMUMAN & EDARAN KEDINASAN (DI BAWAH IDENTITAS USER) -->
+        <div class="relative overflow-hidden rounded-3xl p-5 border-2 border-indigo-400/60 bg-gradient-to-br from-indigo-500/10 via-purple-500/10 to-blue-500/10 backdrop-blur-md shadow-lg shadow-indigo-500/5 space-y-4">
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between pb-3 border-b border-indigo-200/50 gap-3">
+            <div class="flex items-center gap-3">
+              <div class="relative flex items-center justify-center w-10 h-10 rounded-2xl bg-gradient-to-tr from-indigo-600 to-blue-600 text-white shadow-md shadow-indigo-500/20">
+                <span class="text-xl">📢</span>
+                <span class="absolute -top-1 -right-1 flex h-3.5 w-3.5">
+                  <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-amber-400 opacity-75"></span>
+                  <span class="relative inline-flex rounded-full h-3.5 w-3.5 bg-amber-400 border-2 border-white"></span>
+                </span>
+              </div>
+              <div>
+                <div class="flex items-center gap-2">
+                  <h4 class="font-black text-sm sm:text-base text-slate-900">Pusat Informasi & Pengumuman Sekolah</h4>
+                  <span class="px-2 py-0.5 bg-amber-500 text-slate-950 text-[10px] font-black uppercase rounded-full animate-pulse tracking-wider">RESMI</span>
+                </div>
+                <p class="text-xs text-slate-500">Pemberitahuan kedinasan untuk Dewan Guru, Wali Kelas, Pelatih & Tenaga Kependidikan</p>
+              </div>
+            </div>
+            <div class="flex items-center gap-2 self-start sm:self-auto">
+              <button type="button" onclick="switchTabGuru('pengumuman')" class="px-3 py-1.5 bg-white/90 hover:bg-white text-slate-700 border border-slate-200 rounded-xl text-xs font-bold transition flex items-center gap-1 shadow-xs cursor-pointer">
+                <span>Arsip Lengkap</span>
+              </button>
+              <button type="button" onclick="switchTabGuru('pengumuman')" class="px-3.5 py-1.5 bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 hover:to-orange-600 text-white rounded-xl text-xs font-extrabold transition flex items-center gap-1.5 shadow-sm shadow-amber-500/30 cursor-pointer">
+                <i data-lucide="plus-circle" class="w-3.5 h-3.5"></i>
+                <span>+ Buat Pengumuman Baru</span>
+              </button>
+            </div>
+          </div>
+          <div id="feedPengumumanGuruBeranda" class="space-y-3">
+            <!-- Diisi otomatis oleh renderPengumumanGuru -->
+          </div>
+        </div>
+
         <!-- Banner Notifikasi Peringatan Alpa >= 5 Kali -->
         <div id="bannerPeringatanAlpaGuru"></div>
         <div class="grid grid-cols-2 lg:grid-cols-4 gap-4">
@@ -1127,66 +1221,60 @@
           </div>
         </div>
 
-        <!-- Papan Pengumuman Sekolah di Beranda Guru & Karyawan -->
-        <div class="bg-white rounded-3xl border border-slate-200 shadow-xs p-6 space-y-4">
-          <div class="flex items-center justify-between pb-3 border-b border-slate-100">
-            <div class="flex items-center gap-2">
-              <span class="w-8 h-8 rounded-xl bg-indigo-100 text-indigo-600 flex items-center justify-center font-bold">📢</span>
-              <div>
-                <h4 class="font-extrabold text-sm sm:text-base text-slate-900">Pengumuman & Edaran Kedinasan</h4>
-                <p class="text-xs text-slate-400">Pemberitahuan resmi untuk Pendidik, Walikelas, Pembina & Tenaga Kependidikan</p>
-              </div>
-            </div>
-            <button type="button" onclick="switchTabGuru('pengumuman')" class="px-3.5 py-1.5 bg-amber-50 hover:bg-amber-100 text-amber-800 border border-amber-200 rounded-xl text-xs font-bold transition flex items-center gap-1.5 cursor-pointer">
-              <i data-lucide="plus-circle" class="w-3.5 h-3.5"></i>
-              <span>+ Buat Pengumuman Baru</span>
-            </button>
-          </div>
-          <div id="feedPengumumanGuruBeranda" class="space-y-3">
-            <!-- Diisi otomatis oleh renderPengumumanGuru -->
-          </div>
-        </div>
-
       </div>
 
-      <!-- KONTEN TAB 2 GURU: PRESENSI HARIAN KBM (WALI KELAS) -->
+      <!-- KONTEN TAB 2 GURU: PRESENSI HARIAN KBM (WALI KELAS & REFLEKSI 4F) -->
       <div id="tabContentGuru_presensiKbm" class="tab-guru-content hidden space-y-6">
-        <div class="bg-white p-6 rounded-3xl border border-slate-200 shadow-xs">
+        <div class="bg-white p-6 rounded-3xl border border-slate-200 shadow-xs space-y-4">
           <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between pb-4 border-b border-slate-100 gap-3">
             <div>
-              <h3 class="font-extrabold text-lg text-slate-900">Presensi Harian KBM Kelas (Exception-based)</h3>
+              <h3 class="font-extrabold text-lg text-slate-900">Presensi Harian KBM Kelas & Jurnal Refleksi</h3>
               <p class="text-xs text-slate-500">Semua siswa otomatis HADIR. Sentuh tombol untuk siswa yang Sakit (S), Izin (I), Alpha (A), atau Terlambat (T).</p>
             </div>
             <div class="flex items-center gap-2">
               <input type="date" id="guruPresensiKbmTgl" onchange="renderFormPresensiKbm()" onclick="try{this.showPicker()}catch(e){}" class="px-3 py-1.5 bg-slate-50 border border-slate-200 rounded-xl text-xs font-bold cursor-pointer">
               <select id="guruPresensiKbmKelas" onchange="renderFormPresensiKbm()" class="modern-select px-3 py-1.5 text-xs font-bold cursor-pointer">
-                <option value="8-A">Kelas 8-A</option>
-                <option value="8-B">Kelas 8-B</option>
-                <option value="9-A">Kelas 9-A</option>
+                <!-- Diisi otomatis dari masterSiswa -->
               </select>
             </div>
           </div>
 
-          <div class="flex flex-wrap items-center justify-between gap-2 mt-4 pt-2 border-t border-slate-100">
+          <!-- Informasi Topik & Garis Besar Aktivitas Pembelajaran -->
+          <div id="containerPresensiKbmTopikGarisBesar" class="p-4 bg-gradient-to-r from-slate-50 to-indigo-50/40 rounded-2xl border border-slate-200 grid grid-cols-1 sm:grid-cols-3 gap-3">
+            <div>
+              <label class="block text-[11px] font-bold text-slate-700 uppercase mb-1">Mata Pelajaran</label>
+              <input type="text" id="guruPresensiKbmMapel" placeholder="Contoh: Matematika" class="w-full px-3 py-2 bg-white border border-slate-200 rounded-xl text-xs font-bold text-slate-800 focus:outline-none focus:border-indigo-500">
+            </div>
+            <div>
+              <label class="block text-[11px] font-bold text-slate-700 uppercase mb-1">Topik / Materi Pembelajaran</label>
+              <input type="text" id="guruPresensiKbmTopik" placeholder="Contoh: Bab 2 - Sistem Persamaan Linear" class="w-full px-3 py-2 bg-white border border-slate-200 rounded-xl text-xs font-bold text-slate-800 focus:outline-none focus:border-indigo-500">
+            </div>
+            <div>
+              <label class="block text-[11px] font-bold text-slate-700 uppercase mb-1">Garis Besar Aktivitas Belajar</label>
+              <input type="text" id="guruPresensiKbmGarisBesar" placeholder="Contoh: Diskusi kelompok kontekstual, latihan soal mandiri, refleksi" class="w-full px-3 py-2 bg-white border border-slate-200 rounded-xl text-xs font-bold text-slate-800 focus:outline-none focus:border-indigo-500">
+            </div>
+          </div>
+
+          <div class="flex flex-wrap items-center justify-between gap-2 pt-2 border-t border-slate-100">
             <div class="flex items-center gap-1.5 text-xs font-semibold text-slate-600">
               <span>Pilih Cepat Sekelas:</span>
-              <button type="button" onclick="setAllKbmStatus('HADIR')" class="px-2.5 py-1 bg-emerald-50 hover:bg-emerald-100 text-emerald-700 border border-emerald-200 rounded-lg text-xs font-bold transition">Semua Hadir (H)</button>
-              <button type="button" onclick="setAllKbmStatus('SAKIT')" class="px-2.5 py-1 bg-amber-50 hover:bg-amber-100 text-amber-700 border border-amber-200 rounded-lg text-xs font-bold transition">Semua Sakit (S)</button>
-              <button type="button" onclick="setAllKbmStatus('IZIN')" class="px-2.5 py-1 bg-blue-50 hover:bg-blue-100 text-blue-700 border border-blue-200 rounded-lg text-xs font-bold transition">Semua Izin (I)</button>
-              <button type="button" onclick="setAllKbmStatus('ALPHA')" class="px-2.5 py-1 bg-rose-50 hover:bg-rose-100 text-rose-700 border border-rose-200 rounded-lg text-xs font-bold transition">Semua Alpha (A)</button>
+              <button type="button" onclick="setAllKbmStatus('HADIR')" class="px-2.5 py-1 bg-emerald-50 hover:bg-emerald-100 text-emerald-700 border border-emerald-200 rounded-lg text-xs font-bold transition cursor-pointer">Semua Hadir (H)</button>
+              <button type="button" onclick="setAllKbmStatus('SAKIT')" class="px-2.5 py-1 bg-amber-50 hover:bg-amber-100 text-amber-700 border border-amber-200 rounded-lg text-xs font-bold transition cursor-pointer">Semua Sakit (S)</button>
+              <button type="button" onclick="setAllKbmStatus('IZIN')" class="px-2.5 py-1 bg-blue-50 hover:bg-blue-100 text-blue-700 border border-blue-200 rounded-lg text-xs font-bold transition cursor-pointer">Semua Izin (I)</button>
+              <button type="button" onclick="setAllKbmStatus('ALPHA')" class="px-2.5 py-1 bg-rose-50 hover:bg-rose-100 text-rose-700 border border-rose-200 rounded-lg text-xs font-bold transition cursor-pointer">Semua Alpha (A)</button>
             </div>
             <div id="metricSiswaRombel" class="text-xs font-bold text-slate-500">0 Siswa</div>
           </div>
 
-          <div class="overflow-x-auto mt-4">
+          <div class="overflow-x-auto mt-2">
             <table class="w-full text-left text-xs">
               <thead class="bg-slate-50 text-slate-600 font-bold border-b border-slate-200">
                 <tr>
-                  <th class="py-3 px-3">No</th>
-                  <th class="py-3 px-3">NISN</th>
-                  <th class="py-3 px-3">Nama Siswa</th>
-                  <th class="py-3 px-3 text-center">Status Kehadiran</th>
-                  <th class="py-3 px-3">Keterangan / Alasan</th>
+                  <th class="py-3 px-3 w-10">No</th>
+                  <th class="py-3 px-3 w-28">NISN</th>
+                  <th class="py-3 px-3 min-w-[150px]">Nama Siswa</th>
+                  <th class="py-3 px-3 text-center w-52">Status Kehadiran</th>
+                  <th class="py-3 px-3 min-w-[200px]">Keterangan / Alasan</th>
                 </tr>
               </thead>
               <tbody id="tableFormPresensiKbm" class="divide-y divide-slate-100 font-medium">
@@ -1195,11 +1283,104 @@
             </table>
           </div>
 
-          <div class="mt-6 flex justify-end">
-            <button onclick="simpanPresensiKbmSekelas()" class="px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-xl text-xs shadow-md shadow-blue-200 transition flex items-center gap-2">
+          <!-- Tombol Simpan Presensi Standar (Tampil Hanya Ketika Fitur Refleksi 4F Dinonaktifkan Admin) -->
+          <div id="containerBtnSimpanKbmStandar" class="pt-4 flex justify-end hidden">
+            <button type="button" onclick="simpanPresensiKbmSekelas()" class="w-full sm:w-auto px-6 py-3 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-extrabold rounded-xl text-xs shadow-md shadow-blue-200 transition flex items-center justify-center gap-2 cursor-pointer">
               <i data-lucide="save" class="w-4 h-4"></i>
-              <span>Simpan Presensi Harian Kelas</span>
+              <span>Simpan Presensi KBM ke Database</span>
             </button>
+          </div>
+
+          <!-- Modul Refleksi Guru Metode 4F (Facts, Feelings, Findings, Future) -->
+          <div id="containerPresensiKbmRefleksi4F" class="mt-6 p-5 bg-gradient-to-br from-indigo-50/70 via-white to-purple-50/50 rounded-3xl border border-indigo-200/80 shadow-xs space-y-4">
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between pb-3 border-b border-indigo-100 gap-3">
+              <div class="flex items-center gap-2">
+                <span class="w-8 h-8 rounded-xl bg-indigo-600 text-white flex items-center justify-center font-bold text-sm">✨</span>
+                <div>
+                  <h4 class="font-extrabold text-sm text-slate-900">Catatan Jurnal & Refleksi Guru (Metode 4F Kurikulum Merdeka)</h4>
+                  <p class="text-xs text-slate-400">Generate otomatis refleksi Facts, Feelings, Findings, Future (Ringkas &lt; 40 kata)</p>
+                </div>
+              </div>
+              <button type="button" onclick="generateRefleksi4F()" class="px-4 py-2 bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white font-black rounded-xl text-xs shadow-md shadow-indigo-200 transition flex items-center gap-1.5 cursor-pointer">
+                <span>✨ Generate Refleksi 4F Otomatis</span>
+              </button>
+            </div>
+
+            <!-- 4 Kolom Refleksi 4F -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-3 text-xs">
+              <!-- Facts -->
+              <div class="p-3.5 bg-white rounded-2xl border border-indigo-100 shadow-2xs space-y-1.5">
+                <div class="flex items-center justify-between font-bold text-indigo-900">
+                  <div class="flex items-center gap-1.5">
+                    <span class="px-2 py-0.5 bg-indigo-100 text-indigo-800 rounded font-black text-[10px]">1. FACTS</span>
+                    <span>Peristiwa / Fakta Pembelajaran</span>
+                  </div>
+                  <span class="text-[10px] text-indigo-500 font-mono font-normal">&lt; 40 kata</span>
+                </div>
+                <textarea id="refleksi4fFacts" rows="3" placeholder="Fakta objektif KBM: materi yang diajarkan, aktivitas, dan kehadiran..." class="w-full p-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs font-normal text-slate-700 focus:outline-none focus:bg-white focus:border-indigo-500"></textarea>
+              </div>
+
+              <!-- Feelings -->
+              <div class="p-3.5 bg-white rounded-2xl border border-purple-100 shadow-2xs space-y-1.5">
+                <div class="flex items-center justify-between font-bold text-purple-900">
+                  <div class="flex items-center gap-1.5">
+                    <span class="px-2 py-0.5 bg-purple-100 text-purple-800 rounded font-black text-[10px]">2. FEELINGS</span>
+                    <span>Perasaan Guru Saat Mengajar</span>
+                  </div>
+                  <span class="text-[10px] text-purple-500 font-mono font-normal">&lt; 40 kata</span>
+                </div>
+                <textarea id="refleksi4fFeelings" rows="3" placeholder="Respon emosional dan suasana hati guru selama proses KBM..." class="w-full p-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs font-normal text-slate-700 focus:outline-none focus:bg-white focus:border-purple-500"></textarea>
+              </div>
+
+              <!-- Findings -->
+              <div class="p-3.5 bg-white rounded-2xl border border-teal-100 shadow-2xs space-y-1.5">
+                <div class="flex items-center justify-between font-bold text-teal-900">
+                  <div class="flex items-center gap-1.5">
+                    <span class="px-2 py-0.5 bg-teal-100 text-teal-800 rounded font-black text-[10px]">3. FINDINGS</span>
+                    <span>Pembelajaran & Insight Berharga</span>
+                  </div>
+                  <span class="text-[10px] text-teal-500 font-mono font-normal">&lt; 40 kata</span>
+                </div>
+                <textarea id="refleksi4fFindings" rows="3" placeholder="Insight pedagogis: apa yang berhasil dan evaluasi metode..." class="w-full p-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs font-normal text-slate-700 focus:outline-none focus:bg-white focus:border-teal-500"></textarea>
+              </div>
+
+              <!-- Future -->
+              <div class="p-3.5 bg-white rounded-2xl border border-amber-100 shadow-2xs space-y-1.5">
+                <div class="flex items-center justify-between font-bold text-amber-900">
+                  <div class="flex items-center gap-1.5">
+                    <span class="px-2 py-0.5 bg-amber-100 text-amber-800 rounded font-black text-[10px]">4. FUTURE</span>
+                    <span>Penerapan & Rencana Tindak Lanjut</span>
+                  </div>
+                  <span class="text-[10px] text-amber-500 font-mono font-normal">&lt; 40 kata</span>
+                </div>
+                <textarea id="refleksi4fFuture" rows="3" placeholder="Tindakan ke depan: scaffolding, tindak lanjut, atau inovasi modul..." class="w-full p-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs font-normal text-slate-700 focus:outline-none focus:bg-white focus:border-amber-500"></textarea>
+              </div>
+            </div>
+
+            <div class="pt-2 flex flex-col sm:flex-row items-center justify-between gap-3">
+              <span class="text-[11px] text-slate-400 italic">🔒 Catatan refleksi 4F ini disimpan privat dan hanya dapat dilihat oleh akun Anda.</span>
+              <button onclick="simpanPresensiKbmSekelas()" class="w-full sm:w-auto px-6 py-3 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-extrabold rounded-xl text-xs shadow-md shadow-blue-200 transition flex items-center justify-center gap-2 cursor-pointer">
+                <i data-lucide="save" class="w-4 h-4"></i>
+                <span>Simpan Presensi KBM & Jurnal Refleksi ke Database</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- Histori Catatan Jurnal Mengajar Saya (Khusus Guru Bersangkutan) -->
+          <div id="containerPresensiKbmRiwayatJurnal" class="mt-6 p-6 bg-white rounded-3xl border border-slate-200 shadow-xs space-y-4">
+            <div class="flex items-center justify-between pb-3 border-b border-slate-100">
+              <div class="flex items-center gap-2">
+                <span class="w-8 h-8 rounded-xl bg-teal-100 text-teal-700 flex items-center justify-center font-bold">📖</span>
+                <div>
+                  <h4 class="font-extrabold text-sm text-slate-900">Riwayat Catatan Jurnal & Refleksi Mengajar Saya</h4>
+                  <p class="text-xs text-slate-400">Arsip jurnal harian pribadi Anda (Bersifat privat - hanya Anda yang berhak melihat)</p>
+                </div>
+              </div>
+              <span class="px-2.5 py-1 bg-teal-50 text-teal-800 border border-teal-200 rounded-lg text-xs font-bold font-mono" id="badgeTotalJurnalSaya">0 Jurnal</span>
+            </div>
+            <div id="containerJurnalGuruSaya" class="space-y-3">
+              <!-- Diisi dinamis oleh renderJurnalGuruSaya() -->
+            </div>
           </div>
         </div>
       </div>
@@ -1463,7 +1644,7 @@
           </div>
         </div>
 
-        <!-- Filter & Parameter Penilaian Card -->
+        <!-- Filter & Parameter Penilaian Card (Tersinkronisasi & Kurikulum Merdeka) -->
         <div class="bg-white p-6 rounded-3xl border border-slate-200 shadow-xs space-y-4">
           <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
             <div>
@@ -1485,17 +1666,37 @@
             <div>
               <label class="block text-xs font-bold text-slate-700 uppercase mb-1">Kelas / Rombel</label>
               <select id="penilaianTopikKelas" onchange="renderFormPenilaianTopik()" class="modern-select w-full px-3.5 py-2.5 text-xs font-bold cursor-pointer">
-                <option value="8-A">Kelas 8-A</option>
-                <option value="8-B">Kelas 8-B</option>
-                <option value="9-A">Kelas 9-A</option>
+                <!-- Diisi otomatis dan tersinkron dari masterSiswa -->
               </select>
             </div>
 
-            <div class="sm:col-span-2">
-              <label class="block text-xs font-bold text-slate-700 uppercase mb-1">Topik / Lingkup Materi / TP</label>
+            <div>
+              <label class="block text-xs font-bold text-slate-700 uppercase mb-1">Jenis Asesmen (Kurikulum Merdeka)</label>
+              <select id="penilaianTopikKriteriaJenis" onchange="renderFormPenilaianTopik()" class="modern-select w-full px-3.5 py-2.5 text-xs font-bold cursor-pointer">
+                <option value="Formatif: Lingkup Materi (TP)">Formatif: Lingkup Materi (Tujuan Pembelajaran)</option>
+                <option value="Formatif: Asesmen Awal / Diagnostik">Formatif: Asesmen Awal / Diagnostik</option>
+                <option value="Sumatif: Lingkup Materi (Akhir Bab)">Sumatif: Lingkup Materi (Akhir Bab / TP)</option>
+                <option value="Sumatif: Akhir Semester (SAS)">Sumatif: Akhir Semester (SAS)</option>
+              </select>
+            </div>
+
+            <div>
+              <label class="block text-xs font-bold text-slate-700 uppercase mb-1">Pendekatan Kriteria Penilaian</label>
+              <select id="penilaianTopikPendekatan" onchange="renderFormPenilaianTopik()" class="modern-select w-full px-3.5 py-2.5 text-xs font-bold cursor-pointer">
+                <option value="RUBRIK">Pendekatan 1: Rubrik Deskripsi Kualitatif (4 Tingkat)</option>
+                <option value="INTERVAL">Pendekatan 2: Interval Nilai KKTP</option>
+                <option value="SKALA">Pendekatan 3: Skala Kuantitatif dengan Deskripsi</option>
+              </select>
+            </div>
+
+            <div class="sm:col-span-2 lg:col-span-4">
+              <label class="block text-xs font-bold text-slate-700 uppercase mb-1">Topik / Lingkup Materi / Tujuan Pembelajaran (TP)</label>
               <div class="flex gap-2">
-                <input type="text" id="penilaianTopikJudul" value="Lingkup Materi 1: Pemahaman Konsep & Karakteristik Materi" placeholder="Contoh: Bab 1 - Persamaan Linear Satu Variabel" class="flex-1 px-3.5 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs font-bold text-slate-800 focus:outline-none focus:border-teal-500">
-                <button type="button" onclick="renderFormPenilaianTopik()" class="px-3.5 py-2 bg-teal-50 hover:bg-teal-100 text-teal-800 font-bold rounded-xl text-xs border border-teal-200 transition cursor-pointer">Terapkan</button>
+                <input type="text" id="penilaianTopikJudul" value="Lingkup Materi 1: Pemahaman Konsep & Karakteristik Materi" placeholder="Contoh: Bab 1 - Persamaan Linear Satu Variabel" class="flex-1 px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs font-bold text-slate-800 focus:outline-none focus:border-teal-500">
+                <button type="button" onclick="renderFormPenilaianTopik()" class="px-4 py-2 bg-teal-600 hover:bg-teal-700 text-white font-bold rounded-xl text-xs shadow-xs transition cursor-pointer flex items-center gap-1.5">
+                  <i data-lucide="refresh-cw" class="w-3.5 h-3.5"></i>
+                  <span>Sinkronkan Siswa</span>
+                </button>
               </div>
             </div>
           </div>
@@ -1510,64 +1711,90 @@
           </div>
         </div>
 
-        <!-- Pedoman Rubrik Penilaian Card -->
+        <!-- Pedoman Kriteria Rubrik Penilaian (Kurikulum Merdeka) - KKTP & Rentang Diisi Manual -->
         <div class="bg-gradient-to-br from-slate-50 to-teal-50/40 p-5 rounded-3xl border border-teal-200/70 shadow-xs space-y-3">
-          <div class="flex items-center justify-between">
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
             <div class="flex items-center gap-2">
-              <span class="w-7 h-7 rounded-lg bg-teal-600 text-white flex items-center justify-center text-xs font-bold">ðŸ“‹</span>
-              <h4 class="font-bold text-sm text-slate-900">Pedoman Kriteria Rubrik Penilaian (Kurikulum Merdeka)</h4>
+              <span class="w-7 h-7 rounded-lg bg-teal-600 text-white flex items-center justify-center text-xs font-bold">📋</span>
+              <div>
+                <h4 class="font-bold text-sm text-slate-900">Pedoman Kriteria Ketercapaian Tujuan Pembelajaran (KKTP) & Rentang Interval</h4>
+                <p class="text-[11px] text-slate-500">Standar KKTP dan batas rentang interval nilai dapat diedit manual oleh guru sesuai target capaian materi.</p>
+              </div>
             </div>
-            <span class="text-xs text-teal-800 font-bold bg-teal-100 px-2.5 py-0.5 rounded-full">KKTP Standar: 75</span>
+            <div class="flex items-center gap-2">
+              <div class="flex items-center gap-1.5 bg-teal-100/90 px-3 py-1.5 rounded-xl border border-teal-300">
+                <span class="text-xs font-black text-teal-900 uppercase">Standar KKTP:</span>
+                <input type="number" id="kktpNilaiInput" value="75" min="50" max="100" oninput="handleKktpManualChange()" class="w-14 px-2 py-0.5 text-center font-black text-teal-900 bg-white border border-teal-300 rounded-lg text-xs shadow-xs focus:outline-none focus:ring-1 focus:ring-teal-500">
+              </div>
+              <button type="button" onclick="resetKktpKeStandar()" title="Kembalikan ke standar KKTP 75" class="px-2.5 py-1.5 bg-white hover:bg-slate-100 text-slate-600 border border-slate-200 rounded-xl text-xs font-bold transition cursor-pointer">
+                🔄 Reset
+              </button>
+            </div>
           </div>
 
+          <!-- Rentang Interval Dinamis Manual -->
           <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 text-xs">
-            <div class="p-3.5 bg-rose-50 border border-rose-200 rounded-2xl shadow-xs">
-              <div class="flex items-center justify-between font-black text-rose-800 mb-1">
-                <span>ðŸ”´ Perlu Bimbingan</span>
-                <span class="px-2 py-0.5 bg-white text-rose-700 rounded-md font-mono text-[11px] border border-rose-200">&lt; 66</span>
+            <div class="p-3.5 bg-rose-50 border border-rose-200 rounded-2xl shadow-xs space-y-1.5">
+              <div class="flex items-center justify-between font-black text-rose-800">
+                <span>🔴 Perlu Bimbingan</span>
+                <div class="flex items-center gap-1 text-[11px] font-mono font-bold text-rose-700 bg-white px-2 py-0.5 rounded-md border border-rose-200">
+                  <span>&lt;</span>
+                  <input type="number" id="kktpMaxBimbingan" value="65" min="0" max="100" oninput="handleIntervalManualChange()" class="w-10 text-center font-bold text-rose-700 bg-transparent border-0 focus:outline-none focus:ring-1 focus:ring-rose-400">
+                </div>
               </div>
               <p class="text-[11px] text-rose-700 leading-snug">Belum mencapai ketuntasan minimum, memerlukan intervensi dan bimbingan guru secara bertahap.</p>
             </div>
 
-            <div class="p-3.5 bg-amber-50 border border-amber-200 rounded-2xl shadow-xs">
-              <div class="flex items-center justify-between font-black text-amber-800 mb-1">
-                <span>ðŸŸ¡ Cukup</span>
-                <span class="px-2 py-0.5 bg-white text-amber-700 rounded-md font-mono text-[11px] border border-amber-200">66 - 75</span>
+            <div class="p-3.5 bg-amber-50 border border-amber-200 rounded-2xl shadow-xs space-y-1.5">
+              <div class="flex items-center justify-between font-black text-amber-800">
+                <span>🟡 Cukup</span>
+                <div class="flex items-center gap-0.5 text-[11px] font-mono font-bold text-amber-800 bg-white px-1.5 py-0.5 rounded-md border border-amber-200">
+                  <input type="number" id="kktpMinCukup" value="66" min="0" max="100" oninput="handleIntervalManualChange()" class="w-8 text-center font-bold text-amber-800 bg-transparent border-0 focus:outline-none">
+                  <span>-</span>
+                  <input type="number" id="kktpMaxCukup" value="75" min="0" max="100" oninput="handleIntervalManualChange()" class="w-8 text-center font-bold text-amber-800 bg-transparent border-0 focus:outline-none">
+                </div>
               </div>
               <p class="text-[11px] text-amber-700 leading-snug">Mencapai sebagian kriteria ketuntasan minimal, masih membutuhkan penguatan dan latihan tambahan.</p>
             </div>
 
-            <div class="p-3.5 bg-emerald-50 border border-emerald-200 rounded-2xl shadow-xs">
-              <div class="flex items-center justify-between font-black text-emerald-800 mb-1">
-                <span>ðŸŸ¢ Baik</span>
-                <span class="px-2 py-0.5 bg-white text-emerald-700 rounded-md font-mono text-[11px] border border-emerald-200">76 - 88</span>
+            <div class="p-3.5 bg-emerald-50 border border-emerald-200 rounded-2xl shadow-xs space-y-1.5">
+              <div class="flex items-center justify-between font-black text-emerald-800">
+                <span>🟢 Baik (Tuntas)</span>
+                <div class="flex items-center gap-0.5 text-[11px] font-mono font-bold text-emerald-800 bg-white px-1.5 py-0.5 rounded-md border border-emerald-200">
+                  <input type="number" id="kktpMinBaik" value="76" min="0" max="100" oninput="handleIntervalManualChange()" class="w-8 text-center font-bold text-emerald-800 bg-transparent border-0 focus:outline-none">
+                  <span>-</span>
+                  <input type="number" id="kktpMaxBaik" value="88" min="0" max="100" oninput="handleIntervalManualChange()" class="w-8 text-center font-bold text-emerald-800 bg-transparent border-0 focus:outline-none">
+                </div>
               </div>
               <p class="text-[11px] text-emerald-700 leading-snug">Memenuhi kriteria ketuntasan tujuan pembelajaran secara memuaskan, mandiri, dan tepat sasaran.</p>
             </div>
 
-            <div class="p-3.5 bg-blue-50 border border-blue-200 rounded-2xl shadow-xs">
-              <div class="flex items-center justify-between font-black text-blue-800 mb-1">
-                <span>ðŸ”µ Sangat Baik</span>
-                <span class="px-2 py-0.5 bg-white text-blue-700 rounded-md font-mono text-[11px] border border-blue-200">89 - 100</span>
+            <div class="p-3.5 bg-blue-50 border border-blue-200 rounded-2xl shadow-xs space-y-1.5">
+              <div class="flex items-center justify-between font-black text-blue-800">
+                <span>🔵 Sangat Baik</span>
+                <div class="flex items-center gap-0.5 text-[11px] font-mono font-bold text-blue-800 bg-white px-1.5 py-0.5 rounded-md border border-blue-200">
+                  <input type="number" id="kktpMinSangatBaik" value="89" min="0" max="100" oninput="handleIntervalManualChange()" class="w-8 text-center font-bold text-blue-800 bg-transparent border-0 focus:outline-none">
+                  <span>- 100</span>
+                </div>
               </div>
               <p class="text-[11px] text-blue-700 leading-snug">Melampaui kriteria ketuntasan pembelajaran, berpikir kritis serta mampu membimbing rekan sebaya.</p>
             </div>
           </div>
         </div>
 
-        <!-- Tabel Siswa & Input Nilai Rubrik -->
+        <!-- Tabel Siswa & Input Nilai Rubrik (Lengkap dengan Status Kehadiran) -->
         <div class="bg-white p-6 rounded-3xl border border-slate-200 shadow-xs space-y-4">
           <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between pb-3 border-b border-slate-100 gap-3">
             <div>
               <h4 class="font-extrabold text-base text-slate-900">Daftar Penilaian Siswa</h4>
-              <p class="text-xs text-slate-400">Pilih tombol rubrik untuk mengisi otomatis atau masukkan angka secara manual.</p>
+              <p class="text-xs text-slate-400">Siswa yang tidak hadir (Sakit/Izin/Alpha) otomatis dikunci dari penilaian angka dan ditandai susulan.</p>
             </div>
             <div class="flex flex-wrap items-center gap-2">
               <button type="button" onclick="setSemuaNilaiTopik(82, 'BAIK')" class="px-3 py-1.5 bg-emerald-50 hover:bg-emerald-100 text-emerald-800 border border-emerald-200 rounded-xl text-xs font-bold transition cursor-pointer">
-                âš¡ Set Semua "Baik (82)"
+                ⚡ Set Siswa Hadir "Baik (82)"
               </button>
               <button type="button" onclick="hitungStatistikPenilaianTopik()" class="px-3 py-1.5 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-xl text-xs font-bold transition cursor-pointer">
-                ðŸ“Š Hitung Rata-Rata
+                📊 Hitung Rata-Rata
               </button>
             </div>
           </div>
@@ -1576,13 +1803,14 @@
             <table class="w-full text-left border-collapse text-xs">
               <thead>
                 <tr class="border-b border-slate-200 text-slate-500 text-[11px] uppercase tracking-wider bg-slate-50/70">
-                  <th class="py-3 px-3 w-12 font-bold">No</th>
+                  <th class="py-3 px-3 w-10 font-bold">No</th>
                   <th class="py-3 px-3 w-28 font-bold">NISN</th>
-                  <th class="py-3 px-3 min-w-[150px] font-bold">Nama Siswa</th>
-                  <th class="py-3 px-3 min-w-[280px] font-bold">Tingkat Capaian Rubrik</th>
-                  <th class="py-3 px-3 w-28 text-center font-bold">Nilai (0-100)</th>
-                  <th class="py-3 px-3 min-w-[220px] font-bold">Deskripsi Capaian Kompetensi</th>
-                  <th class="py-3 px-3 w-28 text-center font-bold">Status</th>
+                  <th class="py-3 px-3 min-w-[140px] font-bold">Nama Siswa</th>
+                  <th class="py-3 px-2 w-36 text-center font-bold">Kehadiran</th>
+                  <th class="py-3 px-3 min-w-[240px] font-bold">Tingkat Capaian Rubrik</th>
+                  <th class="py-3 px-2 w-24 text-center font-bold">Nilai</th>
+                  <th class="py-3 px-3 min-w-[200px] font-bold">Deskripsi Capaian Kompetensi</th>
+                  <th class="py-3 px-3 w-32 text-center font-bold">Status</th>
                 </tr>
               </thead>
               <tbody id="tbodyPenilaianTopik" class="divide-y divide-slate-100">
@@ -1593,11 +1821,13 @@
 
           <!-- Summary & Simpan Card -->
           <div class="pt-4 border-t border-slate-100 flex flex-col sm:flex-row items-center justify-between gap-4">
-            <div class="flex flex-wrap items-center gap-4 text-xs">
-              <span class="text-slate-500">Total Siswa: <b id="statTopikTotal" class="text-slate-800 font-mono">0</b></span>
+            <div class="flex flex-wrap items-center gap-3 text-xs">
+              <span class="text-slate-500">Total: <b id="statTopikTotal" class="text-slate-800 font-mono">0</b></span>
+              <span class="text-slate-500">Hadir Dinilai: <b id="statTopikHadir" class="text-emerald-700 font-bold font-mono">0</b></span>
               <span class="text-slate-500">Rata-rata: <b id="statTopikRata" class="text-teal-700 font-bold font-mono">0.0</b></span>
               <span class="text-slate-500">Tuntas: <b id="statTopikTuntas" class="text-emerald-700 font-bold font-mono">0</b></span>
-              <span class="text-slate-500">Perlu Bimbingan: <b id="statTopikBimbingan" class="text-rose-700 font-bold font-mono">0</b></span>
+              <span class="text-slate-500">Bimbingan: <b id="statTopikBimbingan" class="text-rose-700 font-bold font-mono">0</b></span>
+              <span class="text-slate-500">Tidak Hadir: <b id="statTopikTidakHadir" class="text-amber-700 font-bold font-mono">0</b></span>
             </div>
 
             <button type="button" onclick="handleSimpanNilaiTopik()" class="w-full sm:w-auto px-6 py-3 bg-gradient-to-r from-teal-600 to-emerald-600 hover:from-teal-700 hover:to-emerald-700 text-white font-black rounded-xl text-xs shadow-md shadow-teal-200 transition flex items-center justify-center gap-2 cursor-pointer">
@@ -1739,12 +1969,44 @@
           <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between pb-4 border-b border-slate-100 gap-3">
             <div>
               <h3 class="font-extrabold text-lg text-slate-900">Buku Catatan Tata Tertib & Razia Pagi</h3>
-              <p class="text-xs text-slate-500">Scan QR Code kartu pelajar siswa atau cari manual untuk mencatat pelanggaran dengan anti-duplikasi harian.</p>
+              <p class="text-xs text-slate-500">Scan Kartu NFC / QR Code atau cari manual untuk mencatat pelanggaran dengan anti-duplikasi harian.</p>
             </div>
-            <button onclick="toggleQrScanner()" id="btnToggleQrScanner" class="px-3.5 py-2 bg-red-600 hover:bg-red-700 text-white font-bold rounded-xl text-xs transition flex items-center gap-1.5 shadow-xs">
-              <i data-lucide="qr-code" class="w-4 h-4"></i>
-              <span>Buka Scanner Kamera QR</span>
-            </button>
+            <div class="flex items-center gap-2 flex-wrap">
+              <!-- Tombol Scan Kartu Pelajar via Web NFC (Android) -->
+              <button type="button" onclick="startNfcTibumScan()" id="btnStartNfcTibum" class="px-3.5 py-2 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-bold rounded-xl text-xs transition flex items-center gap-1.5 shadow-xs cursor-pointer">
+                <i data-lucide="radio" class="w-4 h-4 text-cyan-300"></i>
+                <span>📡 Scan Kartu Siswa (NFC)</span>
+              </button>
+              <!-- Tombol Scanner Kamera QR -->
+              <button type="button" onclick="toggleQrScanner()" id="btnToggleQrScanner" class="px-3.5 py-2 bg-rose-600 hover:bg-rose-700 text-white font-bold rounded-xl text-xs transition flex items-center gap-1.5 shadow-xs cursor-pointer">
+                <i data-lucide="qr-code" class="w-4 h-4"></i>
+                <span>Buka Scanner Kamera QR</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- Area Indikator Aktif Scan Kartu NFC (Android Web NFC) -->
+          <div id="nfcScanningArea" class="hidden my-4 p-5 bg-gradient-to-r from-blue-950 via-indigo-950 to-slate-900 rounded-2xl text-center text-white border border-blue-500/30 shadow-lg relative overflow-hidden">
+            <div class="absolute -top-10 -right-10 w-32 h-32 bg-cyan-500/20 rounded-full blur-2xl pointer-events-none"></div>
+            <div class="relative w-14 h-14 mx-auto mb-2.5 flex items-center justify-center">
+              <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-cyan-400 opacity-40"></span>
+              <div class="w-12 h-12 rounded-xl bg-cyan-500/20 border border-cyan-400/40 flex items-center justify-center text-2xl shadow-inner">
+                📡
+              </div>
+            </div>
+            <h4 class="font-black text-sm text-cyan-200">Sensor NFC Siap Membaca Kartu</h4>
+            <p class="text-xs text-slate-300 mt-1 max-w-sm mx-auto leading-relaxed">
+              Tempelkan Kartu Tanda Pelajar / e-KTP / RFID siswa pada bagian belakang HP Android Anda...
+            </p>
+            <div class="mt-3 flex items-center justify-center gap-2">
+              <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-500/20 border border-emerald-400/30 text-emerald-300 text-[11px] font-bold">
+                <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+                <span>Menunggu Kartu Ditempel...</span>
+              </span>
+              <button type="button" onclick="stopNfcTibumScan()" class="px-3 py-1 bg-white/10 hover:bg-white/20 text-slate-200 rounded-xl text-xs font-semibold border border-white/20 transition cursor-pointer">
+                Batal
+              </button>
+            </div>
           </div>
 
           <!-- Area Kamera QR Code Reader -->
@@ -1819,6 +2081,80 @@
 
         <div id="containerPengumumanGuru" class="space-y-4">
           <!-- Diisi dinamis oleh JS -->
+        </div>
+      </div>
+
+      <!-- KONTEN TAB 10 GURU: PROFIL GURU & GANTI PIN MANDIRI -->
+      <div id="tabContentGuru_profil" class="tab-guru-content hidden space-y-6">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-4xl mx-auto">
+          <!-- Card Profil Akun Guru -->
+          <div class="bg-white p-6 rounded-3xl border border-slate-200 shadow-xs space-y-4">
+            <div class="flex items-center gap-3 pb-3 border-b border-slate-100">
+              <div class="w-12 h-12 rounded-2xl bg-indigo-100 text-indigo-700 flex items-center justify-center text-xl font-bold">
+                👨‍🏫
+              </div>
+              <div>
+                <h3 id="profilDetailNamaGuru" class="font-black text-base text-slate-900">-</h3>
+                <p id="profilDetailNipGuru" class="text-xs font-mono text-slate-500">NIP: -</p>
+              </div>
+            </div>
+
+            <div class="space-y-2.5 text-xs">
+              <div class="flex justify-between py-1.5 border-b border-slate-100">
+                <span class="text-slate-500">Peran / Penugasan:</span>
+                <span id="profilDetailRoleGuru" class="font-bold text-slate-800">-</span>
+              </div>
+              <div class="flex justify-between py-1.5 border-b border-slate-100">
+                <span class="text-slate-500">Wali Kelas:</span>
+                <span id="profilDetailRombelGuru" class="font-bold text-slate-800">-</span>
+              </div>
+              <div class="flex justify-between py-1.5 border-b border-slate-100">
+                <span class="text-slate-500">Mata Pelajaran:</span>
+                <span id="profilDetailMapelGuru" class="font-bold text-slate-800">-</span>
+              </div>
+              <div class="flex justify-between py-1.5 border-b border-slate-100">
+                <span class="text-slate-500">Cabang Ekskul Binaan:</span>
+                <span id="profilDetailEkskulGuru" class="font-bold text-slate-800">-</span>
+              </div>
+            </div>
+
+            <div class="p-3 bg-indigo-50 border border-indigo-200 rounded-xl text-xs text-indigo-900 space-y-1">
+              <p class="font-bold">💡 Tips Keamanan:</p>
+              <p class="text-[11px] leading-relaxed">Ganti PIN default 1234 dengan kombinasi PIN pribadi yang hanya diketahui oleh Anda demi menjaga kerahasiaan data nilai dan jurnal mengajar.</p>
+            </div>
+          </div>
+
+          <!-- Card Ganti PIN / Password Mandiri Guru & Pelatih -->
+          <div class="bg-white p-6 rounded-3xl border border-slate-200 shadow-xs space-y-4">
+            <div class="flex items-center gap-3 pb-3 border-b border-slate-100">
+              <div class="w-10 h-10 rounded-2xl bg-amber-100 text-amber-700 flex items-center justify-center font-bold">
+                <i data-lucide="key" class="w-5 h-5"></i>
+              </div>
+              <div>
+                <h3 class="font-extrabold text-base text-slate-900">Ubah PIN / Password Mandiri</h3>
+                <p class="text-xs text-slate-400">Pembaruan mandiri keamanan akun pendidik</p>
+              </div>
+            </div>
+
+            <form id="formGantiPinGuru" onsubmit="handleGantiPinGuru(event)" class="space-y-3.5">
+              <div>
+                <label class="block text-xs font-bold text-slate-700 uppercase mb-1">PIN / Password Lama</label>
+                <input type="password" id="inputPinLamaGuru" required placeholder="PIN lama (Default: 1234)" class="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs font-bold focus:outline-none focus:border-amber-500">
+              </div>
+              <div>
+                <label class="block text-xs font-bold text-slate-700 uppercase mb-1">PIN Baru (Minimal 4 Karakter)</label>
+                <input type="password" id="inputPinBaruGuru" required minlength="4" placeholder="Masukkan PIN baru Anda" class="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs font-bold focus:outline-none focus:border-amber-500">
+              </div>
+              <div>
+                <label class="block text-xs font-bold text-slate-700 uppercase mb-1">Konfirmasi PIN Baru</label>
+                <input type="password" id="inputPinKonfirmasiGuru" required minlength="4" placeholder="Ketik ulang PIN baru" class="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs font-bold focus:outline-none focus:border-amber-500">
+              </div>
+              <button type="submit" class="w-full py-3 bg-gradient-to-r from-amber-600 to-orange-600 hover:from-amber-700 hover:to-orange-700 text-white font-extrabold rounded-xl text-xs shadow-md shadow-amber-200 transition flex items-center justify-center gap-2 cursor-pointer">
+                <i data-lucide="shield-check" class="w-4 h-4"></i>
+                <span>Simpan PIN Guru Baru</span>
+              </button>
+            </form>
+          </div>
         </div>
       </div>
 
@@ -2101,7 +2437,7 @@
               </div>
             </div>
 
-            <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
               <div>
                 <label class="block text-xs font-bold text-slate-700 uppercase mb-1">Jadwal Rilis Kelulusan (Popup Kalender)</label>
                 <input type="datetime-local" id="cfgTglRilisLulus" onclick="try{this.showPicker()}catch(e){}" class="w-full px-3.5 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs font-bold cursor-pointer">
@@ -2120,6 +2456,14 @@
                   <option value="DITUTUP">DITUTUP (Terkunci oleh Kurikulum)</option>
                 </select>
               </div>
+              <div>
+                <label class="block text-xs font-bold text-indigo-700 uppercase mb-1">Aktivasi Fitur Refleksi 4F</label>
+                <select id="cfgFiturRefleksi4F" onchange="handleModeRefleksi4FChange(this.value)" class="w-full px-3.5 py-2 bg-indigo-50/70 border border-indigo-200 rounded-xl text-xs font-bold text-indigo-900 cursor-pointer">
+                  <option value="SEMUA">🟢 AKTIF SEMUA GURU (Banyak Guru)</option>
+                  <option value="PILIH_GURU">🎯 AKTIF PER GURU (Pilih Tertentu)</option>
+                  <option value="NONAKTIF">🔴 NONAKTIFKAN TOTAL (Sembunyikan)</option>
+                </select>
+              </div>
             </div>
 
             <div>
@@ -2131,6 +2475,77 @@
               Simpan Konfigurasi Sekolah
             </button>
           </form>
+        </div>
+
+        <!-- CARD KELOLA AKTIVASI REFLEKSI 4F PER GURU / BANYAK GURU -->
+        <div id="cardAdminAktivasiRefleksiGuru" class="bg-white p-6 rounded-3xl border border-slate-200 shadow-xs space-y-4">
+          <div class="flex flex-col md:flex-row md:items-center justify-between pb-4 border-b border-slate-100 gap-3">
+            <div>
+              <div class="flex items-center gap-2">
+                <span class="w-8 h-8 rounded-xl bg-indigo-100 text-indigo-700 flex items-center justify-center font-bold text-sm">✨</span>
+                <h3 class="font-extrabold text-base text-slate-900">Kelola Aktivasi Fitur Refleksi 4F Guru</h3>
+              </div>
+              <p class="text-xs text-slate-400 mt-0.5">Aktifkan generator refleksi 4F untuk guru tertentu (per guru) atau pilih banyak guru sekaligus.</p>
+            </div>
+
+            <!-- Metrik Ringkas -->
+            <div class="flex items-center gap-2">
+              <span id="badgeAdminTotalGuruRefleksi" class="px-3 py-1 bg-slate-100 text-slate-700 rounded-xl text-xs font-bold">Total: 0 Guru</span>
+              <span id="badgeAdminAktifGuruRefleksi" class="px-3 py-1 bg-emerald-100 text-emerald-800 border border-emerald-200 rounded-xl text-xs font-bold">🟢 Aktif: 0</span>
+              <span id="badgeAdminNonaktifGuruRefleksi" class="px-3 py-1 bg-rose-100 text-rose-800 border border-rose-200 rounded-xl text-xs font-bold">⚪ Nonaktif: 0</span>
+            </div>
+          </div>
+
+          <!-- Toolbar Aksi Cepat Banyak Guru (Bulk Action) & Pencarian -->
+          <div class="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3">
+            <div class="flex flex-wrap items-center gap-2">
+              <button type="button" onclick="setSemuaAktivasiRefleksiGuru(true)" class="px-3.5 py-2 bg-emerald-600 hover:bg-emerald-700 text-white font-bold rounded-xl text-xs shadow-xs transition flex items-center gap-1.5 cursor-pointer">
+                <i data-lucide="check-check" class="w-4 h-4"></i>
+                <span>⚡ Aktifkan Semua Guru</span>
+              </button>
+              <button type="button" onclick="setSemuaAktivasiRefleksiGuru(false)" class="px-3.5 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold rounded-xl text-xs border border-slate-200 transition flex items-center gap-1.5 cursor-pointer">
+                <i data-lucide="x" class="w-4 h-4"></i>
+                <span>Batalkan Semua</span>
+              </button>
+            </div>
+
+            <div class="flex items-center gap-2">
+              <div class="relative flex-1 sm:w-64">
+                <input type="text" id="searchAdminRefleksiGuru" oninput="renderAdminRefleksiGuruTable()" placeholder="Cari nama guru / NIP / mapel..." class="w-full pl-8 pr-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs font-medium focus:bg-white focus:border-indigo-500">
+                <i data-lucide="search" class="w-3.5 h-3.5 text-slate-400 absolute left-2.5 top-3"></i>
+              </div>
+            </div>
+          </div>
+
+          <!-- Tabel Guru & Status Aktivasi Refleksi 4F -->
+          <div class="overflow-x-auto">
+            <table class="w-full text-left text-xs">
+              <thead class="bg-slate-50 text-slate-600 font-bold border-b border-slate-200 uppercase tracking-wider text-[11px]">
+                <tr>
+                  <th class="py-3 px-3 w-12 text-center">
+                    <input type="checkbox" id="checkAllAdminRefleksi" onchange="handleToggleCheckAllRefleksi(this.checked)" class="rounded text-indigo-600 cursor-pointer">
+                  </th>
+                  <th class="py-3 px-3 w-10 text-center">No</th>
+                  <th class="py-3 px-3 w-40">NIP</th>
+                  <th class="py-3 px-3 min-w-[180px]">Nama Guru</th>
+                  <th class="py-3 px-3 min-w-[140px]">Tugas / Mapel</th>
+                  <th class="py-3 px-3 w-32 text-center">Status 4F</th>
+                  <th class="py-3 px-3 w-32 text-center">Aksi Per Guru</th>
+                </tr>
+              </thead>
+              <tbody id="tableAdminRefleksiGuruBody" class="divide-y divide-slate-100">
+                <!-- Diisi dinamis oleh renderAdminRefleksiGuruTable() -->
+              </tbody>
+            </table>
+          </div>
+
+          <div class="pt-3 border-t border-slate-100 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-slate-500">
+            <span>💡 Perubahan centang per guru langsung tersimpan di sesi dan database saat klik simpan konfigurasi.</span>
+            <button type="button" onclick="handleSimpanAktivasiRefleksiGuruAdmin()" class="px-5 py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white font-extrabold rounded-xl shadow-xs transition flex items-center gap-2 cursor-pointer">
+              <i data-lucide="save" class="w-4 h-4"></i>
+              <span>Simpan Pengaturan Guru ke Database</span>
+            </button>
+          </div>
         </div>
       </div>
 
@@ -2179,13 +2594,13 @@
           <div class="flex flex-wrap items-center gap-3 w-full md:w-auto">
             <div>
               <label class="block text-[11px] font-bold text-slate-600 uppercase mb-1">Pilih Rombel / Kelas</label>
-              <select id="filterKelasQrAdmin" onchange="renderAdminQrNisn()" class="modern-select px-3.5 py-2 text-xs font-bold text-slate-800 cursor-pointer">
+              <select id="filterKelasQrAdmin" onchange="handleAdminQrFilterChange()" class="modern-select px-3.5 py-2 text-xs font-bold text-slate-800 cursor-pointer">
                 <option value="ALL">-- Seluruh Siswa (Semua Kelas) --</option>
               </select>
             </div>
             <div class="flex-1 md:w-64">
               <label class="block text-[11px] font-bold text-slate-600 uppercase mb-1">Cari Nama atau NISN</label>
-              <input type="text" id="searchSiswaQrAdmin" oninput="renderAdminQrNisn()" placeholder="Ketik nama atau NISN..." class="w-full px-3.5 py-2 bg-slate-50 border border-slate-300 rounded-xl text-xs font-semibold">
+              <input type="text" id="searchSiswaQrAdmin" oninput="debounceAdminQrSearch()" placeholder="Ketik nama atau NISN..." class="w-full px-3.5 py-2 bg-slate-50 border border-slate-300 rounded-xl text-xs font-semibold focus:bg-white focus:border-blue-500">
             </div>
           </div>
           <div class="text-right flex items-center gap-2">
@@ -2193,9 +2608,36 @@
           </div>
         </div>
 
-        <!-- Grid Kartu ID Siswa & QR Code -->
+        <!-- Grid Kartu ID Siswa & QR Code (Lightweight & Cepat) -->
         <div id="containerKartuQrAdmin" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
           <!-- Diisi dinamis oleh JS -->
+        </div>
+
+        <!-- Kontrol Paginasi Kartu QR (Meringankan Beban Browser & Jaringan) -->
+        <div id="containerPaginationQrAdmin" class="bg-white p-4 rounded-3xl border border-slate-200 shadow-xs flex flex-col sm:flex-row items-center justify-between gap-3 text-xs">
+          <div class="flex items-center gap-2 text-slate-600 font-medium">
+            <span>Tampilkan per halaman:</span>
+            <select id="selectQrPageSize" onchange="changeAdminQrPageSize(this.value)" class="px-2.5 py-1.5 bg-slate-50 border border-slate-200 rounded-xl text-xs font-bold text-slate-700 cursor-pointer">
+              <option value="12" selected>12 Siswa</option>
+              <option value="24">24 Siswa</option>
+              <option value="48">48 Siswa</option>
+              <option value="ALL">Semua Siswa</option>
+            </select>
+            <span id="adminQrRangeInfo" class="text-slate-400 text-[11px] ml-1"></span>
+          </div>
+          <div class="flex items-center gap-1.5">
+            <button type="button" id="btnAdminQrPrev" onclick="changeAdminQrPage(-1)" class="px-3 py-1.5 bg-slate-100 hover:bg-slate-200 disabled:opacity-40 disabled:hover:bg-slate-100 text-slate-700 font-bold rounded-xl transition flex items-center gap-1 cursor-pointer">
+              <i data-lucide="chevron-left" class="w-4 h-4"></i>
+              <span>Sebelumnya</span>
+            </button>
+            <span id="adminQrPageIndicator" class="px-3 py-1.5 bg-blue-50 text-blue-700 font-extrabold rounded-xl border border-blue-200">
+              1 / 1
+            </span>
+            <button type="button" id="btnAdminQrNext" onclick="changeAdminQrPage(1)" class="px-3 py-1.5 bg-slate-100 hover:bg-slate-200 disabled:opacity-40 disabled:hover:bg-slate-100 text-slate-700 font-bold rounded-xl transition flex items-center gap-1 cursor-pointer">
+              <span>Selanjutnya</span>
+              <i data-lucide="chevron-right" class="w-4 h-4"></i>
+            </button>
+          </div>
         </div>
       </div>
 
@@ -2529,6 +2971,10 @@
         <i data-lucide="megaphone" class="w-4 h-4 mb-0.5"></i>
         <span class="text-[10px] leading-tight">Pengumuman</span>
       </button>
+      <button type="button" onclick="switchTabGuru('profil')" id="mobileNavGuru_profil" class="mobile-nav-btn flex flex-col items-center justify-center py-1 px-2.5 rounded-xl transition text-slate-500 hover:text-indigo-600 font-medium min-w-[56px] flex-shrink-0">
+        <i data-lucide="user" class="w-4 h-4 mb-0.5"></i>
+        <span class="text-[10px] leading-tight">Profil</span>
+      </button>
     </div>
   </nav>
 
@@ -2626,7 +3072,9 @@
       STATUS_PUBLIKASI_NILAI: "TAMPILKAN",
       POIN_SP1: 30,
       POIN_SP2: 60,
-      POIN_SP3: 90
+      POIN_SP3: 90,
+      FITUR_REFLEKSI_4F: "NONAKTIF",
+      GURU_REFLEKSI_4F_NIPS: []
     };
 
     let currentUser = null; // { role: 'SISWA'|'GURU'|'ADMIN', ... }
@@ -2642,6 +3090,7 @@
     let log7Kebiasaan = [];
     let logTibum = [];
     let logPengumuman = [];
+    let logJurnalGuru = [];
 
     let deferredPrompt = null;
     let html5QrCodeScanner = null;
@@ -3439,6 +3888,7 @@
       if (json.logKebiasaan) log7Kebiasaan = json.logKebiasaan;
       if (json.logTibum) logTibum = json.logTibum;
       if (json.pengumuman) logPengumuman = json.pengumuman;
+      if (json.jurnalGuru) logJurnalGuru = json.jurnalGuru;
 
       // Simpan snapshot ke LocalStorage agar saat aplikasi dibuka lagi terbuka INSTAN (0 detik)
       try {
@@ -3535,11 +3985,34 @@
             if (cached.logKebiasaan) log7Kebiasaan = cached.logKebiasaan;
             if (cached.logTibum) logTibum = cached.logTibum;
             if (cached.pengumuman) logPengumuman = cached.pengumuman;
+            if (cached.jurnalGuru) logJurnalGuru = cached.jurnalGuru;
+            const savedJurnalLocal = localStorage.getItem("SUPERAPP_JURNAL_GURU");
+            if (savedJurnalLocal) {
+              try {
+                const parsed = JSON.parse(savedJurnalLocal);
+                if (Array.isArray(parsed) && parsed.length > 0) {
+                  parsed.forEach(pj => {
+                    if (!logJurnalGuru.some(x => x.id === pj.id)) logJurnalGuru.push(pj);
+                  });
+                }
+              } catch (e) {}
+            }
             hasLocalCache = true;
           }
         }
       } catch (err) {
         console.warn("Gagal parse cache lokal:", err);
+      }
+
+      // Selaraskan juga dengan snapshot konfigurasi spesifik jika ada
+      const savedConfigOnly = localStorage.getItem("SUPERAPP_CONFIG");
+      if (savedConfigOnly) {
+        try {
+          const parsedCfg = JSON.parse(savedConfigOnly);
+          if (parsedCfg && typeof parsedCfg === 'object') {
+            appConfig = Object.assign(appConfig, parsedCfg);
+          }
+        } catch (e) {}
       }
 
       // Jika belum ada cache, muat data bawaan awal
@@ -3675,8 +4148,21 @@
         if (document.getElementById('cfgIzinCetakNilai')) {
           document.getElementById('cfgIzinCetakNilai').value = appConfig.IZIN_CETAK_NILAI || "DIBUKA";
         }
+        if (document.getElementById('cfgFiturRefleksi4F')) {
+          const curVal = String(appConfig.FITUR_REFLEKSI_4F || 'NONAKTIF').toUpperCase();
+          if (curVal === 'AKTIF' || curVal === 'SEMUA') {
+            document.getElementById('cfgFiturRefleksi4F').value = 'SEMUA';
+          } else if (curVal === 'PILIH_GURU') {
+            document.getElementById('cfgFiturRefleksi4F').value = 'PILIH_GURU';
+          } else {
+            document.getElementById('cfgFiturRefleksi4F').value = 'NONAKTIF';
+          }
+        }
         document.getElementById('inputBackendUrlConfig').value = BACKEND_URL || "";
       }
+
+      applyRefleksiVisibility();
+      renderAdminRefleksiGuruTable();
     }
 
     // -------------------------------------------------------------
@@ -3773,6 +4259,7 @@
     }
 
     function logoutSession() {
+      if (typeof stopNfcTibumScan === 'function') stopNfcTibumScan();
       currentUser = null;
       document.getElementById('userProfileArea').classList.add('hidden');
       document.getElementById('btnAdminAccess').classList.remove('hidden');
@@ -3833,7 +4320,9 @@
       }
 
       const defaultPin = String(s.nisn).slice(-4);
-      if (pin && pin !== defaultPin && pin !== (s.pin || defaultPin)) {
+      const customPin = localStorage.getItem('custom_pin_siswa_' + s.nisn);
+      const expectedPin = customPin || s.pin || defaultPin;
+      if (pin && pin !== expectedPin) {
         Swal.fire('PIN Salah', 'PIN siswa tidak cocok. Default PIN adalah 4 digit terakhir NISN Anda.', 'error');
         return;
       }
@@ -3882,7 +4371,9 @@
       const pin = document.getElementById('inputPinGuru').value.trim();
 
       // Cek admin
-      if (nip.toUpperCase() === 'ADMIN' && pin === (appConfig.PIN_ADMIN || '123456')) {
+      const customPinAdmin = localStorage.getItem('custom_pin_admin');
+      const expectedAdminPin = customPinAdmin || appConfig.PIN_ADMIN || '123456';
+      if (nip.toUpperCase() === 'ADMIN' && pin === expectedAdminPin) {
         currentUser = { role: 'ADMIN', nama: 'Administrator Sistem', nip: 'ADMIN' };
         setupAdminUi();
         showView('viewAdmin');
@@ -3907,7 +4398,9 @@
         return;
       }
 
-      if (pin && pin !== '1234' && pin !== (g.pin || '1234')) {
+      const customPinGuru = localStorage.getItem('custom_pin_guru_' + g.nip);
+      const expectedGuruPin = customPinGuru || g.pin || '1234';
+      if (pin && pin !== expectedGuruPin) {
         Swal.fire('PIN Salah', 'PIN guru/pelatih tidak cocok. Default PIN: 1234.', 'error');
         return;
       }
@@ -3941,6 +4434,185 @@
         showConfirmButton: false,
         timer: 2000
       });
+    }
+
+    // HANDLER GANTI PIN / PASSWORD MANDIRI (SISWA & GURU)
+    async function handleGantiPinSiswa(e) {
+      e.preventDefault();
+      if (!currentUser || currentUser.role !== 'SISWA') return;
+
+      const oldPinInput = document.getElementById('inputPinLamaSiswa');
+      const newPinInput = document.getElementById('inputPinBaruSiswa');
+      const confPinInput = document.getElementById('inputPinKonfirmasiSiswa');
+
+      const oldPin = oldPinInput ? oldPinInput.value.trim() : '';
+      const newPin = newPinInput ? newPinInput.value.trim() : '';
+      const confPin = confPinInput ? confPinInput.value.trim() : '';
+
+      const s = masterSiswa.find(item => isSameNisn(item.nisn, currentUser.nisn));
+      const defaultPin = String(currentUser.nisn).slice(-4);
+      const customPin = localStorage.getItem('custom_pin_siswa_' + currentUser.nisn);
+      const currentSavedPin = customPin || (s ? s.pin : null) || defaultPin;
+
+      if (oldPin !== currentSavedPin) {
+        Swal.fire({
+          icon: 'error',
+          title: 'PIN Lama Tidak Cocok',
+          text: 'PIN lama yang Anda masukkan salah. Default PIN adalah 4 digit terakhir NISN Anda.'
+        });
+        return;
+      }
+
+      if (newPin.length < 4) {
+        Swal.fire({
+          icon: 'warning',
+          title: 'PIN Terlalu Pendek',
+          text: 'PIN baru minimal harus terdiri dari 4 digit angka/karakter.'
+        });
+        return;
+      }
+
+      if (newPin !== confPin) {
+        Swal.fire({
+          icon: 'warning',
+          title: 'Konfirmasi PIN Berbeda',
+          text: 'PIN baru dan konfirmasi PIN tidak sama. Silakan periksa kembali.'
+        });
+        return;
+      }
+
+      localStorage.setItem('custom_pin_siswa_' + currentUser.nisn, newPin);
+      currentUser.pin = newPin;
+      if (s) s.pin = newPin;
+
+      playBeepSuccess();
+      Swal.fire({
+        title: 'Menyimpan PIN Baru...',
+        text: 'Memperbarui keamanan akun siswa di database...',
+        allowOutsideClick: false,
+        didOpen: () => Swal.showLoading()
+      });
+
+      const res = await callBackendPost({
+        action: 'updatePinUser',
+        role: 'SISWA',
+        id: currentUser.nisn,
+        pin: newPin
+      });
+
+      if (res && res.success) {
+        Swal.fire({
+          icon: 'success',
+          title: 'PIN Berhasil Diperbarui! 🔒',
+          text: 'PIN akun siswa Anda berhasil disimpan secara aman di database. Gunakan PIN baru ini untuk login berikutnya.',
+          confirmButtonColor: '#3b82f6'
+        });
+      } else {
+        Swal.fire({
+          icon: 'success',
+          title: 'PIN Berhasil Disimpan Lokal! 🔒',
+          text: 'PIN akun siswa Anda berhasil diperbarui di perangkat ini. Gunakan PIN baru untuk login selanjutnya.',
+          confirmButtonColor: '#3b82f6'
+        });
+      }
+
+      if (oldPinInput) oldPinInput.value = '';
+      if (newPinInput) newPinInput.value = '';
+      if (confPinInput) confPinInput.value = '';
+    }
+
+    async function handleGantiPinGuru(e) {
+      e.preventDefault();
+      if (!currentUser) return;
+
+      const oldPinInput = document.getElementById('inputPinLamaGuru');
+      const newPinInput = document.getElementById('inputPinBaruGuru');
+      const confPinInput = document.getElementById('inputPinKonfirmasiGuru');
+
+      const oldPin = oldPinInput ? oldPinInput.value.trim() : '';
+      const newPin = newPinInput ? newPinInput.value.trim() : '';
+      const confPin = confPinInput ? confPinInput.value.trim() : '';
+
+      let currentSavedPin = '1234';
+      if (currentUser.role === 'ADMIN' || currentUser.nip === 'ADMIN') {
+        currentSavedPin = localStorage.getItem('custom_pin_admin') || appConfig.PIN_ADMIN || '123456';
+      } else {
+        const g = masterGuru.find(item => item.nip && item.nip.toLowerCase() === currentUser.nip.toLowerCase());
+        const customPin = localStorage.getItem('custom_pin_guru_' + currentUser.nip);
+        currentSavedPin = customPin || (g ? g.pin : null) || '1234';
+      }
+
+      if (oldPin !== currentSavedPin) {
+        Swal.fire({
+          icon: 'error',
+          title: 'PIN Lama Tidak Cocok',
+          text: 'PIN lama yang Anda masukkan tidak sesuai. Default PIN: 1234 (atau 123456 untuk Admin).'
+        });
+        return;
+      }
+
+      if (newPin.length < 4) {
+        Swal.fire({
+          icon: 'warning',
+          title: 'PIN Terlalu Pendek',
+          text: 'PIN baru minimal harus terdiri dari 4 karakter.'
+        });
+        return;
+      }
+
+      if (newPin !== confPin) {
+        Swal.fire({
+          icon: 'warning',
+          title: 'Konfirmasi PIN Berbeda',
+          text: 'PIN baru dan konfirmasi PIN tidak sama. Silakan periksa kembali.'
+        });
+        return;
+      }
+
+      if (currentUser.role === 'ADMIN' || currentUser.nip === 'ADMIN') {
+        localStorage.setItem('custom_pin_admin', newPin);
+        appConfig.PIN_ADMIN = newPin;
+      } else {
+        localStorage.setItem('custom_pin_guru_' + currentUser.nip, newPin);
+        const g = masterGuru.find(item => item.nip && item.nip.toLowerCase() === currentUser.nip.toLowerCase());
+        if (g) g.pin = newPin;
+      }
+      currentUser.pin = newPin;
+
+      playBeepSuccess();
+      Swal.fire({
+        title: 'Menyimpan PIN Guru...',
+        text: 'Menyinkronkan keamanan akun ke database...',
+        allowOutsideClick: false,
+        didOpen: () => Swal.showLoading()
+      });
+
+      const res = await callBackendPost({
+        action: 'updatePinUser',
+        role: currentUser.role === 'ADMIN' ? 'ADMIN' : 'GURU',
+        id: currentUser.nip,
+        pin: newPin
+      });
+
+      if (res && res.success) {
+        Swal.fire({
+          icon: 'success',
+          title: 'PIN Guru Berhasil Diubah! 🔒',
+          text: 'PIN / password baru Anda berhasil disimpan di database. Gunakan PIN baru ini untuk sesi berikutnya.',
+          confirmButtonColor: '#6366f1'
+        });
+      } else {
+        Swal.fire({
+          icon: 'success',
+          title: 'PIN Tersimpan di Perangkat! 🔒',
+          text: 'PIN / password baru Anda berhasil disimpan pada perangkat ini.',
+          confirmButtonColor: '#6366f1'
+        });
+      }
+
+      if (oldPinInput) oldPinInput.value = '';
+      if (newPinInput) newPinInput.value = '';
+      if (confPinInput) confPinInput.value = '';
     }
 
     // -------------------------------------------------------------
@@ -5086,16 +5758,22 @@
         'tabBtnGuru_presensiKbm',
         'tabBtnGuru_rekapWalas',
         'tabBtnGuru_nilaiUlangan',
+        'tabBtnGuru_penilaianTopik',
         'tabBtnGuru_guruWali',
-        'tabBtnGuru_tibum'
+        'tabBtnGuru_tibum',
+        'tabBtnGuru_pengumuman',
+        'tabBtnGuru_profil'
       ];
       const btnAbsenEkskul = document.getElementById('tabBtnGuru_absenEkskul');
 
       if (isCoach) {
-        // BERANDA PELATIH: HANYA BERISI TAB ABSENSI EKSKUL SAJA
+        // BERANDA PELATIH: TAB ABSENSI EKSKUL & PROFIL GURU TETAP AKTIF
         allGuruTabs.forEach(id => {
           const el = document.getElementById(id);
-          if (el) el.classList.add('hidden');
+          if (el) {
+            if (id === 'tabBtnGuru_profil') el.classList.remove('hidden');
+            else el.classList.add('hidden');
+          }
         });
         if (btnAbsenEkskul) {
           btnAbsenEkskul.classList.remove('hidden');
@@ -5149,6 +5827,44 @@
         }
       }
 
+      // SINKRONISASI KELAS & MAPEL PENILAIAN TOPIK SECARA OTOMATIS
+      const selTopikKelas = document.getElementById('penilaianTopikKelas');
+      if (selTopikKelas && distinctKelas.length > 0) {
+        const curTopikKelas = selTopikKelas.value;
+        selTopikKelas.innerHTML = distinctKelas.map(k => `<option value="${k}">Kelas ${k}</option>`).join('');
+        if (currentUser.rombelWali && distinctKelas.includes(currentUser.rombelWali)) {
+          selTopikKelas.value = currentUser.rombelWali;
+        } else if (curTopikKelas && distinctKelas.includes(curTopikKelas)) {
+          selTopikKelas.value = curTopikKelas;
+        } else {
+          selTopikKelas.value = distinctKelas[0];
+        }
+      }
+
+      const selTopikMapel = document.getElementById('penilaianTopikMapel');
+      if (selTopikMapel && currentUser && currentUser.mapel) {
+        for (let i = 0; i < selTopikMapel.options.length; i++) {
+          if (selTopikMapel.options[i].value.toLowerCase() === currentUser.mapel.toLowerCase()) {
+            selTopikMapel.selectedIndex = i;
+            break;
+          }
+        }
+      }
+
+      // Isi otomatis Mapel di Presensi KBM jika guru memiliki penugasan mapel
+      const kbmMapelInp = document.getElementById('guruPresensiKbmMapel');
+      if (kbmMapelInp && currentUser && currentUser.mapel && !kbmMapelInp.value) {
+        kbmMapelInp.value = currentUser.mapel;
+      }
+
+      // Update data kartu profil guru
+      if (document.getElementById('profilDetailNamaGuru')) document.getElementById('profilDetailNamaGuru').innerText = currentUser.nama;
+      if (document.getElementById('profilDetailNipGuru')) document.getElementById('profilDetailNipGuru').innerText = `NIP: ${currentUser.nip}`;
+      if (document.getElementById('profilDetailRoleGuru')) document.getElementById('profilDetailRoleGuru').innerText = currentUser.role || currentUser.peran || "Guru Pengajar";
+      if (document.getElementById('profilDetailRombelGuru')) document.getElementById('profilDetailRombelGuru').innerText = currentUser.rombelWali ? `Kelas ${currentUser.rombelWali}` : "-";
+      if (document.getElementById('profilDetailMapelGuru')) document.getElementById('profilDetailMapelGuru').innerText = currentUser.mapel || "Semua Mata Pelajaran";
+      if (document.getElementById('profilDetailEkskulGuru')) document.getElementById('profilDetailEkskulGuru').innerText = currentUser.cabangEkskul || "-";
+
       // Set tanggal form presensi KBM ke hari ini
       const today = new Date().toISOString().split('T')[0];
       if (document.getElementById('guruPresensiKbmTgl')) document.getElementById('guruPresensiKbmTgl').value = today;
@@ -5174,9 +5890,12 @@
       renderRekapWalasEkskul();
       renderCheckboxMasterTibum();
       loadValidasi7Kebiasaan();
+      applyRefleksiVisibility();
     }
 
     function switchTabGuru(tabName) {
+      // Hentikan scan NFC jika berpindah dari tab tibum
+      if (tabName !== 'tibum' && typeof stopNfcTibumScan === 'function') stopNfcTibumScan();
       // Normalisasi alias nama tab
       if (tabName === 'validasi7K' || tabName === 'kebiasaan-guru' || tabName === 'guru-wali') tabName = 'guruWali';
       if (tabName === 'presensi-kbm') tabName = 'presensiKbm';
@@ -5185,10 +5904,10 @@
       if (tabName === 'nilai-ulangan') tabName = 'nilaiUlangan';
       if (tabName === 'catatan-tibum' || tabName === 'razia-tibum') tabName = 'tibum';
 
-      // Proteksi hak akses: Pelatih hanya boleh akses Absen Ekskul, Guru tidak punya tab Absen Ekskul
+      // Proteksi hak akses: Pelatih hanya boleh akses Absen Ekskul & Profil, Guru tidak punya tab Absen Ekskul
       const isCoach = (currentUser.role === 'PELATIH_EKSKUL' || currentUser.peran === 'PELATIH_EKSKUL' || (currentUser.cabangEkskul && !currentUser.rombelWali && currentUser.role !== 'WALI_KELAS'));
       if (isCoach) {
-        tabName = 'absenEkskul';
+        if (tabName !== 'profil') tabName = 'absenEkskul';
       } else if (tabName === 'absenEkskul') {
         tabName = 'beranda';
       }
@@ -5229,6 +5948,8 @@
         renderFormPenilaianTopik();
       } else if (tabName === 'presensiKbm') {
         renderFormPresensiKbm();
+        applyRefleksiVisibility();
+        if (isRefleksi4FActive()) renderJurnalGuruSaya();
         renderBannerPeringatanAlpaGuru();
       } else if (tabName === 'absenEkskul') {
         renderFormAbsenPelatih();
@@ -5244,6 +5965,13 @@
         renderPengumumanGuru();
       } else if (tabName === 'nilaiUlangan') {
         renderSelectSiswaCetakRaporGuru();
+      } else if (tabName === 'profil') {
+        if (document.getElementById('profilDetailNamaGuru')) document.getElementById('profilDetailNamaGuru').innerText = currentUser.nama;
+        if (document.getElementById('profilDetailNipGuru')) document.getElementById('profilDetailNipGuru').innerText = `NIP: ${currentUser.nip}`;
+        if (document.getElementById('profilDetailRoleGuru')) document.getElementById('profilDetailRoleGuru').innerText = currentUser.role || currentUser.peran || "Guru Pengajar";
+        if (document.getElementById('profilDetailRombelGuru')) document.getElementById('profilDetailRombelGuru').innerText = currentUser.rombelWali ? `Kelas ${currentUser.rombelWali}` : "-";
+        if (document.getElementById('profilDetailMapelGuru')) document.getElementById('profilDetailMapelGuru').innerText = currentUser.mapel || "Semua Mata Pelajaran";
+        if (document.getElementById('profilDetailEkskulGuru')) document.getElementById('profilDetailEkskulGuru').innerText = currentUser.cabangEkskul || "-";
       }
 
       // Sinkronisasi data menyeluruh di latar belakang secara instan saat guru berganti tab
@@ -5355,9 +6083,10 @@
         });
       });
 
-      // Simpan lokal
+      // Simpan lokal presensi
       dataAbsen.forEach(item => {
-        logPresensiHarian.push({
+        const existIdx = logPresensiHarian.findIndex(p => p.tanggal === tgl && isSameNisn(p.nisn, item.nisn));
+        const record = {
           tanggal: tgl,
           kelas: kelas,
           nisn: item.nisn,
@@ -5365,13 +6094,81 @@
           status: item.status,
           keterangan: item.keterangan,
           dicatatOleh: currentUser ? currentUser.nama : "Wali Kelas"
-        });
+        };
+        if (existIdx !== -1) {
+          logPresensiHarian[existIdx] = record;
+        } else {
+          logPresensiHarian.push(record);
+        }
       });
+
+      // Cek dan Simpan Catatan Jurnal Mengajar & Refleksi 4F Guru (Khusus Guru Pengampu)
+      const mapelInp = document.getElementById('guruPresensiKbmMapel');
+      const topikInp = document.getElementById('guruPresensiKbmTopik');
+      const garisInp = document.getElementById('guruPresensiKbmGarisBesar');
+      const factsInp = document.getElementById('refleksi4fFacts');
+      const feelingsInp = document.getElementById('refleksi4fFeelings');
+      const findingsInp = document.getElementById('refleksi4fFindings');
+      const futureInp = document.getElementById('refleksi4fFuture');
+
+      const mapel = (mapelInp && mapelInp.value.trim()) || (currentUser && currentUser.mapel) || 'Umum';
+      const topik = (topikInp && topikInp.value.trim()) || '';
+      const garisBesar = (garisInp && garisInp.value.trim()) || '';
+      const facts = (factsInp && factsInp.value.trim()) || '';
+      const feelings = (feelingsInp && feelingsInp.value.trim()) || '';
+      const findings = (findingsInp && findingsInp.value.trim()) || '';
+      const future = (futureInp && futureInp.value.trim()) || '';
+
+      let hasJurnal = false;
+      if (isRefleksi4FActive() && (topik || facts)) {
+        hasJurnal = true;
+        const hadirCount = dataAbsen.filter(x => x.status === 'HADIR').length;
+        const jurnalItem = {
+          id: 'JRN-' + Date.now().toString().slice(-6) + Math.random().toString(36).slice(2, 5),
+          nip: currentUser ? currentUser.nip : 'GURU',
+          namaGuru: currentUser ? currentUser.nama : 'Guru Pengampu',
+          tanggal: tgl,
+          kelas: kelas,
+          mapel: mapel,
+          topik: topik || 'Pembelajaran Harian',
+          garisBesar: garisBesar || '-',
+          kehadiran: {
+            total: dataAbsen.length,
+            hadir: hadirCount,
+            tidakHadir: dataAbsen.length - hadirCount
+          },
+          refleksi4F: {
+            facts: facts || '-',
+            feelings: feelings || '-',
+            findings: findings || '-',
+            future: future || '-'
+          },
+          tglDibuat: new Date().toISOString()
+        };
+
+        const existIdx = logJurnalGuru.findIndex(j => j.tanggal === tgl && j.kelas === kelas && j.nip === currentUser.nip && j.topik === jurnalItem.topik);
+        if (existIdx !== -1) {
+          logJurnalGuru[existIdx] = jurnalItem;
+        } else {
+          logJurnalGuru.unshift(jurnalItem);
+        }
+
+        try {
+          const myJurnals = logJurnalGuru.filter(j => currentUser && j.nip === currentUser.nip);
+          localStorage.setItem('local_jurnal_guru_' + currentUser.nip, JSON.stringify(myJurnals));
+          localStorage.setItem('SUPERAPP_JURNAL_GURU', JSON.stringify(logJurnalGuru));
+        } catch (e) {}
+
+        callBackendPost({
+          action: 'simpanJurnalGuru',
+          jurnal: jurnalItem
+        });
+      }
 
       playBeepSuccess();
       Swal.fire({
-        title: 'Menyimpan Presensi KBM...',
-        text: 'Mengirim data ke Google Sheets...',
+        title: 'Menyimpan Presensi & Jurnal...',
+        text: 'Mengirim data ke Database...',
         didOpen: () => Swal.showLoading(),
         allowOutsideClick: false
       });
@@ -5385,11 +6182,412 @@
       });
 
       if (res && res.success) {
-        Swal.fire('Tersimpan di Database! 🟢', `Presensi KBM kelas ${kelas} (${dataAbsen.length} siswa) berhasil disimpan.`, 'success');
+        Swal.fire('Tersimpan di Database! 🟢', `Presensi KBM kelas ${kelas} (${dataAbsen.length} siswa)${hasJurnal ? ' dan Catatan Jurnal Refleksi 4F' : ''} berhasil disimpan ke database.`, 'success');
         await syncDataFromGoogleSheets(true, true);
       } else {
-        Swal.fire('Tersimpan Lokal', `Presensi KBM kelas ${kelas} (${dataAbsen.length} siswa) disimpan di sesi lokal.`, 'info');
+        Swal.fire('Tersimpan Lokal 💾', `Presensi KBM kelas ${kelas} (${dataAbsen.length} siswa)${hasJurnal ? ' dan Jurnal Refleksi 4F' : ''} disimpan di sesi lokal.`, 'info');
       }
+
+      if (isRefleksi4FActive()) {
+        renderJurnalGuruSaya();
+      }
+    }
+
+    // HELPER KONTROL AKTIVASI & VISIBILITAS FITUR REFLEKSI 4F & JURNAL GURU (PER GURU ATAU BANYAK GURU)
+    function saveAppConfigToLocalStorage() {
+      try {
+        let cachedStr = localStorage.getItem("SUPERAPP_DATA_CACHE_V1");
+        let cached = cachedStr ? JSON.parse(cachedStr) : {};
+        cached.config = Object.assign({}, appConfig);
+        cached.cachedAt = Date.now();
+        localStorage.setItem("SUPERAPP_DATA_CACHE_V1", JSON.stringify(cached));
+        localStorage.setItem("SUPERAPP_CONFIG", JSON.stringify(appConfig));
+      } catch (e) {
+        console.warn("Gagal simpan config ke storage:", e);
+      }
+    }
+
+    function getActiveRefleksiNips() {
+      const raw = appConfig.GURU_REFLEKSI_4F_NIPS;
+      if (raw === undefined || raw === null) return [];
+      if (typeof raw === 'number') return [String(raw).trim()];
+      if (Array.isArray(raw)) return raw.map(n => String(n).trim()).filter(Boolean);
+      if (typeof raw === 'string') {
+        const trimmed = raw.trim();
+        if (trimmed.startsWith('[') && trimmed.endsWith(']')) {
+          try {
+            const parsed = JSON.parse(trimmed);
+            if (Array.isArray(parsed)) return parsed.map(n => String(n).trim()).filter(Boolean);
+          } catch (e) {}
+        }
+        return trimmed.split(',').map(n => n.trim()).filter(Boolean);
+      }
+      return [];
+    }
+
+    function setActiveRefleksiNips(list) {
+      const unique = Array.from(new Set(list.map(n => String(n).trim()))).filter(Boolean);
+      appConfig.GURU_REFLEKSI_4F_NIPS = unique;
+      saveAppConfigToLocalStorage();
+    }
+
+    function isRefleksi4FActive(user = currentUser) {
+      if (!user) return false;
+      // Siswa tidak memiliki akses ke fitur refleksi guru
+      if (user.role === 'SISWA') return false;
+
+      const mode = String(appConfig.FITUR_REFLEKSI_4F || 'NONAKTIF').toUpperCase();
+      if (mode === 'NONAKTIF') return false;
+      if (mode === 'SEMUA' || mode === 'AKTIF') return true;
+
+      if (mode === 'PILIH_GURU') {
+        const activeNips = getActiveRefleksiNips();
+        const myNip = String(user.nip || '').trim().toLowerCase();
+        return activeNips.some(n => String(n).trim().toLowerCase() === myNip);
+      }
+      return false;
+    }
+
+    function handleModeRefleksi4FChange(newMode) {
+      appConfig.FITUR_REFLEKSI_4F = newMode;
+      saveAppConfigToLocalStorage();
+      const card = document.getElementById('cardAdminAktivasiRefleksiGuru');
+      if (card) {
+        if (newMode === 'NONAKTIF') {
+          card.classList.add('opacity-50');
+        } else {
+          card.classList.remove('opacity-50');
+        }
+      }
+      renderAdminRefleksiGuruTable();
+    }
+
+    function toggleAktivasiRefleksiGuru(nip) {
+      let list = getActiveRefleksiNips();
+      const sNip = String(nip).trim();
+      if (list.includes(sNip)) {
+        list = list.filter(n => n !== sNip);
+      } else {
+        list.push(sNip);
+      }
+      setActiveRefleksiNips(list);
+      if (document.getElementById('cfgFiturRefleksi4F')) {
+        document.getElementById('cfgFiturRefleksi4F').value = 'PILIH_GURU';
+        appConfig.FITUR_REFLEKSI_4F = 'PILIH_GURU';
+      }
+      saveAppConfigToLocalStorage();
+      renderAdminRefleksiGuruTable();
+    }
+
+    function setSemuaAktivasiRefleksiGuru(aktif) {
+      const teachers = (masterGuru || []).filter(g => g.peran !== 'ADMIN');
+      if (aktif) {
+        const allNips = teachers.map(g => String(g.nip).trim());
+        setActiveRefleksiNips(allNips);
+        if (document.getElementById('cfgFiturRefleksi4F')) {
+          document.getElementById('cfgFiturRefleksi4F').value = 'SEMUA';
+          appConfig.FITUR_REFLEKSI_4F = 'SEMUA';
+        }
+      } else {
+        setActiveRefleksiNips([]);
+        if (document.getElementById('cfgFiturRefleksi4F')) {
+          document.getElementById('cfgFiturRefleksi4F').value = 'NONAKTIF';
+          appConfig.FITUR_REFLEKSI_4F = 'NONAKTIF';
+        }
+      }
+      saveAppConfigToLocalStorage();
+      renderAdminRefleksiGuruTable();
+    }
+
+    function handleToggleCheckAllRefleksi(isChecked) {
+      const teachers = (masterGuru || []).filter(g => g.peran !== 'ADMIN');
+      if (isChecked) {
+        setActiveRefleksiNips(teachers.map(g => String(g.nip).trim()));
+        if (document.getElementById('cfgFiturRefleksi4F')) {
+          document.getElementById('cfgFiturRefleksi4F').value = 'PILIH_GURU';
+          appConfig.FITUR_REFLEKSI_4F = 'PILIH_GURU';
+        }
+      } else {
+        setActiveRefleksiNips([]);
+      }
+      saveAppConfigToLocalStorage();
+      renderAdminRefleksiGuruTable();
+    }
+
+    async function handleSimpanAktivasiRefleksiGuruAdmin() {
+      playBeepSuccess();
+      saveAppConfigToLocalStorage();
+      Swal.fire({
+        title: 'Menyimpan Pengaturan Guru...',
+        didOpen: () => Swal.showLoading(),
+        allowOutsideClick: false
+      });
+
+      const res = await callBackendPost({
+        action: 'simpanPengaturan',
+        config: appConfig,
+        pin: appConfig.PIN_ADMIN
+      });
+
+      if (res && res.success) {
+        saveAppConfigToLocalStorage();
+        Swal.fire('Tersimpan di Database! 🟢', 'Pengaturan aktivasi Refleksi 4F per guru / banyak guru berhasil diperbarui.', 'success');
+        await syncDataFromGoogleSheets(true, true);
+      } else {
+        saveAppConfigToLocalStorage();
+        Swal.fire('Tersimpan Lokal 💾', 'Pengaturan aktivasi Refleksi 4F guru tersimpan di browser ini.', 'info');
+      }
+      renderAdminRefleksiGuruTable();
+    }
+
+    function renderAdminRefleksiGuruTable() {
+      const tbody = document.getElementById('tableAdminRefleksiGuruBody');
+      if (!tbody) return;
+
+      const teachers = (masterGuru || []).filter(g => g.peran !== 'ADMIN');
+      const activeNips = getActiveRefleksiNips();
+      const mode = String(appConfig.FITUR_REFLEKSI_4F || 'NONAKTIF').toUpperCase();
+
+      const keyword = (document.getElementById('searchAdminRefleksiGuru')?.value || '').toLowerCase().trim();
+
+      const filteredTeachers = teachers.filter(g => {
+        if (!keyword) return true;
+        const sNama = (g.nama || '').toLowerCase();
+        const sNip = (g.nip || '').toLowerCase();
+        const sMapel = (g.mapel || '').toLowerCase();
+        return sNama.includes(keyword) || sNip.includes(keyword) || sMapel.includes(keyword);
+      });
+
+      let totalAktif = 0;
+      if (mode === 'SEMUA' || mode === 'AKTIF') {
+        totalAktif = teachers.length;
+      } else if (mode === 'NONAKTIF') {
+        totalAktif = 0;
+      } else {
+        totalAktif = teachers.filter(g => activeNips.includes(String(g.nip).trim())).length;
+      }
+
+      if (document.getElementById('badgeAdminTotalGuruRefleksi')) {
+        document.getElementById('badgeAdminTotalGuruRefleksi').innerText = `Total: ${teachers.length} Guru`;
+      }
+      if (document.getElementById('badgeAdminAktifGuruRefleksi')) {
+        document.getElementById('badgeAdminAktifGuruRefleksi').innerText = `🟢 Aktif: ${totalAktif}`;
+      }
+      if (document.getElementById('badgeAdminNonaktifGuruRefleksi')) {
+        document.getElementById('badgeAdminNonaktifGuruRefleksi').innerText = `⚪ Nonaktif: ${teachers.length - totalAktif}`;
+      }
+
+      if (filteredTeachers.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="7" class="py-6 text-center text-slate-400">Tidak ada data guru yang cocok dengan pencarian.</td></tr>`;
+        return;
+      }
+
+      tbody.innerHTML = filteredTeachers.map((g, idx) => {
+        const sNip = String(g.nip).trim();
+        let isGuruActive = false;
+        if (mode === 'SEMUA' || mode === 'AKTIF') {
+          isGuruActive = true;
+        } else if (mode === 'NONAKTIF') {
+          isGuruActive = false;
+        } else {
+          isGuruActive = activeNips.includes(sNip);
+        }
+
+        const badgeStatus = isGuruActive
+          ? `<span class="px-2.5 py-0.5 bg-emerald-100 text-emerald-800 border border-emerald-300 rounded-full font-bold text-[10px] inline-flex items-center gap-1">🟢 Aktif</span>`
+          : `<span class="px-2.5 py-0.5 bg-slate-100 text-slate-500 border border-slate-200 rounded-full font-bold text-[10px] inline-flex items-center gap-1">⚪ Nonaktif</span>`;
+
+        const tugasKet = [g.mapel, g.rombelWali ? 'Walas ' + g.rombelWali : ''].filter(Boolean).join(' • ') || 'Guru Pengampu';
+
+        return `
+          <tr class="hover:bg-slate-50/80 transition" id="rowAdminRefleksiGuru_${sNip}">
+            <td class="py-3 px-3 text-center">
+              <input type="checkbox" onchange="toggleAktivasiRefleksiGuru('${sNip}')" ${isGuruActive ? 'checked' : ''} class="rounded text-indigo-600 cursor-pointer">
+            </td>
+            <td class="py-3 px-3 text-center font-semibold text-slate-400">${idx + 1}</td>
+            <td class="py-3 px-3 font-mono font-bold text-slate-700">${sNip}</td>
+            <td class="py-3 px-3 font-bold text-slate-900">${escapeHtml(g.nama)}</td>
+            <td class="py-3 px-3 text-slate-600 text-[11px]">${escapeHtml(tugasKet)}</td>
+            <td class="py-3 px-3 text-center">${badgeStatus}</td>
+            <td class="py-3 px-3 text-center">
+              <button type="button" onclick="toggleAktivasiRefleksiGuru('${sNip}')" class="px-3 py-1 rounded-lg text-[11px] font-bold transition cursor-pointer ${isGuruActive ? 'bg-rose-50 text-rose-700 border border-rose-200 hover:bg-rose-100' : 'bg-emerald-50 text-emerald-700 border border-emerald-200 hover:bg-emerald-100'}">
+                ${isGuruActive ? 'Nonaktifkan' : 'Aktifkan'}
+              </button>
+            </td>
+          </tr>
+        `;
+      }).join('');
+
+      safeCreateIcons();
+    }
+
+    function applyRefleksiVisibility() {
+      const active = isRefleksi4FActive();
+      const elTopik = document.getElementById('containerPresensiKbmTopikGarisBesar');
+      const elRefleksi = document.getElementById('containerPresensiKbmRefleksi4F');
+      const elJurnal = document.getElementById('containerPresensiKbmRiwayatJurnal');
+      const elBtnStandar = document.getElementById('containerBtnSimpanKbmStandar');
+
+      if (active) {
+        if (elTopik) elTopik.classList.remove('hidden');
+        if (elRefleksi) elRefleksi.classList.remove('hidden');
+        if (elJurnal) elJurnal.classList.remove('hidden');
+        if (elBtnStandar) elBtnStandar.classList.add('hidden');
+      } else {
+        if (elTopik) elTopik.classList.add('hidden');
+        if (elRefleksi) elRefleksi.classList.add('hidden');
+        if (elJurnal) elJurnal.classList.add('hidden');
+        if (elBtnStandar) elBtnStandar.classList.remove('hidden');
+      }
+    }
+
+    function countWords(str) {
+      if (!str) return 0;
+      return str.trim().split(/\s+/).filter(Boolean).length;
+    }
+
+    function limitWords(str, maxWords = 38) {
+      if (!str) return '';
+      const words = str.trim().split(/\s+/).filter(Boolean);
+      if (words.length <= maxWords) return words.join(' ');
+      return words.slice(0, maxWords).join(' ') + '.';
+    }
+
+    // GENERATOR REFLEKSI GURU METODE 4F BERDASARKAN TOPIK, GARIS BESAR & PRESENSI KBM
+    // Per bagian refleksinya dijamin kurang dari 40 kata (< 40 kata)
+    function generateRefleksi4F() {
+      if (!isRefleksi4FActive()) {
+        Swal.fire('Fitur Belum Diaktifkan', 'Fitur Refleksi 4F & Jurnal Guru dinonaktifkan oleh Administrator.', 'info');
+        return;
+      }
+
+      const mapelInp = document.getElementById('guruPresensiKbmMapel');
+      const topikInp = document.getElementById('guruPresensiKbmTopik');
+      const garisInp = document.getElementById('guruPresensiKbmGarisBesar');
+      const tglInp = document.getElementById('guruPresensiKbmTgl');
+      const klsInp = document.getElementById('guruPresensiKbmKelas');
+
+      const mapel = (mapelInp && mapelInp.value.trim()) || (currentUser && currentUser.mapel) || 'Mata Pelajaran';
+      const topik = (topikInp && topikInp.value.trim()) || 'Topik Pembelajaran';
+      const garisBesar = (garisInp && garisInp.value.trim()) || 'Penyampaian materi konsep dan latihan mandiri';
+      const tgl = (tglInp && tglInp.value) || new Date().toISOString().split('T')[0];
+      const kelas = (klsInp && klsInp.value) || (currentUser && currentUser.rombelWali) || 'Kelas';
+
+      // Hitung kehadiran real-time dari tabel presensi di layar
+      const rows = document.querySelectorAll('#tableFormPresensiKbm tr[data-nisn]');
+      let total = rows.length;
+      let hadir = 0;
+      let sakit = 0;
+      let izin = 0;
+      let alpha = 0;
+      let terlambat = 0;
+
+      rows.forEach(r => {
+        const nisn = r.getAttribute('data-nisn');
+        const checked = r.querySelector(`input[name="st_kbm_${nisn}"]:checked`);
+        const st = checked ? checked.value : 'HADIR';
+        if (st === 'HADIR') hadir++;
+        else if (st === 'SAKIT') sakit++;
+        else if (st === 'IZIN') izin++;
+        else if (st === 'ALPHA') alpha++;
+        else if (st === 'TERLAMBAT') terlambat++;
+      });
+
+      const absenCount = sakit + izin + alpha;
+      const absenKet = absenCount > 0 ? `, absen ${absenCount}` : '';
+
+      // 1. FACTS (Peristiwa / Fakta Pembelajaran) - Terjamin < 40 kata
+      const factsRaw = `KBM ${mapel} kelas ${kelas} terlaksana membahas topik "${topik}". Dari ${total} siswa, hadir ${hadir}${absenKet}. Aktivitas: ${garisBesar}. Pembelajaran berjalan tertib dan tepat waktu.`;
+      const factsText = limitWords(factsRaw, 38);
+
+      // 2. FEELINGS (Perasaan Guru) - Terjamin < 40 kata
+      const feelingsRaw = `Saya merasa bersyukur dan puas melihat keaktifan siswa kelas ${kelas} saat mempelajari materi "${topik}". Antusiasme belajar peserta didik dalam diskusi kelompok sangat membanggakan.`;
+      const feelingsText = limitWords(feelingsRaw, 38);
+
+      // 3. FINDINGS (Pembelajaran & Insight Berharga) - Terjamin < 40 kata
+      const findingsRaw = `Metode kontekstual mempermudah pemahaman konsep "${topik}". Siswa lebih percaya diri saat berpraktik langsung, meski beberapa siswa tetap memerlukan penguatan konsep berkelanjutan.`;
+      const findingsText = limitWords(findingsRaw, 38);
+
+      // 4. FUTURE (Penerapan ke Depan & Tindak Lanjut) - Terjamin < 40 kata
+      const futureRaw = `Pertemuan berikutnya saya akan memberi pendampingan diferensiasi bagi siswa bimbingan serta menyiapkan evaluasi susulan terarah bagi siswa yang belum hadir hari ini.`;
+      const futureText = limitWords(futureRaw, 38);
+
+      if (document.getElementById('refleksi4fFacts')) document.getElementById('refleksi4fFacts').value = factsText;
+      if (document.getElementById('refleksi4fFeelings')) document.getElementById('refleksi4fFeelings').value = feelingsText;
+      if (document.getElementById('refleksi4fFindings')) document.getElementById('refleksi4fFindings').value = findingsText;
+      if (document.getElementById('refleksi4fFuture')) document.getElementById('refleksi4fFuture').value = futureText;
+
+      playBeepSuccess();
+      Swal.fire({
+        icon: 'success',
+        title: 'Refleksi 4F Berhasil Digenerate! ✨',
+        text: 'Draf refleksi 4F telah terisi ringkas (< 40 kata per bagian). Anda dapat mengedit teks sebelum menyimpan.',
+        timer: 2000,
+        showConfirmButton: false
+      });
+    }
+
+    // TAMPILKAN HISTORI JURNAL MENGAJAR SAYA (HANYA BISA DILIHAT GURU YANG BERSANGKUTAN)
+    function renderJurnalGuruSaya() {
+      const container = document.getElementById('containerJurnalGuruSaya');
+      const badge = document.getElementById('badgeTotalJurnalSaya');
+      if (!container || !currentUser) return;
+
+      // Filter ketat: HANYA jurnal milik akun guru yang sedang login
+      const myJurnals = (logJurnalGuru || []).filter(j => j.nip === currentUser.nip)
+        .sort((a, b) => (b.tanggal || '').localeCompare(a.tanggal || ''));
+
+      if (badge) badge.innerText = `${myJurnals.length} Catatan Jurnal`;
+
+      if (myJurnals.length === 0) {
+        container.innerHTML = `
+          <div class="p-6 text-center text-slate-400 bg-slate-50 rounded-2xl border border-slate-200">
+            <i data-lucide="book-open" class="w-8 h-8 mx-auto mb-1.5 text-slate-300"></i>
+            <p class="font-bold text-xs text-slate-600">Belum Ada Catatan Jurnal Pembelajaran</p>
+            <p class="text-[11px] text-slate-400 mt-0.5">Isi topik pembelajaran dan klik "Generate Refleksi 4F" lalu simpan presensi KBM untuk mencatat jurnal harian Anda.</p>
+          </div>
+        `;
+        safeCreateIcons();
+        return;
+      }
+
+      container.innerHTML = myJurnals.map((j, idx) => `
+        <div class="p-4 bg-white rounded-2xl border border-slate-200 shadow-xs space-y-3 hover:border-indigo-300 transition">
+          <div class="flex flex-wrap items-center justify-between gap-2 pb-2 border-b border-slate-100">
+            <div class="flex items-center gap-2">
+              <span class="px-2.5 py-0.5 bg-indigo-100 text-indigo-800 rounded-lg text-[10px] font-black uppercase">JURNAL #${idx + 1}</span>
+              <span class="font-bold text-xs text-slate-800">📅 ${j.tanggal} • Kelas ${j.kelas} • ${escapeHtml(j.mapel || 'Mapel')}</span>
+            </div>
+            <span class="text-[11px] font-bold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-md border border-emerald-200">
+              Hadir: ${j.kehadiran ? j.kehadiran.hadir : '-'} / ${j.kehadiran ? j.kehadiran.total : '-'} Siswa
+            </span>
+          </div>
+          <div>
+            <h5 class="font-extrabold text-xs sm:text-sm text-slate-900">Topik: ${escapeHtml(j.topik)}</h5>
+            <p class="text-[11px] text-slate-500 mt-0.5"><b class="text-slate-700">Aktivitas:</b> ${escapeHtml(j.garisBesar)}</p>
+          </div>
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 text-[11px]">
+            <div class="p-2.5 bg-slate-50 rounded-xl border border-slate-100">
+              <span class="font-bold text-indigo-900 block mb-0.5">1. Facts (Peristiwa):</span>
+              <p class="text-slate-600 line-clamp-3">${escapeHtml(j.refleksi4F ? j.refleksi4F.facts : '-')}</p>
+            </div>
+            <div class="p-2.5 bg-slate-50 rounded-xl border border-slate-100">
+              <span class="font-bold text-purple-900 block mb-0.5">2. Feelings (Perasaan):</span>
+              <p class="text-slate-600 line-clamp-3">${escapeHtml(j.refleksi4F ? j.refleksi4F.feelings : '-')}</p>
+            </div>
+            <div class="p-2.5 bg-slate-50 rounded-xl border border-slate-100">
+              <span class="font-bold text-teal-900 block mb-0.5">3. Findings (Pembelajaran):</span>
+              <p class="text-slate-600 line-clamp-3">${escapeHtml(j.refleksi4F ? j.refleksi4F.findings : '-')}</p>
+            </div>
+            <div class="p-2.5 bg-slate-50 rounded-xl border border-slate-100">
+              <span class="font-bold text-amber-900 block mb-0.5">4. Future (Penerapan):</span>
+              <p class="text-slate-600 line-clamp-3">${escapeHtml(j.refleksi4F ? j.refleksi4F.future : '-')}</p>
+            </div>
+          </div>
+        </div>
+      `).join('');
+
+      safeCreateIcons();
     }
 
     // Modul Presensi Ekskul (HANYA Pelatih)
@@ -5901,86 +7099,191 @@
       renderFormPenilaianTopik();
     }
 
+    // Ambil batas threshold KKTP & rentang interval manual
+    function getKktpThresholds() {
+      const kktp = Number(document.getElementById('kktpNilaiInput')?.value || 75);
+      const maxBimbingan = Number(document.getElementById('kktpMaxBimbingan')?.value || 65);
+      const minCukup = Number(document.getElementById('kktpMinCukup')?.value || 66);
+      const maxCukup = Number(document.getElementById('kktpMaxCukup')?.value || 75);
+      const minBaik = Number(document.getElementById('kktpMinBaik')?.value || 76);
+      const maxBaik = Number(document.getElementById('kktpMaxBaik')?.value || 88);
+      const minSangatBaik = Number(document.getElementById('kktpMinSangatBaik')?.value || 89);
+      return { kktp, maxBimbingan, minCukup, maxCukup, minBaik, maxBaik, minSangatBaik };
+    }
+
+    function getLevelFromScore(score) {
+      const t = getKktpThresholds();
+      const num = Number(score || 0);
+      if (num <= t.maxBimbingan) {
+        return { key: 'BIMBINGAN', name: 'Perlu Bimbingan', huruf: 'D', badgeClass: 'bg-rose-100 text-rose-800 border border-rose-300', text: 'Perlu Bimbingan' };
+      } else if (num <= t.maxCukup) {
+        return { key: 'CUKUP', name: 'Cukup', huruf: 'C', badgeClass: 'bg-amber-100 text-amber-800 border border-amber-300', text: 'Cukup' };
+      } else if (num <= t.maxBaik) {
+        return { key: 'BAIK', name: 'Baik (Tuntas)', huruf: 'B', badgeClass: 'bg-emerald-100 text-emerald-800 border border-emerald-300', text: 'Tuntas' };
+      } else {
+        return { key: 'SANGAT_BAIK', name: 'Sangat Baik', huruf: 'A', badgeClass: 'bg-blue-100 text-blue-800 border border-blue-300', text: 'Sangat Baik' };
+      }
+    }
+
+    function handleKktpManualChange() {
+      const kktp = Number(document.getElementById('kktpNilaiInput')?.value || 75);
+      const maxBimb = document.getElementById('kktpMaxBimbingan');
+      const minCukup = document.getElementById('kktpMinCukup');
+      const maxCukup = document.getElementById('kktpMaxCukup');
+      const minBaik = document.getElementById('kktpMinBaik');
+      if (maxBimb) maxBimb.value = Math.max(0, kktp - 10);
+      if (minCukup) minCukup.value = Math.max(0, kktp - 9);
+      if (maxCukup) maxCukup.value = kktp;
+      if (minBaik) minBaik.value = Math.min(100, kktp + 1);
+
+      recalcAllTopikRows();
+    }
+
+    function handleIntervalManualChange() {
+      recalcAllTopikRows();
+    }
+
+    function resetKktpKeStandar() {
+      if (document.getElementById('kktpNilaiInput')) document.getElementById('kktpNilaiInput').value = 75;
+      if (document.getElementById('kktpMaxBimbingan')) document.getElementById('kktpMaxBimbingan').value = 65;
+      if (document.getElementById('kktpMinCukup')) document.getElementById('kktpMinCukup').value = 66;
+      if (document.getElementById('kktpMaxCukup')) document.getElementById('kktpMaxCukup').value = 75;
+      if (document.getElementById('kktpMinBaik')) document.getElementById('kktpMinBaik').value = 76;
+      if (document.getElementById('kktpMaxBaik')) document.getElementById('kktpMaxBaik').value = 88;
+      if (document.getElementById('kktpMinSangatBaik')) document.getElementById('kktpMinSangatBaik').value = 89;
+      recalcAllTopikRows();
+    }
+
+    function recalcAllTopikRows() {
+      const rows = document.querySelectorAll('#tbodyPenilaianTopik tr[data-nisn]');
+      rows.forEach(r => {
+        const nisn = r.getAttribute('data-nisn');
+        const kehadiran = r.getAttribute('data-kehadiran') || 'HADIR';
+        if (kehadiran === 'HADIR') {
+          syncRubrikFromInput(nisn);
+        }
+      });
+      hitungStatistikPenilaianTopik();
+    }
+
     function renderFormPenilaianTopik() {
       const mapelSelect = document.getElementById('penilaianTopikMapel');
       const kelasSelect = document.getElementById('penilaianTopikKelas');
       const topikInput = document.getElementById('penilaianTopikJudul');
+      const jenisSelect = document.getElementById('penilaianTopikKriteriaJenis');
       const tbody = document.getElementById('tbodyPenilaianTopik');
       if (!tbody) return;
 
-      // Populate kelas if needed
-      if (kelasSelect && kelasSelect.options.length <= 1) {
-        const uniqueClasses = Array.from(new Set(masterSiswa.map(s => s.kelas))).filter(Boolean).sort();
-        if (uniqueClasses.length > 0) {
-          kelasSelect.innerHTML = uniqueClasses.map(c => `<option value="${c}">${c}</option>`).join('');
+      // SINKRONISASI KELAS & ROMBEL DARI DATA MASTER
+      const uniqueClasses = Array.from(new Set(masterSiswa.map(s => s.kelas))).filter(Boolean).sort();
+      if (kelasSelect) {
+        const curSelectedKelas = kelasSelect.value;
+        if (kelasSelect.options.length === 0 || (uniqueClasses.length > 0 && Array.from(kelasSelect.options).map(o => o.value).join(',') !== uniqueClasses.join(','))) {
+          kelasSelect.innerHTML = uniqueClasses.map(c => `<option value="${c}">Kelas ${c}</option>`).join('');
+          if (currentUser && currentUser.rombelWali && uniqueClasses.includes(currentUser.rombelWali)) {
+            kelasSelect.value = currentUser.rombelWali;
+          } else if (curSelectedKelas && uniqueClasses.includes(curSelectedKelas)) {
+            kelasSelect.value = curSelectedKelas;
+          } else if (uniqueClasses.length > 0) {
+            kelasSelect.value = uniqueClasses[0];
+          }
         }
       }
 
       const mapel = mapelSelect ? mapelSelect.value : 'Matematika';
-      const kelas = kelasSelect ? kelasSelect.value : '8-A';
+      const kelas = kelasSelect ? kelasSelect.value : (uniqueClasses[0] || '8-A');
       const topik = topikInput ? topikInput.value.trim() : 'Materi Pembelajaran';
+      const jenisAsesmen = jenisSelect ? jenisSelect.value : 'Formatif: Lingkup Materi (TP)';
+      const today = new Date().toISOString().split('T')[0];
 
       const siswaList = masterSiswa.filter(s => s.kelas === kelas);
 
       if (siswaList.length === 0) {
-        tbody.innerHTML = `<tr><td colspan="7" class="py-8 text-center text-slate-400">Tidak ada siswa ditemukan di kelas ${kelas}.</td></tr>`;
+        tbody.innerHTML = `<tr><td colspan="8" class="py-8 text-center text-slate-400">Tidak ada siswa ditemukan di kelas ${kelas}.</td></tr>`;
         hitungStatistikPenilaianTopik();
         return;
       }
 
-      // Check existing scores in logNilai
       tbody.innerHTML = siswaList.map((s, idx) => {
+        // Cek riwayat presensi harian siswa hari ini
+        const presensiToday = (logPresensiHarian || []).find(p => p.tanggal === today && isSameNisn(p.nisn, s.nisn));
+        let statusHadir = 'HADIR';
+        if (presensiToday && ['SAKIT', 'IZIN', 'ALPHA'].includes((presensiToday.status || '').toUpperCase())) {
+          statusHadir = presensiToday.status.toUpperCase();
+        }
+
+        // Cek data nilai yang sudah tersimpan sebelumnya
         const existing = (logNilai || []).find(n => 
           isSameNisn(n.nisn, s.nisn) && 
           n.kelas === kelas && 
           n.mapel === mapel && 
-          (n.jenis === ("Formatif: " + topik) || (n.jenis && n.jenis.includes(topik)))
+          (n.jenis === (jenisAsesmen + ': ' + topik) || (n.jenis && n.jenis.includes(topik)))
         );
 
-        const score = existing ? (existing.nilai !== undefined ? existing.nilai : 80) : '';
-        let initialLevel = 'BAIK';
-        if (score !== '') {
-          const num = Number(score);
-          if (num < 66) initialLevel = 'BIMBINGAN';
-          else if (num <= 75) initialLevel = 'CUKUP';
-          else if (num <= 88) initialLevel = 'BAIK';
-          else initialLevel = 'SANGAT_BAIK';
+        if (existing && existing.statusKehadiran) {
+          statusHadir = existing.statusKehadiran;
         }
 
-        const autoDesc = getDeskripsiOtomatisTopik(initialLevel, topik);
+        const isAbsent = statusHadir !== 'HADIR';
+        let initialScore = 82;
+        if (existing && existing.nilai !== undefined && existing.nilai !== null) {
+          initialScore = Number(existing.nilai);
+        } else if (isAbsent) {
+          initialScore = '';
+        }
+
+        const lvl = getLevelFromScore(initialScore !== '' ? initialScore : 82);
+        const autoDesc = isAbsent ? `Tidak hadir (${statusHadir}) - Terjadwal Asesmen Susulan.` : getDeskripsiOtomatisTopik(lvl.key, topik);
         const desc = existing && existing.catatan ? existing.catatan.replace(/^\[.*?\]\s*/, '') : autoDesc;
 
+        let badgeHtml = '';
+        if (isAbsent) {
+          if (statusHadir === 'SAKIT') badgeHtml = '<span class="px-2 py-0.5 rounded-full font-bold text-[10px] bg-amber-100 text-amber-800 border border-amber-300">🤒 Sakit (Susulan)</span>';
+          else if (statusHadir === 'IZIN') badgeHtml = '<span class="px-2 py-0.5 rounded-full font-bold text-[10px] bg-blue-100 text-blue-800 border border-blue-300">✉️ Izin (Susulan)</span>';
+          else badgeHtml = '<span class="px-2 py-0.5 rounded-full font-bold text-[10px] bg-rose-100 text-rose-800 border border-rose-300">❌ Alpha (Belum Asesmen)</span>';
+        } else {
+          badgeHtml = `<span class="px-2 py-0.5 rounded-full font-bold text-[10px] inline-flex items-center gap-1 ${lvl.badgeClass}">${lvl.text}</span>`;
+        }
+
         return `
-          <tr id="rowTopik_${s.nisn}" class="hover:bg-slate-50/80 transition" data-nisn="${s.nisn}" data-nama="${escapeHtml(s.nama)}">
+          <tr id="rowTopik_${s.nisn}" class="hover:bg-slate-50/80 transition" data-nisn="${s.nisn}" data-nama="${escapeHtml(s.nama)}" data-kehadiran="${statusHadir}">
             <td class="py-3 px-3 font-semibold text-slate-500">${idx + 1}</td>
             <td class="py-3 px-3 font-mono font-bold text-slate-600">${s.nisn}</td>
             <td class="py-3 px-3 font-bold text-slate-800">${escapeHtml(s.nama)}</td>
+            <td class="py-3 px-2 text-center">
+              <div class="inline-flex rounded-lg border border-slate-200 p-0.5 bg-slate-50 gap-0.5 text-[10px]">
+                <button type="button" onclick="setTopikKehadiran('${s.nisn}', 'HADIR')" data-val="HADIR" class="btn-hadir-topik-${s.nisn} px-1.5 py-0.5 rounded font-black transition cursor-pointer ${statusHadir === 'HADIR' ? 'bg-emerald-600 text-white shadow-xs' : 'text-slate-600 hover:bg-slate-200'}">H</button>
+                <button type="button" onclick="setTopikKehadiran('${s.nisn}', 'SAKIT')" data-val="SAKIT" class="btn-hadir-topik-${s.nisn} px-1.5 py-0.5 rounded font-black transition cursor-pointer ${statusHadir === 'SAKIT' ? 'bg-amber-500 text-white shadow-xs' : 'text-slate-600 hover:bg-slate-200'}">S</button>
+                <button type="button" onclick="setTopikKehadiran('${s.nisn}', 'IZIN')" data-val="IZIN" class="btn-hadir-topik-${s.nisn} px-1.5 py-0.5 rounded font-black transition cursor-pointer ${statusHadir === 'IZIN' ? 'bg-blue-600 text-white shadow-xs' : 'text-slate-600 hover:bg-slate-200'}">I</button>
+                <button type="button" onclick="setTopikKehadiran('${s.nisn}', 'ALPHA')" data-val="ALPHA" class="btn-hadir-topik-${s.nisn} px-1.5 py-0.5 rounded font-black transition cursor-pointer ${statusHadir === 'ALPHA' ? 'bg-rose-600 text-white shadow-xs' : 'text-slate-600 hover:bg-slate-200'}">A</button>
+              </div>
+            </td>
             <td class="py-3 px-3">
-              <div class="flex flex-wrap items-center gap-1">
-                <button type="button" onclick="setRubrikSiswa('${s.nisn}', 'BIMBINGAN', 60)" id="btnRubrik_${s.nisn}_BIMBINGAN" class="rubrik-btn-${s.nisn} px-2 py-1 rounded-md text-[10px] font-bold border transition cursor-pointer ${initialLevel === 'BIMBINGAN' ? 'bg-rose-600 text-white border-rose-600 shadow-xs' : 'bg-rose-50 text-rose-700 border-rose-200 hover:bg-rose-100'}">
+              <div id="rubrikGroup_${s.nisn}" class="flex flex-wrap items-center gap-1 ${isAbsent ? 'opacity-40 pointer-events-none' : ''}">
+                <button type="button" onclick="setRubrikSiswa('${s.nisn}', 'BIMBINGAN', 60)" id="btnRubrik_${s.nisn}_BIMBINGAN" class="rubrik-btn-${s.nisn} px-2 py-1 rounded-md text-[10px] font-bold border transition cursor-pointer ${lvl.key === 'BIMBINGAN' && !isAbsent ? 'bg-rose-600 text-white border-rose-600 shadow-xs' : 'bg-rose-50 text-rose-700 border-rose-200 hover:bg-rose-100'}">
                   🔴 Bimbingan
                 </button>
-                <button type="button" onclick="setRubrikSiswa('${s.nisn}', 'CUKUP', 72)" id="btnRubrik_${s.nisn}_CUKUP" class="rubrik-btn-${s.nisn} px-2 py-1 rounded-md text-[10px] font-bold border transition cursor-pointer ${initialLevel === 'CUKUP' ? 'bg-amber-500 text-white border-amber-500 shadow-xs' : 'bg-amber-50 text-amber-700 border-amber-200 hover:bg-amber-100'}">
+                <button type="button" onclick="setRubrikSiswa('${s.nisn}', 'CUKUP', 72)" id="btnRubrik_${s.nisn}_CUKUP" class="rubrik-btn-${s.nisn} px-2 py-1 rounded-md text-[10px] font-bold border transition cursor-pointer ${lvl.key === 'CUKUP' && !isAbsent ? 'bg-amber-500 text-white border-amber-500 shadow-xs' : 'bg-amber-50 text-amber-700 border-amber-200 hover:bg-amber-100'}">
                   🟡 Cukup
                 </button>
-                <button type="button" onclick="setRubrikSiswa('${s.nisn}', 'BAIK', 82)" id="btnRubrik_${s.nisn}_BAIK" class="rubrik-btn-${s.nisn} px-2 py-1 rounded-md text-[10px] font-bold border transition cursor-pointer ${initialLevel === 'BAIK' ? 'bg-emerald-600 text-white border-emerald-600 shadow-xs' : 'bg-emerald-50 text-emerald-700 border-emerald-200 hover:bg-emerald-100'}">
+                <button type="button" onclick="setRubrikSiswa('${s.nisn}', 'BAIK', 82)" id="btnRubrik_${s.nisn}_BAIK" class="rubrik-btn-${s.nisn} px-2 py-1 rounded-md text-[10px] font-bold border transition cursor-pointer ${lvl.key === 'BAIK' && !isAbsent ? 'bg-emerald-600 text-white border-emerald-600 shadow-xs' : 'bg-emerald-50 text-emerald-700 border-emerald-200 hover:bg-emerald-100'}">
                   🟢 Baik
                 </button>
-                <button type="button" onclick="setRubrikSiswa('${s.nisn}', 'SANGAT_BAIK', 92)" id="btnRubrik_${s.nisn}_SANGAT_BAIK" class="rubrik-btn-${s.nisn} px-2 py-1 rounded-md text-[10px] font-bold border transition cursor-pointer ${initialLevel === 'SANGAT_BAIK' ? 'bg-blue-600 text-white border-blue-600 shadow-xs' : 'bg-blue-50 text-blue-700 border-blue-200 hover:bg-blue-100'}">
+                <button type="button" onclick="setRubrikSiswa('${s.nisn}', 'SANGAT_BAIK', 92)" id="btnRubrik_${s.nisn}_SANGAT_BAIK" class="rubrik-btn-${s.nisn} px-2 py-1 rounded-md text-[10px] font-bold border transition cursor-pointer ${lvl.key === 'SANGAT_BAIK' && !isAbsent ? 'bg-blue-600 text-white border-blue-600 shadow-xs' : 'bg-blue-50 text-blue-700 border-blue-200 hover:bg-blue-100'}">
                   🔵 Sangat Baik
                 </button>
               </div>
             </td>
-            <td class="py-3 px-3 text-center">
-              <input type="number" min="0" max="100" id="topikScore_${s.nisn}" oninput="syncRubrikFromInput('${s.nisn}')" value="${score !== '' ? score : 82}" class="w-16 px-2 py-1.5 text-center font-bold text-slate-800 bg-white border border-slate-300 rounded-lg focus:outline-none focus:border-teal-500 shadow-xs">
+            <td class="py-3 px-2 text-center">
+              <input type="number" min="0" max="100" id="topikScore_${s.nisn}" oninput="syncRubrikFromInput('${s.nisn}')" value="${isAbsent ? '' : initialScore}" ${isAbsent ? 'disabled' : ''} class="w-16 px-2 py-1.5 text-center font-bold text-slate-800 bg-white border border-slate-300 rounded-lg focus:outline-none focus:border-teal-500 shadow-xs ${isAbsent ? 'bg-slate-100 text-slate-400 cursor-not-allowed border-dashed' : ''}">
             </td>
             <td class="py-3 px-3">
               <input type="text" id="topikDesc_${s.nisn}" value="${escapeHtml(desc)}" placeholder="Deskripsi capaian kompetensi..." class="w-full px-2.5 py-1.5 bg-slate-50 border border-slate-200 rounded-lg text-xs text-slate-700 focus:outline-none focus:bg-white focus:border-teal-500">
             </td>
             <td class="py-3 px-3 text-center">
-              <span id="topikBadge_${s.nisn}" class="px-2 py-0.5 rounded-full font-bold text-[10px] inline-flex items-center gap-1 ${getBadgeClassTopik(initialLevel)}">
-                ${getBadgeTextTopik(initialLevel)}
-              </span>
+              <div id="topikBadge_${s.nisn}">
+                ${badgeHtml}
+              </div>
             </td>
           </tr>
         `;
@@ -5988,6 +7291,73 @@
 
       hitungStatistikPenilaianTopik();
       safeCreateIcons();
+    }
+
+    // Toggle Kehadiran Siswa di Penilaian Topik
+    function setTopikKehadiran(nisn, status) {
+      const row = document.getElementById(`rowTopik_${nisn}`);
+      if (!row) return;
+      row.setAttribute('data-kehadiran', status);
+
+      const colorMap = {
+        'HADIR': 'bg-emerald-600 text-white shadow-xs',
+        'SAKIT': 'bg-amber-500 text-white shadow-xs',
+        'IZIN': 'bg-blue-600 text-white shadow-xs',
+        'ALPHA': 'bg-rose-600 text-white shadow-xs'
+      };
+
+      const btns = row.querySelectorAll(`.btn-hadir-topik-${nisn}`);
+      btns.forEach(b => {
+        const val = b.getAttribute('data-val');
+        b.className = `btn-hadir-topik-${nisn} px-1.5 py-0.5 rounded font-black transition cursor-pointer ${val === status ? colorMap[status] : 'text-slate-600 hover:bg-slate-200'}`;
+      });
+
+      const scoreInp = document.getElementById(`topikScore_${nisn}`);
+      const descInp = document.getElementById(`topikDesc_${nisn}`);
+      const rubrikGroup = document.getElementById(`rubrikGroup_${nisn}`);
+      const badgeBox = document.getElementById(`topikBadge_${nisn}`);
+      const topikInput = document.getElementById('penilaianTopikJudul');
+      const topik = topikInput ? topikInput.value.trim() : 'Materi Pembelajaran';
+
+      if (status !== 'HADIR') {
+        // SISWA TIDAK MASUK: KUNCI INPUT NILAI & TANDAI KETIDAKHADIRAN
+        if (scoreInp) {
+          scoreInp.dataset.prevScore = scoreInp.value;
+          scoreInp.value = '';
+          scoreInp.disabled = true;
+          scoreInp.classList.add('bg-slate-100', 'text-slate-400', 'cursor-not-allowed', 'border-dashed');
+          scoreInp.classList.remove('bg-white', 'text-slate-800');
+        }
+        if (rubrikGroup) {
+          rubrikGroup.classList.add('opacity-40', 'pointer-events-none');
+        }
+        if (descInp) {
+          descInp.value = `Tidak hadir (${status}) - Terjadwal Asesmen Susulan.`;
+        }
+        if (badgeBox) {
+          let badgeHtml = '';
+          if (status === 'SAKIT') badgeHtml = '<span class="px-2 py-0.5 rounded-full font-bold text-[10px] bg-amber-100 text-amber-800 border border-amber-300">🤒 Sakit (Susulan)</span>';
+          else if (status === 'IZIN') badgeHtml = '<span class="px-2 py-0.5 rounded-full font-bold text-[10px] bg-blue-100 text-blue-800 border border-blue-300">✉️ Izin (Susulan)</span>';
+          else badgeHtml = '<span class="px-2 py-0.5 rounded-full font-bold text-[10px] bg-rose-100 text-rose-800 border border-rose-300">❌ Alpha (Belum Asesmen)</span>';
+          badgeBox.innerHTML = badgeHtml;
+        }
+      } else {
+        // SISWA HADIR: BUKA INPUT NILAI & RUBRIK
+        if (scoreInp) {
+          scoreInp.disabled = false;
+          scoreInp.classList.remove('bg-slate-100', 'text-slate-400', 'cursor-not-allowed', 'border-dashed');
+          scoreInp.classList.add('bg-white', 'text-slate-800');
+          if (!scoreInp.value || scoreInp.value === '') {
+            scoreInp.value = scoreInp.dataset.prevScore || '82';
+          }
+        }
+        if (rubrikGroup) {
+          rubrikGroup.classList.remove('opacity-40', 'pointer-events-none');
+        }
+        syncRubrikFromInput(nisn);
+      }
+
+      hitungStatistikPenilaianTopik();
     }
 
     function getDeskripsiOtomatisTopik(level, topik) {
@@ -6002,21 +7372,11 @@
       }
     }
 
-    function getBadgeClassTopik(level) {
-      if (level === 'BIMBINGAN') return 'bg-rose-100 text-rose-800 border border-rose-200';
-      if (level === 'CUKUP') return 'bg-amber-100 text-amber-800 border border-amber-200';
-      if (level === 'BAIK') return 'bg-emerald-100 text-emerald-800 border border-emerald-200';
-      return 'bg-blue-100 text-blue-800 border border-blue-200';
-    }
-
-    function getBadgeTextTopik(level) {
-      if (level === 'BIMBINGAN') return 'Bimbingan';
-      if (level === 'CUKUP') return 'Cukup';
-      if (level === 'BAIK') return 'Tuntas';
-      return 'Sangat Baik';
-    }
-
     function setRubrikSiswa(nisn, level, defaultScore) {
+      const row = document.getElementById(`rowTopik_${nisn}`);
+      const kehadiran = row ? (row.getAttribute('data-kehadiran') || 'HADIR') : 'HADIR';
+      if (kehadiran !== 'HADIR') return; // Abaikan jika siswa tidak hadir
+
       const scoreInput = document.getElementById(`topikScore_${nisn}`);
       if (scoreInput) scoreInput.value = defaultScore;
 
@@ -6032,18 +7392,17 @@
     }
 
     function syncRubrikFromInput(nisn) {
+      const row = document.getElementById(`rowTopik_${nisn}`);
+      const kehadiran = row ? (row.getAttribute('data-kehadiran') || 'HADIR') : 'HADIR';
+      if (kehadiran !== 'HADIR') return; // Jangan rubrikkan siswa tidak hadir
+
       const scoreInput = document.getElementById(`topikScore_${nisn}`);
       if (!scoreInput) return;
       const val = Number(scoreInput.value || 0);
 
-      let level = 'BAIK';
-      if (val < 66) level = 'BIMBINGAN';
-      else if (val <= 75) level = 'CUKUP';
-      else if (val <= 88) level = 'BAIK';
-      else level = 'SANGAT_BAIK';
-
-      highlightRubrikButtons(nisn, level);
-      updateBadgeTopik(nisn, level);
+      const lvl = getLevelFromScore(val);
+      highlightRubrikButtons(nisn, lvl.key);
+      updateBadgeTopik(nisn, lvl.key);
       hitungStatistikPenilaianTopik();
     }
 
@@ -6059,10 +7418,10 @@
     }
 
     function updateBadgeTopik(nisn, level) {
-      const badge = document.getElementById(`topikBadge_${nisn}`);
-      if (!badge) return;
-      badge.className = `px-2 py-0.5 rounded-full font-bold text-[10px] inline-flex items-center gap-1 ${getBadgeClassTopik(level)}`;
-      badge.innerText = getBadgeTextTopik(level);
+      const badgeBox = document.getElementById(`topikBadge_${nisn}`);
+      if (!badgeBox) return;
+      const lvl = getLevelFromScore(document.getElementById(`topikScore_${nisn}`)?.value || 82);
+      badgeBox.innerHTML = `<span class="px-2 py-0.5 rounded-full font-bold text-[10px] inline-flex items-center gap-1 ${lvl.badgeClass}">${lvl.text}</span>`;
     }
 
     function setSemuaNilaiTopik(score, level) {
@@ -6071,34 +7430,54 @@
       const rows = tbody.querySelectorAll('tr[data-nisn]');
       rows.forEach(r => {
         const nisn = r.getAttribute('data-nisn');
-        setRubrikSiswa(nisn, level, score);
+        const kehadiran = r.getAttribute('data-kehadiran') || 'HADIR';
+        if (kehadiran === 'HADIR') {
+          setRubrikSiswa(nisn, level, score);
+        }
       });
     }
 
     function hitungStatistikPenilaianTopik() {
       const tbody = document.getElementById('tbodyPenilaianTopik');
       if (!tbody) return;
-      const scoreInputs = tbody.querySelectorAll('input[id^="topikScore_"]');
-      let total = scoreInputs.length;
+      const rows = tbody.querySelectorAll('tr[data-nisn]');
+      const thresholds = getKktpThresholds();
+
+      let total = rows.length;
+      let hadirCount = 0;
+      let tidakHadirCount = 0;
       let sum = 0;
       let tuntas = 0;
       let bimbingan = 0;
 
-      scoreInputs.forEach(inp => {
-        const val = Number(inp.value || 0);
-        sum += val;
-        if (val >= 75) tuntas++;
-        else bimbingan++;
+      rows.forEach(r => {
+        const nisn = r.getAttribute('data-nisn');
+        const kehadiran = r.getAttribute('data-kehadiran') || 'HADIR';
+        const inp = document.getElementById(`topikScore_${nisn}`);
+
+        if (kehadiran !== 'HADIR') {
+          tidakHadirCount++;
+        } else {
+          hadirCount++;
+          const val = Number(inp ? inp.value : 0);
+          sum += val;
+          if (val >= thresholds.kktp) tuntas++;
+          else bimbingan++;
+        }
       });
 
-      const rata = total > 0 ? (sum / total).toFixed(1) : '0.0';
+      const rata = hadirCount > 0 ? (sum / hadirCount).toFixed(1) : '0.0';
 
       const statTotal = document.getElementById('statTopikTotal');
+      const statHadir = document.getElementById('statTopikHadir');
+      const statTidakHadir = document.getElementById('statTopikTidakHadir');
       const statRata = document.getElementById('statTopikRata');
       const statTuntas = document.getElementById('statTopikTuntas');
       const statBimbingan = document.getElementById('statTopikBimbingan');
 
       if (statTotal) statTotal.innerText = total;
+      if (statHadir) statHadir.innerText = hadirCount;
+      if (statTidakHadir) statTidakHadir.innerText = tidakHadirCount;
       if (statRata) statRata.innerText = rata;
       if (statTuntas) statTuntas.innerText = tuntas;
       if (statBimbingan) statBimbingan.innerText = bimbingan;
@@ -6108,11 +7487,13 @@
       const mapelSelect = document.getElementById('penilaianTopikMapel');
       const kelasSelect = document.getElementById('penilaianTopikKelas');
       const topikInput = document.getElementById('penilaianTopikJudul');
+      const jenisSelect = document.getElementById('penilaianTopikKriteriaJenis');
       const tbody = document.getElementById('tbodyPenilaianTopik');
 
       const mapel = mapelSelect ? mapelSelect.value : 'Matematika';
       const kelas = kelasSelect ? kelasSelect.value : '8-A';
       const topik = topikInput ? topikInput.value.trim() : 'Materi Pembelajaran';
+      const jenisAsesmen = jenisSelect ? jenisSelect.value : 'Formatif: Lingkup Materi (TP)';
 
       const rows = tbody ? tbody.querySelectorAll('tr[data-nisn]') : [];
       if (rows.length === 0) {
@@ -6125,22 +7506,24 @@
 
       rows.forEach(r => {
         const nisn = r.getAttribute('data-nisn');
+        const kehadiran = r.getAttribute('data-kehadiran') || 'HADIR';
         const scoreInp = document.getElementById(`topikScore_${nisn}`);
         const descInp = document.getElementById(`topikDesc_${nisn}`);
-        const score = scoreInp ? Number(scoreInp.value || 0) : 0;
+
+        const isAbsent = kehadiran !== 'HADIR';
+        const score = (!isAbsent && scoreInp && scoreInp.value !== '') ? Number(scoreInp.value) : null;
         const desc = descInp ? descInp.value.trim() : '';
 
         let levelName = 'Baik';
-        if (score < 66) levelName = 'Perlu Bimbingan';
-        else if (score <= 75) levelName = 'Cukup';
-        else if (score <= 88) levelName = 'Baik';
-        else levelName = 'Sangat Baik';
-
         let huruf = 'B';
-        if (score >= 90) huruf = 'A';
-        else if (score >= 80) huruf = 'B';
-        else if (score >= 70) huruf = 'C';
-        else huruf = 'D';
+        if (!isAbsent && score !== null) {
+          const lvl = getLevelFromScore(score);
+          levelName = lvl.name;
+          huruf = lvl.huruf;
+        } else {
+          levelName = `Tidak Hadir (${kehadiran})`;
+          huruf = '-';
+        }
 
         const item = {
           id: 'NL-TP-' + Date.now().toString().slice(-6) + Math.random().toString(36).slice(2, 5),
@@ -6148,11 +7531,13 @@
           kelas: kelas,
           mapel: mapel,
           mataPelajaran: mapel,
-          jenis: 'Formatif: ' + topik,
-          jenisAsesmen: 'Formatif: ' + topik,
+          jenis: jenisAsesmen + ': ' + topik,
+          jenisAsesmen: jenisAsesmen + ': ' + topik,
           nilai: score,
           nilaiAngka: score,
           huruf: huruf,
+          statusKehadiran: kehadiran,
+          isSusulan: isAbsent,
           catatan: `[${levelName}] ${desc}`,
           catatanGuru: `[${levelName}] ${desc}`,
           tglInput: now
@@ -6205,11 +7590,14 @@
       const mapelSelect = document.getElementById('penilaianTopikMapel');
       const kelasSelect = document.getElementById('penilaianTopikKelas');
       const topikInput = document.getElementById('penilaianTopikJudul');
+      const jenisSelect = document.getElementById('penilaianTopikKriteriaJenis');
       const tbody = document.getElementById('tbodyPenilaianTopik');
 
       const mapel = mapelSelect ? mapelSelect.value : 'Matematika';
       const kelas = kelasSelect ? kelasSelect.value : '8-A';
       const topik = topikInput ? topikInput.value.trim() : 'Materi Pembelajaran';
+      const jenisAsesmen = jenisSelect ? jenisSelect.value : 'Formatif: Lingkup Materi (TP)';
+      const thresholds = getKktpThresholds();
 
       const rows = tbody ? tbody.querySelectorAll('tr[data-nisn]') : [];
       if (rows.length === 0) {
@@ -6228,34 +7616,50 @@
 
       let rowHtml = '';
       let sum = 0;
+      let hadirCount = 0;
+      let tidakHadirCount = 0;
       let tuntasCount = 0;
 
       rows.forEach((r, idx) => {
         const nisn = r.getAttribute('data-nisn');
         const nama = r.getAttribute('data-nama');
+        const kehadiran = r.getAttribute('data-kehadiran') || 'HADIR';
         const scoreInp = document.getElementById(`topikScore_${nisn}`);
         const descInp = document.getElementById(`topikDesc_${nisn}`);
-        const score = scoreInp ? Number(scoreInp.value || 0) : 0;
-        const desc = descInp ? descInp.value.trim() : '';
 
-        sum += score;
-        if (score >= 75) tuntasCount++;
+        const isAbsent = kehadiran !== 'HADIR';
+        const score = (!isAbsent && scoreInp && scoreInp.value !== '') ? Number(scoreInp.value) : '-';
+        const desc = descInp ? descInp.value.trim() : (isAbsent ? `Tidak hadir (${kehadiran}) - Susulan` : '');
 
-        let statusText = score >= 75 ? 'TUNTAS' : 'BELUM TUNTAS';
+        let statusText = '-';
+        if (!isAbsent && score !== '-') {
+          hadirCount++;
+          sum += Number(score);
+          if (Number(score) >= thresholds.kktp) {
+            tuntasCount++;
+            statusText = 'TUNTAS';
+          } else {
+            statusText = 'BIMBINGAN';
+          }
+        } else {
+          tidakHadirCount++;
+          statusText = `SUSULAN (${kehadiran})`;
+        }
 
         rowHtml += `
-          <tr style="border-bottom: 1px solid #cbd5e1; page-break-inside: avoid;">
+          <tr style="border-bottom: 1px solid #cbd5e1; page-break-inside: avoid; ${isAbsent ? 'background: #f8fafc;' : ''}">
             <td style="padding: 6px; text-align: center; font-size: 11px;">${idx + 1}</td>
             <td style="padding: 6px; font-family: monospace; font-size: 11px;">${nisn}</td>
             <td style="padding: 6px; font-weight: bold; font-size: 11px;">${nama}</td>
-            <td style="padding: 6px; text-align: center; font-weight: bold; font-size: 12px;">${score}</td>
+            <td style="padding: 6px; text-align: center; font-weight: bold; font-size: 11px;">${kehadiran}</td>
+            <td style="padding: 6px; text-align: center; font-weight: bold; font-size: 12px; ${score !== '-' && Number(score) < thresholds.kktp ? 'color: #dc2626;' : ''}">${score}</td>
             <td style="padding: 6px; font-size: 10.5px; line-height: 1.3;">${desc}</td>
             <td style="padding: 6px; text-align: center; font-weight: bold; font-size: 10px;">${statusText}</td>
           </tr>
         `;
       });
 
-      const rata = rows.length > 0 ? (sum / rows.length).toFixed(1) : '0';
+      const rata = hadirCount > 0 ? (sum / hadirCount).toFixed(1) : '0';
       const tglCetak = new Date().toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' });
 
       const printArea = document.getElementById('printArea');
@@ -6290,6 +7694,12 @@
               <td style="width: 30%; padding: 2px 0;">: Kelas ${kelas}</td>
             </tr>
             <tr>
+              <td style="padding: 2px 0;"><b>Jenis Asesmen</b></td>
+              <td style="padding: 2px 0;">: ${jenisAsesmen}</td>
+              <td style="padding: 2px 0;"><b>Kriteria KKTP</b></td>
+              <td style="padding: 2px 0;">: ${thresholds.kktp} (Interval ${thresholds.minBaik}-${thresholds.maxBaik})</td>
+            </tr>
+            <tr>
               <td style="padding: 2px 0;"><b>Topik / Materi (TP)</b></td>
               <td style="padding: 2px 0;">: ${topik}</td>
               <td style="padding: 2px 0;"><b>Tanggal Asesmen</b></td>
@@ -6297,29 +7707,30 @@
             </tr>
             <tr>
               <td style="padding: 2px 0;"><b>Guru Pengampu</b></td>
-              <td style="padding: 2px 0;">: ${namaGuru}</td>
-              <td style="padding: 2px 0;"><b>Kriteria Ketuntasan (KKTP)</b></td>
-              <td style="padding: 2px 0;">: 75.0 (Baik)</td>
+              <td style="padding: 2px 0;">: ${namaGuru} (NIP: ${nipGuru})</td>
+              <td style="padding: 2px 0;"><b>Status Kehadiran</b></td>
+              <td style="padding: 2px 0;">: Hadir: ${hadirCount} | Susulan: ${tidakHadirCount}</td>
             </tr>
           </table>
 
           <!-- Pedoman Rubrik Ringkas -->
           <div style="border: 1px solid #94a3b8; border-radius: 4px; padding: 6px 10px; margin-bottom: 12px; font-size: 9.5px; background: #f8fafc;">
-            <b>Kriteria Penilaian Rubrik:</b> 
-            <b>1. Perlu Bimbingan (&lt;66)</b>: Belum tuntas dasar materi | 
-            <b>2. Cukup (66-75)</b>: Tuntas sebagian konsep dasar | 
-            <b>3. Baik (76-88)</b>: Tuntas mandiri sesuai target | 
-            <b>4. Sangat Baik (89-100)</b>: Melampaui target pembelajaran
+            <b>Kriteria Penilaian Rubrik Kurikulum Merdeka (KKTP: ${thresholds.kktp}):</b> 
+            <b>1. Perlu Bimbingan (&le;${thresholds.maxBimbingan})</b>: Belum tuntas dasar materi | 
+            <b>2. Cukup (${thresholds.minCukup}-${thresholds.maxCukup})</b>: Tuntas sebagian konsep dasar | 
+            <b>3. Baik (${thresholds.minBaik}-${thresholds.maxBaik})</b>: Tuntas mandiri sesuai kriteria | 
+            <b>4. Sangat Baik (&ge;${thresholds.minSangatBaik})</b>: Melampaui kriteria ketuntasan
           </div>
 
           <!-- Tabel Nilai -->
           <table style="width: 100%; border-collapse: collapse; font-size: 11px; margin-bottom: 14px; border: 1px solid #64748b;">
             <thead>
               <tr style="background: #e2e8f0; border-bottom: 1.5px solid #475569;">
-                <th style="padding: 6px; width: 35px; text-align: center;">No</th>
-                <th style="padding: 6px; width: 95px; text-align: center;">NISN</th>
-                <th style="padding: 6px; width: 170px; text-align: left;">Nama Peserta Didik</th>
-                <th style="padding: 6px; width: 60px; text-align: center;">Nilai</th>
+                <th style="padding: 6px; width: 30px; text-align: center;">No</th>
+                <th style="padding: 6px; width: 85px; text-align: center;">NISN</th>
+                <th style="padding: 6px; width: 150px; text-align: left;">Nama Peserta Didik</th>
+                <th style="padding: 6px; width: 50px; text-align: center;">Hadir</th>
+                <th style="padding: 6px; width: 50px; text-align: center;">Nilai</th>
                 <th style="padding: 6px; text-align: left;">Deskripsi Capaian Kompetensi Pembelajaran</th>
                 <th style="padding: 6px; width: 85px; text-align: center;">Ketuntasan</th>
               </tr>
@@ -6332,23 +7743,23 @@
           <!-- Statistik Ringkas -->
           <div style="font-size: 10.5px; margin-bottom: 25px; padding: 6px 10px; border: 1px solid #cbd5e1; border-radius: 4px; display: flex; justify-content: space-around;">
             <span>Total Siswa: <b>${rows.length}</b></span>
-            <span>Rata-Rata Kelas: <b>${rata}</b></span>
-            <span>Jumlah Tuntas: <b>${tuntasCount} siswa</b> (${rows.length > 0 ? ((tuntasCount/rows.length)*100).toFixed(0) : 0}%)</span>
-            <span>Perlu Bimbingan: <b>${rows.length - tuntasCount} siswa</b></span>
+            <span>Hadir Dinilai: <b>${hadirCount}</b></span>
+            <span>Tidak Hadir / Susulan: <b>${tidakHadirCount}</b></span>
+            <span>Rata-Rata Nilai: <b>${rata}</b></span>
+            <span>Jumlah Tuntas: <b>${tuntasCount}</b> (${hadirCount > 0 ? ((tuntasCount/hadirCount)*100).toFixed(0) : 0}%)</span>
           </div>
 
           <!-- Tanda Tangan Resmi -->
           <table style="width: 100%; font-size: 11px; text-align: center; margin-top: 15px; page-break-inside: avoid;">
             <tr>
               <td style="width: 50%;">
-                Mengetahui,<br>
-                Kepala Sekolah<br><br><br><br>
+                Mengetahui,<br>Kepala Sekolah<br><br><br><br>
                 <b><u>${namaKepsek}</u></b><br>
                 NIP. ${nipKepsek}
               </td>
               <td style="width: 50%;">
-                Kota Sekolah, ${tglCetak}<br>
-                Guru Mata Pelajaran<br><br><br><br>
+                ${alamatSekolah.split(',')[1] || 'Sekolah'}, ${tglCetak}<br>
+                Guru Pengampu Mata Pelajaran<br><br><br><br>
                 <b><u>${namaGuru}</u></b><br>
                 NIP. ${nipGuru}
               </td>
@@ -6729,11 +8140,179 @@
       playBeepSuccess();
     }
 
+    // =========================================================================
+    // FITUR SCAN KARTU TANDA PELAJAR VIA NFC (WEB NFC API ANDROID)
+    // =========================================================================
+    let nfcTibumController = null;
+
+    async function startNfcTibumScan() {
+      // 1. Cek dukungan Web NFC pada peramban (Web NFC API standar Android Chrome / Edge)
+      if (!('NDEFReader' in window)) {
+        Swal.fire({
+          icon: 'info',
+          title: 'Fitur Scan NFC di Android',
+          html: `
+            <div class="text-xs text-slate-600 text-left space-y-2.5">
+              <div class="p-3 bg-blue-50 text-blue-900 rounded-xl border border-blue-200">
+                <p class="font-bold">📡 Fitur Web NFC tersedia pada:</p>
+                <p class="mt-0.5">Smartphone <b>Android</b> menggunakan browser <b>Google Chrome</b> atau <b>Microsoft Edge</b> dengan sensor NFC menyala.</p>
+              </div>
+              <p class="font-bold text-slate-800">Langkah mengaktifkan di HP Android:</p>
+              <ol class="list-decimal pl-4 space-y-1 text-slate-700">
+                <li>Buka <b>Pengaturan Cepat</b> Android (tarik layar atas ke bawah), lalu aktifkan tombol <b>NFC</b>.</li>
+                <li>Buka aplikasi Super App ini di browser <b>Google Chrome</b> Android.</li>
+                <li>Klik tombol <b>Scan Kartu Siswa (NFC)</b>, lalu dekatkan kartu ke bagian belakang ponsel.</li>
+              </ol>
+              <div class="pt-2 border-t border-slate-200 text-slate-500">
+                💡 Untuk perangkat komputer/laptop atau HP tanpa sensor NFC, Anda dapat memakai tombol <b>Buka Scanner Kamera QR</b>.
+              </div>
+            </div>
+          `,
+          confirmButtonText: 'Saya Mengerti',
+          confirmButtonColor: '#2563eb'
+        });
+        return;
+      }
+
+      // Tutup scanner QR kamera jika sedang terbuka
+      const qrArea = document.getElementById('qrReaderArea');
+      if (qrArea && !qrArea.classList.contains('hidden')) {
+        toggleQrScanner();
+      }
+
+      const nfcArea = document.getElementById('nfcScanningArea');
+      const btn = document.getElementById('btnStartNfcTibum');
+      if (nfcArea) nfcArea.classList.remove('hidden');
+      if (btn) btn.classList.add('ring-2', 'ring-cyan-400');
+
+      try {
+        if (nfcTibumController) {
+          try { nfcTibumController.abort(); } catch(e) {}
+        }
+        nfcTibumController = new AbortController();
+
+        const ndef = new NDEFReader();
+        await ndef.scan({ signal: nfcTibumController.signal });
+
+        ndef.onreading = (event) => {
+          const { message, serialNumber } = event;
+          let scannedText = '';
+
+          // Ekstrak teks/data dari NDEF Records jika ada
+          if (message && message.records && message.records.length > 0) {
+            for (const record of message.records) {
+              try {
+                const textDecoder = new TextDecoder(record.encoding || 'utf-8');
+                const decoded = textDecoder.decode(record.data);
+                if (decoded) {
+                  scannedText = decoded.trim();
+                  break;
+                }
+              } catch (decErr) {}
+            }
+          }
+
+          const tagId = serialNumber || '';
+
+          // Ekstrak 10 digit NISN
+          let detectedNisn = '';
+          const match10 = scannedText.match(/\b\d{10}\b/);
+          if (match10) {
+            detectedNisn = match10[0];
+          } else if (scannedText.trim().length === 10 && /^\d+$/.test(scannedText.trim())) {
+            detectedNisn = scannedText.trim();
+          } else if (scannedText) {
+            detectedNisn = scannedText.trim();
+          }
+
+          // Cari siswa yang cocok di masterSiswa (berdasarkan NISN, NIS, atau serial tag)
+          let matchedSiswa = null;
+          if (detectedNisn) {
+            matchedSiswa = masterSiswa.find(s => isSameNisn(s.nisn, detectedNisn) || (s.nis && s.nis === detectedNisn));
+          }
+          if (!matchedSiswa && tagId) {
+            matchedSiswa = masterSiswa.find(s => (s.uidNfc && s.uidNfc.toLowerCase() === tagId.toLowerCase()) || isSameNisn(s.nisn, tagId));
+          }
+
+          // Feedback getar dan audio
+          try {
+            if (navigator.vibrate) navigator.vibrate([120, 60, 120]);
+          } catch(e) {}
+          playBeepSuccess();
+
+          if (matchedSiswa) {
+            pilihSiswaTibum(matchedSiswa.nisn);
+            const inp = document.getElementById('inputTibumNisn');
+            if (inp) inp.value = matchedSiswa.nisn;
+            const sel = document.getElementById('selectTibumSiswa');
+            if (sel) sel.value = matchedSiswa.nisn;
+
+            Swal.fire({
+              toast: true,
+              position: 'top-end',
+              icon: 'success',
+              title: `Kartu NFC Terdeteksi! 📡`,
+              text: `${matchedSiswa.nama} (${matchedSiswa.kelas})`,
+              showConfirmButton: false,
+              timer: 2200
+            });
+
+            stopNfcTibumScan();
+          } else {
+            const fallbackId = detectedNisn || tagId || 'Kartu Tak Dikenal';
+            const inp = document.getElementById('inputTibumNisn');
+            if (inp) inp.value = detectedNisn || tagId;
+
+            Swal.fire({
+              icon: 'warning',
+              title: 'Kartu NFC Terbaca 📡',
+              html: `<p class="text-xs text-slate-600">ID / Data Kartu: <b class="font-mono text-indigo-700">${fallbackId}</b></p><p class="text-xs text-slate-500 mt-1">NISN tidak ditemukan dalam Master Data Siswa. Silakan cek atau pilih manual rombel.</p>`,
+              confirmButtonText: 'Tutup'
+            });
+          }
+        };
+
+        ndef.onreadingerror = () => {
+          Swal.fire({
+            toast: true,
+            position: 'top-end',
+            icon: 'error',
+            title: 'Gagal Membaca Kartu NFC',
+            text: 'Dekatkan kartu lebih tenang pada punggung HP.',
+            timer: 2000
+          });
+        };
+
+      } catch (err) {
+        console.warn("NFC scan error:", err);
+        stopNfcTibumScan();
+        if (err.name === 'NotAllowedError') {
+          Swal.fire('Izin NFC Ditolak', 'Izinkan akses NFC pada peramban browser Anda.', 'warning');
+        } else if (err.name === 'NotSupportedError' || err.name === 'NotReadableError') {
+          Swal.fire('NFC Belum Aktif', 'Pastikan fitur NFC pada pengaturan HP Android Anda sudah dalam kondisi AKTIF (ON).', 'warning');
+        } else if (err.name !== 'AbortError') {
+          Swal.fire('NFC Error', err.message || 'Tidak dapat mengaktifkan sensor NFC.', 'error');
+        }
+      }
+    }
+
+    function stopNfcTibumScan() {
+      if (nfcTibumController) {
+        try { nfcTibumController.abort(); } catch(e) {}
+        nfcTibumController = null;
+      }
+      const nfcArea = document.getElementById('nfcScanningArea');
+      const btn = document.getElementById('btnStartNfcTibum');
+      if (nfcArea) nfcArea.classList.add('hidden');
+      if (btn) btn.classList.remove('ring-2', 'ring-cyan-400');
+    }
+
     function toggleQrScanner() {
       const area = document.getElementById('qrReaderArea');
       const btn = document.getElementById('btnToggleQrScanner');
 
       if (area.classList.contains('hidden')) {
+        stopNfcTibumScan(); // Hentikan NFC jika kamera QR dibuka
         area.classList.remove('hidden');
         btn.innerHTML = `<i data-lucide="x" class="w-4 h-4"></i><span>Tutup Kamera QR</span>`;
         safeCreateIcons();
@@ -6915,6 +8494,9 @@
         renderAdminQrNisn();
       } else if (tabName === 'pengumuman') {
         renderAdminPengumuman();
+      } else if (tabName === 'pengaturan') {
+        applyConfigToUi();
+        renderAdminRefleksiGuruTable();
       }
 
       safeCreateIcons();
@@ -7210,6 +8792,9 @@
       if (document.getElementById('cfgIzinCetakNilai')) {
         appConfig.IZIN_CETAK_NILAI = document.getElementById('cfgIzinCetakNilai').value;
       }
+      if (document.getElementById('cfgFiturRefleksi4F')) {
+        appConfig.FITUR_REFLEKSI_4F = document.getElementById('cfgFiturRefleksi4F').value;
+      }
 
       const newPin = document.getElementById('cfgNewAdminPin').value.trim();
       if (newPin) appConfig.PIN_ADMIN = newPin;
@@ -7227,6 +8812,7 @@
 
       applyConfigToUi();
       startCountdownTimer();
+      saveAppConfigToLocalStorage();
 
       Swal.fire({
         title: 'Menyimpan ke Google Sheets...',
@@ -7240,6 +8826,7 @@
         pin: appConfig.PIN_ADMIN
       });
 
+      saveAppConfigToLocalStorage();
       if (res && res.success) {
         Swal.fire('Tersimpan di Database! 🟢', 'Seluruh konfigurasi identitas sekolah berhasil disimpan ke Database.', 'success');
         await syncDataFromGoogleSheets(true, true);
@@ -8118,7 +9705,49 @@
         `).join('');
 
       if (container) container.innerHTML = htmlContent;
-      if (feedBeranda) feedBeranda.innerHTML = htmlContent;
+
+      // Tampilan Point of Interest Khusus Beranda Siswa
+      if (feedBeranda) {
+        if (list.length === 0) {
+          feedBeranda.innerHTML = `
+            <div class="bg-white/90 p-5 rounded-2xl border border-amber-200 text-center text-slate-400">
+              <span class="text-2xl block mb-1">📬</span>
+              <p class="font-bold text-xs text-slate-700">Tidak Ada Pengumuman Baru Hari Ini</p>
+              <p class="text-[11px] text-slate-400 mt-0.5">Edaran dan agenda sekolah akan muncul di sini begitu dipublikasikan.</p>
+            </div>
+          `;
+        } else {
+          const main = list[0];
+          const others = list.slice(1, 3);
+          feedBeranda.innerHTML = `
+            <div class="bg-white p-5 rounded-2xl border-2 border-amber-300/80 shadow-md space-y-3">
+              <div class="flex flex-wrap items-center justify-between gap-2">
+                <div class="flex items-center gap-2">
+                  <span class="px-2.5 py-0.5 bg-gradient-to-r from-amber-500 to-orange-500 text-white rounded-md text-[10px] font-black tracking-wider uppercase shadow-xs">📌 PENGUMUMAN TERBARU</span>
+                  <span class="text-[11px] text-slate-500 font-semibold">📅 ${main.tglMulai || '-'} s/d ${main.tglSelesai || '-'}</span>
+                </div>
+                <span class="text-[11px] text-slate-400 font-medium">Oleh: <b class="text-slate-800">${escapeHtml(main.dibuatOleh || 'Sekolah')}</b></span>
+              </div>
+              <h4 class="font-black text-base text-slate-900 leading-snug">${escapeHtml(main.judul)}</h4>
+              <p class="text-xs text-slate-700 leading-relaxed whitespace-pre-line font-medium">${escapeHtml(main.isi)}</p>
+            </div>
+            ${others.length > 0 ? `
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5 pt-1">
+                ${others.map(o => `
+                  <div class="bg-white/90 p-3.5 rounded-xl border border-slate-200 shadow-2xs hover:border-indigo-300 transition">
+                    <div class="flex items-center justify-between text-[10px] text-slate-400 mb-1">
+                      <span class="font-bold text-indigo-700 bg-indigo-50 px-1.5 py-0.5 rounded">INFO</span>
+                      <span>${o.tglMulai || '-'}</span>
+                    </div>
+                    <h5 class="font-bold text-xs text-slate-900 line-clamp-1">${escapeHtml(o.judul)}</h5>
+                    <p class="text-[11px] text-slate-500 line-clamp-2 mt-0.5">${escapeHtml(o.isi)}</p>
+                  </div>
+                `).join('')}
+              </div>
+            ` : ''}
+          `;
+        }
+      }
 
       safeCreateIcons();
     }
@@ -8162,7 +9791,56 @@
         }).join('');
 
       if (container) container.innerHTML = htmlContent;
-      if (feedBeranda) feedBeranda.innerHTML = htmlContent;
+
+      // Tampilan Point of Interest Khusus Beranda Guru
+      if (feedBeranda) {
+        if (list.length === 0) {
+          feedBeranda.innerHTML = `
+            <div class="bg-white/90 p-5 rounded-2xl border border-indigo-200 text-center text-slate-400">
+              <span class="text-2xl block mb-1">📬</span>
+              <p class="font-bold text-xs text-slate-700">Belum Ada Pengumuman Kedinasan Aktif</p>
+              <p class="text-[11px] text-slate-400 mt-0.5">Klik tombol "+ Buat Pengumuman Baru" di pojok kanan atas untuk mempublikasikan edaran.</p>
+            </div>
+          `;
+        } else {
+          const main = list[0];
+          const others = list.slice(1, 3);
+          const targets = Array.isArray(main.targetAudience) ? main.targetAudience : String(main.targetAudience || 'SEMUA').split(',');
+          const targetBadges = targets.map(t => `<span class="px-2 py-0.5 bg-indigo-50 text-indigo-800 rounded text-[10px] font-bold uppercase">${t.trim()}</span>`).join(' ');
+
+          feedBeranda.innerHTML = `
+            <div class="bg-white p-5 rounded-2xl border-2 border-indigo-400/80 shadow-md space-y-3">
+              <div class="flex flex-wrap items-center justify-between gap-2">
+                <div class="flex flex-wrap items-center gap-1.5">
+                  <span class="px-2.5 py-0.5 bg-gradient-to-r from-indigo-600 to-blue-600 text-white rounded-md text-[10px] font-black tracking-wider uppercase shadow-xs">📌 PENGUMUMAN UTAMA</span>
+                  ${targetBadges}
+                </div>
+                <span class="text-[11px] text-slate-500 font-semibold">📅 ${main.tglMulai || '-'} s/d ${main.tglSelesai || '-'}</span>
+              </div>
+              <h4 class="font-black text-base text-slate-900 leading-snug">${escapeHtml(main.judul)}</h4>
+              <p class="text-xs text-slate-700 leading-relaxed whitespace-pre-line font-medium">${escapeHtml(main.isi)}</p>
+              <div class="pt-2 border-t border-slate-100 flex items-center justify-between text-[10px] text-slate-400">
+                <span>Dibuat oleh: <b class="text-slate-800">${escapeHtml(main.dibuatOleh || 'Pendidik')}</b> (${escapeHtml(main.rolePembuat || 'GURU')})</span>
+                <span>Diposting: ${main.tglDibuat || '-'}</span>
+              </div>
+            </div>
+            ${others.length > 0 ? `
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5 pt-1">
+                ${others.map(o => `
+                  <div class="bg-white/90 p-3.5 rounded-xl border border-slate-200 shadow-2xs hover:border-indigo-300 transition">
+                    <div class="flex items-center justify-between text-[10px] text-slate-400 mb-1">
+                      <span class="font-bold text-indigo-700 bg-indigo-50 px-1.5 py-0.5 rounded">INFO KEDINASAN</span>
+                      <span>${o.tglMulai || '-'}</span>
+                    </div>
+                    <h5 class="font-bold text-xs text-slate-900 line-clamp-1">${escapeHtml(o.judul)}</h5>
+                    <p class="text-[11px] text-slate-500 line-clamp-2 mt-0.5">${escapeHtml(o.isi)}</p>
+                  </div>
+                `).join('')}
+              </div>
+            ` : ''}
+          `;
+        }
+      }
 
       safeCreateIcons();
     }
@@ -8425,12 +10103,47 @@
 
     // =========================================================================
     // MODUL GENERATOR QR CODE NISN & CETAK KARTU PELAJAR (ADMIN)
+    // RINGAN, CEPAT & MEMILIKI PAGINASI AGAR TIDAK MEMBEBANI BROWSER
     // =========================================================================
-    function renderAdminQrNisn() {
+    let adminQrCurrentPage = 1;
+    let adminQrPageSize = 12;
+    let adminQrSearchDebounceTimer = null;
+
+    function debounceAdminQrSearch() {
+      clearTimeout(adminQrSearchDebounceTimer);
+      adminQrSearchDebounceTimer = setTimeout(() => {
+        renderAdminQrNisn(true);
+      }, 250);
+    }
+
+    function handleAdminQrFilterChange() {
+      renderAdminQrNisn(true);
+    }
+
+    function changeAdminQrPage(direction) {
+      adminQrCurrentPage += direction;
+      renderAdminQrNisn(false);
+      const container = document.getElementById('containerKartuQrAdmin');
+      if (container) {
+        container.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+      }
+    }
+
+    function changeAdminQrPageSize(newSize) {
+      adminQrPageSize = newSize;
+      adminQrCurrentPage = 1;
+      renderAdminQrNisn(false);
+    }
+
+    function renderAdminQrNisn(resetPage = false) {
       const container = document.getElementById('containerKartuQrAdmin');
       const filterSelect = document.getElementById('filterKelasQrAdmin');
       const searchInput = document.getElementById('searchSiswaQrAdmin');
       if (!container) return;
+
+      if (resetPage) {
+        adminQrCurrentPage = 1;
+      }
 
       if (filterSelect && filterSelect.options.length <= 1) {
         const distinctClasses = [...new Set(masterSiswa.map(s => s.kelas).filter(Boolean))].sort();
@@ -8455,10 +10168,58 @@
         return true;
       });
 
-      const badgeCount = document.getElementById('badgeTotalQrSiswa');
-      if (badgeCount) badgeCount.innerText = `${filtered.length} Siswa Ditampilkan`;
+      const totalItems = filtered.length;
+      const isAll = (adminQrPageSize === 'ALL');
+      const pageSize = isAll ? totalItems : (parseInt(adminQrPageSize, 10) || 12);
+      const totalPages = isAll ? 1 : Math.max(1, Math.ceil(totalItems / pageSize));
 
-      if (filtered.length === 0) {
+      if (adminQrCurrentPage > totalPages) adminQrCurrentPage = totalPages;
+      if (adminQrCurrentPage < 1) adminQrCurrentPage = 1;
+
+      const startIndex = isAll ? 0 : (adminQrCurrentPage - 1) * pageSize;
+      const endIndex = isAll ? totalItems : Math.min(startIndex + pageSize, totalItems);
+      const pageItems = isAll ? filtered : filtered.slice(startIndex, endIndex);
+
+      const badgeCount = document.getElementById('badgeTotalQrSiswa');
+      if (badgeCount) {
+        if (totalItems === 0) {
+          badgeCount.innerText = '0 Siswa Ditampilkan';
+        } else if (isAll) {
+          badgeCount.innerText = `Total ${totalItems} Siswa Ditampilkan`;
+        } else {
+          badgeCount.innerText = `Menampilkan ${startIndex + 1}-${endIndex} dari ${totalItems} Siswa`;
+        }
+      }
+
+      // Update Pagination UI
+      const paginationEl = document.getElementById('containerPaginationQrAdmin');
+      const rangeInfo = document.getElementById('adminQrRangeInfo');
+      const pageIndicator = document.getElementById('adminQrPageIndicator');
+      const btnPrev = document.getElementById('btnAdminQrPrev');
+      const btnNext = document.getElementById('btnAdminQrNext');
+
+      if (rangeInfo) {
+        rangeInfo.innerText = totalItems > 0 ? `(${startIndex + 1}-${endIndex} dari ${totalItems} siswa)` : '';
+      }
+      if (pageIndicator) {
+        pageIndicator.innerText = `Hal ${adminQrCurrentPage} dari ${totalPages}`;
+      }
+      if (btnPrev) {
+        btnPrev.disabled = (adminQrCurrentPage <= 1);
+      }
+      if (btnNext) {
+        btnNext.disabled = (adminQrCurrentPage >= totalPages);
+      }
+
+      if (paginationEl) {
+        if (totalItems <= 12 && isAll) {
+          paginationEl.classList.add('hidden');
+        } else {
+          paginationEl.classList.remove('hidden');
+        }
+      }
+
+      if (totalItems === 0) {
         container.innerHTML = `
           <div class="col-span-full bg-white p-8 rounded-3xl border border-slate-200 text-center text-slate-400">
             <i data-lucide="user-x" class="w-10 h-10 mx-auto mb-2 text-slate-300"></i>
@@ -8470,15 +10231,17 @@
         return;
       }
 
-      container.innerHTML = filtered.map(s => {
-        const qrUrl = `https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=${encodeURIComponent(s.nisn)}`;
+      container.innerHTML = pageItems.map(s => {
+        // Thumbnail card ringan (150x150) untuk meringankan memori & bandwidth browser
+        const qrThumbUrl = `https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${encodeURIComponent(s.nisn)}`;
+        const qrDownloadUrl = `https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=${encodeURIComponent(s.nisn)}`;
         const initials = (s.nama || 'S').split(' ').map(w => w[0]).join('').slice(0, 2).toUpperCase();
 
         return `
           <div class="bg-white rounded-3xl border border-slate-200 shadow-sm hover:shadow-md transition overflow-hidden flex flex-col justify-between">
             <div class="bg-gradient-to-r from-blue-900 via-indigo-900 to-slate-900 p-4 text-white flex items-center justify-between gap-2 border-b border-white/10">
               <div class="flex items-center gap-2 min-w-0">
-                <img src="${appConfig.LOGO_KANAN_SEKOLAH || 'icons/icon-192.png'}" class="w-8 h-8 rounded-lg object-contain bg-white p-0.5">
+                <img src="${appConfig.LOGO_KANAN_SEKOLAH || 'icons/icon-192.png'}" loading="lazy" decoding="async" class="w-8 h-8 rounded-lg object-contain bg-white p-0.5">
                 <div class="min-w-0">
                   <h5 class="text-[11px] font-black uppercase truncate leading-tight">${escapeHtml(appConfig.NAMA_SEKOLAH || 'SUPER APP SEKOLAH')}</h5>
                   <span class="text-[9px] text-amber-300 font-bold tracking-wider uppercase">KARTU TANDA PELAJAR</span>
@@ -8497,12 +10260,12 @@
                 <p class="text-[11px] text-slate-400 mt-0.5">Kelas: <span class="font-bold text-blue-700">${s.kelas || '-'}</span></p>
               </div>
               <div class="w-16 h-16 p-1 bg-white border border-slate-200 rounded-xl flex items-center justify-center flex-shrink-0 shadow-xs">
-                <img src="${qrUrl}" alt="QR ${s.nisn}" class="w-full h-full object-contain">
+                <img src="${qrThumbUrl}" loading="lazy" decoding="async" alt="QR ${s.nisn}" class="w-full h-full object-contain">
               </div>
             </div>
 
             <div class="p-3 bg-slate-50 border-t border-slate-100 flex items-center justify-between gap-2">
-              <a href="${qrUrl}" download="QR_NISN_${s.nisn}.png" target="_blank" class="px-3 py-1.5 bg-white hover:bg-slate-100 text-slate-700 border border-slate-200 rounded-xl text-xs font-bold transition flex items-center gap-1 shadow-xs">
+              <a href="${qrDownloadUrl}" download="QR_NISN_${s.nisn}.png" target="_blank" class="px-3 py-1.5 bg-white hover:bg-slate-100 text-slate-700 border border-slate-200 rounded-xl text-xs font-bold transition flex items-center gap-1 shadow-xs">
                 <i data-lucide="download" class="w-3.5 h-3.5"></i>
                 <span>Unduh QR</span>
               </a>

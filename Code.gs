@@ -208,6 +208,10 @@ function executeActionCore(action, payload) {
       response = simpanMasterEkskul(payload.ekskulList, payload.pin);
     } else if (action === "updateProfilSiswa") {
       response = updateProfilSiswa(payload.nisn, payload.noHpOrtu);
+    } else if (action === "simpanJurnalGuru") {
+      response = simpanJurnalGuru(payload.jurnal);
+    } else if (action === "updatePinUser") {
+      response = updatePinUser(payload.role, payload.id, payload.pin);
     } else if (action === "verifyAdminPin") {
       response = verifyAdminPin(payload.pin);
     } else if (action === "getPresensiHarian") {
@@ -542,8 +546,16 @@ function getSekolahConfig() {
   const config = {};
   for (let i = 1; i < data.length; i++) {
     const k = String(data[i][0]).trim();
-    const v = data[i][1];
-    if (k) config[k] = v;
+    let v = data[i][1];
+    if (k) {
+      if (typeof v === 'string') {
+        const tr = v.trim();
+        if ((tr.startsWith('[') && tr.endsWith(']')) || (tr.startsWith('{') && tr.endsWith('}'))) {
+          try { v = JSON.parse(tr); } catch (e) {}
+        }
+      }
+      config[k] = v;
+    }
   }
   return config;
 }
@@ -1747,16 +1759,20 @@ function simpanPengaturan(newConfig, pin) {
   const raw = sheet.getDataRange().getValues();
 
   for (const key in newConfig) {
+    let val = newConfig[key];
+    if (Array.isArray(val) || (typeof val === 'object' && val !== null)) {
+      val = JSON.stringify(val);
+    }
     let found = false;
     for (let i = 1; i < raw.length; i++) {
       if (String(raw[i][0]).trim() === key) {
-        sheet.getRange(i + 1, 2).setValue(newConfig[key]);
+        sheet.getRange(i + 1, 2).setValue(val);
         found = true;
         break;
       }
     }
     if (!found) {
-      sheet.appendRow([key, newConfig[key], "Pengaturan sistem"]);
+      sheet.appendRow([key, val, "Pengaturan sistem"]);
     }
   }
   SpreadsheetApp.flush();
@@ -1932,4 +1948,84 @@ function updateProfilSiswa(nisn, noHpOrtu) {
   }
 
   return { success: false, error: "Siswa dengan NISN " + targetNisn + " tidak ditemukan." };
+}
+
+function simpanJurnalGuru(jurnal) {
+  if (!jurnal) return { success: false, error: "Data jurnal tidak valid." };
+  try {
+    const ss = getSS();
+    let sheet = ss.getSheetByName("JURNAL_GURU");
+    if (!sheet) {
+      sheet = ss.insertSheet("JURNAL_GURU");
+      sheet.appendRow([
+        "ID_Jurnal", "NIP", "Nama_Guru", "Tanggal", "Kelas", "Mapel", "Topik", "Garis_Besar", 
+        "Hadir", "Total_Siswa", "Facts", "Feelings", "Findings", "Future", "Timestamp"
+      ]);
+    }
+    const facts = (jurnal.refleksi4F && jurnal.refleksi4F.facts) || "-";
+    const feelings = (jurnal.refleksi4F && jurnal.refleksi4F.feelings) || "-";
+    const findings = (jurnal.refleksi4F && jurnal.refleksi4F.findings) || "-";
+    const future = (jurnal.refleksi4F && jurnal.refleksi4F.future) || "-";
+    const hadir = (jurnal.kehadiran && jurnal.kehadiran.hadir) || 0;
+    const total = (jurnal.kehadiran && jurnal.kehadiran.total) || 0;
+
+    sheet.appendRow([
+      jurnal.id || ("JRN-" + Date.now()),
+      String(jurnal.nip || "").trim(),
+      String(jurnal.namaGuru || "").trim(),
+      String(jurnal.tanggal || "").trim(),
+      String(jurnal.kelas || "").trim(),
+      String(jurnal.mapel || "").trim(),
+      String(jurnal.topik || "").trim(),
+      String(jurnal.garisBesar || "").trim(),
+      hadir,
+      total,
+      facts,
+      feelings,
+      findings,
+      future,
+      new Date().toISOString()
+    ]);
+    SpreadsheetApp.flush();
+    return { success: true, message: "Catatan jurnal dan refleksi 4F guru berhasil disimpan di database." };
+  } catch (err) {
+    return { success: false, error: "Gagal menyimpan jurnal guru: " + err.message };
+  }
+}
+
+function updatePinUser(role, id, pin) {
+  if (!id || !pin) return { success: false, error: "ID dan PIN tidak boleh kosong." };
+  try {
+    const ss = getSS();
+    if (role === "SISWA") {
+      const sheet = ss.getSheetByName(SHEET_SISWA);
+      if (sheet && sheet.getLastRow() > 1) {
+        const raw = sheet.getDataRange().getValues();
+        const targetNisn = String(id).padStart(10, "0");
+        for (let i = 1; i < raw.length; i++) {
+          if (String(raw[i][0]).padStart(10, "0") === targetNisn) {
+            sheet.getRange(i + 1, 9).setValue(String(pin).trim());
+            SpreadsheetApp.flush();
+            return { success: true, message: "PIN siswa berhasil diperbarui di database." };
+          }
+        }
+      }
+    } else if (role === "GURU") {
+      const sheet = ss.getSheetByName(SHEET_GURU);
+      if (sheet && sheet.getLastRow() > 1) {
+        const raw = sheet.getDataRange().getValues();
+        const targetNip = String(id).trim().toLowerCase();
+        for (let i = 1; i < raw.length; i++) {
+          if (String(raw[i][0]).trim().toLowerCase() === targetNip) {
+            sheet.getRange(i + 1, 7).setValue(String(pin).trim());
+            SpreadsheetApp.flush();
+            return { success: true, message: "PIN guru berhasil diperbarui di database." };
+          }
+        }
+      }
+    }
+    return { success: true, message: "PIN berhasil diperbarui." };
+  } catch (err) {
+    return { success: false, error: "Gagal memperbarui PIN: " + err.message };
+  }
 }
