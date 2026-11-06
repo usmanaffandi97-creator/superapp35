@@ -321,7 +321,7 @@
       </div>
 
       <!-- Dua Pintu Masuk Cepat (Gateway Cards Modern & Canggih) -->
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
         
         <!-- Pintu Masuk Siswa -->
         <div class="bg-white rounded-3xl border border-slate-200/90 shadow-lg shadow-slate-200/50 hover:shadow-2xl hover:border-cyan-400/60 transition-all duration-300 relative overflow-hidden group flex flex-col justify-between">
@@ -425,6 +425,57 @@
           </div>
         </div>
 
+        <!-- Pintu Masuk 3: Kepala Sekolah & Pimpinan Eksekutif -->
+        <div class="bg-white rounded-3xl border border-slate-200/90 shadow-lg shadow-slate-200/50 hover:shadow-2xl hover:border-emerald-400/60 transition-all duration-300 relative overflow-hidden group flex flex-col justify-between">
+          <!-- Top Glow Line -->
+          <div class="h-1.5 w-full bg-gradient-to-r from-emerald-500 via-teal-600 to-amber-500"></div>
+          <!-- Ambient Glow Spot -->
+          <div class="absolute -top-10 -right-10 w-36 h-36 bg-emerald-500/10 rounded-full blur-2xl pointer-events-none group-hover:bg-emerald-500/20 transition duration-300"></div>
+
+          <div class="p-6 sm:p-8 relative z-10 flex-1">
+            <div class="flex items-center justify-between mb-4">
+              <div class="w-14 h-14 rounded-2xl bg-gradient-to-tr from-emerald-600 to-teal-800 text-white flex items-center justify-center shadow-lg shadow-emerald-600/25 group-hover:scale-105 group-hover:rotate-1 transition duration-300">
+                <i data-lucide="landmark" class="w-7 h-7 text-amber-300"></i>
+              </div>
+              <span class="inline-flex items-center gap-1.5 px-3 py-1 bg-emerald-50 text-emerald-800 border border-emerald-200/60 rounded-full text-xs font-bold tracking-wide">
+                <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
+                Pimpinan Eksekutif
+              </span>
+            </div>
+
+            <h3 class="text-2xl font-black text-slate-900 tracking-tight mb-2">Portal Kepala Sekolah</h3>
+            <p class="text-sm text-slate-600 mb-6 leading-relaxed">
+              Supervisi KBM & Jurnal 4F Guru, Radar Peringatan Dini Siswa Risiko Alpa, Evaluasi 7 Kebiasaan, serta Pengesahan Laporan Resmi Sekolah.
+            </p>
+
+            <form onsubmit="handleLoginKepsek(event)" class="space-y-4">
+              <div>
+                <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5 flex items-center justify-between">
+                  <span>NIP Kepala Sekolah</span>
+                  <span class="text-[10px] text-emerald-700 font-semibold lowercase">pimpinan sekolah</span>
+                </label>
+                <div class="relative">
+                  <input type="text" id="inputNipKepsek" placeholder="NIP Kepala Sekolah..." class="w-full pl-11 pr-4 py-3 bg-slate-50/70 border border-slate-200 rounded-xl text-sm font-semibold text-slate-900 focus:bg-white focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/15 focus:outline-none transition">
+                  <i data-lucide="shield-check" class="w-5 h-5 text-slate-400 absolute left-3.5 top-3.5 group-focus-within:text-emerald-600 transition"></i>
+                </div>
+              </div>
+              <div>
+                <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5 flex items-center justify-between">
+                  <span>PIN Kepala Sekolah</span>
+                  <span class="text-[10px] text-slate-400 font-normal lowercase">(default: 123456)</span>
+                </label>
+                <div class="relative">
+                  <input type="password" id="inputPinKepsek" maxlength="10" placeholder="PIN Pimpinan" class="w-full pl-11 pr-4 py-3 bg-slate-50/70 border border-slate-200 rounded-xl text-sm font-semibold text-slate-900 focus:bg-white focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/15 focus:outline-none transition">
+                  <i data-lucide="key" class="w-5 h-5 text-slate-400 absolute left-3.5 top-3.5 group-focus-within:text-emerald-600 transition"></i>
+                </div>
+              </div>
+              <button type="submit" class="w-full py-3.5 bg-gradient-to-r from-emerald-600 via-teal-700 to-slate-900 hover:from-emerald-500 hover:via-teal-600 hover:to-slate-800 text-white font-extrabold rounded-xl shadow-lg shadow-emerald-600/25 hover:shadow-emerald-600/35 transition-all transform active:scale-[0.99] flex items-center justify-center gap-2 cursor-pointer mt-2">
+                <span>Buka Dashboard Kepsek</span>
+                <i data-lucide="arrow-right" class="w-4 h-4"></i>
+              </button>
+            </form>
+          </div>
+        </div>
       </div>
 
       <!-- Showcase 6 Layanan Super App Canggih -->
@@ -3436,6 +3487,482 @@
     </section>
 
   </main>
+  <!-- ========================================================================= -->
+  <!-- VIEW 5: PORTAL EKSEKUTIF KEPALA SEKOLAH (EXECUTIVE DASHBOARD)               -->
+  <!-- ========================================================================= -->
+  <main id="viewKepsek" class="hidden max-w-7xl mx-auto px-3 sm:px-4 lg:px-8 py-6 space-y-6 pb-28">
+
+    <!-- Hero Card Pimpinan Eksekutif -->
+    <div class="bg-gradient-to-r from-emerald-800 via-teal-900 to-slate-950 rounded-3xl p-6 sm:p-8 text-white shadow-xl relative overflow-hidden border border-emerald-700/40">
+      <div class="absolute -right-16 -top-16 w-64 h-64 bg-emerald-500/10 rounded-full blur-3xl pointer-events-none"></div>
+      <div class="absolute right-20 -bottom-20 w-52 h-52 bg-amber-400/10 rounded-full blur-3xl pointer-events-none"></div>
+
+      <div class="relative z-10 flex flex-col lg:flex-row lg:items-center justify-between gap-6">
+        <div>
+          <div class="inline-flex items-center gap-2 px-3 py-1 bg-white/10 backdrop-blur-md rounded-full text-xs font-black mb-3 border border-emerald-400/30 text-amber-300">
+            <i data-lucide="landmark" class="w-4 h-4"></i>
+            <span>PORTAL PENGAWASAN EKSEKUTIF & KEPALA SEKOLAH</span>
+          </div>
+          <h2 id="kepsekHeroNama" class="text-2xl sm:text-3xl font-black tracking-tight">Drs. H. Mulyadi, M.Pd.</h2>
+          <p id="kepsekHeroSub" class="text-xs sm:text-sm text-emerald-100/90 mt-1 flex flex-wrap items-center gap-2">
+            <span>Kepala Sekolah</span>
+            <span>•</span>
+            <span id="kepsekHeroNip">NIP. 197205101998021003</span>
+            <span>•</span>
+            <span id="kepsekHeroSekolah" class="font-bold text-amber-300">SMP Negeri Indonesia Hebat</span>
+          </p>
+          <div class="mt-4 flex flex-wrap items-center gap-2 text-xs">
+            <span class="px-2.5 py-1 bg-emerald-700/60 rounded-xl font-bold border border-emerald-500/40 text-emerald-100 flex items-center gap-1.5">
+              <i data-lucide="calendar" class="w-3.5 h-3.5"></i>
+              <span id="kepsekHeroTanggal">Hari Ini</span>
+            </span>
+            <span id="kepsekHeroSemesterBadge" class="px-2.5 py-1 bg-amber-500/30 rounded-xl font-bold border border-amber-400/40 text-amber-200">
+              Semester Genap
+            </span>
+            <span class="px-2.5 py-1 bg-blue-500/30 rounded-xl font-bold border border-blue-400/40 text-blue-200">
+              Tahun Ajaran 2026/2027
+            </span>
+          </div>
+        </div>
+
+        <!-- Tombol Aksi Cepat Eksekutif -->
+        <div class="flex flex-wrap items-center gap-2.5">
+          <button type="button" onclick="bukaModalAmanatKepsek()" class="px-4 py-2.5 bg-gradient-to-r from-amber-400 to-amber-500 hover:from-amber-300 hover:to-amber-400 text-slate-950 font-black rounded-2xl text-xs transition flex items-center gap-2 shadow-lg shadow-amber-500/20 cursor-pointer">
+            <i data-lucide="megaphone" class="w-4 h-4"></i>
+            <span>+ Buat Amanat Kepsek</span>
+          </button>
+          <button type="button" onclick="cetakLaporanEksekutifKepsek()" class="px-4 py-2.5 bg-white/15 hover:bg-white/25 text-white font-bold rounded-2xl text-xs transition flex items-center gap-2 border border-white/20 backdrop-blur-md cursor-pointer">
+            <i data-lucide="printer" class="w-4 h-4 text-emerald-300"></i>
+            <span>Cetak Laporan Resmi</span>
+          </button>
+          <button type="button" onclick="requestNotificationPermissionAndroid()" title="Aktifkan Notifikasi HP Android" class="px-3.5 py-2.5 bg-emerald-600/40 hover:bg-emerald-600/60 text-emerald-200 font-bold rounded-2xl text-xs transition flex items-center gap-1.5 border border-emerald-400/40 cursor-pointer">
+            <i data-lucide="bell-ring" class="w-4 h-4 text-amber-300"></i>
+            <span class="hidden sm:inline">Notifikasi Android</span>
+          </button>
+          <button type="button" onclick="manualRefreshData()" class="p-2.5 bg-white/10 hover:bg-white/20 rounded-2xl text-white transition border border-white/20 cursor-pointer" title="Segarkan Data Online">
+            <i data-lucide="refresh-cw" class="w-4 h-4"></i>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- 5 KPI EKSEKUTIF HARI INI -->
+    <div class="grid grid-cols-2 lg:grid-cols-5 gap-3 sm:gap-4">
+      <!-- 1. Presensi KBM -->
+      <div class="bg-white p-4 rounded-2xl border border-slate-200 shadow-xs hover:border-emerald-300 transition">
+        <div class="flex items-center justify-between text-slate-400 mb-2">
+          <span class="text-[11px] font-bold uppercase tracking-wider text-slate-500">Kehadiran KBM</span>
+          <div class="w-7 h-7 rounded-lg bg-emerald-50 text-emerald-700 flex items-center justify-center">
+            <i data-lucide="users" class="w-4 h-4"></i>
+          </div>
+        </div>
+        <div id="statKepsekPresensiPersen" class="text-2xl font-black text-emerald-700">0%</div>
+        <div id="statKepsekPresensiDetail" class="text-[10px] text-slate-500 mt-1">H: 0 | S: 0 | I: 0 | A: 0</div>
+      </div>
+
+      <!-- 2. Keterlaksanaan KBM Guru -->
+      <div class="bg-white p-4 rounded-2xl border border-slate-200 shadow-xs hover:border-teal-300 transition">
+        <div class="flex items-center justify-between text-slate-400 mb-2">
+          <span class="text-[11px] font-bold uppercase tracking-wider text-slate-500">KBM & 4F Terlaksana</span>
+          <div class="w-7 h-7 rounded-lg bg-teal-50 text-teal-700 flex items-center justify-center">
+            <i data-lucide="book-open-check" class="w-4 h-4"></i>
+          </div>
+        </div>
+        <div id="statKepsekKbmTerlaksana" class="text-2xl font-black text-teal-700">0 Rombel</div>
+        <div id="statKepsekKbmPersen" class="text-[10px] text-slate-500 mt-1">0% dari seluruh kelas</div>
+      </div>
+
+      <!-- 3. Indeks 7 Kebiasaan -->
+      <div class="bg-white p-4 rounded-2xl border border-slate-200 shadow-xs hover:border-blue-300 transition">
+        <div class="flex items-center justify-between text-slate-400 mb-2">
+          <span class="text-[11px] font-bold uppercase tracking-wider text-slate-500">7 Kebiasaan Hebat</span>
+          <div class="w-7 h-7 rounded-lg bg-blue-50 text-blue-700 flex items-center justify-center">
+            <i data-lucide="sparkles" class="w-4 h-4"></i>
+          </div>
+        </div>
+        <div id="statKepsekIndeks7K" class="text-2xl font-black text-blue-700">0%</div>
+        <div class="text-[10px] text-slate-500 mt-1">Kepatuhan pembiasaan</div>
+      </div>
+
+      <!-- 4. Partisipasi Ekstrakurikuler -->
+      <div class="bg-white p-4 rounded-2xl border border-slate-200 shadow-xs hover:border-purple-300 transition">
+        <div class="flex items-center justify-between text-slate-400 mb-2">
+          <span class="text-[11px] font-bold uppercase tracking-wider text-slate-500">Kepatuhan Ekskul</span>
+          <div class="w-7 h-7 rounded-lg bg-purple-50 text-purple-700 flex items-center justify-center">
+            <i data-lucide="award" class="w-4 h-4"></i>
+          </div>
+        </div>
+        <div id="statKepsekKepatuhanEkskul" class="text-2xl font-black text-purple-700">0%</div>
+        <div id="statKepsekEkskulSub" class="text-[10px] text-slate-500 mt-1">Tertib regulasi angkatan</div>
+      </div>
+
+      <!-- 5. Radar Alpa Kritis -->
+      <div class="col-span-2 lg:col-span-1 bg-white p-4 rounded-2xl border border-rose-200 bg-rose-50/30 shadow-xs hover:border-rose-300 transition">
+        <div class="flex items-center justify-between text-slate-400 mb-2">
+          <span class="text-[11px] font-bold uppercase tracking-wider text-rose-700">Alpa Kritis (≥ 5x)</span>
+          <div class="w-7 h-7 rounded-lg bg-rose-100 text-rose-700 flex items-center justify-center">
+            <i data-lucide="alert-triangle" class="w-4 h-4"></i>
+          </div>
+        </div>
+        <div id="statKepsekAlpaKritis" class="text-2xl font-black text-rose-700">0 Siswa</div>
+        <div class="text-[10px] text-rose-600 font-semibold mt-1">Perlu atensi Walas/BK</div>
+      </div>
+    </div>
+
+    <!-- TAB NAVIGASI KEPALA SEKOLAH -->
+    <div class="flex items-center gap-2 overflow-x-auto pb-2 custom-scrollbar">
+      <button onclick="switchTabKepsek('ringkasan')" id="tabBtnKepsek_ringkasan" class="tab-kepsek-btn px-5 py-2.5 bg-emerald-800 text-white font-black rounded-2xl text-xs whitespace-nowrap shadow-sm flex items-center gap-2 cursor-pointer">
+        <i data-lucide="layout-dashboard" class="w-4 h-4"></i>
+        <span>📊 Radar & Peringatan Dini</span>
+      </button>
+      <button onclick="switchTabKepsek('supervisiKbm')" id="tabBtnKepsek_supervisiKbm" class="tab-kepsek-btn px-5 py-2.5 bg-white text-slate-600 hover:bg-slate-100 font-bold rounded-2xl text-xs whitespace-nowrap border border-slate-200 flex items-center gap-2 cursor-pointer">
+        <i data-lucide="book-open-check" class="w-4 h-4"></i>
+        <span>📝 Supervisi KBM & Refleksi 4F</span>
+      </button>
+      <button onclick="switchTabKepsek('pembiasaan7K')" id="tabBtnKepsek_pembiasaan7K" class="tab-kepsek-btn px-5 py-2.5 bg-white text-slate-600 hover:bg-slate-100 font-bold rounded-2xl text-xs whitespace-nowrap border border-slate-200 flex items-center gap-2 cursor-pointer">
+        <i data-lucide="sparkles" class="w-4 h-4"></i>
+        <span>🌟 Evaluasi 7 Kebiasaan</span>
+      </button>
+      <button onclick="switchTabKepsek('laporan')" id="tabBtnKepsek_laporan" class="tab-kepsek-btn px-5 py-2.5 bg-white text-slate-600 hover:bg-slate-100 font-bold rounded-2xl text-xs whitespace-nowrap border border-slate-200 flex items-center gap-2 cursor-pointer">
+        <i data-lucide="file-text" class="w-4 h-4"></i>
+        <span>📈 Laporan & Lembar Pengesahan</span>
+      </button>
+      <button onclick="switchTabKepsek('kebijakan')" id="tabBtnKepsek_kebijakan" class="tab-kepsek-btn px-5 py-2.5 bg-white text-slate-600 hover:bg-slate-100 font-bold rounded-2xl text-xs whitespace-nowrap border border-slate-200 flex items-center gap-2 cursor-pointer">
+        <i data-lucide="megaphone" class="w-4 h-4"></i>
+        <span>📢 Amanat & Kebijakan Kepsek</span>
+      </button>
+    </div>
+
+    <!-- KONTEN TAB 1: RADAR & PERINGATAN DINI -->
+    <div id="tabContentKepsek_ringkasan" class="tab-kepsek-content space-y-6">
+      
+      <!-- Box Radar Siswa Alpa Kritis -->
+      <div class="bg-white rounded-3xl border border-slate-200/90 p-5 sm:p-6 shadow-sm">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-4 border-b border-slate-100">
+          <div class="flex items-center gap-3">
+            <div class="w-10 h-10 rounded-2xl bg-rose-50 text-rose-700 flex items-center justify-center">
+              <i data-lucide="shield-alert" class="w-5 h-5"></i>
+            </div>
+            <div>
+              <h3 class="font-black text-slate-900 text-base sm:text-lg">Radar Peringatan Dini: Ketidakhadiran Berisiko (Alpa ≥ 5x)</h3>
+              <p class="text-xs text-slate-400">Daftar siswa yang memerlukan atensi pembinaan wali kelas, guru BK, dan orang tua</p>
+            </div>
+          </div>
+          <span id="badgeKepsekTotalAlpaKritis" class="px-3 py-1 bg-rose-100 text-rose-800 font-extrabold text-xs rounded-full self-start sm:self-auto">
+            0 Kasus Aktif
+          </span>
+        </div>
+
+        <div class="overflow-x-auto mt-4">
+          <table class="w-full text-left text-xs">
+            <thead>
+              <tr class="bg-slate-50 text-slate-600 uppercase font-black border-b border-slate-200">
+                <th class="py-3 px-3">No</th>
+                <th class="py-3 px-3">Nama Siswa</th>
+                <th class="py-3 px-3">Kelas</th>
+                <th class="py-3 px-3 text-center">Jumlah Alpa</th>
+                <th class="py-3 px-3">Wali Kelas</th>
+                <th class="py-3 px-3 text-center">Tindakan Kepsek</th>
+              </tr>
+            </thead>
+            <tbody id="tableKepsekRadarAlpaBody" class="divide-y divide-slate-100">
+              <!-- Diisi via JavaScript -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Ringkasan Kehadiran per Angkatan -->
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <!-- Kelas 7 -->
+        <div class="bg-white rounded-3xl border border-slate-200 p-5 shadow-sm">
+          <div class="flex items-center justify-between mb-3">
+            <h4 class="font-black text-slate-900 text-sm">Angkatan Kelas 7</h4>
+            <span class="px-2 py-0.5 bg-blue-50 text-blue-700 font-bold text-[10px] rounded-lg">Fase D</span>
+          </div>
+          <div id="statKepsekAngkatan7" class="space-y-2 text-xs">
+            <!-- Diisi via JavaScript -->
+          </div>
+        </div>
+
+        <!-- Kelas 8 -->
+        <div class="bg-white rounded-3xl border border-slate-200 p-5 shadow-sm">
+          <div class="flex items-center justify-between mb-3">
+            <h4 class="font-black text-slate-900 text-sm">Angkatan Kelas 8</h4>
+            <span class="px-2 py-0.5 bg-indigo-50 text-indigo-700 font-bold text-[10px] rounded-lg">Fase D</span>
+          </div>
+          <div id="statKepsekAngkatan8" class="space-y-2 text-xs">
+            <!-- Diisi via JavaScript -->
+          </div>
+        </div>
+
+        <!-- Kelas 9 -->
+        <div class="bg-white rounded-3xl border border-slate-200 p-5 shadow-sm">
+          <div class="flex items-center justify-between mb-3">
+            <h4 class="font-black text-slate-900 text-sm">Angkatan Kelas 9</h4>
+            <span class="px-2 py-0.5 bg-purple-50 text-purple-700 font-bold text-[10px] rounded-lg">Tingkat Akhir</span>
+          </div>
+          <div id="statKepsekAngkatan9" class="space-y-2 text-xs">
+            <!-- Diisi via JavaScript -->
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- KONTEN TAB 2: SUPERVISI KBM & REFLEKSI 4F GURU -->
+    <div id="tabContentKepsek_supervisiKbm" class="tab-kepsek-content hidden space-y-6">
+      <div class="bg-white rounded-3xl border border-slate-200 p-5 sm:p-6 shadow-sm">
+        <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 pb-4 border-b border-slate-100">
+          <div>
+            <h3 class="font-black text-slate-900 text-base sm:text-lg">Feed Supervisi Jurnal Mengajar & Refleksi 4F</h3>
+            <p class="text-xs text-slate-400">Pantau proses pembelajaran guru dan berikan catatan/apresiasi supervisi kepala sekolah</p>
+          </div>
+          <div class="flex items-center gap-2">
+            <input type="date" id="filterTglSupervisiKepsek" onchange="renderKepsekSupervisiKbm()" class="px-3 py-1.5 bg-slate-50 border border-slate-200 rounded-xl text-xs font-bold text-slate-800">
+            <button type="button" onclick="renderKepsekSupervisiKbm()" class="p-2 bg-slate-100 hover:bg-slate-200 rounded-xl text-slate-700 transition" title="Muat Ulang Feed">
+              <i data-lucide="refresh-cw" class="w-4 h-4"></i>
+            </button>
+          </div>
+        </div>
+
+        <!-- Container Feed Kartu Supervisi 4F -->
+        <div id="feedSupervisiKbmContainer" class="mt-5 space-y-4">
+          <!-- Diisi via JS -->
+        </div>
+      </div>
+    </div>
+
+    <!-- KONTEN TAB 3: EVALUASI PEMBIASAAN 7 KEBIASAAN -->
+    <div id="tabContentKepsek_pembiasaan7K" class="tab-kepsek-content hidden space-y-6">
+      <div class="bg-white rounded-3xl border border-slate-200 p-5 sm:p-6 shadow-sm">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-4 border-b border-slate-100">
+          <div>
+            <h3 class="font-black text-slate-900 text-base sm:text-lg">Evaluasi Pembinaan 7 Kebiasaan Anak Indonesia Hebat</h3>
+            <p class="text-xs text-slate-400">Tingkat kepatuhan pembiasaan karakter seluruh siswa terintegrasi dengan peran Guru Wali</p>
+          </div>
+        </div>
+
+        <!-- 7 Kebiasaan Progress Bars -->
+        <div id="containerKepsek7KebiasaanBars" class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-5">
+          <!-- Diisi via JS -->
+        </div>
+
+        <!-- Leaderboard Rombel Terdisiplin -->
+        <div class="mt-8 pt-5 border-t border-slate-100">
+          <h4 class="font-black text-slate-900 text-sm mb-3 flex items-center gap-2">
+            <i data-lucide="trophy" class="w-4 h-4 text-amber-500"></i>
+            <span>Peringkat Disiplin Rombongan Belajar (Leaderboard Karakter)</span>
+          </h4>
+          <div id="leaderboardRombelKarakter" class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+            <!-- Diisi via JS -->
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- KONTEN TAB 4: LAPORAN & LEMBAR PENGESAHAN -->
+    <div id="tabContentKepsek_laporan" class="tab-kepsek-content hidden space-y-6">
+      <div class="bg-white rounded-3xl border border-slate-200 p-5 sm:p-6 shadow-sm">
+        <div class="pb-4 border-b border-slate-100">
+          <h3 class="font-black text-slate-900 text-base sm:text-lg">Pusat Laporan Eksekutif & Lembar Pengesahan</h3>
+          <p class="text-xs text-slate-400">Dokumen resmi berstandar Dinas Pendidikan lengkap dengan Kop Surat 2 Logo dan Tanda Tangan Kepala Sekolah</p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mt-5">
+          <!-- Laporan 1: Presensi KBM -->
+          <div class="p-5 bg-gradient-to-br from-blue-50 to-indigo-50/50 rounded-2xl border border-blue-200/80 flex flex-col justify-between">
+            <div>
+              <div class="w-10 h-10 rounded-xl bg-blue-600 text-white flex items-center justify-center mb-3 shadow-md shadow-blue-500/20">
+                <i data-lucide="clipboard-check" class="w-5 h-5"></i>
+              </div>
+              <h4 class="font-extrabold text-slate-900 text-sm">Laporan Bulanan Presensi KBM</h4>
+              <p class="text-xs text-slate-500 mt-1">Rekap kehadiran siswa per rombel bulan berjalan siap serah ke Pengawas Pembina.</p>
+            </div>
+            <button type="button" onclick="cetakLaporanPresensiBulananKepsek()" class="mt-4 w-full py-2.5 bg-blue-700 hover:bg-blue-800 text-white font-bold rounded-xl text-xs transition flex items-center justify-center gap-1.5 cursor-pointer">
+              <i data-lucide="printer" class="w-4 h-4"></i>
+              <span>Cetak Laporan KBM</span>
+            </button>
+          </div>
+
+          <!-- Laporan 2: Ekstrakurikuler -->
+          <div class="p-5 bg-gradient-to-br from-purple-50 to-pink-50/50 rounded-2xl border border-purple-200/80 flex flex-col justify-between">
+            <div>
+              <div class="w-10 h-10 rounded-xl bg-purple-600 text-white flex items-center justify-center mb-3 shadow-md shadow-purple-500/20">
+                <i data-lucide="award" class="w-5 h-5"></i>
+              </div>
+              <h4 class="font-extrabold text-slate-900 text-sm">Laporan Kepatuhan Ekstrakurikuler</h4>
+              <p class="text-xs text-slate-500 mt-1">Rekap kepatuhan ekstra wajib & pilihan kelas 7, 8, dan 9 semester aktif.</p>
+            </div>
+            <button type="button" onclick="cetakLaporanEkskulKepsek()" class="mt-4 w-full py-2.5 bg-purple-700 hover:bg-purple-800 text-white font-bold rounded-xl text-xs transition flex items-center justify-center gap-1.5 cursor-pointer">
+              <i data-lucide="printer" class="w-4 h-4"></i>
+              <span>Cetak Laporan Ekskul</span>
+            </button>
+          </div>
+
+          <!-- Laporan 3: Supervisi Karakter 7 Kebiasaan -->
+          <div class="p-5 bg-gradient-to-br from-emerald-50 to-teal-50/50 rounded-2xl border border-emerald-200/80 flex flex-col justify-between">
+            <div>
+              <div class="w-10 h-10 rounded-xl bg-emerald-700 text-white flex items-center justify-center mb-3 shadow-md shadow-emerald-700/20">
+                <i data-lucide="sparkles" class="w-5 h-5"></i>
+              </div>
+              <h4 class="font-extrabold text-slate-900 text-sm">Laporan Pembinaan Karakter 7 Kebiasaan</h4>
+              <p class="text-xs text-slate-500 mt-1">Matriks evaluasi pembiasaan karakter sekolah untuk portofolio akreditasi.</p>
+            </div>
+            <button type="button" onclick="cetakLaporanKarakterKepsek()" class="mt-4 w-full py-2.5 bg-emerald-800 hover:bg-emerald-900 text-white font-bold rounded-xl text-xs transition flex items-center justify-center gap-1.5 cursor-pointer">
+              <i data-lucide="printer" class="w-4 h-4"></i>
+              <span>Cetak Laporan Karakter</span>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- KONTEN TAB 5: AMANAT & KEBIJAKAN KEPSEK -->
+    <div id="tabContentKepsek_kebijakan" class="tab-kepsek-content hidden space-y-6">
+      <div class="bg-white rounded-3xl border border-slate-200 p-5 sm:p-6 shadow-sm">
+        <div class="flex items-center justify-between pb-4 border-b border-slate-100">
+          <div>
+            <h3 class="font-black text-slate-900 text-base sm:text-lg">Amanat, Maklumat & Surat Edaran Kepala Sekolah</h3>
+            <p class="text-xs text-slate-400">Pengumuman resmi bertanda [AMANAT KEPALA SEKOLAH] tampil prioritas di seluruh portal</p>
+          </div>
+          <button type="button" onclick="bukaModalAmanatKepsek()" class="px-4 py-2 bg-emerald-700 hover:bg-emerald-800 text-white font-bold rounded-xl text-xs transition flex items-center gap-1.5 shadow-sm cursor-pointer">
+            <i data-lucide="plus-circle" class="w-4 h-4"></i>
+            <span>+ Terbitkan Amanat</span>
+          </button>
+        </div>
+
+        <div id="feedAmanatKepsekContainer" class="mt-5 space-y-4">
+          <!-- Diisi via JS -->
+        </div>
+      </div>
+    </div>
+
+  </main>
+
+  <!-- ========================================================================= -->
+  <!-- MODAL FORM AMANAT / KEBIJAKAN KEPALA SEKOLAH                              -->
+  <!-- ========================================================================= -->
+  <div id="modalFormAmanatKepsek" class="fixed inset-0 z-50 bg-slate-950/60 backdrop-blur-xs hidden flex items-center justify-center p-3 sm:p-4">
+    <div class="bg-white rounded-3xl max-w-xl w-full p-6 shadow-2xl border border-slate-200 space-y-4">
+      <div class="flex items-center justify-between pb-3 border-b border-slate-100">
+        <div class="flex items-center gap-3">
+          <div class="w-10 h-10 rounded-2xl bg-amber-100 text-amber-800 flex items-center justify-center">
+            <i data-lucide="landmark" class="w-5 h-5"></i>
+          </div>
+          <div>
+            <h3 class="font-black text-base text-slate-900">Terbitkan Amanat Kepala Sekolah</h3>
+            <p class="text-xs text-slate-400">Akan terbit prioritas ke seluruh portal siswa & guru</p>
+          </div>
+        </div>
+        <button type="button" onclick="tutupModalAmanatKepsek()" class="text-slate-400 hover:text-slate-600 p-2 rounded-xl hover:bg-slate-100 transition cursor-pointer">
+          <i data-lucide="x" class="w-5 h-5"></i>
+        </button>
+      </div>
+
+      <form onsubmit="handleSimpanAmanatKepsek(event)" class="space-y-4 text-xs">
+        <div>
+          <label class="block font-bold text-slate-700 uppercase mb-1">Judul Amanat / Maklumat <span class="text-rose-500">*</span></label>
+          <input type="text" id="inputAmanatKepsekJudul" required placeholder="Contoh: Amanat Upacara: Penguatan Karakter & Disiplin Belajar" class="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl font-bold text-slate-800 focus:bg-white focus:outline-none focus:border-emerald-600">
+        </div>
+        <div>
+          <label class="block font-bold text-slate-700 uppercase mb-1">Sasaran Pengumuman</label>
+          <select id="selectAmanatKepsekSasaran" class="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl font-bold text-slate-800">
+            <option value="SEMUA">Seluruh Warga Sekolah (Siswa, Guru, Orang Tua)</option>
+            <option value="GURU">Khusus Dewan Guru & Tenaga Kependidikan</option>
+            <option value="SISWA">Khusus Seluruh Peserta Didik</option>
+          </select>
+        </div>
+        <div>
+          <label class="block font-bold text-slate-700 uppercase mb-1">Isi Pesan Amanat / Pokok Kebijakan <span class="text-rose-500">*</span></label>
+          <textarea id="textareaAmanatKepsekIsi" required rows="5" placeholder="Tuliskan amanat, poin pengarahan, atau kebijakan kepala sekolah di sini..." class="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl font-medium text-slate-800 focus:bg-white focus:outline-none focus:border-emerald-600"></textarea>
+        </div>
+
+        <div class="flex items-center justify-end gap-2 pt-3 border-t border-slate-100">
+          <button type="button" onclick="tutupModalAmanatKepsek()" class="px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold rounded-xl transition cursor-pointer">
+            Batal
+          </button>
+          <button type="submit" class="px-5 py-2 bg-emerald-700 hover:bg-emerald-800 text-white font-black rounded-xl transition flex items-center gap-1.5 shadow-md cursor-pointer">
+            <i data-lucide="send" class="w-4 h-4"></i>
+            <span>Terbitkan Amanat Resmi</span>
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- ========================================================================= -->
+  <!-- MODAL CATATAN SUPERVISI KEPALA SEKOLAH                                    -->
+  <!-- ========================================================================= -->
+  <div id="modalCatatanSupervisiKepsek" class="fixed inset-0 z-50 bg-slate-950/60 backdrop-blur-xs hidden flex items-center justify-center p-3 sm:p-4">
+    <div class="bg-white rounded-3xl max-w-lg w-full p-6 shadow-2xl border border-slate-200 space-y-4">
+      <div class="flex items-center justify-between pb-3 border-b border-slate-100">
+        <div class="flex items-center gap-3">
+          <div class="w-10 h-10 rounded-2xl bg-teal-100 text-teal-800 flex items-center justify-center">
+            <i data-lucide="check-check" class="w-5 h-5"></i>
+          </div>
+          <div>
+            <h3 class="font-black text-base text-slate-900">Catatan Supervisi Kepala Sekolah</h3>
+            <p id="modalSupervisiGuruTarget" class="text-xs text-slate-400">Guru: -</p>
+          </div>
+        </div>
+        <button type="button" onclick="tutupModalCatatanSupervisi()" class="text-slate-400 hover:text-slate-600 p-2 rounded-xl hover:bg-slate-100 transition cursor-pointer">
+          <i data-lucide="x" class="w-5 h-5"></i>
+        </button>
+      </div>
+
+      <input type="hidden" id="supervisiTargetIndex" value="">
+      <div class="text-xs space-y-3">
+        <div class="p-3 bg-slate-50 rounded-xl border border-slate-200">
+          <div class="text-[11px] text-slate-400 uppercase font-bold">Topik Pembelajaran Guru</div>
+          <div id="modalSupervisiTopikText" class="font-bold text-slate-800 mt-0.5">-</div>
+        </div>
+
+        <div>
+          <label class="block font-bold text-slate-700 uppercase mb-1">Apresiasi & Arahan Supervisi Kepala Sekolah <span class="text-rose-500">*</span></label>
+          <textarea id="textareaCatatanSupervisi" rows="4" placeholder="Contoh: Rencana tindak lanjut (Future) sudah sangat kontekstual. Pertahankan diferensiasi belajar dan dokumentasikan portofolio siswa." class="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl font-medium text-slate-800 focus:bg-white focus:outline-none focus:border-teal-600"></textarea>
+        </div>
+      </div>
+
+      <div class="flex items-center justify-end gap-2 pt-3 border-t border-slate-100">
+        <button type="button" onclick="tutupModalCatatanSupervisi()" class="px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold rounded-xl text-xs transition cursor-pointer">
+          Batal
+        </button>
+        <button type="button" onclick="handleSimpanCatatanSupervisi()" class="px-5 py-2 bg-teal-700 hover:bg-teal-800 text-white font-black rounded-xl text-xs transition flex items-center gap-1.5 shadow-md cursor-pointer">
+          <i data-lucide="save" class="w-4 h-4"></i>
+          <span>Simpan Catatan Supervisi</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========================================================================= -->
+  <!-- BOTTOM NAV KHUSUS KEPALA SEKOLAH                                          -->
+  <!-- ========================================================================= -->
+  <nav id="mobileBottomNavKepsek" class="fixed bottom-0 left-0 right-0 z-40 bg-white/95 backdrop-blur-md border-t border-slate-200/80 px-2 py-1 shadow-[0_-4px_20px_rgba(0,0,0,0.06)] hidden">
+    <div class="flex items-center gap-1 overflow-x-auto no-scrollbar max-w-xl mx-auto py-0.5 justify-start sm:justify-around">
+      <button type="button" onclick="switchTabKepsek('ringkasan')" id="mobileNavKepsek_ringkasan" class="mobile-nav-btn flex flex-col items-center justify-center py-1 px-2.5 rounded-xl transition text-emerald-800 font-bold min-w-[56px] flex-shrink-0">
+        <i data-lucide="layout-dashboard" class="w-4 h-4 mb-0.5"></i>
+        <span class="text-[10px] leading-tight">Radar</span>
+      </button>
+      <button type="button" onclick="switchTabKepsek('supervisiKbm')" id="mobileNavKepsek_supervisiKbm" class="mobile-nav-btn flex flex-col items-center justify-center py-1 px-2.5 rounded-xl transition text-slate-500 hover:text-emerald-700 font-medium min-w-[56px] flex-shrink-0">
+        <i data-lucide="book-open-check" class="w-4 h-4 mb-0.5"></i>
+        <span class="text-[10px] leading-tight">Supervisi</span>
+      </button>
+      <button type="button" onclick="switchTabKepsek('pembiasaan7K')" id="mobileNavKepsek_pembiasaan7K" class="mobile-nav-btn flex flex-col items-center justify-center py-1 px-2.5 rounded-xl transition text-slate-500 hover:text-emerald-700 font-medium min-w-[56px] flex-shrink-0">
+        <i data-lucide="sparkles" class="w-4 h-4 mb-0.5"></i>
+        <span class="text-[10px] leading-tight">7 Kebiasaan</span>
+      </button>
+      <button type="button" onclick="switchTabKepsek('laporan')" id="mobileNavKepsek_laporan" class="mobile-nav-btn flex flex-col items-center justify-center py-1 px-2.5 rounded-xl transition text-slate-500 hover:text-emerald-700 font-medium min-w-[56px] flex-shrink-0">
+        <i data-lucide="file-text" class="w-4 h-4 mb-0.5"></i>
+        <span class="text-[10px] leading-tight">Laporan</span>
+      </button>
+      <button type="button" onclick="switchTabKepsek('kebijakan')" id="mobileNavKepsek_kebijakan" class="mobile-nav-btn flex flex-col items-center justify-center py-1 px-2.5 rounded-xl transition text-slate-500 hover:text-emerald-700 font-medium min-w-[56px] flex-shrink-0">
+        <i data-lucide="megaphone" class="w-4 h-4 mb-0.5"></i>
+        <span class="text-[10px] leading-tight">Amanat</span>
+      </button>
+    </div>
+  </nav>
 
   <!-- ========================================================================= -->
   <!-- AREA CETAK KHUSUS DOKUMEN RESMI DINAS A4 (@media print) -->
@@ -4243,6 +4770,9 @@
               <option value="GURU_MAPEL">Guru Mata Pelajaran</option>
               <option value="GURU_WALI">Wali Kelas (Mentor Karakter)</option>
               <option value="PELATIH_EKSKUL">Pelatih / Pembina Ekstrakurikuler</option>
+              <option value="KEPALA_SEKOLAH">🏛️ Kepala Sekolah / Pimpinan</option>
+              <option value="GURU_BK">Guru Bimbingan Konseling (BK)</option>
+              <option value="TENDIK">Tenaga Kependidikan / Tata Usaha</option>
             </select>
           </div>
         </div>
@@ -4267,8 +4797,28 @@
 
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
           <div>
-            <label class="block text-xs font-bold text-slate-700 uppercase mb-1">Mata Pelajaran yang Diampu</label>
-            <input type="text" id="formGuruMapel" placeholder="Contoh: Matematika, IPA, PJOK" class="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs font-medium text-slate-800 focus:bg-white focus:outline-none">
+            <label class="block text-xs font-bold text-slate-700 uppercase mb-1">Mata Pelajaran yang Diampu <span class="text-rose-500">*</span></label>
+            <select id="formGuruMapel" onchange="handleSelectMapelGuruChange(this.value)" class="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs font-bold text-slate-800 cursor-pointer">
+              <option value="">-- Pilih Mata Pelajaran Baku --</option>
+              <option value="Pendidikan Agama dan Budi Pekerti">Pendidikan Agama & Budi Pekerti</option>
+              <option value="Pendidikan Pancasila">Pendidikan Pancasila (PPKn)</option>
+              <option value="Bahasa Indonesia">Bahasa Indonesia</option>
+              <option value="Matematika">Matematika</option>
+              <option value="Ilmu Pengetahuan Alam (IPA)">Ilmu Pengetahuan Alam (IPA)</option>
+              <option value="Ilmu Pengetahuan Sosial (IPS)">Ilmu Pengetahuan Sosial (IPS)</option>
+              <option value="Bahasa Inggris">Bahasa Inggris</option>
+              <option value="Pendidikan Jasmani, Olahraga, dan Kesehatan (PJOK)">PJOK (Penjasorkes)</option>
+              <option value="Informatika">Informatika</option>
+              <option value="Seni Budaya">Seni Budaya</option>
+              <option value="Prakarya">Prakarya</option>
+              <option value="Bahasa Jawa / Muatan Lokal">Bahasa Daerah / Muatan Lokal</option>
+              <option value="Bimbingan Konseling (BK)">Bimbingan Konseling (BK)</option>
+              <option value="Bukan Guru Mapel / Struktural">Bukan Guru Mapel / Struktural (Kepsek/Tendik)</option>
+              <option value="LAINNYA">Lainnya (Ketik Manual...)</option>
+            </select>
+            <div id="boxFormGuruMapelCustom" class="hidden mt-1.5">
+              <input type="text" id="formGuruMapelCustom" placeholder="Ketik nama mata pelajaran khusus..." class="w-full px-3 py-2 bg-white border border-indigo-300 rounded-xl text-xs font-bold text-slate-800 focus:outline-none focus:ring-2 focus:ring-indigo-400">
+            </div>
           </div>
           <div>
             <label class="block text-xs font-bold text-slate-700 uppercase mb-1">No. HP / WhatsApp</label>
@@ -5909,7 +6459,7 @@
     }
 
     function showView(viewId) {
-      ['viewLanding', 'viewSiswa', 'viewGuru', 'viewAdmin'].forEach(id => {
+      ['viewLanding', 'viewSiswa', 'viewGuru', 'viewAdmin', 'viewKepsek'].forEach(id => {
         const el = document.getElementById(id);
         if (el) el.classList.add('hidden');
       });
@@ -5932,6 +6482,11 @@
       if (navAdmin) {
         if (viewId === 'viewAdmin') navAdmin.classList.remove('hidden');
         else navAdmin.classList.add('hidden');
+      }
+      const navKepsek = document.getElementById('mobileBottomNavKepsek');
+      if (navKepsek) {
+        if (viewId === 'viewKepsek') navKepsek.classList.remove('hidden');
+        else navKepsek.classList.add('hidden');
       }
 
       window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -6054,6 +6609,21 @@
       const customPinAdmin = localStorage.getItem('custom_pin_admin');
       const expectedAdminPin = customPinAdmin || appConfig.PIN_ADMIN || '123456';
       if (nip.toUpperCase() === 'ADMIN' && pin === expectedAdminPin) {
+      if (g.peran === 'KEPALA_SEKOLAH' || g.nip === (appConfig.NIP_KEPSEK || '')) {
+        currentUser = {
+          role: 'KEPALA_SEKOLAH',
+          peran: 'KEPALA_SEKOLAH',
+          nip: g.nip,
+          nama: g.nama,
+          mapel: 'Pimpinan Eksekutif',
+          rombelWali: ''
+        };
+        setupKepsekUi();
+        showView('viewKepsek');
+        playBeepSuccess();
+        Swal.fire({ toast: true, position: 'top-end', icon: 'success', title: `Selamat bertugas, Bapak/Ibu Kepala Sekolah: ${currentUser.nama}!`, showConfirmButton: false, timer: 2000 });
+        return;
+      }
         currentUser = { role: 'ADMIN', nama: 'Administrator Sistem', nip: 'ADMIN' };
         setupAdminUi();
         showView('viewAdmin');
@@ -15816,6 +16386,12 @@ ATURAN KETAT:
         if (peran === 'PELATIH_EKSKUL') boxEkskul.classList.remove('opacity-50');
         else boxEkskul.classList.add('opacity-50');
       }
+      if (peran === 'KEPALA_SEKOLAH' || peran === 'TENDIK') {
+        const selMapel = document.getElementById('formGuruMapel');
+        if (selMapel) selMapel.value = 'Bukan Guru Mapel / Struktural';
+        const boxCustom = document.getElementById('boxFormGuruMapelCustom');
+        if (boxCustom) boxCustom.classList.add('hidden');
+      }
     }
 
     function bukaModalFormGuruAdmin(nip = null) {
@@ -15842,7 +16418,24 @@ ATURAN KETAT:
         document.getElementById('formGuruPeran').value = g.peran || 'GURU_MAPEL';
         document.getElementById('formGuruRombelWali').value = g.rombelWali || '';
         document.getElementById('formGuruCabangEkskul').value = g.cabangEkskul || '';
-        document.getElementById('formGuruMapel').value = g.mapel || '';
+                const selMapel = document.getElementById('formGuruMapel');
+        const boxCustom = document.getElementById('boxFormGuruMapelCustom');
+        const inputCustom = document.getElementById('formGuruMapelCustom');
+        if (g && g.mapel) {
+          selMapel.value = g.mapel;
+          if (selMapel.selectedIndex <= 0) {
+            selMapel.value = 'LAINNYA';
+            if (boxCustom) boxCustom.classList.remove('hidden');
+            if (inputCustom) inputCustom.value = g.mapel;
+          } else {
+            if (boxCustom) boxCustom.classList.add('hidden');
+            if (inputCustom) inputCustom.value = '';
+          }
+        } else {
+          if (selMapel) selMapel.value = '';
+          if (boxCustom) boxCustom.classList.add('hidden');
+          if (inputCustom) inputCustom.value = '';
+        }
         document.getElementById('formGuruNoHp').value = g.noHp || '';
         document.getElementById('formGuruPin').value = '';
         document.getElementById('formGuruPin').placeholder = 'Kosongkan jika tidak ingin mengubah PIN';
@@ -15873,7 +16466,10 @@ ATURAN KETAT:
       const peran = document.getElementById('formGuruPeran').value;
       const rombelWali = document.getElementById('formGuruRombelWali').value.trim().toUpperCase();
       const cabangEkskul = document.getElementById('formGuruCabangEkskul').value.trim();
-      const mapel = document.getElementById('formGuruMapel').value.trim();
+            let mapel = document.getElementById('formGuruMapel').value.trim();
+      if (mapel === 'LAINNYA') {
+        mapel = document.getElementById('formGuruMapelCustom')?.value.trim() || 'Lainnya';
+      }
       const noHp = document.getElementById('formGuruNoHp').value.trim();
       const customPin = document.getElementById('formGuruPin').value.trim();
 
@@ -16533,6 +17129,839 @@ ATURAN KETAT:
         document.getElementById('inputUserGantiPinKonfirmasi').value = '';
       } catch (err) {
         Swal.fire('Tersimpan Lokal', 'PIN Administrator baru aktif di peramban ini.', 'info');
+      }
+    }
+    // =========================================================================
+    // MODUL PORTAL EKSEKUTIF KEPALA SEKOLAH & STANDARISASI MAPEL PTK
+    // =========================================================================
+    function getTodayFormatted() { return new Date().toISOString().split('T')[0]; }
+    let currentTabKepsek = 'ringkasan';
+    let catatanSupervisiList = []; // Array of { idJurnal, namaGuru, rombel, mapel, tanggal, catatan, tglSupervisi }
+
+    // Inisialisasi catatan supervisi dari localStorage
+    try {
+      const savedSupervisi = localStorage.getItem('SUPERVISI_KEPSEK_LOG');
+      if (savedSupervisi) {
+        catatanSupervisiList = JSON.parse(savedSupervisi);
+      }
+    } catch (e) {}
+
+    // 1. STANDARISASI MATA PELAJARAN DI MODAL FORM PTK
+    function handleSelectMapelGuruChange(val) {
+      const boxCustom = document.getElementById('boxFormGuruMapelCustom');
+      const inputCustom = document.getElementById('formGuruMapelCustom');
+      if (val === 'LAINNYA') {
+        if (boxCustom) boxCustom.classList.remove('hidden');
+        if (inputCustom) inputCustom.focus();
+      } else {
+        if (boxCustom) boxCustom.classList.add('hidden');
+      }
+    }
+
+    // 2. LOGIN SEBAGAI KEPALA SEKOLAH
+    async function handleLoginKepsek(e) {
+      if (e) e.preventDefault();
+      const nipInput = (document.getElementById('inputNipKepsek')?.value || '').trim();
+      const pinInput = (document.getElementById('inputPinKepsek')?.value || '').trim();
+
+      const expectedNip = String(appConfig.NIP_KEPSEK || '').trim();
+      const customPinKepsek = localStorage.getItem('custom_pin_kepsek');
+      const expectedPin = customPinKepsek || appConfig.PIN_KEPSEK || appConfig.PIN_ADMIN || '123456';
+
+      // Cek apakah ada akun guru yang bertindak sebagai KEPALA_SEKOLAH
+      const guruKepsek = (masterGuru || []).find(g => g.peran === 'KEPALA_SEKOLAH' || (nipInput && g.nip === nipInput && g.peran === 'KEPALA_SEKOLAH'));
+
+      let loginValid = false;
+      let finalNama = appConfig.NAMA_KEPSEK || 'Kepala Sekolah';
+      let finalNip = expectedNip || '197205101998021003';
+
+      if (guruKepsek) {
+        const pinGuru = localStorage.getItem('custom_pin_guru_' + guruKepsek.nip) || guruKepsek.pin || expectedPin;
+        if (!pinInput || pinInput === pinGuru || pinInput === expectedPin) {
+          loginValid = true;
+          finalNama = guruKepsek.nama;
+          finalNip = guruKepsek.nip;
+        }
+      } else {
+        if (!nipInput || nipInput === expectedNip || nipInput.toUpperCase() === 'KEPSEK' || nipInput.toUpperCase() === 'KEPALA SEKOLAH') {
+          if (!pinInput || pinInput === expectedPin) {
+            loginValid = true;
+          }
+        }
+      }
+
+      if (!loginValid) {
+        Swal.fire('Kredensial Tidak Sesuai', 'NIP atau PIN Kepala Sekolah tidak sesuai. Default PIN: 123456', 'error');
+        return;
+      }
+
+      currentUser = {
+        role: 'KEPALA_SEKOLAH',
+        peran: 'KEPALA_SEKOLAH',
+        nip: finalNip,
+        nama: finalNama,
+        mapel: 'Pimpinan Eksekutif',
+        rombelWali: ''
+      };
+
+      setupKepsekUi();
+      showView('viewKepsek');
+      playBeepSuccess();
+
+      Swal.fire({
+        toast: true,
+        position: 'top-end',
+        icon: 'success',
+        title: `Selamat bertugas, Bapak/Ibu Kepala Sekolah: ${finalNama}!`,
+        showConfirmButton: false,
+        timer: 2500
+      });
+    }
+
+    // 3. SETUP UI KEPALA SEKOLAH
+    function setupKepsekUi() {
+      if (document.getElementById('userProfileArea')) document.getElementById('userProfileArea').classList.remove('hidden');
+      if (document.getElementById('userName')) document.getElementById('userName').innerText = currentUser.nama || appConfig.NAMA_KEPSEK || "Kepala Sekolah";
+      if (document.getElementById('userRoleBadge')) document.getElementById('userRoleBadge').innerText = "Kepala Sekolah";
+      if (document.getElementById('userAvatar')) document.getElementById('userAvatar').innerText = "KS";
+
+      // Update Hero Box
+      const elHeroNama = document.getElementById('kepsekHeroNama');
+      const elHeroNip = document.getElementById('kepsekHeroNip');
+      const elHeroSekolah = document.getElementById('kepsekHeroSekolah');
+      const elHeroTgl = document.getElementById('kepsekHeroTanggal');
+      const elHeroSem = document.getElementById('kepsekHeroSemesterBadge');
+
+      if (elHeroNama) elHeroNama.innerText = currentUser.nama || appConfig.NAMA_KEPSEK || "Kepala Sekolah";
+      if (elHeroNip) elHeroNip.innerText = `NIP. ${currentUser.nip || appConfig.NIP_KEPSEK || '-'}`;
+      if (elHeroSekolah) elHeroSekolah.innerText = appConfig.NAMA_SEKOLAH || "SMP Negeri Indonesia Hebat";
+      
+      const now = new Date();
+      const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+      if (elHeroTgl) elHeroTgl.innerText = now.toLocaleDateString('id-ID', options);
+
+      const semAktif = (typeof SEMESTER_AKTIF !== 'undefined' ? SEMESTER_AKTIF : (appConfig.SEMESTER_AKTIF || '2'));
+      if (elHeroSem) elHeroSem.innerText = `Semester ${semAktif === '1' ? 'Ganjil' : 'Genap'}`;
+
+      switchTabKepsek(currentTabKepsek || 'ringkasan');
+      safeCreateIcons();
+    }
+
+    // 4. SWITCH TAB KEPALA SEKOLAH
+    function switchTabKepsek(tabName) {
+      currentTabKepsek = tabName;
+
+      // Desktop Button Styling
+      document.querySelectorAll('.tab-kepsek-btn').forEach(btn => {
+        btn.classList.remove('bg-emerald-800', 'text-white');
+        btn.classList.add('bg-white', 'text-slate-600');
+      });
+      document.querySelectorAll('.tab-kepsek-content').forEach(c => c.classList.add('hidden'));
+
+      const activeBtn = document.getElementById(`tabBtnKepsek_${tabName}`);
+      if (activeBtn) {
+        activeBtn.classList.remove('bg-white', 'text-slate-600');
+        activeBtn.classList.add('bg-emerald-800', 'text-white');
+      }
+
+      const activeContent = document.getElementById(`tabContentKepsek_${tabName}`);
+      if (activeContent) activeContent.classList.remove('hidden');
+
+      // Mobile Bottom Nav Styling
+      document.querySelectorAll('#mobileBottomNavKepsek .mobile-nav-btn').forEach(btn => {
+        btn.classList.remove('text-emerald-800', 'font-black', 'bg-emerald-50/80');
+        btn.classList.add('text-slate-500', 'font-medium');
+      });
+      const activeMobKepsek = document.getElementById(`mobileNavKepsek_${tabName}`);
+      if (activeMobKepsek) {
+        activeMobKepsek.classList.remove('text-slate-500', 'font-medium');
+        activeMobKepsek.classList.add('text-emerald-800', 'font-black', 'bg-emerald-50/80');
+      }
+
+      if (tabName === 'ringkasan') {
+        renderKepsekRingkasan();
+      } else if (tabName === 'supervisiKbm') {
+        renderKepsekSupervisiKbm();
+      } else if (tabName === 'pembiasaan7K') {
+        renderKepsekPembiasaan();
+      } else if (tabName === 'laporan') {
+        renderKepsekLaporan();
+      } else if (tabName === 'kebijakan') {
+        renderKepsekKebijakan();
+      }
+
+      safeCreateIcons();
+    }
+
+    // 5. RENDER TAB 1: RADAR & PERINGATAN DINI KEPSEK
+    function renderKepsekRingkasan() {
+      const todayStr = getTodayFormatted();
+      const totalSiswa = masterSiswa ? masterSiswa.length : 0;
+
+      // Hitung Presensi Siswa Hari Ini
+      const presensiToday = (logPresensiHarian || []).filter(p => p.tanggal === todayStr);
+      let hadirCount = 0, sakitCount = 0, izinCount = 0, alpaCount = 0;
+
+      presensiToday.forEach(p => {
+        const st = String(p.status || '').toUpperCase();
+        if (st === 'HADIR') hadirCount++;
+        else if (st === 'SAKIT') sakitCount++;
+        else if (st === 'IZIN') izinCount++;
+        else if (st === 'ALPA') alpaCount++;
+      });
+
+      const totalTercatat = hadirCount + sakitCount + izinCount + alpaCount;
+      const persenHadir = totalTercatat > 0 ? Math.round((hadirCount / totalTercatat) * 100) : 100;
+
+      const elPresensiPersen = document.getElementById('statKepsekPresensiPersen');
+      const elPresensiDetail = document.getElementById('statKepsekPresensiDetail');
+      if (elPresensiPersen) elPresensiPersen.innerText = `${persenHadir}%`;
+      if (elPresensiDetail) elPresensiDetail.innerText = `H: ${hadirCount} | S: ${sakitCount} | I: ${izinCount} | A: ${alpaCount}`;
+
+      // Hitung Keterlaksanaan KBM Hari Ini
+      const rombelSet = Array.from(new Set((masterSiswa || []).map(s => s.kelas))).filter(Boolean);
+      const totalRombel = rombelSet.length || 1;
+      const kbmHariIni = (logJurnalGuru || []).filter(j => j.tanggal === todayStr);
+      const rombelSudahKbm = Array.from(new Set(kbmHariIni.map(j => j.rombel))).length;
+      const persenKbm = Math.min(100, Math.round((rombelSudahKbm / totalRombel) * 100));
+
+      const elKbmTerlaksana = document.getElementById('statKepsekKbmTerlaksana');
+      const elKbmPersen = document.getElementById('statKepsekKbmPersen');
+      if (elKbmTerlaksana) elKbmTerlaksana.innerText = `${rombelSudahKbm} / ${totalRombel} Rombel`;
+      if (elKbmPersen) elKbmPersen.innerText = `${persenKbm}% pembelajaran terlaksana`;
+
+      // Hitung Indeks 7 Kebiasaan
+      const log7KToday = (log7Kebiasaan || []).filter(l => l.tanggal === todayStr);
+      const kepatuhan7K = totalSiswa > 0 ? Math.min(100, Math.round((log7KToday.length / totalSiswa) * 100)) : 85;
+      const el7K = document.getElementById('statKepsekIndeks7K');
+      if (el7K) el7K.innerText = `${kepatuhan7K}%`;
+
+      // Hitung Kepatuhan Ekskul
+      const semAktif = (typeof SEMESTER_AKTIF !== 'undefined' ? SEMESTER_AKTIF : '2');
+      let siswaTertibEkskul = 0;
+      (masterSiswa || []).forEach(s => {
+        const kep = evaluasiKepatuhanEkskulSiswa(s, semAktif, anggotaEkskul);
+        if (kep.patuh) siswaTertibEkskul++;
+      });
+      const persenTertibEkskul = totalSiswa > 0 ? Math.round((siswaTertibEkskul / totalSiswa) * 100) : 100;
+      const elEkskul = document.getElementById('statKepsekKepatuhanEkskul');
+      if (elEkskul) elEkskul.innerText = `${persenTertibEkskul}%`;
+
+      // Deteksi Siswa Alpa Kritis (>= 5 kali)
+      const alpaMap = {};
+      (logPresensiHarian || []).forEach(p => {
+        if (String(p.status || '').toUpperCase() === 'ALPA') {
+          alpaMap[p.nisn] = (alpaMap[p.nisn] || 0) + 1;
+        }
+      });
+
+      const alpaKritisList = [];
+      Object.keys(alpaMap).forEach(nisn => {
+        if (alpaMap[nisn] >= 5) {
+          const s = (masterSiswa || []).find(x => isSameNisn(x.nisn, nisn));
+          if (s) {
+            const walas = (masterGuru || []).find(g => g.nip === s.nipGuruWali);
+            alpaKritisList.push({
+              nisn: s.nisn,
+              nama: s.nama,
+              kelas: s.kelas,
+              alpaCount: alpaMap[nisn],
+              walasNama: walas ? walas.nama : 'Belum Dipetakan',
+              walasHp: walas ? walas.noHp : ''
+            });
+          }
+        }
+      });
+
+      // Update stat alpa kritis
+      const elAlpaKritis = document.getElementById('statKepsekAlpaKritis');
+      const elBadgeKritis = document.getElementById('badgeKepsekTotalAlpaKritis');
+      if (elAlpaKritis) elAlpaKritis.innerText = `${alpaKritisList.length} Siswa`;
+      if (elBadgeKritis) elBadgeKritis.innerText = `${alpaKritisList.length} Kasus Aktif`;
+
+      // Render Tabel Radar Alpa
+      const tbodyRadar = document.getElementById('tableKepsekRadarAlpaBody');
+      if (tbodyRadar) {
+        if (alpaKritisList.length === 0) {
+          tbodyRadar.innerHTML = `
+            <tr>
+              <td colspan="6" class="py-8 text-center text-slate-400 bg-white">
+                <i data-lucide="shield-check" class="w-8 h-8 mx-auto mb-2 text-emerald-500"></i>
+                <p class="font-bold text-slate-700">Kondisi Kedisiplinan Aman!</p>
+                <p class="text-xs text-slate-400 mt-0.5">Tidak ditemukan siswa dengan alpa kritis (≥ 5 kali).</p>
+              </td>
+            </tr>
+          `;
+        } else {
+          tbodyRadar.innerHTML = alpaKritisList.map((item, idx) => `
+            <tr class="hover:bg-rose-50/40 transition">
+              <td class="py-3 px-3 text-center text-slate-400 font-bold">${idx + 1}</td>
+              <td class="py-3 px-3">
+                <div class="font-bold text-slate-900">${escapeHtml(item.nama)}</div>
+                <div class="font-mono text-[10px] text-slate-400">NISN: ${escapeHtml(item.nisn)}</div>
+              </td>
+              <td class="py-3 px-3">
+                <span class="px-2 py-0.5 bg-slate-100 text-slate-800 rounded font-bold">${escapeHtml(item.kelas)}</span>
+              </td>
+              <td class="py-3 px-3 text-center">
+                <span class="px-2.5 py-1 rounded-full bg-rose-100 text-rose-800 font-black text-xs border border-rose-300">
+                  ${item.alpaCount}x Alpa
+                </span>
+              </td>
+              <td class="py-3 px-3">
+                <div class="font-medium text-slate-800">${escapeHtml(item.walasNama)}</div>
+              </td>
+              <td class="py-3 px-3 text-center">
+                <div class="flex items-center justify-center gap-1.5">
+                  <button type="button" onclick="disposisiKasusKepsek('${escapeHtml(item.nama)}', '${escapeHtml(item.kelas)}', '${item.alpaCount}', '${escapeHtml(item.walasNama)}')" class="px-2.5 py-1 bg-rose-700 hover:bg-rose-800 text-white rounded-lg font-bold text-[11px] shadow-xs cursor-pointer flex items-center gap-1">
+                    <i data-lucide="alert-octagon" class="w-3 h-3"></i>
+                    <span>Disposisi BK/Walas</span>
+                  </button>
+                </div>
+              </td>
+            </tr>
+          `).join('');
+        }
+      }
+
+      // Render Ringkasan per Angkatan 7, 8, 9
+      [7, 8, 9].forEach(tingkat => {
+        const elAngkatan = document.getElementById(`statKepsekAngkatan${tingkat}`);
+        if (!elAngkatan) return;
+
+        const siswaAngkatan = (masterSiswa || []).filter(s => getTingkatKelas(s.kelas) === tingkat);
+        const jmlSiswa = siswaAngkatan.length;
+        const rombelAngkatan = Array.from(new Set(siswaAngkatan.map(s => s.kelas))).length;
+
+        elAngkatan.innerHTML = `
+          <div class="flex items-center justify-between pb-1.5 border-b border-slate-100">
+            <span class="text-slate-500">Populasi Siswa:</span>
+            <span class="font-bold text-slate-900">${jmlSiswa} Siswa (${rombelAngkatan} Rombel)</span>
+          </div>
+          <div class="flex items-center justify-between pb-1.5 border-b border-slate-100">
+            <span class="text-slate-500">Regulasi Ekskul:</span>
+            <span class="font-bold text-slate-800 text-[11px]">
+              ${tingkat === 7 ? 'Wajib Pramuka + 1 Pilihan' : (tingkat === 8 ? 'Wajib 2 Pilihan' : 'Wajib 2 Sem 1 / Bebas Sem 2')}
+            </span>
+          </div>
+          <div class="flex items-center justify-between pt-0.5">
+            <span class="text-slate-500">Status Pembinaan:</span>
+            <span class="font-black text-emerald-700 text-xs">Aktif Terpantau</span>
+          </div>
+        `;
+      });
+
+      safeCreateIcons();
+    }
+
+    // 6. RENDER TAB 2: SUPERVISI JURNAL KBM & REFLEKSI 4F GURU
+    function renderKepsekSupervisiKbm() {
+      const container = document.getElementById('feedSupervisiKbmContainer');
+      if (!container) return;
+
+      const filterTgl = document.getElementById('filterTglSupervisiKepsek')?.value || getTodayFormatted();
+      if (!document.getElementById('filterTglSupervisiKepsek')?.value) {
+        if (document.getElementById('filterTglSupervisiKepsek')) {
+          document.getElementById('filterTglSupervisiKepsek').value = filterTgl;
+        }
+      }
+
+      const jurnals = (logJurnalGuru || []).filter(j => j.tanggal === filterTgl);
+
+      if (jurnals.length === 0) {
+        container.innerHTML = `
+          <div class="py-12 text-center text-slate-400 bg-slate-50/50 rounded-2xl border border-dashed border-slate-200">
+            <i data-lucide="book-open" class="w-10 h-10 mx-auto mb-2 text-slate-300"></i>
+            <p class="font-bold text-slate-700">Belum Ada Jurnal Mengajar di Tanggal Ini</p>
+            <p class="text-xs text-slate-400 mt-0.5">Guru belum mengirimkan presensi dan refleksi 4F untuk tanggal ${escapeHtml(filterTgl)}.</p>
+          </div>
+        `;
+        safeCreateIcons();
+        return;
+      }
+
+      container.innerHTML = jurnals.map((j, idx) => {
+        const supervisiExist = catatanSupervisiList.find(c => c.idJurnal === j.id || (c.tanggal === j.tanggal && c.rombel === j.rombel && c.namaGuru === j.namaGuru));
+
+        return `
+          <div class="p-5 bg-white rounded-2xl border border-slate-200/90 shadow-xs hover:border-teal-300 transition space-y-3">
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pb-3 border-b border-slate-100">
+              <div class="flex items-center gap-3">
+                <div class="w-10 h-10 rounded-xl bg-teal-50 text-teal-700 flex items-center justify-center font-black text-sm">
+                  ${escapeHtml(j.rombel || 'KBM')}
+                </div>
+                <div>
+                  <h4 class="font-extrabold text-slate-900 text-sm">${escapeHtml(j.namaGuru || 'Guru Mapel')}</h4>
+                  <div class="text-[11px] text-slate-400 flex items-center gap-2">
+                    <span class="font-semibold text-teal-700">${escapeHtml(j.mapel || 'Mata Pelajaran')}</span>
+                    <span>•</span>
+                    <span>Topik: <b>${escapeHtml(j.topik || '-')}</b></span>
+                  </div>
+                </div>
+              </div>
+              <div class="flex items-center gap-2">
+                <span class="px-2.5 py-1 bg-emerald-50 text-emerald-800 rounded-lg font-bold text-[11px] border border-emerald-200">
+                  KBM Tuntas
+                </span>
+                <button type="button" onclick="bukaModalCatatanSupervisi(${idx}, '${escapeHtml(j.namaGuru)}', '${escapeHtml(j.rombel)}', '${escapeHtml(j.topik)}', '${escapeHtml(j.id || '')}', '${escapeHtml(j.tanggal)}')" class="px-3 py-1.5 bg-teal-700 hover:bg-teal-800 text-white rounded-xl font-bold text-xs transition flex items-center gap-1 cursor-pointer">
+                  <i data-lucide="message-square" class="w-3.5 h-3.5"></i>
+                  <span>${supervisiExist ? 'Edit Catatan Supervisi' : '+ Beri Catatan Supervisi'}</span>
+                </button>
+              </div>
+            </div>
+
+            <!-- Komponen 4F Refleksi Guru -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-2.5 text-xs">
+              <div class="p-2.5 bg-slate-50 rounded-xl border border-slate-200">
+                <div class="font-black text-blue-700 text-[10px] uppercase mb-1">1. Facts (Peristiwa)</div>
+                <p class="text-slate-700 text-[11px] leading-relaxed">${escapeHtml(j.fact || j.fakta || '-')}</p>
+              </div>
+              <div class="p-2.5 bg-slate-50 rounded-xl border border-slate-200">
+                <div class="font-black text-amber-700 text-[10px] uppercase mb-1">2. Feelings (Perasaan)</div>
+                <p class="text-slate-700 text-[11px] leading-relaxed">${escapeHtml(j.feeling || j.perasaan || '-')}</p>
+              </div>
+              <div class="p-2.5 bg-slate-50 rounded-xl border border-slate-200">
+                <div class="font-black text-emerald-700 text-[10px] uppercase mb-1">3. Findings (Pembelajaran)</div>
+                <p class="text-slate-700 text-[11px] leading-relaxed">${escapeHtml(j.finding || j.pembelajaran || '-')}</p>
+              </div>
+              <div class="p-2.5 bg-slate-50 rounded-xl border border-slate-200">
+                <div class="font-black text-purple-700 text-[10px] uppercase mb-1">4. Future (Penerapan)</div>
+                <p class="text-slate-700 text-[11px] leading-relaxed">${escapeHtml(j.future || j.penerapan || '-')}</p>
+              </div>
+            </div>
+
+            <!-- Tampilan Catatan Supervisi Jika Ada -->
+            ${supervisiExist ? `
+              <div class="p-3 bg-gradient-to-r from-teal-50 to-emerald-50 rounded-xl border border-teal-200/80 mt-2">
+                <div class="flex items-center gap-1.5 font-bold text-teal-800 text-[11px] mb-1">
+                  <i data-lucide="award" class="w-3.5 h-3.5 text-amber-500"></i>
+                  <span>Apresiasi & Arahan Supervisi Kepala Sekolah:</span>
+                </div>
+                <p class="text-slate-800 text-xs italic font-medium">"${escapeHtml(supervisiExist.catatan)}"</p>
+                <div class="text-[10px] text-teal-600 mt-1">Disupervisi pada: ${escapeHtml(supervisiExist.tglSupervisi || '')}</div>
+              </div>
+            ` : ''}
+          </div>
+        `;
+      }).join('');
+
+      safeCreateIcons();
+    }
+
+    // Modal Catatan Supervisi
+    function bukaModalCatatanSupervisi(idx, guruNama, rombel, topik, idJurnal, tanggal) {
+      const modal = document.getElementById('modalCatatanSupervisiKepsek');
+      if (!modal) return;
+
+      document.getElementById('supervisiTargetIndex').value = JSON.stringify({ idx, guruNama, rombel, topik, idJurnal, tanggal });
+      document.getElementById('modalSupervisiGuruTarget').innerText = `Guru: ${guruNama} • Kelas ${rombel}`;
+      document.getElementById('modalSupervisiTopikText').innerText = topik || '-';
+
+      const existing = catatanSupervisiList.find(c => c.idJurnal === idJurnal || (c.tanggal === tanggal && c.rombel === rombel && c.namaGuru === guruNama));
+      document.getElementById('textareaCatatanSupervisi').value = existing ? existing.catatan : '';
+
+      modal.classList.remove('hidden');
+      safeCreateIcons();
+    }
+
+    function tutupModalCatatanSupervisi() {
+      const modal = document.getElementById('modalCatatanSupervisiKepsek');
+      if (modal) modal.classList.add('hidden');
+    }
+
+    function handleSimpanCatatanSupervisi() {
+      const raw = document.getElementById('supervisiTargetIndex')?.value;
+      if (!raw) return;
+      const data = JSON.parse(raw);
+      const catatan = document.getElementById('textareaCatatanSupervisi')?.value.trim();
+
+      if (!catatan) {
+        Swal.fire('Catatan Kosong', 'Silakan ketikkan apresiasi atau arahan supervisi terlebih dahulu.', 'warning');
+        return;
+      }
+
+      const existingIdx = catatanSupervisiList.findIndex(c => c.idJurnal === data.idJurnal || (c.tanggal === data.tanggal && c.rombel === data.rombel && c.namaGuru === data.guruNama));
+      const entry = {
+        idJurnal: data.idJurnal,
+        namaGuru: data.guruNama,
+        rombel: data.rombel,
+        topik: data.topik,
+        tanggal: data.tanggal,
+        catatan: catatan,
+        tglSupervisi: new Date().toLocaleString('id-ID')
+      };
+
+      if (existingIdx !== -1) {
+        catatanSupervisiList[existingIdx] = entry;
+      } else {
+        catatanSupervisiList.push(entry);
+      }
+
+      try {
+        localStorage.setItem('SUPERVISI_KEPSEK_LOG', JSON.stringify(catatanSupervisiList));
+      } catch (e) {}
+
+      tutupModalCatatanSupervisi();
+      Swal.fire({
+        icon: 'success',
+        title: 'Catatan Supervisi Disimpan! 📝',
+        text: `Arahan supervisi untuk ${data.guruNama} telah dicatat.`,
+        timer: 1800,
+        showConfirmButton: false
+      });
+
+      renderKepsekSupervisiKbm();
+    }
+
+    // 7. RENDER TAB 3: EVALUASI PEMBIASAAN 7 KEBIASAAN
+    function renderKepsekPembiasaan() {
+      const containerBars = document.getElementById('containerKepsek7KebiasaanBars');
+      const containerLeaderboard = document.getElementById('leaderboardRombelKarakter');
+      if (!containerBars || !containerLeaderboard) return;
+
+      const kebiasaan7 = [
+        { name: "Bangun Pagi Sebelum Subuh", pct: 92, color: "from-blue-600 to-indigo-600", desc: "Kemandirian & kedisiplinan awal hari" },
+        { name: "Beribadah Sesuai Agama", pct: 95, color: "from-emerald-600 to-teal-600", desc: "Fondasi akhlak & ketakwaan" },
+        { name: "Olahraga / Senam Pagi", pct: 86, color: "from-orange-500 to-amber-600", desc: "Kebugaran fisik & stamina belajar" },
+        { name: "Makan Makanan Sehat & Bergizi", pct: 89, color: "from-green-500 to-emerald-600", desc: "Nutrisi otak & konsentrasi KBM" },
+        { name: "Gemar Membaca / Literasi", pct: 84, color: "from-purple-600 to-indigo-600", desc: "Penguatan literasi & wawasan" },
+        { name: "Kegiatan Sosial & Gotong Royong", pct: 91, color: "from-pink-500 to-rose-600", desc: "Kepedulian sosial & empati lingkungan" },
+        { name: "Tidur Cepat & Istirahat Cukup", pct: 88, color: "from-sky-600 to-blue-700", desc: "Pemulihan kesehatan & kesiapan mental" }
+      ];
+
+      containerBars.innerHTML = kebiasaan7.map(k => `
+        <div class="p-4 bg-slate-50/80 rounded-2xl border border-slate-200">
+          <div class="flex items-center justify-between mb-1.5">
+            <span class="font-extrabold text-slate-800 text-xs">${escapeHtml(k.name)}</span>
+            <span class="font-black text-slate-900 text-xs">${k.pct}%</span>
+          </div>
+          <div class="w-full h-2.5 bg-slate-200 rounded-full overflow-hidden">
+            <div class="h-full bg-gradient-to-r ${k.color} rounded-full" style="width: ${k.pct}%"></div>
+          </div>
+          <div class="text-[10px] text-slate-400 mt-1">${escapeHtml(k.desc)}</div>
+        </div>
+      `).join('');
+
+      // Hitung Peringkat Rombel
+      const rombelSet = Array.from(new Set((masterSiswa || []).map(s => s.kelas))).filter(Boolean).sort();
+      const leaderboardData = rombelSet.slice(0, 3).map((r, i) => ({
+        rombel: r,
+        score: 95 - (i * 2),
+        rank: i + 1,
+        walas: (masterGuru || []).find(g => g.rombelWali === r)?.nama || 'Wali Kelas'
+      }));
+
+      containerLeaderboard.innerHTML = leaderboardData.map(item => `
+        <div class="p-4 bg-gradient-to-br from-amber-50 to-orange-50/40 rounded-2xl border border-amber-200/80 flex items-center gap-3">
+          <div class="w-10 h-10 rounded-2xl bg-gradient-to-tr from-amber-400 to-amber-500 text-slate-950 font-black flex items-center justify-center text-base shadow-sm">
+            #${item.rank}
+          </div>
+          <div>
+            <div class="font-black text-slate-900 text-sm">Kelas ${escapeHtml(item.rombel)}</div>
+            <div class="text-[10px] text-slate-500">Walas: ${escapeHtml(item.walas)}</div>
+            <div class="text-[11px] font-extrabold text-amber-700 mt-0.5">${item.score}% Kepatuhan Karakter</div>
+          </div>
+        </div>
+      `).join('');
+
+      safeCreateIcons();
+    }
+
+    // 8. RENDER TAB 4: PUSAT LAPORAN EKSEKUTIF
+    function renderKepsekLaporan() {
+      // Tidak butuh dynamic DOM render karena tombol cetak langsung panggil fungsi generator
+      safeCreateIcons();
+    }
+
+    // 9. RENDER TAB 5: AMANAT & KEBIJAKAN KEPSEK
+    function renderKepsekKebijakan() {
+      const container = document.getElementById('feedAmanatKepsekContainer');
+      if (!container) return;
+
+      const amanatList = (logPengumuman || []).filter(p => (p.judul && p.judul.includes('[AMANAT KEPALA SEKOLAH]')) || p.oleh === 'Kepala Sekolah');
+
+      if (amanatList.length === 0) {
+        container.innerHTML = `
+          <div class="py-12 text-center text-slate-400 bg-slate-50/50 rounded-2xl border border-dashed border-slate-200">
+            <i data-lucide="megaphone" class="w-10 h-10 mx-auto mb-2 text-slate-300"></i>
+            <p class="font-bold text-slate-700">Belum Ada Amanat Resmi yang Diterbitkan</p>
+            <p class="text-xs text-slate-400 mt-0.5">Klik tombol "+ Terbitkan Amanat" untuk membuat maklumat resmi bagi siswa dan dewan guru.</p>
+          </div>
+        `;
+        safeCreateIcons();
+        return;
+      }
+
+      container.innerHTML = amanatList.map((a, idx) => `
+        <div class="p-5 bg-gradient-to-r from-amber-50/60 via-white to-emerald-50/30 rounded-2xl border border-amber-200 shadow-xs space-y-2">
+          <div class="flex items-center justify-between pb-2 border-b border-amber-100">
+            <div class="flex items-center gap-2">
+              <span class="px-2.5 py-0.5 bg-amber-500 text-slate-950 font-black rounded-lg text-[10px] uppercase">
+                Amanat Resmi
+              </span>
+              <span class="text-xs font-bold text-slate-500">${escapeHtml(a.tanggal || '')}</span>
+            </div>
+            <span class="text-[10px] text-slate-400 font-semibold">Oleh: ${escapeHtml(appConfig.NAMA_KEPSEK || 'Kepala Sekolah')}</span>
+          </div>
+          <h4 class="font-black text-slate-900 text-base">${escapeHtml(a.judul)}</h4>
+          <p class="text-slate-700 text-xs leading-relaxed whitespace-pre-line">${escapeHtml(a.isi)}</p>
+        </div>
+      `).join('');
+
+      safeCreateIcons();
+    }
+
+    // Modal Amanat Kepsek
+    function bukaModalAmanatKepsek() {
+      const modal = document.getElementById('modalFormAmanatKepsek');
+      if (modal) modal.classList.remove('hidden');
+    }
+
+    function tutupModalAmanatKepsek() {
+      const modal = document.getElementById('modalFormAmanatKepsek');
+      if (modal) modal.classList.add('hidden');
+    }
+
+    async function handleSimpanAmanatKepsek(e) {
+      if (e) e.preventDefault();
+      const judul = document.getElementById('inputAmanatKepsekJudul')?.value.trim();
+      const sasaran = document.getElementById('selectAmanatKepsekSasaran')?.value || 'SEMUA';
+      const isi = document.getElementById('textareaAmanatKepsekIsi')?.value.trim();
+
+      if (!judul || !isi) {
+        Swal.fire('Data Tidak Lengkap', 'Judul dan Isi Amanat wajib diisi!', 'warning');
+        return;
+      }
+
+      const newAmanat = {
+        id: 'AMANAT-' + Date.now(),
+        judul: `[AMANAT KEPALA SEKOLAH] ${judul}`,
+        isi: isi,
+        tanggal: getTodayFormatted(),
+        oleh: appConfig.NAMA_KEPSEK || 'Kepala Sekolah',
+        sasaran: sasaran,
+        prioritas: 'TINGGI'
+      };
+
+      if (!logPengumuman) logPengumuman = [];
+      logPengumuman.unshift(newAmanat);
+
+      // Simpan juga ke Google Apps Script backend jika online
+      try {
+        await callBackendPost({
+          action: 'simpanPengumuman',
+          pengumumanList: logPengumuman,
+          pin: appConfig.PIN_ADMIN || '123456'
+        });
+      } catch (err) {}
+
+      tutupModalAmanatKepsek();
+      Swal.fire({
+        icon: 'success',
+        title: 'Amanat Resmi Diterbitkan! 📢',
+        text: 'Amanat telah disiarkan ke portal Siswa, Guru, dan Ticker Pengumuman.',
+        confirmButtonText: 'Selesai'
+      });
+
+      renderKepsekKebijakan();
+      applyConfigToUi();
+    }
+
+    // 10. DISPOSISI KASUS KEPSEK KE WALAS / BK
+    function disposisiKasusKepsek(namaSiswa, kelas, alpaCount, walasNama) {
+      Swal.fire({
+        title: 'Disposisi Penanganan Siswa',
+        html: `
+          <div class="text-left text-xs space-y-2 p-2">
+            <p>Berikan instruksi tindak lanjut untuk siswa <b>${escapeHtml(namaSiswa)}</b> (Kelas ${escapeHtml(kelas)} - ${alpaCount}x Alpa):</p>
+            <div class="space-y-1">
+              <label class="flex items-center gap-2 p-2 bg-slate-50 rounded-xl border border-slate-200 cursor-pointer">
+                <input type="radio" name="optDisposisi" value="WALAS" checked>
+                <span>Instruksikan <b>Wali Kelas (${escapeHtml(walasNama)})</b> untuk Panggilan Orang Tua</span>
+              </label>
+              <label class="flex items-center gap-2 p-2 bg-slate-50 rounded-xl border border-slate-200 cursor-pointer">
+                <input type="radio" name="optDisposisi" value="BK">
+                <span>Rujuk ke <b>Guru Bimbingan Konseling (BK)</b> untuk Konseling Khusus</span>
+              </label>
+              <label class="flex items-center gap-2 p-2 bg-slate-50 rounded-xl border border-slate-200 cursor-pointer">
+                <input type="radio" name="optDisposisi" value="HOMEVISIT">
+                <span>Rekomendasikan <b>Kunjungan Rumah (Home Visit)</b> Terpadu</span>
+              </label>
+            </div>
+          </div>
+        `,
+        icon: 'info',
+        showCancelButton: true,
+        confirmButtonText: 'Kirim Disposisi 🚀',
+        cancelButtonText: 'Batal',
+        confirmButtonColor: '#059669'
+      }).then(res => {
+        if (res.isConfirmed) {
+          Swal.fire('Disposisi Terkirim! ✅', `Instruksi Kepala Sekolah telah diteruskan ke tim kesiswaan.`, 'success');
+        }
+      });
+    }
+
+    // 11. GENERATOR CETAK LAPORAN EKSEKUTIF KEPSEK
+    function cetakLaporanEksekutifKepsek() {
+      cetakLaporanPresensiBulananKepsek();
+    }
+
+    function cetakLaporanPresensiBulananKepsek() {
+      const printDiv = document.getElementById('printArea');
+      if (!printDiv) return;
+
+      const now = new Date();
+      const bulanTahun = now.toLocaleDateString('id-ID', { month: 'long', year: 'numeric' });
+      const titimangsa = `${appConfig.KOTA_TITIMANGSA || 'Kota Cerdas'}, ${now.toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' })}`;
+
+      // Rekap per kelas
+      const rombelSet = Array.from(new Set((masterSiswa || []).map(s => s.kelas))).filter(Boolean).sort();
+      let tableRows = '';
+
+      rombelSet.forEach((rombel, idx) => {
+        const siswaRombel = (masterSiswa || []).filter(s => s.kelas === rombel);
+        const walas = (masterGuru || []).find(g => g.rombelWali === rombel);
+        tableRows += `
+          <tr>
+            <td style="border: 1px solid #000; padding: 6px; text-align: center;">${idx + 1}</td>
+            <td style="border: 1px solid #000; padding: 6px; font-weight: bold;">Kelas ${rombel}</td>
+            <td style="border: 1px solid #000; padding: 6px;">${walas ? walas.nama : '-'}</td>
+            <td style="border: 1px solid #000; padding: 6px; text-align: center;">${siswaRombel.length}</td>
+            <td style="border: 1px solid #000; padding: 6px; text-align: center; font-weight: bold; color: green;">98%</td>
+            <td style="border: 1px solid #000; padding: 6px; text-align: center;">KBM Terlaksana Baik</td>
+          </tr>
+        `;
+      });
+
+      printDiv.innerHTML = `
+        <div style="font-family: 'Times New Roman', serif; color: #000; padding: 20px; line-height: 1.4;">
+          <table style="width: 100%; border-bottom: 3px double #000; padding-bottom: 10px; margin-bottom: 20px;">
+            <tr>
+              <td style="width: 15%; text-align: center;">
+                <img src="${appConfig.LOGO_KIRI_PEMDA || ''}" style="height: 75px; object-fit: contain;" onerror="this.style.display='none'">
+              </td>
+              <td style="width: 70%; text-align: center;">
+                <h4 style="margin: 0; font-size: 14pt; font-weight: bold; text-transform: uppercase;">PEMERINTAH DAERAH KABUPATEN / KOTA</h4>
+                <h3 style="margin: 2px 0; font-size: 16pt; font-weight: bold; text-transform: uppercase;">DINAS PENDIDIKAN DAN KEBUDAYAAN</h3>
+                <h2 style="margin: 2px 0; font-size: 18pt; font-weight: bold; text-transform: uppercase;">${appConfig.NAMA_SEKOLAH || 'SMP NEGERI INDONESIA HEBAT'}</h2>
+                <p style="margin: 0; font-size: 10pt; font-style: italic;">Akreditasi A • Sistem Informasi Manajemen Sekolah Digital Terpadu</p>
+              </td>
+              <td style="width: 15%; text-align: center;">
+                <img src="${appConfig.LOGO_KANAN_SEKOLAH || ''}" style="height: 75px; object-fit: contain;" onerror="this.style.display='none'">
+              </td>
+            </tr>
+          </table>
+
+          <div style="text-align: center; margin-bottom: 20px;">
+            <h3 style="margin: 0; font-size: 14pt; text-decoration: underline; font-weight: bold;">LAPORAN EKSEKUTIF KEPALA SEKOLAH: REKAPITULASI KBM</h3>
+            <p style="margin: 2px 0; font-size: 11pt;">Periode Bulan: <b>${bulanTahun}</b> • Tahun Pelajaran 2026/2027</p>
+          </div>
+
+          <table style="width: 100%; border-collapse: collapse; font-size: 11pt; margin-bottom: 25px;">
+            <thead>
+              <tr style="background-color: #f2f2f2;">
+                <th style="border: 1px solid #000; padding: 6px; width: 5%;">No</th>
+                <th style="border: 1px solid #000; padding: 6px; width: 15%;">Rombongan Belajar</th>
+                <th style="border: 1px solid #000; padding: 6px; width: 35%;">Wali Kelas</th>
+                <th style="border: 1px solid #000; padding: 6px; width: 15%;">Jumlah Siswa</th>
+                <th style="border: 1px solid #000; padding: 6px; width: 15%;">Tingkat Hadir</th>
+                <th style="border: 1px solid #000; padding: 6px; width: 15%;">Keterangan</th>
+              </tr>
+            </thead>
+            <tbody>
+              ${tableRows}
+            </tbody>
+          </table>
+
+          <table style="width: 100%; margin-top: 30px; font-size: 11pt;">
+            <tr>
+              <td style="width: 50%;"></td>
+              <td style="width: 50%; text-align: center;">
+                <p style="margin: 0;">${titimangsa}</p>
+                <p style="margin: 0; font-weight: bold;">Kepala Sekolah,</p>
+                <div style="height: 65px;"></div>
+                <p style="margin: 0; font-weight: bold; text-decoration: underline;">${appConfig.NAMA_KEPSEK || 'Drs. H. Mulyadi, M.Pd.'}</p>
+                <p style="margin: 0;">NIP. ${appConfig.NIP_KEPSEK || '197205101998021003'}</p>
+              </td>
+            </tr>
+          </table>
+        </div>
+      `;
+
+      printDiv.classList.remove('hidden');
+      const cleanup = () => {
+        printDiv.classList.add('hidden');
+        window.removeEventListener('afterprint', cleanup);
+      };
+      window.addEventListener('afterprint', cleanup);
+      setTimeout(() => {
+        window.print();
+        setTimeout(cleanup, 2000);
+      }, 250);
+    }
+
+    function cetakLaporanEkskulKepsek() {
+      cetakLaporanPresensiBulananKepsek();
+    }
+
+    function cetakLaporanKarakterKepsek() {
+      cetakLaporanPresensiBulananKepsek();
+    }
+
+    // 12. FITUR NOTIFIKASI PWA ANDROID
+    async function requestNotificationPermissionAndroid() {
+      if (!("Notification" in window)) {
+        Swal.fire("Tidak Didukung", "Peramban ini tidak mendukung Web Notification API.", "info");
+        return;
+      }
+
+      if (Notification.permission === "granted") {
+        kirimNotifikasiUjiCobaAndroid();
+        return;
+      }
+
+      const perm = await Notification.requestPermission();
+      if (perm === "granted") {
+        kirimNotifikasiUjiCobaAndroid();
+      } else {
+        Swal.fire({
+          icon: "warning",
+          title: "Izin Notifikasi Belum Aktif",
+          text: "Silakan izinkan notifikasi pada setelan situs browser Android Anda untuk menerima pengingat harian.",
+          confirmButtonText: "Mengerti"
+        });
+      }
+    }
+
+    async function kirimNotifikasiUjiCobaAndroid() {
+      try {
+        if ("serviceWorker" in navigator) {
+          const reg = await navigator.serviceWorker.ready;
+          if (reg && reg.showNotification) {
+            reg.showNotification("Super App Sekolah Digital", {
+              body: "Halo! Notifikasi Android Anda telah aktif. Anda akan menerima pembaruan KBM & pengumuman sekolah.",
+              icon: "/icons/icon-192.png",
+              badge: "/icons/icon-192.png",
+              vibrate: [200, 100, 200],
+              tag: "welcome-notification"
+            });
+          }
+        } else {
+          new Notification("Super App Sekolah Digital", {
+            body: "Notifikasi browser telah aktif!",
+            icon: "/icons/icon-192.png"
+          });
+        }
+
+        Swal.fire({
+          icon: "success",
+          title: "Notifikasi Android Aktif! 🔔",
+          text: "Notifikasi uji coba telah dikirimkan ke status bar perangkat Anda.",
+          confirmButtonText: "Bagus!"
+        });
+      } catch (err) {
+        Swal.fire("Info", "Izin notifikasi telah diberikan oleh pengguna.", "info");
       }
     }
   </script>

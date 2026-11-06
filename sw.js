@@ -129,3 +129,35 @@ self.addEventListener('notificationclick', (event) => {
     })
   );
 });
+
+// Listener Push Notification Background (PWA Android Web Push)
+self.addEventListener('push', (event) => {
+  let title = 'Super App Sekolah Terpadu';
+  let body = 'Ada pengumuman atau pengingat presensi baru dari sekolah.';
+  let icon = '/icons/icon-192.png';
+  let data = {};
+
+  if (event.data) {
+    try {
+      const payload = event.data.json();
+      if (payload.title) title = payload.title;
+      if (payload.body) body = payload.body;
+      if (payload.icon) icon = payload.icon;
+      if (payload.data) data = payload.data;
+    } catch (e) {
+      body = event.data.text();
+    }
+  }
+
+  const options = {
+    body: body,
+    icon: icon,
+    badge: '/icons/icon-192.png',
+    vibrate: [200, 100, 200],
+    data: data,
+    tag: 'sekolah-push-notification',
+    renotify: true
+  };
+
+  event.waitUntil(self.registration.showNotification(title, options));
+});
