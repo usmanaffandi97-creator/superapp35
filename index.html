@@ -2228,10 +2228,15 @@
 
       <!-- Navigasi Tab Panel Admin -->
       <div class="flex items-center gap-2 overflow-x-auto pb-2 custom-scrollbar">
-        <button onclick="switchTabAdmin('guruWali')" id="tabBtnAdmin_guruWali" class="tab-admin-btn px-5 py-2.5 bg-blue-700 text-white font-bold rounded-2xl text-xs whitespace-nowrap shadow-sm flex items-center gap-2">
+        <button onclick="switchTabAdmin('manajemenUser')" id="tabBtnAdmin_manajemenUser" class="tab-admin-btn px-5 py-2.5 bg-blue-700 text-white font-bold rounded-2xl text-xs whitespace-nowrap shadow-sm flex items-center gap-2 cursor-pointer">
+          <i data-lucide="user-cog" class="w-4 h-4"></i>
+          <span>Manajemen User & Naik Kelas</span>
+          <span id="badgeAdminTotalUserSemua" class="px-2 py-0.5 bg-blue-800 rounded-full text-[10px]">0 Akun</span>
+        </button>
+        <button onclick="switchTabAdmin('guruWali')" id="tabBtnAdmin_guruWali" class="tab-admin-btn px-5 py-2.5 bg-white text-slate-600 hover:bg-slate-100 font-semibold border border-slate-200 cursor-pointer rounded-2xl text-xs whitespace-nowrap shadow-sm flex items-center gap-2">
           <i data-lucide="users" class="w-4 h-4"></i>
           <span>Plotting Guru Wali (Siswa Binaan)</span>
-          <span id="badgeAdminTotalSiswaBinaan" class="px-2 py-0.5 bg-blue-800 rounded-full text-[10px]">0 Siswa</span>
+          <span id="badgeAdminTotalSiswaBinaan" class="px-2 py-0.5 bg-slate-100 text-slate-700 font-semibold rounded-full text-[10px]">0 Siswa</span>
         </button>
         <button onclick="switchTabAdmin('ekskul')" id="tabBtnAdmin_ekskul" class="tab-admin-btn px-5 py-2.5 bg-white text-slate-600 hover:bg-slate-100 font-semibold rounded-2xl text-xs whitespace-nowrap border border-slate-200 flex items-center gap-2">
           <i data-lucide="award" class="w-4 h-4"></i>
@@ -2257,7 +2262,397 @@
       </div>
 
       <!-- KONTEN TAB 1 ADMIN: PLOTTING GURU WALI (SISWA BINAAN) -->
-      <div id="tabContentAdmin_guruWali" class="tab-admin-content space-y-6">
+      <!-- KONTEN TAB UTAMA ADMIN: MANAJEMEN USER & KENAIKAN KELAS -->
+      <div id="tabContentAdmin_manajemenUser" class="tab-admin-content space-y-6">
+        <!-- Hero Card Manajemen User -->
+        <div class="bg-gradient-to-r from-slate-900 via-indigo-950 to-blue-900 rounded-3xl p-6 text-white shadow-md">
+          <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
+            <div>
+              <div class="inline-flex items-center gap-1.5 px-3 py-1 bg-white/20 backdrop-blur-md rounded-full text-xs font-bold mb-2">
+                <i data-lucide="user-cog" class="w-3.5 h-3.5 text-amber-300"></i>
+                <span>PUSAT KENDALI PENGGUNA & ROMBEL SEKOLAH</span>
+              </div>
+              <h3 class="text-xl sm:text-2xl font-black">Manajemen Pengguna & Kenaikan Kelas</h3>
+              <p class="text-xs sm:text-sm text-slate-300 mt-1 max-w-3xl leading-relaxed">
+                Kelola seluruh akun civitas sekolah: akun Siswa, Guru & Tenaga Kependidikan (PTK), reset PIN mandiri, plotting tugas tambahan, dan Wizard Kenaikan Kelas / Promosi Rombel Tahun Ajaran Baru.
+              </p>
+            </div>
+            <div class="flex flex-wrap items-center gap-2">
+              <button type="button" onclick="bukaModalFormSiswaAdmin()" class="px-3.5 py-2.5 bg-blue-600 hover:bg-blue-500 text-white font-bold rounded-xl text-xs transition flex items-center gap-1.5 shadow-md cursor-pointer">
+                <i data-lucide="user-plus" class="w-4 h-4"></i>
+                <span>+ Tambah Siswa</span>
+              </button>
+              <button type="button" onclick="bukaModalFormGuruAdmin()" class="px-3.5 py-2.5 bg-indigo-600 hover:bg-indigo-500 text-white font-bold rounded-xl text-xs transition flex items-center gap-1.5 shadow-md cursor-pointer">
+                <i data-lucide="user-check" class="w-4 h-4"></i>
+                <span>+ Tambah Guru</span>
+              </button>
+              <button type="button" onclick="switchSubTabUser('naikKelas')" class="px-4 py-2.5 bg-amber-400 hover:bg-amber-300 text-slate-950 font-black rounded-xl text-xs transition flex items-center gap-1.5 shadow-md cursor-pointer">
+                <i data-lucide="trending-up" class="w-4 h-4"></i>
+                <span>🚀 Wizard Naik Kelas</span>
+              </button>
+              <button type="button" onclick="eksporCsvDataPengguna()" class="px-3.5 py-2.5 bg-emerald-600 hover:bg-emerald-500 text-white font-bold rounded-xl text-xs transition flex items-center gap-1.5 shadow-xs cursor-pointer">
+                <i data-lucide="download" class="w-3.5 h-3.5"></i>
+                <span>Ekspor CSV</span>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- 4 Statistik Ringkasan Pengguna -->
+        <div class="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
+          <div class="p-4 bg-white rounded-2xl border border-slate-200 shadow-xs flex items-center gap-3">
+            <div class="w-10 h-10 rounded-xl bg-blue-50 text-blue-700 flex items-center justify-center font-bold flex-shrink-0">
+              <i data-lucide="users" class="w-5 h-5"></i>
+            </div>
+            <div class="min-w-0">
+              <span class="text-[11px] font-bold text-slate-400 block truncate">Total Pengguna</span>
+              <span id="statUserTotalSemua" class="text-base sm:text-lg font-black text-slate-800">0 Akun</span>
+            </div>
+          </div>
+          <div class="p-4 bg-white rounded-2xl border border-slate-200 shadow-xs flex items-center gap-3">
+            <div class="w-10 h-10 rounded-xl bg-indigo-50 text-indigo-700 flex items-center justify-center font-bold flex-shrink-0">
+              <i data-lucide="graduation-cap" class="w-5 h-5"></i>
+            </div>
+            <div class="min-w-0">
+              <span class="text-[11px] font-bold text-slate-400 block truncate">Siswa Terdaftar</span>
+              <span id="statUserTotalSiswa" class="text-base sm:text-lg font-black text-indigo-700">0 Siswa</span>
+            </div>
+          </div>
+          <div class="p-4 bg-white rounded-2xl border border-slate-200 shadow-xs flex items-center gap-3">
+            <div class="w-10 h-10 rounded-xl bg-purple-50 text-purple-700 flex items-center justify-center font-bold flex-shrink-0">
+              <i data-lucide="briefcase" class="w-5 h-5"></i>
+            </div>
+            <div class="min-w-0">
+              <span class="text-[11px] font-bold text-slate-400 block truncate">Pendidik & Staf (PTK)</span>
+              <span id="statUserTotalGuru" class="text-base sm:text-lg font-black text-purple-700">0 Guru</span>
+            </div>
+          </div>
+          <div class="p-4 bg-white rounded-2xl border border-slate-200 shadow-xs flex items-center gap-3">
+            <div class="w-10 h-10 rounded-xl bg-amber-50 text-amber-700 flex items-center justify-center font-bold flex-shrink-0">
+              <i data-lucide="trending-up" class="w-5 h-5"></i>
+            </div>
+            <div class="min-w-0">
+              <span class="text-[11px] font-bold text-slate-400 block truncate">Siswa Siap Promosi</span>
+              <span id="statUserSiapPromosi" class="text-base sm:text-lg font-black text-amber-700">0 Siswa</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Sub-Navigasi Tab Role & Naik Kelas -->
+        <div class="flex items-center gap-2 border-b border-slate-200 pb-3 flex-wrap">
+          <button type="button" id="btnSubTabUser_siswa" onclick="switchSubTabUser('siswa')" class="px-4 py-2.5 rounded-xl text-xs font-black transition flex items-center gap-2 bg-blue-700 text-white shadow-xs cursor-pointer">
+            <i data-lucide="graduation-cap" class="w-4 h-4"></i>
+            <span>Akun Siswa (Peserta Didik)</span>
+            <span id="badgeSubTabSiswaCount" class="px-2 py-0.5 rounded-full text-[10px] bg-white/20 text-white font-mono">0</span>
+          </button>
+          <button type="button" id="btnSubTabUser_guru" onclick="switchSubTabUser('guru')" class="px-4 py-2.5 rounded-xl text-xs font-bold transition flex items-center gap-2 bg-slate-100 hover:bg-slate-200 text-slate-700 cursor-pointer">
+            <i data-lucide="briefcase" class="w-4 h-4 text-indigo-600"></i>
+            <span>Akun Guru & Tenaga Kependidikan (PTK)</span>
+            <span id="badgeSubTabGuruCount" class="px-2 py-0.5 rounded-full text-[10px] bg-slate-200 text-slate-700 font-mono">0</span>
+          </button>
+          <button type="button" id="btnSubTabUser_naikKelas" onclick="switchSubTabUser('naikKelas')" class="px-4 py-2.5 rounded-xl text-xs font-bold transition flex items-center gap-2 bg-slate-100 hover:bg-slate-200 text-slate-700 cursor-pointer">
+            <i data-lucide="trending-up" class="w-4 h-4 text-amber-600"></i>
+            <span>🚀 Kenaikan Kelas & Kelulusan (Tahun Ajaran Baru)</span>
+            <span class="px-2 py-0.5 rounded-full text-[10px] bg-amber-500 text-slate-950 font-black uppercase">Fitur Baru</span>
+          </button>
+          <button type="button" id="btnSubTabUser_admin" onclick="switchSubTabUser('admin')" class="px-4 py-2.5 rounded-xl text-xs font-bold transition flex items-center gap-2 bg-slate-100 hover:bg-slate-200 text-slate-700 cursor-pointer">
+            <i data-lucide="shield-check" class="w-4 h-4 text-emerald-600"></i>
+            <span>Akun Administrator & Keamanan</span>
+          </button>
+        </div>
+
+        <!-- SUB-VIEW 1: MANAJEMEN AKUN SISWA -->
+        <div id="subViewUser_siswa" class="space-y-4">
+          <!-- Filter & Pencarian Siswa -->
+          <div class="bg-white p-4 sm:p-5 rounded-2xl border border-slate-200 shadow-xs flex flex-col md:flex-row items-stretch md:items-center justify-between gap-3">
+            <div class="relative flex-1">
+              <i data-lucide="search" class="w-4 h-4 text-slate-400 absolute left-3.5 top-3"></i>
+              <input type="text" id="inputSearchUserSiswa" oninput="renderTableUserSiswa()" placeholder="Cari nama siswa, NISN, atau NIS..." class="w-full pl-9 pr-4 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs focus:outline-none focus:border-blue-500 focus:bg-white transition">
+            </div>
+            <div class="flex items-center gap-2 flex-wrap sm:flex-nowrap">
+              <select id="filterUserSiswaKelas" onchange="renderTableUserSiswa()" class="px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs font-bold text-slate-700 focus:outline-none focus:border-blue-500 cursor-pointer">
+                <option value="">Semua Kelas</option>
+              </select>
+              <select id="filterUserSiswaGender" onchange="renderTableUserSiswa()" class="px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs font-semibold text-slate-700 focus:outline-none focus:border-blue-500 cursor-pointer">
+                <option value="">Semua Gender</option>
+                <option value="L">Laki-laki (L)</option>
+                <option value="P">Perempuan (P)</option>
+              </select>
+              <button type="button" onclick="bukaModalFormSiswaAdmin()" class="px-3.5 py-2 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-xl text-xs transition flex items-center gap-1.5 shadow-xs cursor-pointer flex-shrink-0">
+                <i data-lucide="user-plus" class="w-3.5 h-3.5"></i>
+                <span>+ Siswa</span>
+              </button>
+              <button type="button" onclick="bukaModalImportSiswaAdmin()" class="px-3.5 py-2 bg-indigo-50 hover:bg-indigo-100 text-indigo-700 border border-indigo-200 font-bold rounded-xl text-xs transition flex items-center gap-1.5 cursor-pointer flex-shrink-0">
+                <i data-lucide="upload" class="w-3.5 h-3.5"></i>
+                <span>Import CSV</span>
+              </button>
+              <button type="button" onclick="eksporCsvDataSiswa()" class="px-3 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold rounded-xl text-xs transition flex items-center gap-1 cursor-pointer flex-shrink-0" title="Unduh CSV Siswa">
+                <i data-lucide="download" class="w-3.5 h-3.5"></i>
+                <span>Unduh CSV</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- Tabel Siswa -->
+          <div class="bg-white rounded-3xl border border-slate-200 shadow-xs overflow-hidden">
+            <div class="overflow-x-auto">
+              <table class="w-full text-left text-xs">
+                <thead class="bg-slate-50 text-slate-600 font-bold border-b border-slate-200">
+                  <tr>
+                    <th class="py-3 px-3 text-center w-12">No</th>
+                    <th class="py-3 px-3">NISN & NIS</th>
+                    <th class="py-3 px-3">Nama Lengkap Siswa</th>
+                    <th class="py-3 px-3 text-center">Kelas</th>
+                    <th class="py-3 px-3">Guru Wali Pembina</th>
+                    <th class="py-3 px-3">No. HP / WA Ortu</th>
+                    <th class="py-3 px-3 text-center w-36">Aksi Pengguna</th>
+                  </tr>
+                </thead>
+                <tbody id="tableUserSiswaBody" class="divide-y divide-slate-100 font-medium">
+                  <!-- Diisi dinamis oleh JS -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <!-- SUB-VIEW 2: MANAJEMEN AKUN GURU & PTK -->
+        <div id="subViewUser_guru" class="hidden space-y-4">
+          <!-- Filter & Pencarian Guru -->
+          <div class="bg-white p-4 sm:p-5 rounded-2xl border border-slate-200 shadow-xs flex flex-col md:flex-row items-stretch md:items-center justify-between gap-3">
+            <div class="relative flex-1">
+              <i data-lucide="search" class="w-4 h-4 text-slate-400 absolute left-3.5 top-3"></i>
+              <input type="text" id="inputSearchUserGuru" oninput="renderTableUserGuru()" placeholder="Cari nama guru, NIP, atau mata pelajaran..." class="w-full pl-9 pr-4 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs focus:outline-none focus:border-indigo-500 focus:bg-white transition">
+            </div>
+            <div class="flex items-center gap-2 flex-wrap sm:flex-nowrap">
+              <select id="filterUserGuruPeran" onchange="renderTableUserGuru()" class="px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs font-bold text-slate-700 focus:outline-none focus:border-indigo-500 cursor-pointer">
+                <option value="">Semua Peran</option>
+                <option value="GURU_WALI">Wali Kelas (Mentor Karakter)</option>
+                <option value="PELATIH_EKSKUL">Pelatih / Pembina Ekskul</option>
+                <option value="GURU_MAPEL">Guru Mata Pelajaran</option>
+              </select>
+              <button type="button" onclick="bukaModalFormGuruAdmin()" class="px-3.5 py-2 bg-indigo-600 hover:bg-indigo-700 text-white font-bold rounded-xl text-xs transition flex items-center gap-1.5 shadow-xs cursor-pointer flex-shrink-0">
+                <i data-lucide="user-plus" class="w-3.5 h-3.5"></i>
+                <span>+ Tambah Guru / PTK</span>
+              </button>
+              <button type="button" onclick="eksporCsvDataGuru()" class="px-3 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold rounded-xl text-xs transition flex items-center gap-1 cursor-pointer flex-shrink-0" title="Unduh CSV Guru">
+                <i data-lucide="download" class="w-3.5 h-3.5"></i>
+                <span>Unduh CSV</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- Tabel Guru -->
+          <div class="bg-white rounded-3xl border border-slate-200 shadow-xs overflow-hidden">
+            <div class="overflow-x-auto">
+              <table class="w-full text-left text-xs">
+                <thead class="bg-slate-50 text-slate-600 font-bold border-b border-slate-200">
+                  <tr>
+                    <th class="py-3 px-3 text-center w-12">No</th>
+                    <th class="py-3 px-3">NIP / ID Guru</th>
+                    <th class="py-3 px-3">Nama Lengkap & Gelar</th>
+                    <th class="py-3 px-3">Peran / Jabatan</th>
+                    <th class="py-3 px-3">Tugas Tambahan</th>
+                    <th class="py-3 px-3">Mata Pelajaran</th>
+                    <th class="py-3 px-3">No. HP / WhatsApp</th>
+                    <th class="py-3 px-3 text-center w-36">Aksi Pengguna</th>
+                  </tr>
+                </thead>
+                <tbody id="tableUserGuruBody" class="divide-y divide-slate-100 font-medium">
+                  <!-- Diisi dinamis oleh JS -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <!-- SUB-VIEW 3: FITUR KENAIKAN KELAS & KELULUSAN (PROMOSI TAHUN AJARAN BARU) -->
+        <div id="subViewUser_naikKelas" class="hidden space-y-6">
+          <!-- Banner Edukasi Kenaikan Kelas -->
+          <div class="p-5 bg-gradient-to-r from-amber-500/10 via-orange-500/10 to-indigo-500/10 border border-amber-300 rounded-3xl space-y-3">
+            <div class="flex items-start gap-3.5">
+              <div class="w-10 h-10 rounded-2xl bg-amber-500 text-slate-950 flex items-center justify-center flex-shrink-0 shadow-sm mt-0.5">
+                <i data-lucide="trending-up" class="w-5 h-5"></i>
+              </div>
+              <div class="text-xs text-slate-700 space-y-1.5 flex-1">
+                <div class="flex items-center gap-2 flex-wrap">
+                  <h4 class="font-black text-sm text-slate-900">Wizard Kenaikan Kelas & Kelulusan (Tahun Ajaran Baru)</h4>
+                  <span class="px-2.5 py-0.5 bg-amber-400 text-slate-950 rounded-full text-[10px] font-black uppercase">Promosi Siswa Otomatis</span>
+                </div>
+                <p class="text-slate-600 leading-relaxed">
+                  Fitur ini memperbarui tingkat kelas siswa secara terstruktur saat pergantian tahun ajaran:
+                  <b>Kelas 7 &rarr; Kelas 8</b>, <b>Kelas 8 &rarr; Kelas 9</b>, dan <b>Kelas 9 &rarr; Dinyatakan Lulus (Alumni)</b>.
+                  Tersedia 2 metode: <b>Promosi Otomatis Seluruh Sekolah</b> (1-klik cepat) atau <b>Promosi Selektif per Rombel</b> (bisa menandai siswa yang tinggal kelas).
+                </p>
+                <div class="p-2.5 bg-white/90 rounded-xl border border-amber-200 text-[11px] text-amber-900 flex items-center gap-2">
+                  <i data-lucide="shield-check" class="w-4 h-4 text-emerald-600 flex-shrink-0"></i>
+                  <span><b>Zero Data Loss Guarantee:</b> Sistem akan mengunduh cadangan (backup) file CSV seluruh data siswa sebelum eksekusi promosi dijalankan.</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Selector Mode Kenaikan Kelas -->
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <!-- MODE A: PROMOSI OTOMATIS SELURUH SEKOLAH -->
+            <div class="bg-white p-5 rounded-3xl border border-slate-200 shadow-xs space-y-4 flex flex-col justify-between">
+              <div class="space-y-3">
+                <div class="flex items-center gap-2">
+                  <span class="w-6 h-6 rounded-full bg-blue-600 text-white font-black text-xs flex items-center justify-center">A</span>
+                  <h4 class="font-extrabold text-sm text-slate-900">Promosi Otomatis Seluruh Sekolah (1-Klik Cepat)</h4>
+                </div>
+                <p class="text-xs text-slate-500 leading-relaxed">
+                  Semua rombel dipromosikan otomatis ke tingkat berikutnya dengan nama paralel yang sama (misal: 7-A &rarr; 8-A, 8-A &rarr; 9-A), dan seluruh siswa kelas 9 dialihkan ke status Lulus (Alumni).
+                </p>
+
+                <!-- Simulasi Angka Siswa -->
+                <div class="grid grid-cols-3 gap-2 text-center text-xs">
+                  <div class="p-2.5 bg-blue-50 border border-blue-200 rounded-xl">
+                    <span class="text-[10px] text-blue-600 font-bold block uppercase">Kelas 7 &rarr; 8</span>
+                    <span id="statPromosiKls7" class="text-base font-black text-blue-800">0 Siswa</span>
+                  </div>
+                  <div class="p-2.5 bg-indigo-50 border border-indigo-200 rounded-xl">
+                    <span class="text-[10px] text-indigo-600 font-bold block uppercase">Kelas 8 &rarr; 9</span>
+                    <span id="statPromosiKls8" class="text-base font-black text-indigo-800">0 Siswa</span>
+                  </div>
+                  <div class="p-2.5 bg-emerald-50 border border-emerald-200 rounded-xl">
+                    <span class="text-[10px] text-emerald-600 font-bold block uppercase">Kelas 9 &rarr; Lulus</span>
+                    <span id="statPromosiKls9" class="text-base font-black text-emerald-800">0 Siswa</span>
+                  </div>
+                </div>
+
+                <div class="p-3 bg-slate-50 border border-slate-200 rounded-xl text-[11px] text-slate-600 space-y-1">
+                  <label class="flex items-center gap-2 cursor-pointer font-bold text-slate-800">
+                    <input type="checkbox" id="chkAutoResetEkskulNaikKelas" checked class="rounded text-blue-600">
+                    <span>Reset pendaftaran ekstra untuk tahun ajaran baru</span>
+                  </label>
+                  <p class="text-slate-400 pl-5 text-[10px]">Siswa yang naik kelas akan memilih kegiatan ekstra baru sesuai tingkatan.</p>
+                </div>
+              </div>
+
+              <button type="button" onclick="handleEksekusiNaikKelasOtomatis()" class="w-full py-3 bg-gradient-to-r from-blue-700 to-indigo-700 hover:from-blue-600 hover:to-indigo-600 text-white font-black rounded-xl text-xs shadow-md transition flex items-center justify-center gap-2 cursor-pointer">
+                <i data-lucide="zap" class="w-4 h-4"></i>
+                <span>Jalankan Promosi Otomatis Seluruh Sekolah 🚀</span>
+              </button>
+            </div>
+
+            <!-- MODE B: PROMOSI SELEKTIF PER ROMBEL (BISA TANDAI SISWA TINGGAL KELAS) -->
+            <div class="bg-white p-5 rounded-3xl border border-slate-200 shadow-xs space-y-4 flex flex-col justify-between">
+              <div class="space-y-3">
+                <div class="flex items-center gap-2">
+                  <span class="w-6 h-6 rounded-full bg-amber-500 text-slate-950 font-black text-xs flex items-center justify-center">B</span>
+                  <h4 class="font-extrabold text-sm text-slate-900">Promosi Selektif per Rombel (Custom / Siswa Tinggal)</h4>
+                </div>
+                <p class="text-xs text-slate-500 leading-relaxed">
+                  Pilih satu rombel kelas untuk melihat daftar siswanya. Anda dapat menandai jika ada siswa yang <b>Tinggal Kelas</b> sebelum menyimpan kenaikan kelas rombel tersebut.
+                </p>
+
+                <div class="grid grid-cols-2 gap-2">
+                  <div>
+                    <label class="block text-[10px] font-bold text-slate-600 uppercase mb-1">Rombel Asal</label>
+                    <select id="selectNaikKelasRombelAsal" onchange="updateNaikKelasRombelPreview()" class="modern-select w-full px-3 py-2 text-xs font-bold text-slate-800 bg-slate-50 border border-slate-200 rounded-xl cursor-pointer">
+                      <option value="">-- Pilih Rombel --</option>
+                    </select>
+                  </div>
+                  <div>
+                    <label class="block text-[10px] font-bold text-slate-600 uppercase mb-1">Rombel Tujuan</label>
+                    <input type="text" id="inputNaikKelasRombelTujuan" placeholder="Contoh: 8-A" class="w-full px-3 py-2 text-xs font-bold text-slate-800 bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:outline-none uppercase">
+                  </div>
+                </div>
+
+                <div class="p-3 bg-amber-50/60 border border-amber-200 rounded-xl text-[11px] text-amber-900">
+                  <span id="labelNaikKelasPreviewInfo">Pilih rombel asal di atas untuk memuat daftar siswa rombel.</span>
+                </div>
+              </div>
+
+              <button type="button" onclick="bukaModalSelektifNaikKelasRombel()" id="btnBukaModalSelektifNaik" disabled class="w-full py-3 bg-slate-200 text-slate-400 font-bold rounded-xl text-xs transition flex items-center justify-center gap-2 cursor-not-allowed">
+                <i data-lucide="list-checks" class="w-4 h-4"></i>
+                <span>Tinjau Siswa & Atur Kenaikan Rombel Ini</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- Tombol Cadangan Manual Data Siswa -->
+          <div class="p-4 bg-slate-50 rounded-2xl border border-slate-200 flex flex-col sm:flex-row items-center justify-between gap-3">
+            <div class="flex items-center gap-2.5">
+              <i data-lucide="archive" class="w-5 h-5 text-slate-500"></i>
+              <div>
+                <h5 class="font-bold text-xs text-slate-800">Cadangan Manual Database Siswa</h5>
+                <p class="text-[11px] text-slate-500">Unduh salinan arsip data seluruh siswa aktif saat ini sebelum melakukan perubahan besar.</p>
+              </div>
+            </div>
+            <button type="button" onclick="unduhBackupSiswaSebelumNaikKelas()" class="px-4 py-2 bg-white hover:bg-slate-100 text-slate-800 font-bold rounded-xl text-xs border border-slate-200 transition flex items-center gap-1.5 cursor-pointer shadow-xs flex-shrink-0">
+              <i data-lucide="download" class="w-3.5 h-3.5"></i>
+              <span>Unduh Backup CSV Sekarang</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- SUB-VIEW 4: AKUN SUPER ADMINISTRATOR & KEAMANAN -->
+        <div id="subViewUser_admin" class="hidden space-y-5">
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+            <!-- Profil Akun Super Admin -->
+            <div class="bg-white p-6 rounded-3xl border border-slate-200 shadow-xs space-y-4">
+              <div class="flex items-center gap-3 pb-3 border-b border-slate-100">
+                <div class="w-12 h-12 rounded-2xl bg-blue-100 text-blue-700 flex items-center justify-center font-black text-lg">
+                  SA
+                </div>
+                <div>
+                  <h4 class="font-extrabold text-base text-slate-900 leading-tight">Akun Super Administrator</h4>
+                  <span class="px-2 py-0.5 bg-amber-100 text-amber-800 rounded text-[10px] font-black uppercase">Hak Akses Penuh Sistem</span>
+                </div>
+              </div>
+
+              <div class="space-y-2.5 text-xs">
+                <div class="flex justify-between py-1.5 border-b border-slate-100">
+                  <span class="text-slate-400 font-medium">Username Default:</span>
+                  <span class="font-mono font-bold text-slate-800">admin</span>
+                </div>
+                <div class="flex justify-between py-1.5 border-b border-slate-100">
+                  <span class="text-slate-400 font-medium">Status PIN Admin:</span>
+                  <span class="font-bold text-emerald-600 flex items-center gap-1"><i data-lucide="check-circle-2" class="w-3 h-3"></i> Aktif & Terlindungi</span>
+                </div>
+                <div class="flex justify-between py-1.5 border-b border-slate-100">
+                  <span class="text-slate-400 font-medium">Kepala Sekolah:</span>
+                  <span id="userAdminKepsekName" class="font-bold text-slate-800">-</span>
+                </div>
+                <div class="flex justify-between py-1.5">
+                  <span class="text-slate-400 font-medium">Satuan Pendidikan:</span>
+                  <span id="userAdminSchoolName" class="font-bold text-slate-800">-</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Ganti PIN Administrator -->
+            <div class="bg-white p-6 rounded-3xl border border-slate-200 shadow-xs space-y-4">
+              <div class="flex items-center gap-2 pb-3 border-b border-slate-100">
+                <i data-lucide="key" class="w-5 h-5 text-indigo-600"></i>
+                <h4 class="font-extrabold text-base text-slate-900 leading-tight">Ubah PIN Keamanan Administrator</h4>
+              </div>
+
+              <form onsubmit="handleGantiPinAdmin(event)" class="space-y-3">
+                <div>
+                  <label class="block text-[11px] font-bold text-slate-700 uppercase mb-1">PIN Administrator Saat Ini</label>
+                  <input type="password" id="inputUserGantiPinLama" required placeholder="Masukkan PIN lama (default: 123456)" class="w-full px-3.5 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs font-mono font-bold focus:bg-white focus:outline-none focus:border-indigo-500">
+                </div>
+                <div>
+                  <label class="block text-[11px] font-bold text-slate-700 uppercase mb-1">PIN Baru (6 Digit)</label>
+                  <input type="password" id="inputUserGantiPinBaru" required maxlength="10" placeholder="Contoh: 889900" class="w-full px-3.5 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs font-mono font-bold focus:bg-white focus:outline-none focus:border-indigo-500">
+                </div>
+                <div>
+                  <label class="block text-[11px] font-bold text-slate-700 uppercase mb-1">Konfirmasi PIN Baru</label>
+                  <input type="password" id="inputUserGantiPinKonfirmasi" required maxlength="10" placeholder="Ulangi PIN baru" class="w-full px-3.5 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs font-mono font-bold focus:bg-white focus:outline-none focus:border-indigo-500">
+                </div>
+                <button type="submit" class="w-full py-2.5 bg-blue-700 hover:bg-blue-800 text-white font-bold rounded-xl text-xs transition flex items-center justify-center gap-1.5 shadow-sm cursor-pointer">
+                  <i data-lucide="check" class="w-4 h-4"></i>
+                  <span>Simpan PIN Baru</span>
+                </button>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div id="tabContentAdmin_guruWali" class="tab-admin-content hidden space-y-6">
         <!-- Hero Card Plotting -->
         <div class="bg-gradient-to-r from-blue-700 via-indigo-700 to-slate-900 rounded-3xl p-6 text-white shadow-md">
           <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
@@ -3723,6 +4118,302 @@
     </div>
   </div>
 
+  <!-- ========================================================================= -->
+  <!-- MODAL FORM SISWA ADMIN (TAMBAH / EDIT SISWA) -->
+  <!-- ========================================================================= -->
+  <div id="modalFormSiswaAdmin" class="fixed inset-0 z-50 bg-slate-950/60 backdrop-blur-xs hidden flex items-center justify-center p-3 sm:p-4">
+    <div class="bg-white rounded-3xl max-w-xl w-full p-6 sm:p-7 shadow-2xl border border-slate-200 max-h-[92vh] flex flex-col space-y-4 overflow-hidden">
+      <div class="flex items-center justify-between pb-3 border-b border-slate-100 flex-shrink-0">
+        <div class="flex items-center gap-3">
+          <div class="w-10 h-10 rounded-2xl bg-blue-50 text-blue-700 flex items-center justify-center flex-shrink-0 shadow-2xs">
+            <i data-lucide="graduation-cap" class="w-5 h-5"></i>
+          </div>
+          <div>
+            <h3 id="modalFormSiswaTitle" class="font-black text-base text-slate-900 leading-snug">Tambah Siswa Baru</h3>
+            <p id="modalFormSiswaSubtitle" class="text-xs text-slate-400">Isi identitas akun peserta didik sekolah</p>
+          </div>
+        </div>
+        <button type="button" onclick="tutupModalFormSiswaAdmin()" class="text-slate-400 hover:text-slate-600 p-2 rounded-xl hover:bg-slate-100 transition cursor-pointer">
+          <i data-lucide="x" class="w-5 h-5"></i>
+        </button>
+      </div>
+
+      <form id="formSiswaAdmin" onsubmit="handleSimpanSiswaAdmin(event)" class="overflow-y-auto custom-scrollbar flex-1 space-y-4 pr-1">
+        <input type="hidden" id="formSiswaMode" value="add">
+        <input type="hidden" id="formSiswaOriginalNisn" value="">
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          <div>
+            <label class="block text-xs font-bold text-slate-700 uppercase mb-1">NISN (10 Digit) <span class="text-rose-500">*</span></label>
+            <input type="text" id="formSiswaNisn" required maxlength="10" placeholder="Contoh: 0081234567" class="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs font-mono font-bold text-slate-800 focus:bg-white focus:outline-none focus:border-blue-500">
+          </div>
+          <div>
+            <label class="block text-xs font-bold text-slate-700 uppercase mb-1">NIS Sekolah</label>
+            <input type="text" id="formSiswaNis" placeholder="Contoh: 24250701" class="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs font-mono font-medium text-slate-800 focus:bg-white focus:outline-none focus:border-blue-500">
+          </div>
+        </div>
+
+        <div>
+          <label class="block text-xs font-bold text-slate-700 uppercase mb-1">Nama Lengkap Siswa <span class="text-rose-500">*</span></label>
+          <input type="text" id="formSiswaNama" required placeholder="Nama lengkap peserta didik..." class="w-full px-3.5 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs font-bold text-slate-900 focus:bg-white focus:outline-none focus:border-blue-500">
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+          <div>
+            <label class="block text-xs font-bold text-slate-700 uppercase mb-1">Kelas / Rombel <span class="text-rose-500">*</span></label>
+            <input type="text" id="formSiswaKelas" required placeholder="Contoh: 7-A, 8-B" class="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs font-bold text-slate-800 focus:bg-white focus:outline-none focus:border-blue-500 uppercase">
+          </div>
+          <div>
+            <label class="block text-xs font-bold text-slate-700 uppercase mb-1">Jenis Kelamin</label>
+            <select id="formSiswaGender" class="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs font-bold text-slate-800 cursor-pointer">
+              <option value="L">Laki-laki (L)</option>
+              <option value="P">Perempuan (P)</option>
+            </select>
+          </div>
+          <div>
+            <label class="block text-xs font-bold text-slate-700 uppercase mb-1">Tanggal Lahir</label>
+            <input type="date" id="formSiswaTglLahir" class="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs font-semibold text-slate-800 cursor-pointer">
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          <div>
+            <label class="block text-xs font-bold text-slate-700 uppercase mb-1">No. HP / WhatsApp Orang Tua</label>
+            <input type="text" id="formSiswaNoHpOrtu" placeholder="081234567890 (Untuk notifikasi)" class="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs font-medium text-slate-800 focus:bg-white focus:outline-none focus:border-blue-500">
+          </div>
+          <div>
+            <label class="block text-xs font-bold text-slate-700 uppercase mb-1">Guru Wali Pembina Karakter</label>
+            <select id="formSiswaGuruWali" class="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs font-semibold text-slate-800 cursor-pointer">
+              <option value="">-- Pilih Guru Wali --</option>
+            </select>
+          </div>
+        </div>
+
+        <div>
+          <label class="block text-xs font-bold text-slate-700 uppercase mb-1">PIN Siswa (Kredensial Login)</label>
+          <input type="password" id="formSiswaPin" maxlength="10" placeholder="Default: 4 digit terakhir NISN" class="w-full px-3.5 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs font-mono font-bold text-slate-800 focus:bg-white focus:outline-none focus:border-blue-500">
+          <p class="text-[11px] text-slate-400 mt-1">Kosongkan untuk menggunakan 4 digit terakhir NISN sebagai PIN login bawaan.</p>
+        </div>
+
+        <div class="flex items-center justify-end gap-2 pt-3 border-t border-slate-100 flex-shrink-0">
+          <button type="button" onclick="tutupModalFormSiswaAdmin()" class="px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold rounded-xl text-xs transition cursor-pointer">
+            Batal
+          </button>
+          <button type="submit" class="px-5 py-2 bg-blue-700 hover:bg-blue-800 text-white font-bold rounded-xl text-xs transition flex items-center gap-1.5 shadow-sm cursor-pointer">
+            <i data-lucide="check" class="w-4 h-4"></i>
+            <span>Simpan Data Siswa</span>
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- ========================================================================= -->
+  <!-- MODAL FORM GURU ADMIN (TAMBAH / EDIT GURU & PTK) -->
+  <!-- ========================================================================= -->
+  <div id="modalFormGuruAdmin" class="fixed inset-0 z-50 bg-slate-950/60 backdrop-blur-xs hidden flex items-center justify-center p-3 sm:p-4">
+    <div class="bg-white rounded-3xl max-w-xl w-full p-6 sm:p-7 shadow-2xl border border-slate-200 max-h-[92vh] flex flex-col space-y-4 overflow-hidden">
+      <div class="flex items-center justify-between pb-3 border-b border-slate-100 flex-shrink-0">
+        <div class="flex items-center gap-3">
+          <div class="w-10 h-10 rounded-2xl bg-indigo-50 text-indigo-700 flex items-center justify-center flex-shrink-0 shadow-2xs">
+            <i data-lucide="briefcase" class="w-5 h-5"></i>
+          </div>
+          <div>
+            <h3 id="modalFormGuruTitle" class="font-black text-base text-slate-900 leading-snug">Tambah Guru / PTK Baru</h3>
+            <p id="modalFormGuruSubtitle" class="text-xs text-slate-400">Isi data akun pendidik dan tenaga kependidikan</p>
+          </div>
+        </div>
+        <button type="button" onclick="tutupModalFormGuruAdmin()" class="text-slate-400 hover:text-slate-600 p-2 rounded-xl hover:bg-slate-100 transition cursor-pointer">
+          <i data-lucide="x" class="w-5 h-5"></i>
+        </button>
+      </div>
+
+      <form id="formGuruAdmin" onsubmit="handleSimpanGuruAdmin(event)" class="overflow-y-auto custom-scrollbar flex-1 space-y-4 pr-1">
+        <input type="hidden" id="formGuruMode" value="add">
+        <input type="hidden" id="formGuruOriginalNip" value="">
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          <div>
+            <label class="block text-xs font-bold text-slate-700 uppercase mb-1">NIP / ID Guru <span class="text-rose-500">*</span></label>
+            <input type="text" id="formGuruNip" required placeholder="Contoh: 19800512..." class="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs font-mono font-bold text-slate-800 focus:bg-white focus:outline-none focus:border-indigo-500">
+          </div>
+          <div>
+            <label class="block text-xs font-bold text-slate-700 uppercase mb-1">Peran Utama <span class="text-rose-500">*</span></label>
+            <select id="formGuruPeran" onchange="handlePeranGuruFormChange(this.value)" class="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs font-bold text-slate-800 cursor-pointer">
+              <option value="GURU_MAPEL">Guru Mata Pelajaran</option>
+              <option value="GURU_WALI">Wali Kelas (Mentor Karakter)</option>
+              <option value="PELATIH_EKSKUL">Pelatih / Pembina Ekstrakurikuler</option>
+            </select>
+          </div>
+        </div>
+
+        <div>
+          <label class="block text-xs font-bold text-slate-700 uppercase mb-1">Nama Lengkap & Gelar <span class="text-rose-500">*</span></label>
+          <input type="text" id="formGuruNama" required placeholder="Contoh: Dra. Hj. Siti Rahmawati, M.Pd." class="w-full px-3.5 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs font-bold text-slate-900 focus:bg-white focus:outline-none focus:border-indigo-500">
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          <div id="boxFormGuruRombelWali">
+            <label class="block text-xs font-bold text-slate-700 uppercase mb-1">Rombel Binaan (Jika Wali Kelas)</label>
+            <input type="text" id="formGuruRombelWali" placeholder="Contoh: 7-A, 8-B" class="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs font-bold text-slate-800 focus:bg-white focus:outline-none uppercase">
+          </div>
+          <div id="boxFormGuruCabangEkskul">
+            <label class="block text-xs font-bold text-slate-700 uppercase mb-1">Cabang Ekskul (Jika Pelatih)</label>
+            <select id="formGuruCabangEkskul" class="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs font-semibold text-slate-800 cursor-pointer">
+              <option value="">-- Bukan Pelatih Ekskul --</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          <div>
+            <label class="block text-xs font-bold text-slate-700 uppercase mb-1">Mata Pelajaran yang Diampu</label>
+            <input type="text" id="formGuruMapel" placeholder="Contoh: Matematika, IPA, PJOK" class="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs font-medium text-slate-800 focus:bg-white focus:outline-none">
+          </div>
+          <div>
+            <label class="block text-xs font-bold text-slate-700 uppercase mb-1">No. HP / WhatsApp</label>
+            <input type="text" id="formGuruNoHp" placeholder="081234567890" class="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs font-medium text-slate-800 focus:bg-white focus:outline-none">
+          </div>
+        </div>
+
+        <div>
+          <label class="block text-xs font-bold text-slate-700 uppercase mb-1">PIN Guru (Kredensial Login)</label>
+          <input type="password" id="formGuruPin" maxlength="10" placeholder="Default: 123456" class="w-full px-3.5 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs font-mono font-bold text-slate-800 focus:bg-white focus:outline-none">
+          <p class="text-[11px] text-slate-400 mt-1">Kosongkan untuk menggunakan PIN default sekolah (123456).</p>
+        </div>
+
+        <div class="flex items-center justify-end gap-2 pt-3 border-t border-slate-100 flex-shrink-0">
+          <button type="button" onclick="tutupModalFormGuruAdmin()" class="px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold rounded-xl text-xs transition cursor-pointer">
+            Batal
+          </button>
+          <button type="submit" class="px-5 py-2 bg-indigo-700 hover:bg-indigo-800 text-white font-bold rounded-xl text-xs transition flex items-center gap-1.5 shadow-sm cursor-pointer">
+            <i data-lucide="check" class="w-4 h-4"></i>
+            <span>Simpan Data Guru</span>
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- ========================================================================= -->
+  <!-- MODAL IMPORT SISWA MASSAL (CSV / PASTE TEKS) -->
+  <!-- ========================================================================= -->
+  <div id="modalImportSiswaAdmin" class="fixed inset-0 z-50 bg-slate-950/60 backdrop-blur-xs hidden flex items-center justify-center p-3 sm:p-4">
+    <div class="bg-white rounded-3xl max-w-2xl w-full p-6 sm:p-7 shadow-2xl border border-slate-200 max-h-[92vh] flex flex-col space-y-4 overflow-hidden">
+      <div class="flex items-center justify-between pb-3 border-b border-slate-100 flex-shrink-0">
+        <div class="flex items-center gap-3">
+          <div class="w-10 h-10 rounded-2xl bg-indigo-50 text-indigo-700 flex items-center justify-center flex-shrink-0 shadow-2xs">
+            <i data-lucide="upload" class="w-5 h-5"></i>
+          </div>
+          <div>
+            <h3 class="font-black text-base text-slate-900 leading-snug">Import Siswa Massal (CSV)</h3>
+            <p class="text-xs text-slate-400">Tambahkan banyak peserta didik sekaligus via file CSV atau paste teks</p>
+          </div>
+        </div>
+        <button type="button" onclick="tutupModalImportSiswaAdmin()" class="text-slate-400 hover:text-slate-600 p-2 rounded-xl hover:bg-slate-100 transition cursor-pointer">
+          <i data-lucide="x" class="w-5 h-5"></i>
+        </button>
+      </div>
+
+      <div class="overflow-y-auto custom-scrollbar flex-1 space-y-4 pr-1">
+        <div class="p-3 bg-blue-50 border border-blue-200 rounded-2xl text-[11px] text-blue-900 space-y-1">
+          <p class="font-bold">Format Kolom CSV (Pisahkan dengan koma atau tab):</p>
+          <code class="block bg-white p-2 rounded-xl border border-blue-200 font-mono text-[10.5px]">NISN,NIS,Nama_Lengkap,Kelas,Jenis_Kelamin,Tanggal_Lahir,No_HP_Ortu</code>
+          <p class="text-blue-700 mt-1">Contoh: <code>0081234567,24250701,Ahmad Pratama,7-A,L,2010-05-14,081234567890</code></p>
+        </div>
+
+        <div>
+          <label class="block text-xs font-bold text-slate-700 uppercase mb-1">Unggah File CSV / Excel CSV</label>
+          <input type="file" id="fileImportSiswaCsv" accept=".csv,.txt" onchange="handleFileImportSiswaChange(event)" class="w-full text-xs text-slate-500 file:mr-3 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-bold file:bg-indigo-50 file:text-indigo-700 hover:file:bg-indigo-100 cursor-pointer">
+        </div>
+
+        <div>
+          <label class="block text-xs font-bold text-slate-700 uppercase mb-1">Atau Tempel (Paste) Teks Baris Siswa Di Sini:</label>
+          <textarea id="textareaImportSiswa" rows="6" placeholder="0081234567,24250701,Ahmad Pratama,7-A,L,2010-05-14,081234567890&#10;0087654321,24250702,Siti Aisyah,7-A,P,2010-08-20,081298765432" class="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs font-mono focus:bg-white focus:outline-none"></textarea>
+        </div>
+      </div>
+
+      <div class="flex items-center justify-between gap-2 pt-3 border-t border-slate-100 flex-shrink-0">
+        <button type="button" onclick="unduhTemplateCsvSiswa()" class="px-3.5 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold rounded-xl text-xs transition flex items-center gap-1 cursor-pointer">
+          <i data-lucide="download" class="w-3.5 h-3.5"></i>
+          <span>Unduh Template CSV</span>
+        </button>
+        <div class="flex items-center gap-2">
+          <button type="button" onclick="tutupModalImportSiswaAdmin()" class="px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold rounded-xl text-xs transition cursor-pointer">
+            Batal
+          </button>
+          <button type="button" onclick="handleProsesImportSiswaMassal()" class="px-5 py-2 bg-indigo-700 hover:bg-indigo-800 text-white font-bold rounded-xl text-xs transition flex items-center gap-1.5 shadow-sm cursor-pointer">
+            <i data-lucide="check" class="w-4 h-4"></i>
+            <span>Proses Import Siswa 🚀</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========================================================================= -->
+  <!-- MODAL SELEKTIF KENAIKAN KELAS PER ROMBEL -->
+  <!-- ========================================================================= -->
+  <div id="modalSelektifNaikKelasRombel" class="fixed inset-0 z-50 bg-slate-950/60 backdrop-blur-xs hidden flex items-center justify-center p-3 sm:p-4">
+    <div class="bg-white rounded-3xl max-w-3xl w-full p-6 sm:p-7 shadow-2xl border border-slate-200 max-h-[92vh] flex flex-col space-y-4 overflow-hidden">
+      <div class="flex items-center justify-between pb-3 border-b border-slate-100 flex-shrink-0">
+        <div class="flex items-center gap-3">
+          <div class="w-10 h-10 rounded-2xl bg-amber-50 text-amber-700 flex items-center justify-center flex-shrink-0 shadow-2xs">
+            <i data-lucide="trending-up" class="w-5 h-5"></i>
+          </div>
+          <div>
+            <h3 id="modalSelektifNaikTitle" class="font-black text-base text-slate-900 leading-snug">Kenaikan Kelas Rombel</h3>
+            <p id="modalSelektifNaikSubtitle" class="text-xs text-slate-400">Atur status naik / tinggal kelas untuk setiap siswa rombel ini</p>
+          </div>
+        </div>
+        <button type="button" onclick="tutupModalSelektifNaikKelasRombel()" class="text-slate-400 hover:text-slate-600 p-2 rounded-xl hover:bg-slate-100 transition cursor-pointer">
+          <i data-lucide="x" class="w-5 h-5"></i>
+        </button>
+      </div>
+
+      <div class="overflow-y-auto custom-scrollbar flex-1 space-y-4 pr-1">
+        <div class="flex items-center justify-between p-3 bg-slate-50 border border-slate-200 rounded-2xl text-xs">
+          <div>
+            <span class="text-slate-400 font-bold uppercase text-[10px] block">Rombel Asal &rarr; Tujuan:</span>
+            <span id="labelSelektifRombelRoute" class="font-black text-sm text-slate-800">7-A &rarr; 8-A</span>
+          </div>
+          <div class="flex items-center gap-2">
+            <button type="button" onclick="setSemuaSiswaSelektifStatus('NAIK')" class="px-2.5 py-1 bg-emerald-50 hover:bg-emerald-100 text-emerald-700 rounded-lg font-bold text-[11px] border border-emerald-200">Set Semua NAIK</button>
+            <button type="button" onclick="setSemuaSiswaSelektifStatus('TINGGAL')" class="px-2.5 py-1 bg-rose-50 hover:bg-rose-100 text-rose-700 rounded-lg font-bold text-[11px] border border-rose-200">Set Semua TINGGAL</button>
+          </div>
+        </div>
+
+        <div class="border border-slate-200 rounded-2xl overflow-hidden">
+          <table class="w-full text-left text-xs">
+            <thead class="bg-slate-50 text-slate-600 font-bold border-b border-slate-200">
+              <tr>
+                <th class="py-2.5 px-3 w-10 text-center">No</th>
+                <th class="py-2.5 px-3">NISN</th>
+                <th class="py-2.5 px-3">Nama Siswa</th>
+                <th class="py-2.5 px-3">Keputusan Kenaikan Kelas</th>
+              </tr>
+            </thead>
+            <tbody id="tableSelektifNaikKelasBody" class="divide-y divide-slate-100 font-medium">
+              <!-- Diisi dinamis oleh JS -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="flex items-center justify-between gap-2 pt-3 border-t border-slate-100 flex-shrink-0">
+        <span class="text-[11px] text-slate-400">Data cadangan otomatis terunduh saat disimpan.</span>
+        <div class="flex items-center gap-2">
+          <button type="button" onclick="tutupModalSelektifNaikKelasRombel()" class="px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold rounded-xl text-xs transition cursor-pointer">
+            Batal
+          </button>
+          <button type="button" onclick="handleSimpanKenaikanKelasRombel()" class="px-5 py-2 bg-emerald-600 hover:bg-emerald-700 text-white font-bold rounded-xl text-xs transition flex items-center gap-1.5 shadow-sm cursor-pointer">
+            <i data-lucide="save" class="w-4 h-4"></i>
+            <span>Simpan Kenaikan Kelas Rombel Ini</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
   <!-- 1. BOTTOM NAV KHUSUS PORTAL SISWA -->
   <nav id="mobileBottomNavSiswa" class="fixed bottom-0 left-0 right-0 z-40 bg-white/95 backdrop-blur-md border-t border-slate-200/80 px-2 py-1 shadow-[0_-4px_20px_rgba(0,0,0,0.06)] hidden">
     <div class="flex items-center gap-1 overflow-x-auto no-scrollbar max-w-xl mx-auto py-0.5 justify-start sm:justify-around">
@@ -3814,7 +4505,11 @@
   <!-- 3. BOTTOM NAV KHUSUS PORTAL ADMIN -->
   <nav id="mobileBottomNavAdmin" class="fixed bottom-0 left-0 right-0 z-40 bg-white/95 backdrop-blur-md border-t border-slate-200/80 px-2 py-1 shadow-[0_-4px_20px_rgba(0,0,0,0.06)] hidden">
     <div class="flex items-center gap-1 overflow-x-auto no-scrollbar max-w-xl mx-auto py-0.5 justify-start sm:justify-around">
-      <button type="button" onclick="switchTabAdmin('guruWali')" id="mobileNavAdmin_guruWali" class="mobile-nav-btn flex flex-col items-center justify-center py-1 px-2.5 rounded-xl transition text-blue-700 font-bold min-w-[60px] flex-shrink-0">
+      <button type="button" onclick="switchTabAdmin('manajemenUser')" id="mobileNavAdmin_manajemenUser" class="mobile-nav-btn flex flex-col items-center justify-center py-1 px-2.5 rounded-xl transition text-blue-700 font-bold bg-blue-50/80 min-w-[60px] flex-shrink-0 cursor-pointer">
+        <i data-lucide="user-cog" class="w-4 h-4 mb-0.5"></i>
+        <span class="text-[10px] leading-tight">User/Naik</span>
+      </button>
+      <button type="button" onclick="switchTabAdmin('guruWali')" id="mobileNavAdmin_guruWali" class="mobile-nav-btn flex flex-col items-center justify-center py-1 px-2.5 rounded-xl transition text-slate-500 hover:text-blue-600 font-medium cursor-pointer min-w-[60px] flex-shrink-0">
         <i data-lucide="users" class="w-4 h-4 mb-0.5"></i>
         <span class="text-[10px] leading-tight">Plotting</span>
       </button>
@@ -10168,7 +10863,7 @@ ATURAN KETAT:
       document.getElementById('userRoleBadge').innerText = "Super Admin";
       document.getElementById('userAvatar').innerText = "A";
       applyConfigToUi();
-      switchTabAdmin('guruWali');
+      switchTabAdmin('manajemenUser');
     }
 
     function switchTabAdmin(tabName) {
@@ -10198,7 +10893,9 @@ ATURAN KETAT:
         activeMobAdmin.classList.add('text-blue-700', 'font-bold', 'bg-blue-50/80');
       }
 
-      if (tabName === 'guruWali') {
+      if (tabName === 'manajemenUser') {
+        renderManajemenUser();
+      } else if (tabName === 'guruWali') {
       } else if (tabName === 'ekskul') {
         renderAdminEkskul();
         renderAdminPlottingGuruWali();
@@ -14599,6 +15296,1244 @@ ATURAN KETAT:
         window.print();
         setTimeout(cleanup, 2000);
       }, 250);
+    }
+    // =========================================================================
+    // MODUL MANAJEMEN PENGGUNA LENGKAP & KENAIKAN KELAS (USER & ROLE MANAGEMENT)
+    // =========================================================================
+    let currentSubTabUser = 'siswa';
+    let currentSelektifRombelStudents = [];
+
+    function renderManajemenUser() {
+      const totalSiswa = masterSiswa ? masterSiswa.length : 0;
+      const totalGuru = masterGuru ? masterGuru.length : 0;
+      const totalSemua = totalSiswa + totalGuru + 1; // Termasuk 1 Super Admin
+
+      const kls7Count = (masterSiswa || []).filter(s => getTingkatKelas(s.kelas) === 7).length;
+      const kls8Count = (masterSiswa || []).filter(s => getTingkatKelas(s.kelas) === 8).length;
+      const kls9Count = (masterSiswa || []).filter(s => getTingkatKelas(s.kelas) === 9).length;
+      const siapPromosi = kls7Count + kls8Count + kls9Count;
+
+      // Update Metrik Cards
+      const elSemua = document.getElementById('statUserTotalSemua');
+      const elSiswa = document.getElementById('statUserTotalSiswa');
+      const elGuru = document.getElementById('statUserTotalGuru');
+      const elPromosi = document.getElementById('statUserSiapPromosi');
+      const badgeNav = document.getElementById('badgeAdminTotalUserSemua');
+      const badgeSiswaCount = document.getElementById('badgeSubTabSiswaCount');
+      const badgeGuruCount = document.getElementById('badgeSubTabGuruCount');
+
+      if (elSemua) elSemua.innerText = `${totalSemua} Akun`;
+      if (elSiswa) elSiswa.innerText = `${totalSiswa} Siswa`;
+      if (elGuru) elGuru.innerText = `${totalGuru} Guru`;
+      if (elPromosi) elPromosi.innerText = `${siapPromosi} Siswa`;
+      if (badgeNav) badgeNav.innerText = `${totalSemua} Akun`;
+      if (badgeSiswaCount) badgeSiswaCount.innerText = `${totalSiswa}`;
+      if (badgeGuruCount) badgeGuruCount.innerText = `${totalGuru}`;
+
+      // Update Info Profil Super Admin
+      const elKepsek = document.getElementById('userAdminKepsekName');
+      const elSchool = document.getElementById('userAdminSchoolName');
+      if (elKepsek) elKepsek.innerText = appConfig.NAMA_KEPSEK || "Kepala Sekolah";
+      if (elSchool) elSchool.innerText = appConfig.NAMA_SEKOLAH || "SMP Negeri Indonesia Hebat";
+
+      // Populate opsi Kelas di filter Siswa & Kenaikan Kelas
+      const kelasSet = Array.from(new Set((masterSiswa || []).map(s => s.kelas))).filter(Boolean).sort();
+      const filterKelas = document.getElementById('filterUserSiswaKelas');
+      if (filterKelas && filterKelas.options.length <= 1) {
+        filterKelas.innerHTML = '<option value="">Semua Kelas</option>' + 
+          kelasSet.map(k => `<option value="${k}">Kelas ${k}</option>`).join('');
+      }
+
+      const selectRombelAsal = document.getElementById('selectNaikKelasRombelAsal');
+      if (selectRombelAsal && selectRombelAsal.options.length <= 1) {
+        selectRombelAsal.innerHTML = '<option value="">-- Pilih Rombel --</option>' + 
+          kelasSet.map(k => `<option value="${k}">Kelas ${k}</option>`).join('');
+      }
+
+      // Render view yang aktif
+      if (currentSubTabUser === 'siswa') {
+        renderTableUserSiswa();
+      } else if (currentSubTabUser === 'guru') {
+        renderTableUserGuru();
+      } else if (currentSubTabUser === 'naikKelas') {
+        renderPanelNaikKelas();
+      }
+
+      safeCreateIcons();
+    }
+
+    function switchSubTabUser(subTab) {
+      currentSubTabUser = subTab;
+      const views = ['siswa', 'guru', 'naikKelas', 'admin'];
+      views.forEach(v => {
+        const elView = document.getElementById(`subViewUser_${v}`);
+        const elBtn = document.getElementById(`btnSubTabUser_${v}`);
+        if (elView) {
+          if (v === subTab) elView.classList.remove('hidden');
+          else elView.classList.add('hidden');
+        }
+        if (elBtn) {
+          if (v === subTab) {
+            elBtn.className = 'px-4 py-2.5 rounded-xl text-xs font-black transition flex items-center gap-2 bg-blue-700 text-white shadow-xs cursor-pointer';
+          } else {
+            elBtn.className = 'px-4 py-2.5 rounded-xl text-xs font-bold transition flex items-center gap-2 bg-slate-100 hover:bg-slate-200 text-slate-700 cursor-pointer';
+          }
+        }
+      });
+
+      if (subTab === 'siswa') renderTableUserSiswa();
+      else if (subTab === 'guru') renderTableUserGuru();
+      else if (subTab === 'naikKelas') renderPanelNaikKelas();
+
+      safeCreateIcons();
+    }
+
+    function renderTableUserSiswa() {
+      const tbody = document.getElementById('tableUserSiswaBody');
+      if (!tbody) return;
+
+      const filterKelas = (document.getElementById('filterUserSiswaKelas')?.value || '').trim();
+      const filterGender = (document.getElementById('filterUserSiswaGender')?.value || '').trim();
+      const keyword = (document.getElementById('inputSearchUserSiswa')?.value || '').trim().toLowerCase();
+
+      const filtered = (masterSiswa || []).filter(s => {
+        if (filterKelas && s.kelas !== filterKelas) return false;
+        if (filterGender && (s.gender || 'L').toUpperCase() !== filterGender) return false;
+        if (keyword) {
+          const mNama = String(s.nama || '').toLowerCase().includes(keyword);
+          const mNisn = String(s.nisn || '').toLowerCase().includes(keyword);
+          const mNis = String(s.nis || '').toLowerCase().includes(keyword);
+          const mKelas = String(s.kelas || '').toLowerCase().includes(keyword);
+          if (!mNama && !mNisn && !mNis && !mKelas) return false;
+        }
+        return true;
+      });
+
+      if (filtered.length === 0) {
+        tbody.innerHTML = `
+          <tr>
+            <td colspan="7" class="py-8 text-center text-slate-400 bg-white">
+              <i data-lucide="graduation-cap" class="w-8 h-8 mx-auto mb-2 text-slate-300"></i>
+              <p class="font-bold text-slate-600">Tidak ada data peserta didik yang cocok.</p>
+              <p class="text-xs text-slate-400 mt-0.5">Silakan sesuaikan kata kunci pencarian atau filter kelas.</p>
+            </td>
+          </tr>
+        `;
+        safeCreateIcons();
+        return;
+      }
+
+      tbody.innerHTML = filtered.map((s, idx) => {
+        const isLaki = (s.gender || 'L').toUpperCase() === 'L';
+        const genderBadge = isLaki 
+          ? '<span class="px-1.5 py-0.5 bg-blue-50 text-blue-700 border border-blue-200 rounded text-[9.5px] font-black uppercase">L</span>' 
+          : '<span class="px-1.5 py-0.5 bg-pink-50 text-pink-700 border border-pink-200 rounded text-[9.5px] font-black uppercase">P</span>';
+
+        let waliName = '<span class="text-rose-500 italic text-[11px]">Belum Ditugaskan</span>';
+        if (s.nipGuruWali) {
+          const g = (masterGuru || []).find(x => x.nip === s.nipGuruWali);
+          waliName = g ? `<span class="font-medium text-slate-700">${escapeHtml(g.nama)}</span>` : `<span class="font-mono text-slate-500">${escapeHtml(s.nipGuruWali)}</span>`;
+        }
+
+        let contactHtml = '<span class="text-slate-400 italic text-[11px]">-</span>';
+        if (s.noHpOrtu) {
+          let cleanPhone = String(s.noHpOrtu).replace(/[^0-9]/g, '');
+          if (cleanPhone.startsWith('0')) cleanPhone = '62' + cleanPhone.slice(1);
+          contactHtml = `
+            <a href="https://api.whatsapp.com/send?phone=${cleanPhone}" target="_blank" class="inline-flex items-center gap-1 text-emerald-700 hover:text-emerald-800 font-medium font-mono text-[11px] bg-emerald-50 px-2 py-0.5 rounded-md border border-emerald-200/80">
+              <i data-lucide="phone" class="w-3 h-3 text-emerald-600"></i>
+              <span>${escapeHtml(s.noHpOrtu)}</span>
+            </a>
+          `;
+        }
+
+        return `
+          <tr class="hover:bg-slate-50/80 transition">
+            <td class="py-3 px-3 text-center text-slate-400 font-bold">${idx + 1}</td>
+            <td class="py-3 px-3">
+              <div class="font-mono font-bold text-slate-800">${escapeHtml(s.nisn)}</div>
+              <div class="font-mono text-[10.5px] text-slate-400">NIS: ${escapeHtml(s.nis || '-')}</div>
+            </td>
+            <td class="py-3 px-3">
+              <div class="flex items-center gap-1.5">
+                <span class="font-bold text-slate-900">${escapeHtml(s.nama)}</span>
+                ${genderBadge}
+              </div>
+              <div class="text-[10px] text-slate-400 mt-0.5">Lahir: ${escapeHtml(s.tglLahir || '-')}</div>
+            </td>
+            <td class="py-3 px-3 text-center">
+              <span class="px-2.5 py-1 rounded-lg bg-slate-100 text-slate-800 font-black text-xs border border-slate-200">${escapeHtml(s.kelas)}</span>
+            </td>
+            <td class="py-3 px-3">
+              ${waliName}
+            </td>
+            <td class="py-3 px-3">
+              ${contactHtml}
+            </td>
+            <td class="py-3 px-3 text-center">
+              <div class="flex items-center justify-center gap-1 flex-wrap">
+                <button type="button" onclick="bukaModalFormSiswaAdmin('${escapeHtml(s.nisn)}')" class="p-1.5 bg-blue-50 hover:bg-blue-100 text-blue-700 rounded-lg transition" title="Edit Siswa">
+                  <i data-lucide="edit-2" class="w-3.5 h-3.5"></i>
+                </button>
+                <button type="button" onclick="bukaModalResetPinAdmin('SISWA', '${escapeHtml(s.nisn)}', '${escapeHtml(s.nama)}')" class="p-1.5 bg-amber-50 hover:bg-amber-100 text-amber-700 rounded-lg transition" title="Reset PIN Siswa">
+                  <i data-lucide="key" class="w-3.5 h-3.5"></i>
+                </button>
+                <button type="button" onclick="hapusSiswaAdmin('${escapeHtml(s.nisn)}')" class="p-1.5 bg-rose-50 hover:bg-rose-100 text-rose-700 rounded-lg transition" title="Hapus Siswa">
+                  <i data-lucide="trash-2" class="w-3.5 h-3.5"></i>
+                </button>
+              </div>
+            </td>
+          </tr>
+        `;
+      }).join('');
+
+      safeCreateIcons();
+    }
+
+    function renderTableUserGuru() {
+      const tbody = document.getElementById('tableUserGuruBody');
+      if (!tbody) return;
+
+      const filterPeran = (document.getElementById('filterUserGuruPeran')?.value || '').trim();
+      const keyword = (document.getElementById('inputSearchUserGuru')?.value || '').trim().toLowerCase();
+
+      const filtered = (masterGuru || []).filter(g => {
+        if (filterPeran && g.peran !== filterPeran) return false;
+        if (keyword) {
+          const mNama = String(g.nama || '').toLowerCase().includes(keyword);
+          const mNip = String(g.nip || '').toLowerCase().includes(keyword);
+          const mMapel = String(g.mapel || '').toLowerCase().includes(keyword);
+          if (!mNama && !mNip && !mMapel) return false;
+        }
+        return true;
+      });
+
+      if (filtered.length === 0) {
+        tbody.innerHTML = `
+          <tr>
+            <td colspan="8" class="py-8 text-center text-slate-400 bg-white">
+              <i data-lucide="briefcase" class="w-8 h-8 mx-auto mb-2 text-slate-300"></i>
+              <p class="font-bold text-slate-600">Tidak ada data guru/staf yang cocok.</p>
+              <p class="text-xs text-slate-400 mt-0.5">Silakan sesuaikan kata kunci pencarian atau filter peran.</p>
+            </td>
+          </tr>
+        `;
+        safeCreateIcons();
+        return;
+      }
+
+      tbody.innerHTML = filtered.map((g, idx) => {
+        let peranBadge = '<span class="px-2 py-0.5 bg-slate-100 text-slate-700 rounded font-bold text-[10px]">Guru Mapel</span>';
+        if (g.peran === 'GURU_WALI') {
+          peranBadge = '<span class="px-2 py-0.5 bg-amber-100 text-amber-800 rounded font-black text-[10px] border border-amber-300">WALI KELAS</span>';
+        } else if (g.peran === 'PELATIH_EKSKUL') {
+          peranBadge = '<span class="px-2 py-0.5 bg-purple-100 text-purple-800 rounded font-black text-[10px] border border-purple-300">PELATIH EKSKUL</span>';
+        }
+
+        let tugasTambahan = '<span class="text-slate-400 italic text-[11px]">-</span>';
+        if (g.rombelWali) {
+          tugasTambahan = `<span class="px-2 py-0.5 bg-indigo-50 text-indigo-700 rounded-md font-bold text-[10px] border border-indigo-200">Walas ${escapeHtml(g.rombelWali)}</span>`;
+        } else if (g.cabangEkskul) {
+          const eks = (masterEkskul || []).find(x => x.id === g.cabangEkskul);
+          tugasTambahan = `<span class="px-2 py-0.5 bg-purple-50 text-purple-700 rounded-md font-bold text-[10px] border border-purple-200">${escapeHtml(eks ? eks.nama : g.cabangEkskul)}</span>`;
+        }
+
+        let phoneHtml = '<span class="text-slate-400 italic text-[11px]">-</span>';
+        if (g.noHp) {
+          let clean = String(g.noHp).replace(/[^0-9]/g, '');
+          if (clean.startsWith('0')) clean = '62' + clean.slice(1);
+          phoneHtml = `
+            <a href="https://api.whatsapp.com/send?phone=${clean}" target="_blank" class="inline-flex items-center gap-1 text-emerald-700 hover:text-emerald-800 font-mono text-[11px] bg-emerald-50 px-2 py-0.5 rounded-md border border-emerald-200/80">
+              <i data-lucide="message-circle" class="w-3 h-3 text-emerald-600"></i>
+              <span>${escapeHtml(g.noHp)}</span>
+            </a>
+          `;
+        }
+
+        return `
+          <tr class="hover:bg-slate-50/80 transition">
+            <td class="py-3 px-3 text-center text-slate-400 font-bold">${idx + 1}</td>
+            <td class="py-3 px-3 font-mono font-bold text-slate-700">${escapeHtml(g.nip)}</td>
+            <td class="py-3 px-3 font-bold text-slate-900">${escapeHtml(g.nama)}</td>
+            <td class="py-3 px-3">${peranBadge}</td>
+            <td class="py-3 px-3">${tugasTambahan}</td>
+            <td class="py-3 px-3 font-medium text-slate-700">${escapeHtml(g.mapel || '-')}</td>
+            <td class="py-3 px-3">${phoneHtml}</td>
+            <td class="py-3 px-3 text-center">
+              <div class="flex items-center justify-center gap-1 flex-wrap">
+                <button type="button" onclick="bukaModalFormGuruAdmin('${escapeHtml(g.nip)}')" class="p-1.5 bg-blue-50 hover:bg-blue-100 text-blue-700 rounded-lg transition" title="Edit Data Guru">
+                  <i data-lucide="edit-2" class="w-3.5 h-3.5"></i>
+                </button>
+                <button type="button" onclick="bukaModalResetPinAdmin('GURU', '${escapeHtml(g.nip)}', '${escapeHtml(g.nama)}')" class="p-1.5 bg-amber-50 hover:bg-amber-100 text-amber-700 rounded-lg transition" title="Reset PIN Guru">
+                  <i data-lucide="key" class="w-3.5 h-3.5"></i>
+                </button>
+                <button type="button" onclick="hapusGuruAdmin('${escapeHtml(g.nip)}')" class="p-1.5 bg-rose-50 hover:bg-rose-100 text-rose-700 rounded-lg transition" title="Hapus Guru">
+                  <i data-lucide="trash-2" class="w-3.5 h-3.5"></i>
+                </button>
+              </div>
+            </td>
+          </tr>
+        `;
+      }).join('');
+
+      safeCreateIcons();
+    }
+
+    function renderPanelNaikKelas() {
+      const kls7 = (masterSiswa || []).filter(s => getTingkatKelas(s.kelas) === 7).length;
+      const kls8 = (masterSiswa || []).filter(s => getTingkatKelas(s.kelas) === 8).length;
+      const kls9 = (masterSiswa || []).filter(s => getTingkatKelas(s.kelas) === 9).length;
+
+      const el7 = document.getElementById('statPromosiKls7');
+      const el8 = document.getElementById('statPromosiKls8');
+      const el9 = document.getElementById('statPromosiKls9');
+      if (el7) el7.innerText = `${kls7} Siswa`;
+      if (el8) el8.innerText = `${kls8} Siswa`;
+      if (el9) el9.innerText = `${kls9} Siswa`;
+    }
+
+    function updateNaikKelasRombelPreview() {
+      const asal = document.getElementById('selectNaikKelasRombelAsal')?.value;
+      const inputTujuan = document.getElementById('inputNaikKelasRombelTujuan');
+      const labelInfo = document.getElementById('labelNaikKelasPreviewInfo');
+      const btnBuka = document.getElementById('btnBukaModalSelektifNaik');
+
+      if (!asal) {
+        if (inputTujuan) inputTujuan.value = '';
+        if (labelInfo) labelInfo.innerText = 'Pilih rombel asal di atas untuk memuat daftar siswa rombel.';
+        if (btnBuka) {
+          btnBuka.disabled = true;
+          btnBuka.className = 'w-full py-3 bg-slate-200 text-slate-400 font-bold rounded-xl text-xs transition flex items-center justify-center gap-2 cursor-not-allowed';
+        }
+        return;
+      }
+
+      const nextClass = getNextClassTarget(asal);
+      if (inputTujuan) inputTujuan.value = nextClass;
+
+      const countSiswa = (masterSiswa || []).filter(s => s.kelas === asal).length;
+      if (labelInfo) {
+        labelInfo.innerHTML = `Terdeteksi <b>${countSiswa} siswa</b> di rombel <b>${asal}</b>. Target kenaikan otomatis: <b>${nextClass}</b>.`;
+      }
+
+      if (btnBuka) {
+        btnBuka.disabled = false;
+        btnBuka.className = 'w-full py-3 bg-amber-500 hover:bg-amber-400 text-slate-950 font-black rounded-xl text-xs shadow-md transition flex items-center justify-center gap-2 cursor-pointer';
+      }
+    }
+
+    function getNextClassTarget(currentClass) {
+      const s = String(currentClass || '').trim();
+      const match = s.match(/^(\d+)(.*)$/);
+      if (!match) return currentClass;
+      const tingkat = parseInt(match[1], 10);
+      const suffix = match[2];
+      if (tingkat === 7) return `8${suffix}`;
+      if (tingkat === 8) return `9${suffix}`;
+      if (tingkat === 9) return `LULUS-ALUMNI`;
+      return currentClass;
+    }
+
+    // Modal Form Siswa
+    function bukaModalFormSiswaAdmin(nisn = null) {
+      const modal = document.getElementById('modalFormSiswaAdmin');
+      const title = document.getElementById('modalFormSiswaTitle');
+      const form = document.getElementById('formSiswaAdmin');
+      if (!modal || !form) return;
+
+      // Populate Guru Wali
+      const selWali = document.getElementById('formSiswaGuruWali');
+      if (selWali) {
+        selWali.innerHTML = '<option value="">-- Tanpa Guru Wali (Belum Ditugaskan) --</option>' + 
+          (masterGuru || []).map(g => `<option value="${escapeHtml(g.nip)}">${escapeHtml(g.nama)} (${escapeHtml(g.nip)})</option>`).join('');
+      }
+
+      if (nisn) {
+        const s = (masterSiswa || []).find(x => isSameNisn(x.nisn, nisn));
+        if (!s) return;
+        title.innerText = 'Edit Data Siswa';
+        document.getElementById('formSiswaMode').value = 'edit';
+        document.getElementById('formSiswaOriginalNisn').value = s.nisn;
+        document.getElementById('formSiswaNisn').value = s.nisn;
+        document.getElementById('formSiswaNis').value = s.nis || '';
+        document.getElementById('formSiswaNama').value = s.nama || '';
+        document.getElementById('formSiswaKelas').value = s.kelas || '';
+        document.getElementById('formSiswaGender').value = (s.gender || 'L').toUpperCase();
+        document.getElementById('formSiswaTglLahir').value = s.tglLahir || '';
+        document.getElementById('formSiswaNoHpOrtu').value = s.noHpOrtu || '';
+        document.getElementById('formSiswaGuruWali').value = s.nipGuruWali || '';
+        document.getElementById('formSiswaPin').value = '';
+        document.getElementById('formSiswaPin').placeholder = 'Kosongkan jika tidak ingin mengubah PIN';
+      } else {
+        title.innerText = 'Tambah Siswa Baru';
+        form.reset();
+        document.getElementById('formSiswaMode').value = 'add';
+        document.getElementById('formSiswaOriginalNisn').value = '';
+        document.getElementById('formSiswaPin').placeholder = 'Default: 4 digit terakhir NISN';
+      }
+
+      modal.classList.remove('hidden');
+      safeCreateIcons();
+    }
+
+    function tutupModalFormSiswaAdmin() {
+      const modal = document.getElementById('modalFormSiswaAdmin');
+      if (modal) modal.classList.add('hidden');
+    }
+
+    async function handleSimpanSiswaAdmin(e) {
+      e.preventDefault();
+      const mode = document.getElementById('formSiswaMode').value;
+      const origNisn = document.getElementById('formSiswaOriginalNisn').value;
+      const nisn = document.getElementById('formSiswaNisn').value.trim();
+      const nis = document.getElementById('formSiswaNis').value.trim();
+      const nama = document.getElementById('formSiswaNama').value.trim();
+      const kelas = document.getElementById('formSiswaKelas').value.trim().toUpperCase();
+      const gender = document.getElementById('formSiswaGender').value;
+      const tglLahir = document.getElementById('formSiswaTglLahir').value;
+      const noHpOrtu = document.getElementById('formSiswaNoHpOrtu').value.trim();
+      const nipGuruWali = document.getElementById('formSiswaGuruWali').value.trim();
+      const customPin = document.getElementById('formSiswaPin').value.trim();
+
+      if (!nisn || !nama || !kelas) {
+        Swal.fire('Data Tidak Lengkap', 'NISN, Nama Lengkap, dan Kelas wajib diisi!', 'warning');
+        return;
+      }
+
+      // Validasi duplikasi NISN pada mode tambah
+      if (mode === 'add' && (masterSiswa || []).some(s => isSameNisn(s.nisn, nisn))) {
+        Swal.fire('NISN Terdaftar', `Siswa dengan NISN ${nisn} sudah terdaftar di sistem!`, 'error');
+        return;
+      }
+
+      Swal.fire({
+        title: 'Menyimpan Data Siswa...',
+        didOpen: () => Swal.showLoading(),
+        allowOutsideClick: false
+      });
+
+      if (mode === 'edit') {
+        const idx = (masterSiswa || []).findIndex(s => isSameNisn(s.nisn, origNisn));
+        if (idx !== -1) {
+          masterSiswa[idx].nisn = nisn;
+          masterSiswa[idx].nis = nis;
+          masterSiswa[idx].nama = nama;
+          masterSiswa[idx].kelas = kelas;
+          masterSiswa[idx].gender = gender;
+          masterSiswa[idx].tglLahir = tglLahir;
+          masterSiswa[idx].noHpOrtu = noHpOrtu;
+          masterSiswa[idx].nipGuruWali = nipGuruWali;
+          if (customPin) masterSiswa[idx].pin = customPin;
+        }
+      } else {
+        const newSiswa = {
+          nisn: nisn,
+          nis: nis,
+          nama: nama,
+          kelas: kelas,
+          gender: gender,
+          tglLahir: tglLahir || '2011-01-01',
+          noHpOrtu: noHpOrtu,
+          nipGuruWali: nipGuruWali,
+          pin: customPin || nisn.slice(-4)
+        };
+        masterSiswa.push(newSiswa);
+      }
+
+      // Sync ke backend Google Sheets
+      try {
+        const res = await callBackendPost({
+          action: 'simpanMasterSiswa',
+          siswaList: masterSiswa,
+          pin: appConfig.PIN_ADMIN || '123456'
+        });
+
+        tutupModalFormSiswaAdmin();
+        Swal.fire({
+          icon: 'success',
+          title: 'Berhasil Disimpan! 🎉',
+          text: `Data peserta didik "${nama}" berhasil disimpan ke sistem.`,
+          timer: 1800,
+          showConfirmButton: false
+        });
+
+        renderManajemenUser();
+      } catch (err) {
+        tutupModalFormSiswaAdmin();
+        Swal.fire('Tersimpan Lokal', 'Data disimpan di sesi lokal browser.', 'info');
+        renderManajemenUser();
+      }
+    }
+
+    async function hapusSiswaAdmin(nisn) {
+      const s = (masterSiswa || []).find(x => isSameNisn(x.nisn, nisn));
+      if (!s) return;
+
+      const confirm = await Swal.fire({
+        title: 'Hapus Siswa Ini?',
+        html: `Apakah Anda yakin ingin menghapus data <b>${escapeHtml(s.nama)}</b> (NISN: ${s.nisn})?<br><span class="text-rose-500 text-xs">Perhatian: Tindakan ini permanen.</span>`,
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonText: 'Ya, Hapus Siswa',
+        cancelButtonText: 'Batal',
+        confirmButtonColor: '#e11d48'
+      });
+
+      if (!confirm.isConfirmed) return;
+
+      masterSiswa = (masterSiswa || []).filter(x => !isSameNisn(x.nisn, nisn));
+
+      Swal.fire({
+        title: 'Menghapus Siswa...',
+        didOpen: () => Swal.showLoading(),
+        allowOutsideClick: false
+      });
+
+      try {
+        await callBackendPost({
+          action: 'simpanMasterSiswa',
+          siswaList: masterSiswa,
+          pin: appConfig.PIN_ADMIN || '123456'
+        });
+
+        Swal.fire('Terhapus! 🗑️', 'Data peserta didik telah dihapus.', 'success');
+        renderManajemenUser();
+      } catch (err) {
+        Swal.fire('Terhapus Lokal', 'Data dihapus dari memori lokal.', 'info');
+        renderManajemenUser();
+      }
+    }
+
+    // Modal Form Guru
+    function handlePeranGuruFormChange(peran) {
+      const boxWalas = document.getElementById('boxFormGuruRombelWali');
+      const boxEkskul = document.getElementById('boxFormGuruCabangEkskul');
+      if (boxWalas) {
+        if (peran === 'GURU_WALI') boxWalas.classList.remove('opacity-50');
+        else boxWalas.classList.add('opacity-50');
+      }
+      if (boxEkskul) {
+        if (peran === 'PELATIH_EKSKUL') boxEkskul.classList.remove('opacity-50');
+        else boxEkskul.classList.add('opacity-50');
+      }
+    }
+
+    function bukaModalFormGuruAdmin(nip = null) {
+      const modal = document.getElementById('modalFormGuruAdmin');
+      const title = document.getElementById('modalFormGuruTitle');
+      const form = document.getElementById('formGuruAdmin');
+      if (!modal || !form) return;
+
+      // Populate opsi Ekskul
+      const selEkskul = document.getElementById('formGuruCabangEkskul');
+      if (selEkskul) {
+        selEkskul.innerHTML = '<option value="">-- Bukan Pelatih Ekskul --</option>' + 
+          (masterEkskul || []).map(e => `<option value="${escapeHtml(e.id)}">[${escapeHtml(e.id)}] ${escapeHtml(e.nama)}</option>`).join('');
+      }
+
+      if (nip) {
+        const g = (masterGuru || []).find(x => x.nip === nip);
+        if (!g) return;
+        title.innerText = 'Edit Data Guru / PTK';
+        document.getElementById('formGuruMode').value = 'edit';
+        document.getElementById('formGuruOriginalNip').value = g.nip;
+        document.getElementById('formGuruNip').value = g.nip;
+        document.getElementById('formGuruNama').value = g.nama || '';
+        document.getElementById('formGuruPeran').value = g.peran || 'GURU_MAPEL';
+        document.getElementById('formGuruRombelWali').value = g.rombelWali || '';
+        document.getElementById('formGuruCabangEkskul').value = g.cabangEkskul || '';
+        document.getElementById('formGuruMapel').value = g.mapel || '';
+        document.getElementById('formGuruNoHp').value = g.noHp || '';
+        document.getElementById('formGuruPin').value = '';
+        document.getElementById('formGuruPin').placeholder = 'Kosongkan jika tidak ingin mengubah PIN';
+      } else {
+        title.innerText = 'Tambah Guru / PTK Baru';
+        form.reset();
+        document.getElementById('formGuruMode').value = 'add';
+        document.getElementById('formGuruOriginalNip').value = '';
+        document.getElementById('formGuruPin').placeholder = 'Default: 123456';
+      }
+
+      handlePeranGuruFormChange(document.getElementById('formGuruPeran').value);
+      modal.classList.remove('hidden');
+      safeCreateIcons();
+    }
+
+    function tutupModalFormGuruAdmin() {
+      const modal = document.getElementById('modalFormGuruAdmin');
+      if (modal) modal.classList.add('hidden');
+    }
+
+    async function handleSimpanGuruAdmin(e) {
+      e.preventDefault();
+      const mode = document.getElementById('formGuruMode').value;
+      const origNip = document.getElementById('formGuruOriginalNip').value;
+      const nip = document.getElementById('formGuruNip').value.trim();
+      const nama = document.getElementById('formGuruNama').value.trim();
+      const peran = document.getElementById('formGuruPeran').value;
+      const rombelWali = document.getElementById('formGuruRombelWali').value.trim().toUpperCase();
+      const cabangEkskul = document.getElementById('formGuruCabangEkskul').value.trim();
+      const mapel = document.getElementById('formGuruMapel').value.trim();
+      const noHp = document.getElementById('formGuruNoHp').value.trim();
+      const customPin = document.getElementById('formGuruPin').value.trim();
+
+      if (!nip || !nama) {
+        Swal.fire('Data Tidak Lengkap', 'NIP dan Nama Lengkap Guru wajib diisi!', 'warning');
+        return;
+      }
+
+      if (mode === 'add' && (masterGuru || []).some(g => g.nip === nip)) {
+        Swal.fire('NIP Terdaftar', `Guru dengan NIP ${nip} sudah terdaftar!`, 'error');
+        return;
+      }
+
+      Swal.fire({
+        title: 'Menyimpan Data Guru...',
+        didOpen: () => Swal.showLoading(),
+        allowOutsideClick: false
+      });
+
+      if (mode === 'edit') {
+        const idx = (masterGuru || []).findIndex(g => g.nip === origNip);
+        if (idx !== -1) {
+          masterGuru[idx].nip = nip;
+          masterGuru[idx].nama = nama;
+          masterGuru[idx].peran = peran;
+          masterGuru[idx].rombelWali = rombelWali;
+          masterGuru[idx].cabangEkskul = cabangEkskul;
+          masterGuru[idx].mapel = mapel;
+          masterGuru[idx].noHp = noHp;
+          if (customPin) masterGuru[idx].pin = customPin;
+        }
+      } else {
+        const newGuru = {
+          nip: nip,
+          nama: nama,
+          peran: peran,
+          rombelWali: rombelWali,
+          cabangEkskul: cabangEkskul,
+          mapel: mapel,
+          noHp: noHp,
+          pin: customPin || '123456'
+        };
+        masterGuru.push(newGuru);
+      }
+
+      try {
+        await callBackendPost({
+          action: 'simpanMasterGuru',
+          guruList: masterGuru,
+          pin: appConfig.PIN_ADMIN || '123456'
+        });
+
+        tutupModalFormGuruAdmin();
+        Swal.fire({
+          icon: 'success',
+          title: 'Berhasil Disimpan! 🎉',
+          text: `Data PTK "${nama}" berhasil disimpan.`,
+          timer: 1800,
+          showConfirmButton: false
+        });
+
+        renderManajemenUser();
+      } catch (err) {
+        tutupModalFormGuruAdmin();
+        Swal.fire('Tersimpan Lokal', 'Data disimpan di sesi lokal.', 'info');
+        renderManajemenUser();
+      }
+    }
+
+    async function hapusGuruAdmin(nip) {
+      const g = (masterGuru || []).find(x => x.nip === nip);
+      if (!g) return;
+
+      const confirm = await Swal.fire({
+        title: 'Hapus Guru Ini?',
+        html: `Apakah Anda yakin ingin menghapus data guru <b>${escapeHtml(g.nama)}</b> (NIP: ${g.nip})?`,
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonText: 'Ya, Hapus',
+        cancelButtonText: 'Batal',
+        confirmButtonColor: '#e11d48'
+      });
+
+      if (!confirm.isConfirmed) return;
+
+      masterGuru = (masterGuru || []).filter(x => x.nip !== nip);
+
+      Swal.fire({
+        title: 'Menghapus Data Guru...',
+        didOpen: () => Swal.showLoading(),
+        allowOutsideClick: false
+      });
+
+      try {
+        await callBackendPost({
+          action: 'simpanMasterGuru',
+          guruList: masterGuru,
+          pin: appConfig.PIN_ADMIN || '123456'
+        });
+
+        Swal.fire('Terhapus! 🗑️', 'Data guru telah dihapus dari sistem.', 'success');
+        renderManajemenUser();
+      } catch (err) {
+        Swal.fire('Terhapus Lokal', 'Data dihapus dari memori lokal.', 'info');
+        renderManajemenUser();
+      }
+    }
+
+    // Modal Reset PIN User
+    async function bukaModalResetPinAdmin(role, identifier, nama) {
+      const defaultPin = role === 'SISWA' ? String(identifier).slice(-4) : '123456';
+
+      const { value: formValues } = await Swal.fire({
+        title: `Reset PIN ${role === 'SISWA' ? 'Siswa' : 'Guru'}`,
+        html: `
+          <div class="text-left text-xs space-y-3 p-1">
+            <div class="p-3 bg-slate-50 border border-slate-200 rounded-xl">
+              <div class="font-extrabold text-sm text-slate-800">${escapeHtml(nama)}</div>
+              <div class="text-slate-500 font-mono">${role === 'SISWA' ? 'NISN' : 'NIP'}: <b>${escapeHtml(identifier)}</b></div>
+            </div>
+
+            <div>
+              <label class="block font-bold text-slate-700 uppercase mb-1">Pilihan Reset PIN:</label>
+              <div class="space-y-1.5">
+                <label class="flex items-center gap-2 p-2 bg-slate-50 rounded-xl border border-slate-200 cursor-pointer">
+                  <input type="radio" name="optResetPin" value="DEFAULT" checked onchange="document.getElementById('inputCustomPinReset').disabled = true">
+                  <span class="text-slate-800 font-bold">Gunakan PIN Default (<b>${defaultPin}</b>)</span>
+                </label>
+                <label class="flex items-center gap-2 p-2 bg-slate-50 rounded-xl border border-slate-200 cursor-pointer">
+                  <input type="radio" name="optResetPin" value="CUSTOM" onchange="document.getElementById('inputCustomPinReset').disabled = false; document.getElementById('inputCustomPinReset').focus()">
+                  <span class="text-slate-800 font-bold">Masukkan PIN Baru Khusus</span>
+                </label>
+              </div>
+            </div>
+
+            <div>
+              <input type="password" id="inputCustomPinReset" disabled maxlength="10" placeholder="Ketik PIN baru (4-6 angka)..." class="w-full px-3 py-2 bg-white border border-slate-200 rounded-xl text-xs font-mono font-bold text-slate-800 focus:outline-none focus:border-indigo-500">
+            </div>
+          </div>
+        `,
+        focusConfirm: false,
+        showCancelButton: true,
+        confirmButtonText: 'Reset PIN Sekarang 🔑',
+        cancelButtonText: 'Batal',
+        confirmButtonColor: '#4f46e5',
+        preConfirm: () => {
+          const isCustom = document.querySelector('input[name="optResetPin"]:checked')?.value === 'CUSTOM';
+          let finalPin = defaultPin;
+          if (isCustom) {
+            const customVal = document.getElementById('inputCustomPinReset').value.trim();
+            if (!customVal) {
+              Swal.showValidationMessage('PIN baru khusus tidak boleh kosong!');
+              return false;
+            }
+            finalPin = customVal;
+          }
+          return { pin: finalPin };
+        }
+      });
+
+      if (!formValues) return;
+
+      Swal.fire({
+        title: 'Mereset PIN...',
+        didOpen: () => Swal.showLoading(),
+        allowOutsideClick: false
+      });
+
+      try {
+        const res = await callBackendPost({
+          action: 'updatePinUser',
+          role: role,
+          id: identifier,
+          pin: formValues.pin
+        });
+
+        // Update lokal jika ada
+        if (role === 'SISWA') {
+          const s = (masterSiswa || []).find(x => isSameNisn(x.nisn, identifier));
+          if (s) s.pin = formValues.pin;
+        } else if (role === 'GURU') {
+          const g = (masterGuru || []).find(x => x.nip === identifier);
+          if (g) g.pin = formValues.pin;
+        }
+
+        Swal.fire({
+          icon: 'success',
+          title: 'PIN Berhasil Direset! 🔑',
+          text: `PIN untuk ${nama} telah diatur menjadi: "${formValues.pin}".`,
+          confirmButtonText: 'OK'
+        });
+      } catch (err) {
+        Swal.fire('Info', 'PIN berhasil diset di sesi lokal.', 'info');
+      }
+    }
+
+    // Modal Import Siswa Massal
+    function bukaModalImportSiswaAdmin() {
+      const modal = document.getElementById('modalImportSiswaAdmin');
+      if (modal) modal.classList.remove('hidden');
+    }
+
+    function tutupModalImportSiswaAdmin() {
+      const modal = document.getElementById('modalImportSiswaAdmin');
+      if (modal) modal.classList.add('hidden');
+    }
+
+    function handleFileImportSiswaChange(event) {
+      const file = event.target.files && event.target.files[0];
+      if (!file) return;
+
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        const text = e.target.result;
+        const textarea = document.getElementById('textareaImportSiswa');
+        if (textarea) textarea.value = text;
+      };
+      reader.readAsText(file);
+    }
+
+    function unduhTemplateCsvSiswa() {
+      const header = "NISN,NIS,Nama_Lengkap,Kelas,Jenis_Kelamin,Tanggal_Lahir,No_HP_Ortu\n";
+      const sample = "0081234567,24250701,Ahmad Pratama,7-A,L,2011-05-14,081234567890\n0087654321,24250702,Siti Aisyah,7-A,P,2011-08-20,081298765432\n";
+      const blob = new Blob(["\uFEFF" + header + sample], { type: 'text/csv;charset=utf-8;' });
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.href = url;
+      link.download = "Template_Import_Siswa_SuperApp.csv";
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    }
+
+    async function handleProsesImportSiswaMassal() {
+      const text = document.getElementById('textareaImportSiswa')?.value || '';
+      if (!text.trim()) {
+        Swal.fire('Data Kosong', 'Silakan tempel baris data siswa atau unggah file CSV terlebih dahulu!', 'warning');
+        return;
+      }
+
+      const lines = text.split('\n').map(l => l.trim()).filter(Boolean);
+      let importedCount = 0;
+      let skippedCount = 0;
+
+      for (let i = 0; i < lines.length; i++) {
+        // Skip header
+        if (i === 0 && lines[i].toLowerCase().includes('nisn')) continue;
+
+        // Pisahkan koma, semicolon, atau tab
+        let cols = lines[i].split(/[,;\t]/).map(c => c.trim().replace(/^"|"$/g, ''));
+        if (cols.length < 3) continue;
+
+        const nisn = cols[0];
+        const nis = cols[1] || '';
+        const nama = cols[2];
+        const kelas = cols[3] || '7-A';
+        const gender = (cols[4] || 'L').toUpperCase().startsWith('P') ? 'P' : 'L';
+        const tglLahir = cols[5] || '2011-01-01';
+        const noHpOrtu = cols[6] || '';
+
+        if (!nisn || !nama) continue;
+
+        const existingIdx = (masterSiswa || []).findIndex(s => isSameNisn(s.nisn, nisn));
+        if (existingIdx !== -1) {
+          masterSiswa[existingIdx].nis = nis || masterSiswa[existingIdx].nis;
+          masterSiswa[existingIdx].nama = nama;
+          masterSiswa[existingIdx].kelas = kelas;
+          masterSiswa[existingIdx].gender = gender;
+          masterSiswa[existingIdx].tglLahir = tglLahir;
+          masterSiswa[existingIdx].noHpOrtu = noHpOrtu;
+          importedCount++;
+        } else {
+          masterSiswa.push({
+            nisn: nisn,
+            nis: nis,
+            nama: nama,
+            kelas: kelas,
+            gender: gender,
+            tglLahir: tglLahir,
+            noHpOrtu: noHpOrtu,
+            nipGuruWali: '',
+            pin: nisn.slice(-4)
+          });
+          importedCount++;
+        }
+      }
+
+      Swal.fire({
+        title: 'Menyimpan Data Siswa Hasil Import...',
+        didOpen: () => Swal.showLoading(),
+        allowOutsideClick: false
+      });
+
+      try {
+        await callBackendPost({
+          action: 'simpanMasterSiswa',
+          siswaList: masterSiswa,
+          pin: appConfig.PIN_ADMIN || '123456'
+        });
+
+        tutupModalImportSiswaAdmin();
+        Swal.fire({
+          icon: 'success',
+          title: 'Import Siswa Berhasil! 🎉',
+          text: `Sebanyak ${importedCount} data peserta didik berhasil diimpor & disimpan ke Database.`,
+          confirmButtonText: 'Selesai'
+        });
+
+        renderManajemenUser();
+      } catch (err) {
+        tutupModalImportSiswaAdmin();
+        Swal.fire('Tersimpan Lokal', `Berhasil memproses ${importedCount} data siswa di sesi browser.`, 'info');
+        renderManajemenUser();
+      }
+    }
+
+    // FITUR KENAIKAN KELAS: Backup Otomatis
+    function unduhBackupSiswaSebelumNaikKelas() {
+      let csv = "NISN,NIS,Nama_Lengkap,Kelas,Jenis_Kelamin,Tanggal_Lahir,No_HP_Ortu,NIP_Guru_Wali\n";
+      (masterSiswa || []).forEach(s => {
+        csv += `"${s.nisn}","${s.nis || ''}","${(s.nama || '').replace(/"/g, '""')}","${s.kelas}","${s.gender || 'L'}","${s.tglLahir || ''}","${s.noHpOrtu || ''}","${s.nipGuruWali || ''}"\n`;
+      });
+
+      const blob = new Blob(["\uFEFF" + csv], { type: 'text/csv;charset=utf-8;' });
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.href = url;
+      link.download = `BACKUP_SISWA_SEBELUM_NAIK_KELAS_${Date.now()}.csv`;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    }
+
+    // FITUR KENAIKAN KELAS: Mode A Otomatis Seluruh Sekolah
+    async function handleEksekusiNaikKelasOtomatis() {
+      const kls7 = (masterSiswa || []).filter(s => getTingkatKelas(s.kelas) === 7).length;
+      const kls8 = (masterSiswa || []).filter(s => getTingkatKelas(s.kelas) === 8).length;
+      const kls9 = (masterSiswa || []).filter(s => getTingkatKelas(s.kelas) === 9).length;
+
+      const { value: confirmPin } = await Swal.fire({
+        title: 'Konfirmasi Promosi Seluruh Sekolah',
+        html: `
+          <div class="text-left text-xs space-y-3 p-1">
+            <p class="text-slate-600">Anda akan mengeksekusi <b>Kenaikan Kelas Massal Tahun Ajaran Baru</b> dengan rincian:</p>
+            <div class="p-3 bg-blue-50 border border-blue-200 rounded-xl space-y-1 font-semibold text-blue-900">
+              <div>• <b>${kls7} Siswa Kelas 7</b> &rarr; Naik ke <b>Kelas 8</b></div>
+              <div>• <b>${kls8} Siswa Kelas 8</b> &rarr; Naik ke <b>Kelas 9</b></div>
+              <div>• <b>${kls9} Siswa Kelas 9</b> &rarr; Dinyatakan <b>LULUS (Alumni)</b></div>
+            </div>
+            <div class="p-2.5 bg-emerald-50 border border-emerald-200 rounded-xl text-[11px] text-emerald-800">
+              ✓ Cadangan (backup) data siswa akan diunduh secara otomatis.
+            </div>
+            <div>
+              <label class="block font-bold text-slate-700 uppercase mb-1">Ketik PIN Administrator untuk Menyetujui:</label>
+              <input type="password" id="swalPinKonfirmasiNaik" placeholder="PIN Administrator (6 digit)" class="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs font-mono font-bold text-slate-800 focus:outline-none focus:border-indigo-500">
+            </div>
+          </div>
+        `,
+        focusConfirm: false,
+        showCancelButton: true,
+        confirmButtonText: 'Jalankan Promosi Sekarang 🚀',
+        cancelButtonText: 'Batal',
+        confirmButtonColor: '#4f46e5',
+        preConfirm: () => {
+          const pin = document.getElementById('swalPinKonfirmasiNaik')?.value.trim();
+          if (!pin) {
+            Swal.showValidationMessage('PIN Administrator wajib diisi!');
+            return false;
+          }
+          if (pin !== String(appConfig.PIN_ADMIN || '123456').trim()) {
+            Swal.showValidationMessage('PIN Administrator tidak cocok!');
+            return false;
+          }
+          return pin;
+        }
+      });
+
+      if (!confirmPin) return;
+
+      // 1. Unduh backup otomatis
+      unduhBackupSiswaSebelumNaikKelas();
+
+      Swal.fire({
+        title: 'Memproses Kenaikan Kelas...',
+        didOpen: () => Swal.showLoading(),
+        allowOutsideClick: false
+      });
+
+      // 2. Eksekusi Kenaikan Kelas pada masterSiswa
+      let promotedCount = 0;
+      let graduatedCount = 0;
+
+      masterSiswa.forEach(s => {
+        const tingkat = getTingkatKelas(s.kelas);
+        if (tingkat === 7) {
+          s.kelas = getNextClassTarget(s.kelas);
+          promotedCount++;
+        } else if (tingkat === 8) {
+          s.kelas = getNextClassTarget(s.kelas);
+          promotedCount++;
+        } else if (tingkat === 9) {
+          s.kelas = 'LULUS-ALUMNI';
+          graduatedCount++;
+        }
+      });
+
+      // 3. Reset pendaftaran ekstra jika opsi dicentang
+      const isResetEkskul = document.getElementById('chkAutoResetEkskulNaikKelas')?.checked;
+      if (isResetEkskul) {
+        anggotaEkskul = [];
+      }
+
+      // 4. Sinkronisasi ke server
+      try {
+        await callBackendPost({
+          action: 'simpanMasterSiswa',
+          siswaList: masterSiswa,
+          pin: confirmPin
+        });
+
+        Swal.fire({
+          icon: 'success',
+          title: 'Promosi Tahun Ajaran Baru Sukses! 🎉',
+          html: `
+            <div class="text-xs text-slate-600 space-y-1 text-left p-2">
+              <p>• <b>${promotedCount} siswa</b> berhasil naik ke jenjang kelas berikutnya.</p>
+              <p>• <b>${graduatedCount} siswa kelas 9</b> telah dialihkan ke status Lulus (Alumni).</p>
+              <p>• File cadangan data siswa lama berhasil diunduh ke komputer Anda.</p>
+            </div>
+          `,
+          confirmButtonText: 'Selesai'
+        });
+
+        renderManajemenUser();
+      } catch (err) {
+        Swal.fire('Tersimpan Lokal', 'Kenaikan kelas berhasil diproses di sesi lokal.', 'info');
+        renderManajemenUser();
+      }
+    }
+
+    // FITUR KENAIKAN KELAS: Mode B Selektif per Rombel
+    function bukaModalSelektifNaikKelasRombel() {
+      const asal = document.getElementById('selectNaikKelasRombelAsal')?.value;
+      const tujuan = document.getElementById('inputNaikKelasRombelTujuan')?.value.trim();
+      const modal = document.getElementById('modalSelektifNaikKelasRombel');
+      if (!asal || !modal) return;
+
+      document.getElementById('modalSelektifNaikTitle').innerText = `Kenaikan Kelas Rombel ${asal}`;
+      document.getElementById('labelSelektifRombelRoute').innerText = `${asal}  ➔  ${tujuan || getNextClassTarget(asal)}`;
+
+      currentSelektifRombelStudents = (masterSiswa || []).filter(s => s.kelas === asal).map(s => ({
+        nisn: s.nisn,
+        nama: s.nama,
+        kelasAsal: asal,
+        kelasTujuan: tujuan || getNextClassTarget(asal),
+        keputusan: 'NAIK' // 'NAIK' atau 'TINGGAL'
+      }));
+
+      renderTableSelektifNaikKelas();
+      modal.classList.remove('hidden');
+      safeCreateIcons();
+    }
+
+    function tutupModalSelektifNaikKelasRombel() {
+      const modal = document.getElementById('modalSelektifNaikKelasRombel');
+      if (modal) modal.classList.add('hidden');
+    }
+
+    function renderTableSelektifNaikKelas() {
+      const tbody = document.getElementById('tableSelektifNaikKelasBody');
+      if (!tbody) return;
+
+      tbody.innerHTML = currentSelektifRombelStudents.map((item, idx) => {
+        const isNaik = item.keputusan === 'NAIK';
+        return `
+          <tr class="hover:bg-slate-50 transition ${!isNaik ? 'bg-rose-50/40' : ''}">
+            <td class="py-2.5 px-3 text-center text-slate-400 font-bold">${idx + 1}</td>
+            <td class="py-2.5 px-3 font-mono font-bold text-slate-700">${escapeHtml(item.nisn)}</td>
+            <td class="py-2.5 px-3 font-bold text-slate-900">${escapeHtml(item.nama)}</td>
+            <td class="py-2.5 px-3">
+              <div class="flex items-center gap-3">
+                <label class="inline-flex items-center gap-1.5 cursor-pointer">
+                  <input type="radio" name="keputusan_${item.nisn}" value="NAIK" ${isNaik ? 'checked' : ''} onchange="updateKeputusanSiswaSelektif('${item.nisn}', 'NAIK')" class="text-emerald-600">
+                  <span class="text-xs font-bold text-emerald-800">Naik ke <b>${escapeHtml(item.kelasTujuan)}</b></span>
+                </label>
+                <label class="inline-flex items-center gap-1.5 cursor-pointer">
+                  <input type="radio" name="keputusan_${item.nisn}" value="TINGGAL" ${!isNaik ? 'checked' : ''} onchange="updateKeputusanSiswaSelektif('${item.nisn}', 'TINGGAL')" class="text-rose-600">
+                  <span class="text-xs font-bold text-rose-700">Tinggal di <b>${escapeHtml(item.kelasAsal)}</b></span>
+                </label>
+              </div>
+            </td>
+          </tr>
+        `;
+      }).join('');
+    }
+
+    function updateKeputusanSiswaSelektif(nisn, keputusan) {
+      const item = currentSelektifRombelStudents.find(x => isSameNisn(x.nisn, nisn));
+      if (item) {
+        item.keputusan = keputusan;
+        renderTableSelektifNaikKelas();
+      }
+    }
+
+    function setSemuaSiswaSelektifStatus(status) {
+      currentSelektifRombelStudents.forEach(item => {
+        item.keputusan = status;
+      });
+      renderTableSelektifNaikKelas();
+    }
+
+    async function handleSimpanKenaikanKelasRombel() {
+      if (!currentSelektifRombelStudents || currentSelektifRombelStudents.length === 0) return;
+
+      const naikCount = currentSelektifRombelStudents.filter(x => x.keputusan === 'NAIK').length;
+      const tinggalCount = currentSelektifRombelStudents.filter(x => x.keputusan === 'TINGGAL').length;
+
+      const confirm = await Swal.fire({
+        title: 'Simpan Kenaikan Kelas Rombel?',
+        html: `
+          <div class="text-xs text-left text-slate-700 space-y-1.5 p-2">
+            <div>• <b>${naikCount} Siswa</b> akan Naik Kelas ke rombel tujuan.</div>
+            <div>• <b>${tinggalCount} Siswa</b> akan Tinggal di rombel saat ini.</div>
+            <p class="text-slate-400 mt-2 text-[11px]">Salinan cadangan CSV akan diunduh otomatis.</p>
+          </div>
+        `,
+        icon: 'question',
+        showCancelButton: true,
+        confirmButtonText: 'Ya, Simpan Promosi',
+        cancelButtonText: 'Batal'
+      });
+
+      if (!confirm.isConfirmed) return;
+
+      // Backup otomatis
+      unduhBackupSiswaSebelumNaikKelas();
+
+      Swal.fire({
+        title: 'Menyimpan Kenaikan Kelas Rombel...',
+        didOpen: () => Swal.showLoading(),
+        allowOutsideClick: false
+      });
+
+      currentSelektifRombelStudents.forEach(item => {
+        const s = (masterSiswa || []).find(x => isSameNisn(x.nisn, item.nisn));
+        if (s) {
+          if (item.keputusan === 'NAIK') {
+            s.kelas = item.kelasTujuan;
+          }
+        }
+      });
+
+      try {
+        await callBackendPost({
+          action: 'simpanMasterSiswa',
+          siswaList: masterSiswa,
+          pin: appConfig.PIN_ADMIN || '123456'
+        });
+
+        tutupModalSelektifNaikKelasRombel();
+        Swal.fire({
+          icon: 'success',
+          title: 'Promosi Rombel Selesai! 🎉',
+          text: `Kenaikan kelas untuk rombel tersebut berhasil disimpan.`,
+          confirmButtonText: 'OK'
+        });
+
+        renderManajemenUser();
+      } catch (err) {
+        tutupModalSelektifNaikKelasRombel();
+        Swal.fire('Tersimpan Lokal', 'Kenaikan kelas rombel tersimpan di sesi lokal.', 'info');
+        renderManajemenUser();
+      }
+    }
+
+    // Ekspor CSV Data Siswa & Guru
+    function eksporCsvDataSiswa() {
+      let csv = "No,NISN,NIS,Nama Lengkap,Kelas,Gender,Tanggal Lahir,No HP Ortu,NIP Guru Wali\n";
+      (masterSiswa || []).forEach((s, idx) => {
+        csv += `${idx + 1},"${s.nisn}","${s.nis || ''}","${(s.nama || '').replace(/"/g, '""')}","${s.kelas}","${s.gender || 'L'}","${s.tglLahir || ''}","${s.noHpOrtu || ''}","${s.nipGuruWali || ''}"\n`;
+      });
+
+      const blob = new Blob(["\uFEFF" + csv], { type: 'text/csv;charset=utf-8;' });
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.href = url;
+      link.download = `Data_Siswa_SuperApp_${Date.now()}.csv`;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    }
+
+    function eksporCsvDataGuru() {
+      let csv = "No,NIP,Nama Lengkap,Peran,Rombel Wali,Cabang Ekskul,Mata Pelajaran,No HP\n";
+      (masterGuru || []).forEach((g, idx) => {
+        csv += `${idx + 1},"${g.nip}","${(g.nama || '').replace(/"/g, '""')}","${g.peran}","${g.rombelWali || ''}","${g.cabangEkskul || ''}","${(g.mapel || '').replace(/"/g, '""')}","${g.noHp || ''}"\n`;
+      });
+
+      const blob = new Blob(["\uFEFF" + csv], { type: 'text/csv;charset=utf-8;' });
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.href = url;
+      link.download = `Data_Guru_PTK_SuperApp_${Date.now()}.csv`;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    }
+
+    function eksporCsvDataPengguna() {
+      eksporCsvDataSiswa();
+    }
+
+    // Form Ganti PIN Super Admin
+    async function handleGantiPinAdmin(e) {
+      e.preventDefault();
+      const pinLama = document.getElementById('inputUserGantiPinLama')?.value.trim();
+      const pinBaru = document.getElementById('inputUserGantiPinBaru')?.value.trim();
+      const pinKonf = document.getElementById('inputUserGantiPinKonfirmasi')?.value.trim();
+
+      const currentPin = String(appConfig.PIN_ADMIN || '123456').trim();
+      if (pinLama !== currentPin) {
+        Swal.fire('PIN Lama Salah', 'PIN Administrator saat ini tidak sesuai!', 'error');
+        return;
+      }
+
+      if (pinBaru.length < 4) {
+        Swal.fire('PIN Terlalu Pendek', 'PIN baru minimal terdiri dari 4 digit angka!', 'warning');
+        return;
+      }
+
+      if (pinBaru !== pinKonf) {
+        Swal.fire('Konfirmasi Tidak Cocok', 'PIN baru dan konfirmasi PIN tidak sama!', 'error');
+        return;
+      }
+
+      Swal.fire({
+        title: 'Menyimpan PIN Administrator Baru...',
+        didOpen: () => Swal.showLoading(),
+        allowOutsideClick: false
+      });
+
+      appConfig.PIN_ADMIN = pinBaru;
+      try {
+        localStorage.setItem("SUPERAPP_ADMIN_PIN", pinBaru);
+      } catch (err) {}
+
+      try {
+        await callBackendPost({
+          action: 'simpanPengaturan',
+          config: appConfig,
+          pin: pinBaru
+        });
+
+        Swal.fire('PIN Berhasil Diganti! 🔒', 'PIN Administrator baru telah aktif dan tersimpan ke Google Sheets.', 'success');
+        document.getElementById('inputUserGantiPinLama').value = '';
+        document.getElementById('inputUserGantiPinBaru').value = '';
+        document.getElementById('inputUserGantiPinKonfirmasi').value = '';
+      } catch (err) {
+        Swal.fire('Tersimpan Lokal', 'PIN Administrator baru aktif di peramban ini.', 'info');
+      }
     }
   </script>
 </body>
