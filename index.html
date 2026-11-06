@@ -1475,6 +1475,11 @@
               <select id="rekapWalasSelectKelas" onchange="renderRekapWalasEkskul()" class="modern-select px-3 py-1.5 text-xs font-bold text-slate-700 cursor-pointer">
                 <option value="8-A">Kelas 8-A</option>
               </select>
+              <select id="rekapWalasFilterKepatuhan" onchange="renderRekapWalasEkskul()" class="modern-select px-3 py-1.5 text-xs font-bold text-slate-700 cursor-pointer">
+                <option value="SEMUA">Semua Status Siswa</option>
+                <option value="KURANG">âš ï¸ Belum Memenuhi Syarat Ekstra</option>
+                <option value="LENGKAP">âœ“ Lengkap Sesuai Syarat</option>
+              </select>
               <button onclick="eksporCsvRekapWalas()" class="px-3.5 py-2 bg-emerald-50 hover:bg-emerald-100 text-emerald-700 font-bold rounded-xl text-xs border border-emerald-200 transition flex items-center gap-1.5 cursor-pointer">
                 <i data-lucide="download" class="w-4 h-4"></i>
                 <span>Ekspor ke CSV / Excel</span>
@@ -1498,6 +1503,7 @@
                   <th class="py-3 px-3">No</th>
                   <th class="py-3 px-3">NISN</th>
                   <th class="py-3 px-3">Nama Siswa</th>
+                  <th class="py-3 px-3">Status Syarat Ekstra</th>
                   <th class="py-3 px-3">Cabang Ekskul Diikuti</th>
                   <th class="py-3 px-3 text-center">Hadir</th>
                   <th class="py-3 px-3 text-center">Sakit</th>
@@ -2487,7 +2493,14 @@
               </div>
             </div>
 
-            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3">
+              <div>
+                <label class="block text-xs font-bold text-slate-700 uppercase mb-1">Semester Akademik</label>
+                <select id="cfgSemesterAktif" class="w-full px-3.5 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs font-bold">
+                  <option value="1">Semester 1 (Ganjil)</option>
+                  <option value="2">Semester 2 (Genap - Kls 9 Bebas)</option>
+                </select>
+              </div>
               <div>
                 <label class="block text-xs font-bold text-slate-700 uppercase mb-1">Jadwal Rilis Kelulusan (Popup Kalender)</label>
                 <input type="datetime-local" id="cfgTglRilisLulus" onclick="try{this.showPicker()}catch(e){}" class="w-full px-3.5 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs font-bold cursor-pointer">
@@ -2782,8 +2795,8 @@
           </div>
         </div>
 
-        <!-- 4 Statistik Ringkasan Mini Cards -->
-        <div class="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
+        <!-- 5 Statistik Ringkasan Mini Cards -->
+        <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3 sm:gap-4">
           <div class="p-4 bg-white rounded-2xl border border-slate-200 shadow-xs flex items-center gap-3">
             <div class="w-10 h-10 rounded-xl bg-purple-50 text-purple-700 flex items-center justify-center font-bold flex-shrink-0">
               <i data-lucide="award" class="w-5 h-5"></i>
@@ -2803,12 +2816,12 @@
             </div>
           </div>
           <div class="p-4 bg-white rounded-2xl border border-slate-200 shadow-xs flex items-center gap-3">
-            <div class="w-10 h-10 rounded-xl bg-rose-50 text-rose-700 flex items-center justify-center font-bold flex-shrink-0">
+            <div class="w-10 h-10 rounded-xl bg-slate-100 text-slate-700 flex items-center justify-center font-bold flex-shrink-0">
               <i data-lucide="lock" class="w-5 h-5"></i>
             </div>
             <div class="min-w-0">
               <span class="text-[11px] font-bold text-slate-400 block truncate">Pendaftaran Tutup</span>
-              <span id="statAdminEkskulTutup" class="text-base sm:text-lg font-black text-rose-700">0 Cabang</span>
+              <span id="statAdminEkskulTutup" class="text-base sm:text-lg font-black text-slate-700">0 Cabang</span>
             </div>
           </div>
           <div class="p-4 bg-white rounded-2xl border border-slate-200 shadow-xs flex items-center gap-3">
@@ -2820,37 +2833,209 @@
               <span id="statAdminEkskulAnggota" class="text-base sm:text-lg font-black text-blue-700">0 Siswa</span>
             </div>
           </div>
-        </div>
-
-        <!-- Filter & Pencarian Bar -->
-        <div class="bg-white p-4 sm:p-5 rounded-2xl border border-slate-200 shadow-xs flex flex-col md:flex-row items-stretch md:items-center justify-between gap-3">
-          <div class="relative flex-1">
-            <i data-lucide="search" class="w-4 h-4 text-slate-400 absolute left-3.5 top-3"></i>
-            <input type="text" id="inputSearchAdminEkskul" oninput="renderAdminEkskul()" placeholder="Cari cabang ekskul, ID, lokasi, atau pembina..." class="w-full pl-9 pr-4 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs focus:outline-none focus:border-purple-500 focus:bg-white transition">
-          </div>
-          <div class="flex items-center gap-2 flex-wrap sm:flex-nowrap">
-            <select id="filterKategoriAdminEkskul" onchange="renderAdminEkskul()" class="px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs font-semibold text-slate-700 focus:outline-none focus:border-purple-500">
-              <option value="">Semua Kategori</option>
-              <option value="Olahraga">Olahraga</option>
-              <option value="Seni & Budaya">Seni & Budaya</option>
-              <option value="Kepanduan">Kepanduan / Bela Negara</option>
-              <option value="Sains & Teknologi">Sains & Teknologi</option>
-              <option value="Kemanusiaan">Kemanusiaan & PMR</option>
-              <option value="Keagamaan">Keagamaan</option>
-              <option value="Bahasa">Bahasa & Sastra</option>
-              <option value="Umum">Umum / Lainnya</option>
-            </select>
-            <select id="filterStatusAdminEkskul" onchange="renderAdminEkskul()" class="px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs font-semibold text-slate-700 focus:outline-none focus:border-purple-500">
-              <option value="">Semua Status</option>
-              <option value="BUKA">Pendaftaran Buka</option>
-              <option value="TUTUP">Pendaftaran Tutup</option>
-            </select>
+          <!-- Card 5: Peringatan Siswa Belum Lengkap Ekstra -->
+          <div onclick="switchSubTabAdminEkskul('kepatuhan')" class="p-4 bg-rose-50/70 hover:bg-rose-100/70 border border-rose-200 rounded-2xl shadow-xs flex items-center gap-3 cursor-pointer transition col-span-2 sm:col-span-1" title="Klik untuk audit siswa belum memenuhi syarat ekstra">
+            <div class="w-10 h-10 rounded-xl bg-rose-600 text-white flex items-center justify-center font-bold flex-shrink-0 shadow-xs">
+              <i data-lucide="alert-triangle" class="w-5 h-5"></i>
+            </div>
+            <div class="min-w-0">
+              <span class="text-[11px] font-extrabold text-rose-800 block truncate">Belum Lengkap Ekstra</span>
+              <span id="statAdminEkskulKurang" class="text-base sm:text-lg font-black text-rose-700">0 Siswa</span>
+            </div>
           </div>
         </div>
 
-        <!-- Container Daftar Ekskul (Responsive Grid) -->
-        <div id="containerListAdminEkskul" class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
-          <!-- Diisi otomatis oleh renderAdminEkskul() -->
+        <!-- Sub-Navigasi Tab Ekskul Admin -->
+        <div class="flex items-center gap-2 border-b border-slate-200 pb-3 flex-wrap">
+          <button type="button" id="btnSubTabAdminEkskul_master" onclick="switchSubTabAdminEkskul('master')" class="px-4 py-2.5 rounded-xl text-xs font-black transition flex items-center gap-2 bg-purple-600 text-white shadow-xs cursor-pointer">
+            <i data-lucide="award" class="w-4 h-4"></i>
+            <span>Cabang Ekstrakurikuler</span>
+            <span id="badgeSubTabMasterEkskul" class="px-2 py-0.5 rounded-full text-[10px] bg-white/20 text-white font-mono">0</span>
+          </button>
+          <button type="button" id="btnSubTabAdminEkskul_kepatuhan" onclick="switchSubTabAdminEkskul('kepatuhan')" class="px-4 py-2.5 rounded-xl text-xs font-bold transition flex items-center gap-2 bg-slate-100 hover:bg-slate-200 text-slate-700 cursor-pointer">
+            <i data-lucide="shield-alert" class="w-4 h-4 text-amber-600"></i>
+            <span>Audit & Kepatuhan Siswa (Wajib & Pilihan)</span>
+            <span id="badgeSubTabKepatuhanEkskul" class="px-2.5 py-0.5 rounded-full text-[10px] bg-rose-600 text-white font-black animate-pulse">0 Kurang</span>
+          </button>
+        </div>
+
+        <!-- SUB-VIEW 1: MASTER CABANG EKSTRAKURIKULER -->
+        <div id="subViewAdminEkskul_master" class="space-y-4">
+          <!-- Filter & Pencarian Bar -->
+          <div class="bg-white p-4 sm:p-5 rounded-2xl border border-slate-200 shadow-xs flex flex-col md:flex-row items-stretch md:items-center justify-between gap-3">
+            <div class="relative flex-1">
+              <i data-lucide="search" class="w-4 h-4 text-slate-400 absolute left-3.5 top-3"></i>
+              <input type="text" id="inputSearchAdminEkskul" oninput="renderAdminEkskul()" placeholder="Cari cabang ekskul, ID, lokasi, atau pembina..." class="w-full pl-9 pr-4 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs focus:outline-none focus:border-purple-500 focus:bg-white transition">
+            </div>
+            <div class="flex items-center gap-2 flex-wrap sm:flex-nowrap">
+              <select id="filterKategoriAdminEkskul" onchange="renderAdminEkskul()" class="px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs font-semibold text-slate-700 focus:outline-none focus:border-purple-500">
+                <option value="">Semua Kategori</option>
+                <option value="Olahraga">Olahraga</option>
+                <option value="Seni & Budaya">Seni & Budaya</option>
+                <option value="Kepanduan">Kepanduan / Bela Negara</option>
+                <option value="Sains & Teknologi">Sains & Teknologi</option>
+                <option value="Kemanusiaan">Kemanusiaan & PMR</option>
+                <option value="Keagamaan">Keagamaan</option>
+                <option value="Bahasa">Bahasa & Sastra</option>
+                <option value="Umum">Umum / Lainnya</option>
+              </select>
+              <select id="filterStatusAdminEkskul" onchange="renderAdminEkskul()" class="px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs font-semibold text-slate-700 focus:outline-none focus:border-purple-500">
+                <option value="">Semua Status</option>
+                <option value="BUKA">Pendaftaran Buka</option>
+                <option value="TUTUP">Pendaftaran Tutup</option>
+              </select>
+            </div>
+          </div>
+
+          <!-- Container Daftar Ekskul (Responsive Grid) -->
+          <div id="containerListAdminEkskul" class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
+            <!-- Diisi otomatis oleh renderAdminEkskul() -->
+          </div>
+        </div>
+
+        <!-- SUB-VIEW 2: AUDIT & MONITORING KEPATUHAN EKSTRA SISWA -->
+        <div id="subViewAdminEkskul_kepatuhan" class="hidden space-y-5">
+          <!-- Banner Edukasi & Aturan Beban Ekskul -->
+          <div class="p-5 bg-gradient-to-r from-amber-500/10 via-purple-500/10 to-indigo-500/10 border border-amber-200/90 rounded-3xl flex flex-col lg:flex-row lg:items-center justify-between gap-4">
+            <div class="flex items-start gap-3.5">
+              <div class="w-10 h-10 rounded-2xl bg-amber-500 text-white flex items-center justify-center flex-shrink-0 mt-0.5 shadow-sm">
+                <i data-lucide="shield-alert" class="w-5 h-5"></i>
+              </div>
+              <div class="text-xs text-slate-700 space-y-1.5">
+                <div class="flex items-center gap-2 flex-wrap">
+                  <h4 class="font-black text-sm text-slate-900">Ketentuan Resmi Beban Ekstrakurikuler Siswa</h4>
+                  <span id="labelSubKepatuhanSemester" class="px-2.5 py-0.5 bg-indigo-600 text-white rounded-full text-[10px] font-black uppercase">Semester 1 (Ganjil)</span>
+                </div>
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-2 text-[11px] text-slate-700 mt-1">
+                  <div class="p-2.5 bg-white/80 rounded-xl border border-slate-200/80">
+                    <span class="font-extrabold text-indigo-900 block">Kelas 7 (Fase D1):</span>
+                    <span>Wajib <b>Pramuka</b> + Min. <b>1 Ekstra Pilihan</b>.</span>
+                  </div>
+                  <div class="p-2.5 bg-white/80 rounded-xl border border-slate-200/80">
+                    <span class="font-extrabold text-indigo-900 block">Kelas 8 (Fase D2):</span>
+                    <span>Wajib mengambil <b>2 Ekstra Pilihan</b>.</span>
+                  </div>
+                  <div class="p-2.5 bg-white/80 rounded-xl border border-slate-200/80">
+                    <span class="font-extrabold text-indigo-900 block">Kelas 9 (Fase D3):</span>
+                    <span><b>Sem 1:</b> Wajib 2 Pilihan. <b>Sem 2:</b> Bebas Ekstra (Ujian).</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="flex items-center gap-2 flex-shrink-0 self-start lg:self-center">
+              <button type="button" onclick="eksporCsvKepatuhanEkskul(true)" class="px-3.5 py-2.5 bg-rose-600 hover:bg-rose-700 text-white font-bold rounded-xl text-xs transition flex items-center gap-1.5 shadow-xs cursor-pointer" title="Unduh CSV siswa yang belum memenuhi syarat">
+                <i data-lucide="download" class="w-4 h-4"></i>
+                <span>Ekspor Siswa Kurang</span>
+              </button>
+              <button type="button" onclick="cetakLaporanKepatuhanEkskulA4()" class="px-3.5 py-2.5 bg-slate-800 hover:bg-slate-900 text-white font-bold rounded-xl text-xs transition flex items-center gap-1.5 shadow-xs cursor-pointer" title="Cetak Lembar Dokumen Resmi Kesiswaan (A4)">
+                <i data-lucide="printer" class="w-4 h-4"></i>
+                <span>Cetak Rekap A4</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- 4 Ringkasan Metrik Kepatuhan -->
+          <div class="grid grid-cols-2 lg:grid-cols-4 gap-3">
+            <div class="p-4 bg-white rounded-2xl border border-slate-200 shadow-xs">
+              <span class="text-[11px] font-bold text-slate-400 block truncate uppercase">Total Siswa Dianalisis</span>
+              <span id="kepatuhanMetrikTotal" class="text-xl font-black text-slate-800 mt-1 block">0 Siswa</span>
+              <span class="text-[10px] text-slate-400">Seluruh rombel 7, 8, 9</span>
+            </div>
+            <div class="p-4 bg-rose-50/60 rounded-2xl border border-rose-200 shadow-xs">
+              <span class="text-[11px] font-bold text-rose-600 block truncate uppercase">Belum Memenuhi Syarat</span>
+              <span id="kepatuhanMetrikKurang" class="text-xl font-black text-rose-700 mt-1 block">0 Siswa</span>
+              <span class="text-[10px] text-rose-600 font-semibold">Perlu didaftarkan / diingatkan</span>
+            </div>
+            <div class="p-4 bg-emerald-50/60 rounded-2xl border border-emerald-200 shadow-xs">
+              <span class="text-[11px] font-bold text-emerald-700 block truncate uppercase">Lengkap Sesuai Syarat</span>
+              <span id="kepatuhanMetrikLengkap" class="text-xl font-black text-emerald-700 mt-1 block">0 Siswa</span>
+              <span class="text-[10px] text-emerald-600 font-semibold">Telah memenuhi kuota beban</span>
+            </div>
+            <div class="p-4 bg-sky-50/60 rounded-2xl border border-sky-200 shadow-xs">
+              <span class="text-[11px] font-bold text-sky-700 block truncate uppercase">Bebas Ekstra</span>
+              <span id="kepatuhanMetrikBebas" class="text-xl font-black text-sky-700 mt-1 block">0 Siswa</span>
+              <span class="text-[10px] text-sky-600 font-semibold">Kelas 9 Semester 2</span>
+            </div>
+          </div>
+
+          <!-- Filter & Kontrol Audit Bar -->
+          <div class="bg-white p-4 rounded-2xl border border-slate-200 shadow-xs space-y-3">
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-2.5">
+              <!-- Filter Tingkat -->
+              <div>
+                <label class="block text-[10px] font-bold text-slate-500 uppercase mb-1">Tingkat Kelas</label>
+                <select id="filterKepatuhanTingkat" onchange="renderMonitoringKepatuhanEkskul()" class="modern-select w-full px-3 py-2 text-xs font-bold text-slate-700 bg-slate-50 border border-slate-200 rounded-xl cursor-pointer">
+                  <option value="">Semua Tingkat (7, 8, 9)</option>
+                  <option value="7">Kelas 7 (Wajib Pramuka + 1 Pilihan)</option>
+                  <option value="8">Kelas 8 (Wajib 2 Pilihan)</option>
+                  <option value="9">Kelas 9 (Wajib 2 Pilihan / Bebas Sem 2)</option>
+                </select>
+              </div>
+
+              <!-- Filter Status Kepatuhan -->
+              <div>
+                <label class="block text-[10px] font-bold text-slate-500 uppercase mb-1">Status Kepatuhan</label>
+                <select id="filterKepatuhanStatus" onchange="renderMonitoringKepatuhanEkskul()" class="modern-select w-full px-3 py-2 text-xs font-bold text-slate-700 bg-slate-50 border border-slate-200 rounded-xl cursor-pointer">
+                  <option value="KURANG" selected>âš ï¸ Belum Memenuhi Syarat (Prioritas)</option>
+                  <option value="">Semua Status Siswa</option>
+                  <option value="KURANG_PILIHAN">Kelas 7: Belum Ada Pilihan</option>
+                  <option value="KURANG_PRAMUKA">Kelas 7: Belum Ada Pramuka</option>
+                  <option value="KURANG_1">Kelas 8/9: Kurang 1 Pilihan (Baru 1)</option>
+                  <option value="BELUM_IKUT">Kelas 8/9: Belum Ikut Ekstra (0)</option>
+                  <option value="LENGKAP">âœ… Sudah Lengkap Sesuai Syarat</option>
+                  <option value="BEBAS_EKSTRA">ðŸŽ“ Bebas Ekstra (Kelas 9 Sem 2)</option>
+                </select>
+              </div>
+
+              <!-- Filter Rombel -->
+              <div>
+                <label class="block text-[10px] font-bold text-slate-500 uppercase mb-1">Rombel Kelas</label>
+                <select id="filterKepatuhanRombel" onchange="renderMonitoringKepatuhanEkskul()" class="modern-select w-full px-3 py-2 text-xs font-bold text-slate-700 bg-slate-50 border border-slate-200 rounded-xl cursor-pointer">
+                  <option value="">Semua Rombel</option>
+                </select>
+              </div>
+
+              <!-- Pengatur Semester Uji -->
+              <div>
+                <label class="block text-[10px] font-bold text-indigo-700 uppercase mb-1">Semester Evaluasi</label>
+                <select id="filterKepatuhanSemester" onchange="renderMonitoringKepatuhanEkskul()" class="modern-select w-full px-3 py-2 text-xs font-bold text-indigo-900 bg-indigo-50/70 border border-indigo-200 rounded-xl cursor-pointer">
+                  <option value="1">Semester 1 (Ganjil)</option>
+                  <option value="2">Semester 2 (Genap - Kls 9 Bebas)</option>
+                </select>
+              </div>
+
+              <!-- Cari Siswa -->
+              <div>
+                <label class="block text-[10px] font-bold text-slate-500 uppercase mb-1">Cari Siswa</label>
+                <div class="relative">
+                  <i data-lucide="search" class="w-3.5 h-3.5 text-slate-400 absolute left-3 top-2.5"></i>
+                  <input type="text" id="inputSearchKepatuhanEkskul" oninput="renderMonitoringKepatuhanEkskul()" placeholder="Nama atau NISN..." class="w-full pl-8 pr-3 py-1.5 bg-slate-50 border border-slate-200 rounded-xl text-xs focus:bg-white focus:outline-none focus:border-indigo-500">
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Tabel Data Kepatuhan Siswa -->
+          <div class="bg-white rounded-3xl border border-slate-200 shadow-xs overflow-hidden">
+            <div class="overflow-x-auto">
+              <table class="w-full text-left text-xs">
+                <thead class="bg-slate-50 text-slate-600 font-bold border-b border-slate-200">
+                  <tr>
+                    <th class="py-3 px-3 w-10 text-center">No</th>
+                    <th class="py-3 px-3">NISN & Nama Siswa</th>
+                    <th class="py-3 px-2 text-center w-20">Kelas</th>
+                    <th class="py-3 px-3">Status Kepatuhan</th>
+                    <th class="py-3 px-3">Ekstra yang Diikuti</th>
+                    <th class="py-3 px-3">Catatan / Analisis Sistem</th>
+                    <th class="py-3 px-3 text-center w-36">Aksi Cepat</th>
+                  </tr>
+                </thead>
+                <tbody id="tableMonitoringKepatuhanEkskulBody" class="divide-y divide-slate-100 font-medium">
+                  <!-- Diisi dinamis oleh renderMonitoringKepatuhanEkskul() -->
+                </tbody>
+              </table>
+            </div>
+          </div>
         </div>
       </div>
     </section>
@@ -3805,6 +3990,7 @@
       POIN_SP1: 30,
       POIN_SP2: 60,
       POIN_SP3: 90,
+      SEMESTER_AKTIF: "1",
       FITUR_REFLEKSI_4F: "NONAKTIF",
       GURU_REFLEKSI_4F_NIPS: [],
       AMBANG_TUGAS_KHUSUS: 3,
@@ -4921,6 +5107,9 @@
         const formattedLulus = (appConfig.TGL_RILIS_KELULUSAN || "").replace(" ", "T");
         document.getElementById('cfgTglRilisLulus').value = formattedLulus;
         document.getElementById('cfgStatusEkskul').value = appConfig.STATUS_PENDAFTARAN_EKSKUL || "BUKA";
+        if (document.getElementById('cfgSemesterAktif')) {
+          document.getElementById('cfgSemesterAktif').value = String(appConfig.SEMESTER_AKTIF || "1");
+        }
         if (document.getElementById('cfgIzinCetakNilai')) {
           document.getElementById('cfgIzinCetakNilai').value = appConfig.IZIN_CETAK_NILAI || "DIBUKA";
         }
@@ -7979,6 +8168,155 @@ ATURAN KETAT:
     }
 
     // Modul Rekap Walas (Walas HANYA Menerima Rekap Terintegrasi)
+    // =========================================================================
+    // MODUL AUDIT & DETEKSI KEPATUHAN EKSTRAKURIKULER SISWA
+    // Kebijakan Beban Ekstra:
+    // 1. Kelas 7: Wajib Pramuka + Wajib Minimal 1 Ekstra Pilihan (selain Pramuka)
+    // 2. Kelas 8: Wajib 2 Ekstra Pilihan
+    // 3. Kelas 9: Sem 1 Wajib 2 Ekstra Pilihan, Sem 2 Bebas Ekstra (Ujian/Kelulusan)
+    // =========================================================================
+    function isEkskulPramuka(ekskul) {
+      if (!ekskul) return false;
+      const id = String(ekskul.id || ekskul.idEkskul || '').toUpperCase();
+      const nama = String(ekskul.nama || ekskul.namaEkskul || '').toLowerCase();
+      const kat = String(ekskul.kategori || '').toLowerCase();
+      return id.includes('PRAMUKA') || nama.includes('pramuka') || kat.includes('pandu');
+    }
+
+    function getTingkatKelas(kelasStr) {
+      const match = String(kelasStr || '').trim().match(/^(\d+)/);
+      if (match) return parseInt(match[1], 10);
+      return null;
+    }
+
+    function evaluasiKepatuhanEkskulSiswa(siswa, semesterAktif) {
+      const sem = String(semesterAktif !== undefined && semesterAktif !== null ? semesterAktif : (appConfig.SEMESTER_AKTIF || '1')).trim();
+      const tingkat = getTingkatKelas(siswa.kelas);
+      
+      const listAktif = (anggotaEkskul || []).filter(a => isSameNisn(a.nisn, siswa.nisn) && String(a.status || 'AKTIF').toUpperCase() === 'AKTIF');
+      
+      const ekskulPramukaList = listAktif.filter(a => isEkskulPramuka(a));
+      const ikutPramuka = ekskulPramukaList.length > 0;
+      
+      const ekskulPilihanList = listAktif.filter(a => !isEkskulPramuka(a));
+      const jmlPilihan = ekskulPilihanList.length;
+
+      let hasil = {
+        tingkat: tingkat,
+        semester: sem,
+        ikutPramuka: ikutPramuka,
+        jmlPilihan: jmlPilihan,
+        totalEkskul: listAktif.length,
+        listAktif: listAktif,
+        ekskulPilihanList: ekskulPilihanList,
+        ekskulPramukaList: ekskulPramukaList,
+        isLengkap: false,
+        statusKode: '',
+        badgeColor: '',
+        statusText: '',
+        keterangan: '',
+        rekomendasi: ''
+      };
+
+      if (tingkat === 7) {
+        if (ikutPramuka && jmlPilihan >= 1) {
+          hasil.isLengkap = true;
+          hasil.statusKode = 'LENGKAP';
+          hasil.badgeColor = 'bg-emerald-50 text-emerald-800 border-emerald-300';
+          hasil.statusText = 'Lengkap';
+          hasil.keterangan = `Pramuka Wajib (âœ“) + ${jmlPilihan} Pilihan (âœ“)`;
+          hasil.rekomendasi = 'Siswa telah memenuhi seluruh kewajiban ekstra kelas 7.';
+        } else if (!ikutPramuka && jmlPilihan === 0) {
+          hasil.isLengkap = false;
+          hasil.statusKode = 'KURANG_SEMUA';
+          hasil.badgeColor = 'bg-rose-100 text-rose-800 border-rose-300';
+          hasil.statusText = 'Belum Ada Ekstra';
+          hasil.keterangan = 'Belum ikut Pramuka & Belum ambil Ekstra Pilihan';
+          hasil.rekomendasi = 'Wajib mendaftar Pramuka dan minimal 1 cabang ekstra pilihan.';
+        } else if (ikutPramuka && jmlPilihan === 0) {
+          hasil.isLengkap = false;
+          hasil.statusKode = 'KURANG_PILIHAN';
+          hasil.badgeColor = 'bg-amber-100 text-amber-900 border-amber-300';
+          hasil.statusText = 'Belum Ada Pilihan';
+          hasil.keterangan = 'Sudah Pramuka Wajib, tapi belum memilih 1 Ekstra Pilihan';
+          hasil.rekomendasi = 'Siswa wajib memilih minimal 1 cabang ekstrakurikuler pilihan.';
+        } else if (!ikutPramuka && jmlPilihan >= 1) {
+          hasil.isLengkap = false;
+          hasil.statusKode = 'KURANG_PRAMUKA';
+          hasil.badgeColor = 'bg-purple-100 text-purple-900 border-purple-300';
+          hasil.statusText = 'Belum Pramuka';
+          hasil.keterangan = `Sudah ada ${jmlPilihan} pilihan, tapi belum terdaftar Pramuka Wajib`;
+          hasil.rekomendasi = 'Siswa kelas 7 wajib didaftarkan ke kegiatan Pramuka Wajib.';
+        }
+      } else if (tingkat === 8) {
+        const totalEkskul = listAktif.length;
+        if (totalEkskul >= 2) {
+          hasil.isLengkap = true;
+          hasil.statusKode = 'LENGKAP';
+          hasil.badgeColor = 'bg-emerald-50 text-emerald-800 border-emerald-300';
+          hasil.statusText = 'Lengkap (2 Ekstra)';
+          hasil.keterangan = `Mengikuti ${totalEkskul} Cabang Ekstra (Syarat: 2 Pilihan)`;
+          hasil.rekomendasi = 'Siswa telah memenuhi syarat 2 ekstra pilihan kelas 8.';
+        } else if (totalEkskul === 1) {
+          hasil.isLengkap = false;
+          hasil.statusKode = 'KURANG_1';
+          hasil.badgeColor = 'bg-amber-100 text-amber-900 border-amber-300';
+          hasil.statusText = 'Kurang 1 Pilihan';
+          hasil.keterangan = `Baru mengikuti 1 ekstra (${listAktif[0].namaEkskul}), wajib 2 pilihan`;
+          hasil.rekomendasi = 'Siswa wajib memilih 1 cabang ekstrakurikuler pilihan lagi.';
+        } else {
+          hasil.isLengkap = false;
+          hasil.statusKode = 'BELUM_IKUT';
+          hasil.badgeColor = 'bg-rose-100 text-rose-800 border-rose-300';
+          hasil.statusText = 'Belum Memilih';
+          hasil.keterangan = 'Belum memilih ekstrakurikuler sama sekali (Wajib 2 Pilihan)';
+          hasil.rekomendasi = 'Siswa wajib segera mendaftar 2 cabang ekstrakurikuler pilihan.';
+        }
+      } else if (tingkat === 9) {
+        if (sem === '2' || sem === 'Genap') {
+          hasil.isLengkap = true;
+          hasil.statusKode = 'BEBAS_EKSTRA';
+          hasil.badgeColor = 'bg-sky-50 text-sky-800 border-sky-300';
+          hasil.statusText = 'Bebas Ekstra (Sem 2)';
+          hasil.keterangan = 'Kelas 9 Semester 2 dibebaskan dari ekstra (Fokus Persiapan Asesmen & Kelulusan)';
+          hasil.rekomendasi = 'Tidak ada kewajiban ekstra pada semester ini.';
+        } else {
+          const totalEkskul = listAktif.length;
+          if (totalEkskul >= 2) {
+            hasil.isLengkap = true;
+            hasil.statusKode = 'LENGKAP';
+            hasil.badgeColor = 'bg-emerald-50 text-emerald-800 border-emerald-300';
+            hasil.statusText = 'Lengkap (2 Ekstra)';
+            hasil.keterangan = `Mengikuti ${totalEkskul} Cabang Ekstra (Syarat: 2 Pilihan)`;
+            hasil.rekomendasi = 'Siswa telah memenuhi syarat 2 ekstra pilihan kelas 9 Sem 1.';
+          } else if (totalEkskul === 1) {
+            hasil.isLengkap = false;
+            hasil.statusKode = 'KURANG_1';
+            hasil.badgeColor = 'bg-amber-100 text-amber-900 border-amber-300';
+            hasil.statusText = 'Kurang 1 Pilihan';
+            hasil.keterangan = `Baru mengikuti 1 ekstra (${listAktif[0].namaEkskul}), wajib 2 pilihan`;
+            hasil.rekomendasi = 'Siswa wajib memilih 1 cabang ekstrakurikuler pilihan lagi.';
+          } else {
+            hasil.isLengkap = false;
+            hasil.statusKode = 'BELUM_IKUT';
+            hasil.badgeColor = 'bg-rose-100 text-rose-800 border-rose-300';
+            hasil.statusText = 'Belum Memilih';
+            hasil.keterangan = 'Belum memilih ekstrakurikuler sama sekali (Wajib 2 Pilihan)';
+            hasil.rekomendasi = 'Siswa wajib segera mendaftar 2 cabang ekstrakurikuler pilihan.';
+          }
+        }
+      } else {
+        hasil.isLengkap = listAktif.length > 0;
+        hasil.statusKode = hasil.isLengkap ? 'LENGKAP' : 'BELUM_IKUT';
+        hasil.badgeColor = hasil.isLengkap ? 'bg-slate-100 text-slate-700 border-slate-300' : 'bg-rose-100 text-rose-700 border-rose-300';
+        hasil.statusText = hasil.isLengkap ? `${listAktif.length} Ekstra` : 'Belum Ikut';
+        hasil.keterangan = `${listAktif.length} ekstra terdaftar`;
+        hasil.rekomendasi = '-';
+      }
+
+      return hasil;
+    }
+
     function renderRekapWalasEkskul() {
       const rombelSelect = document.getElementById('rekapWalasSelectKelas');
       let rombel = "8-A";
@@ -8009,13 +8347,31 @@ ATURAN KETAT:
       const tbody = document.getElementById('tableRekapWalasEkskul');
       if (!tbody) return;
 
+      const filterKepatuhan = document.getElementById('rekapWalasFilterKepatuhan')?.value || 'SEMUA';
       let countAlphaSiswa = 0;
       const listPerluPerhatian = [];
 
-      if (siswaRombel.length === 0) {
-        tbody.innerHTML = `<tr><td colspan="9" class="py-6 text-center text-slate-400">Tidak ada data siswa untuk rombel ${rombel}.</td></tr>`;
+      // Evaluasi kepatuhan beban ekstra seluruh siswa rombel
+      const siswaEvaluasiList = siswaRombel.map(s => {
+        const kep = evaluasiKepatuhanEkskulSiswa(s);
+        return { siswa: s, kepatuhan: kep };
+      });
+
+      const siswaKurangSyarat = siswaEvaluasiList.filter(x => !x.kepatuhan.isLengkap);
+
+      let displayedList = siswaEvaluasiList;
+      if (filterKepatuhan === 'KURANG') {
+        displayedList = displayedList.filter(x => !x.kepatuhan.isLengkap);
+      } else if (filterKepatuhan === 'LENGKAP') {
+        displayedList = displayedList.filter(x => x.kepatuhan.isLengkap);
+      }
+
+      if (displayedList.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="10" class="py-6 text-center text-slate-400">Tidak ada data siswa untuk rombel ${rombel} dengan filter terpilih.</td></tr>`;
       } else {
-        tbody.innerHTML = siswaRombel.map((s, idx) => {
+        tbody.innerHTML = displayedList.map((item, idx) => {
+          const s = item.siswa;
+          const kepatuhan = item.kepatuhan;
           const ikutanArr = anggotaEkskul.filter(a => isSameNisn(a.nisn, s.nisn) && a.status === 'AKTIF');
           const ikutanStr = ikutanArr.map(a => a.namaEkskul).join(', ') || 'Belum ikut';
 
@@ -8036,14 +8392,14 @@ ATURAN KETAT:
           if (alpha >= 5) {
             rincianHtml = `
               <div class="flex flex-wrap items-center gap-1">
-                <span class="px-2 py-0.5 bg-rose-600 text-white rounded-md font-bold text-[10px] inline-flex items-center gap-1 shadow-xs animate-pulse">⚠️ ${alpha}x ALPHA (SP BK)</span>
+                <span class="px-2 py-0.5 bg-rose-600 text-white rounded-md font-bold text-[10px] inline-flex items-center gap-1 shadow-xs animate-pulse">âš ï¸ ${alpha}x ALPHA (SP BK)</span>
                 ${sakit > 0 ? `<span class="px-2 py-0.5 bg-amber-50 text-amber-700 border border-amber-200 rounded-md font-bold text-[10px]">${sakit}x Sakit</span>` : ''}
                 ${izin > 0 ? `<span class="px-2 py-0.5 bg-sky-50 text-sky-700 border border-sky-200 rounded-md font-bold text-[10px]">${izin}x Izin</span>` : ''}
               </div>
             `;
           } else if (absents.length === 0) {
             rincianHtml = hadir > 0 
-              ? `<span class="px-2.5 py-0.5 bg-emerald-50 text-emerald-700 border border-emerald-200 rounded-full font-bold text-[10px] inline-flex items-center gap-1">✓ Disiplin (${hadir}x Hadir)</span>` 
+              ? `<span class="px-2.5 py-0.5 bg-emerald-50 text-emerald-700 border border-emerald-200 rounded-full font-bold text-[10px] inline-flex items-center gap-1">âœ“ Disiplin (${hadir}x Hadir)</span>` 
               : `<span class="text-slate-400 text-[10px] italic">Belum ada sesi</span>`;
           } else {
             const tooltipDetail = absents.map(p => {
@@ -8064,12 +8420,17 @@ ATURAN KETAT:
           }
 
           return `
-            <tr class="hover:bg-slate-50 transition ${alpha >= 5 ? 'bg-rose-50/50' : ''}">
+            <tr class="hover:bg-slate-50 transition ${alpha >= 5 ? 'bg-rose-50/50' : (!kepatuhan.isLengkap ? 'bg-amber-50/30' : '')}">
               <td class="py-3 px-3">${idx + 1}</td>
               <td class="py-3 px-3 font-mono font-bold text-slate-600">${s.nisn}</td>
               <td class="py-3 px-3 font-bold text-slate-800">
                 <span>${s.nama}</span>
                 ${alpha >= 5 ? '<span class="ml-1.5 px-1.5 py-0.5 bg-rose-600 text-white rounded text-[9px] font-black">SP ALPHA</span>' : ''}
+              </td>
+              <td class="py-3 px-3">
+                <span class="px-2.5 py-1 rounded-full text-[10px] font-black border ${kepatuhan.badgeColor}" title="${escapeHtml(kepatuhan.keterangan)}">
+                  ${escapeHtml(kepatuhan.statusText)}
+                </span>
               </td>
               <td class="py-3 px-3"><span class="px-2 py-0.5 bg-blue-50 text-blue-700 rounded font-semibold text-xs">${ikutanStr}</span></td>
               <td class="py-3 px-3 text-center font-bold text-emerald-700">${hadir}</td>
@@ -8085,16 +8446,25 @@ ATURAN KETAT:
       const warningTextElem = document.getElementById('walasEarlyWarningText');
       const warningBoxElem = document.getElementById('walasEarlyWarningBox');
       if (warningTextElem && warningBoxElem) {
+        let warningMessages = [];
+        if (siswaKurangSyarat.length > 0) {
+          const detailKurang = siswaKurangSyarat.slice(0, 5).map(x => `${x.siswa.nama} (${x.kepatuhan.statusText})`).join(', ');
+          const sisa = siswaKurangSyarat.length > 5 ? ` dan ${siswaKurangSyarat.length - 5} lainnya` : '';
+          warningMessages.push(`<b>âš ï¸ Peringatan Kepatuhan Syarat Ekstra:</b> Terdapat <b>${siswaKurangSyarat.length} siswa</b> di rombel ${rombel} belum memenuhi ketentuan beban ekstra: ${detailKurang}${sisa}. Mohon wali kelas mengingatkan siswa & orang tua.`);
+        }
         if (listPerluPerhatian.length > 0) {
+          warningMessages.push(`<b>âš ï¸ Peringatan Disiplin Walas:</b> Sebanyak <b>${listPerluPerhatian.length} siswa</b> di rombel ${rombel} tercatat memiliki 5x atau lebih Alpha di kegiatan ekskul: ${listPerluPerhatian.join(', ')}. Segera lakukan pemanggilan atau koordinasi dengan Guru BK.`);
+        }
+
+        if (warningMessages.length > 0) {
           warningBoxElem.className = 'mt-4 p-4 bg-rose-50 border border-rose-300 rounded-2xl flex items-start gap-3 text-rose-900';
-          warningTextElem.innerHTML = `<b>Peringatan Disiplin Walas:</b> Sebanyak <b>${listPerluPerhatian.length} siswa</b> di rombel ${rombel} tercatat memiliki 5x atau lebih Alpha di kegiatan ekskul: ${listPerluPerhatian.join(', ')}. Segera lakukan pemanggilan atau koordinasi dengan Guru BK.`;
+          warningTextElem.innerHTML = warningMessages.join('<br class="my-1">');
         } else {
           warningBoxElem.className = 'mt-4 p-4 bg-emerald-50 border border-emerald-200 rounded-2xl flex items-start gap-3 text-emerald-900';
-          warningTextElem.innerText = `Seluruh ${siswaRombel.length} siswa di rombel ${rombel} terpantau aktif dan berpartisipasi tertib di kegiatan ekstrakurikuler. Nihil pelanggaran berat.`;
+          warningTextElem.innerText = `Seluruh ${siswaRombel.length} siswa di rombel ${rombel} telah memenuhi ketentuan ekstra dan berpartisipasi tertib di kegiatan ekstrakurikuler. Nihil pelanggaran berat.`;
         }
       }
     }
-
     function eksporCsvRekapWalas() {
       const rombelSelect = document.getElementById('rekapWalasSelectKelas');
       const rombel = (rombelSelect ? rombelSelect.value : (currentUser && currentUser.rombelWali)) || "8-A";
@@ -10132,6 +10502,9 @@ ATURAN KETAT:
       appConfig.NIP_KEPSEK = document.getElementById('cfgNipKepsek').value;
       appConfig.TGL_RILIS_KELULUSAN = (document.getElementById('cfgTglRilisLulus').value || '').replace('T', ' ');
       appConfig.STATUS_PENDAFTARAN_EKSKUL = document.getElementById('cfgStatusEkskul').value;
+      if (document.getElementById('cfgSemesterAktif')) {
+        appConfig.SEMESTER_AKTIF = document.getElementById('cfgSemesterAktif').value;
+      }
       if (document.getElementById('cfgIzinCetakNilai')) {
         appConfig.IZIN_CETAK_NILAI = document.getElementById('cfgIzinCetakNilai').value;
       }
@@ -11609,6 +11982,11 @@ ATURAN KETAT:
       if (statTutup) statTutup.innerText = `${tutupCount} Cabang`;
       if (statAnggota) statAnggota.innerText = `${anggotaAktif} Siswa`;
       if (badgeNav) badgeNav.innerText = `${totalCabang} Cabang`;
+      const badgeMaster = document.getElementById('badgeSubTabMasterEkskul');
+      if (badgeMaster) badgeMaster.innerText = `${totalCabang}`;
+      if (typeof updateRingkasanKepatuhanMiniCard === 'function') {
+        updateRingkasanKepatuhanMiniCard();
+      }
 
       // Filter & Pencarian
       const searchKeyword = (document.getElementById('inputSearchAdminEkskul')?.value || '').trim().toLowerCase();
@@ -11746,6 +12124,537 @@ ATURAN KETAT:
 
       safeCreateIcons();
     }
+
+    // =========================================================================
+    // MODUL MONITORING & AUDIT KEPATUHAN EKSTRAKURIKULER SISWA (ADMIN)
+    // =========================================================================
+    let currentSubTabAdminEkskul = 'master';
+
+    function updateRingkasanKepatuhanMiniCard() {
+      const sem = String(appConfig.SEMESTER_AKTIF || '1');
+      const daftar = masterSiswa || [];
+      let kurangCount = 0;
+      for (let i = 0; i < daftar.length; i++) {
+        const res = evaluasiKepatuhanEkskulSiswa(daftar[i], sem);
+        if (!res.isLengkap) kurangCount++;
+      }
+      const statKurang = document.getElementById('statAdminEkskulKurang');
+      if (statKurang) statKurang.innerText = `${kurangCount} Siswa`;
+      const badgeSub = document.getElementById('badgeSubTabKepatuhanEkskul');
+      if (badgeSub) badgeSub.innerText = `${kurangCount} Siswa Kurang`;
+    }
+
+    function switchSubTabAdminEkskul(subTab) {
+      currentSubTabAdminEkskul = subTab;
+      const viewMaster = document.getElementById('subViewAdminEkskul_master');
+      const viewKepatuhan = document.getElementById('subViewAdminEkskul_kepatuhan');
+      const btnMaster = document.getElementById('btnSubTabAdminEkskul_master');
+      const btnKepatuhan = document.getElementById('btnSubTabAdminEkskul_kepatuhan');
+
+      if (subTab === 'kepatuhan') {
+        if (viewMaster) viewMaster.classList.add('hidden');
+        if (viewKepatuhan) viewKepatuhan.classList.remove('hidden');
+        if (btnMaster) {
+          btnMaster.className = 'px-4 py-2.5 rounded-xl text-xs font-bold transition flex items-center gap-2 bg-slate-100 hover:bg-slate-200 text-slate-700 cursor-pointer';
+        }
+        if (btnKepatuhan) {
+          btnKepatuhan.className = 'px-4 py-2.5 rounded-xl text-xs font-black transition flex items-center gap-2 bg-purple-600 text-white shadow-xs cursor-pointer';
+        }
+        renderMonitoringKepatuhanEkskul();
+      } else {
+        if (viewMaster) viewMaster.classList.remove('hidden');
+        if (viewKepatuhan) viewKepatuhan.classList.add('hidden');
+        if (btnMaster) {
+          btnMaster.className = 'px-4 py-2.5 rounded-xl text-xs font-black transition flex items-center gap-2 bg-purple-600 text-white shadow-xs cursor-pointer';
+        }
+        if (btnKepatuhan) {
+          btnKepatuhan.className = 'px-4 py-2.5 rounded-xl text-xs font-bold transition flex items-center gap-2 bg-slate-100 hover:bg-slate-200 text-slate-700 cursor-pointer';
+        }
+        renderAdminEkskul();
+      }
+      safeCreateIcons();
+    }
+
+    function renderMonitoringKepatuhanEkskul() {
+      const tbody = document.getElementById('tableMonitoringKepatuhanEkskulBody');
+      if (!tbody) return;
+
+      // Sinkronisasi opsi semester evaluasi
+      const semSelect = document.getElementById('filterKepatuhanSemester');
+      let evalSem = semSelect ? semSelect.value : (appConfig.SEMESTER_AKTIF || '1');
+      if (!evalSem) evalSem = '1';
+
+      const labelSem = document.getElementById('labelSubKepatuhanSemester');
+      if (labelSem) {
+        labelSem.innerText = evalSem === '2' ? 'Semester 2 (Genap - Kls 9 Bebas)' : 'Semester 1 (Ganjil)';
+      }
+
+      // Sinkronisasi opsi rombel
+      const rombelSelect = document.getElementById('filterKepatuhanRombel');
+      if (rombelSelect && rombelSelect.options.length <= 1) {
+        const uniqueClasses = Array.from(new Set(masterSiswa.map(s => s.kelas))).filter(Boolean).sort();
+        if (uniqueClasses.length > 0) {
+          rombelSelect.innerHTML = '<option value="">Semua Rombel</option>' + 
+            uniqueClasses.map(c => `<option value="${c}">Kelas ${c}</option>`).join('');
+        }
+      }
+
+      const tingkatFilter = (document.getElementById('filterKepatuhanTingkat')?.value || '').trim();
+      const statusFilter = (document.getElementById('filterKepatuhanStatus')?.value || '').trim();
+      const rombelFilter = (document.getElementById('filterKepatuhanRombel')?.value || '').trim();
+      const searchKeyword = (document.getElementById('inputSearchKepatuhanEkskul')?.value || '').trim().toLowerCase();
+
+      // Hitung metrik kepatuhan
+      let totalSiswa = masterSiswa.length;
+      let countKurang = 0;
+      let countLengkap = 0;
+      let countBebas = 0;
+
+      const hasilEvaluasiSemua = masterSiswa.map(s => {
+        const kep = evaluasiKepatuhanEkskulSiswa(s, evalSem);
+        if (kep.statusKode === 'BEBAS_EKSTRA') countBebas++;
+        else if (kep.isLengkap) countLengkap++;
+        else countKurang++;
+        return { siswa: s, kepatuhan: kep };
+      });
+
+      // Update Card Metrik Kepatuhan
+      const elTotal = document.getElementById('kepatuhanMetrikTotal');
+      const elKurang = document.getElementById('kepatuhanMetrikKurang');
+      const elLengkap = document.getElementById('kepatuhanMetrikLengkap');
+      const elBebas = document.getElementById('kepatuhanMetrikBebas');
+      const statKurangMini = document.getElementById('statAdminEkskulKurang');
+      const badgeSubTab = document.getElementById('badgeSubTabKepatuhanEkskul');
+
+      if (elTotal) elTotal.innerText = `${totalSiswa} Siswa`;
+      if (elKurang) elKurang.innerText = `${countKurang} Siswa`;
+      if (elLengkap) elLengkap.innerText = `${countLengkap} Siswa`;
+      if (elBebas) elBebas.innerText = `${countBebas} Siswa`;
+      if (statKurangMini) statKurangMini.innerText = `${countKurang} Siswa`;
+      if (badgeSubTab) badgeSubTab.innerText = `${countKurang} Siswa Kurang`;
+
+      // Filter daftar siswa
+      const filtered = hasilEvaluasiSemua.filter(item => {
+        const s = item.siswa;
+        const kep = item.kepatuhan;
+
+        // Filter Tingkat
+        if (tingkatFilter && String(kep.tingkat) !== tingkatFilter) return false;
+
+        // Filter Rombel
+        if (rombelFilter && s.kelas !== rombelFilter) return false;
+
+        // Filter Status
+        if (statusFilter === 'KURANG') {
+          if (kep.isLengkap) return false;
+        } else if (statusFilter === 'LENGKAP') {
+          if (!kep.isLengkap || kep.statusKode === 'BEBAS_EKSTRA') return false;
+        } else if (statusFilter === 'BEBAS_EKSTRA') {
+          if (kep.statusKode !== 'BEBAS_EKSTRA') return false;
+        } else if (statusFilter) {
+          if (kep.statusKode !== statusFilter) return false;
+        }
+
+        // Pencarian Kata Kunci
+        if (searchKeyword) {
+          const matchNama = String(s.nama || '').toLowerCase().includes(searchKeyword);
+          const matchNisn = String(s.nisn || '').toLowerCase().includes(searchKeyword);
+          const matchKelas = String(s.kelas || '').toLowerCase().includes(searchKeyword);
+          if (!matchNama && !matchNisn && !matchKelas) return false;
+        }
+
+        return true;
+      });
+
+      if (filtered.length === 0) {
+        tbody.innerHTML = `
+          <tr>
+            <td colspan="7" class="py-8 text-center text-slate-400 bg-white">
+              <i data-lucide="check-circle" class="w-8 h-8 mx-auto mb-2 text-emerald-400 opacity-60"></i>
+              <p class="font-bold text-slate-600">Tidak ada siswa yang sesuai dengan filter.</p>
+              <p class="text-xs text-slate-400 mt-0.5">Semua siswa pada kriteria ini telah memenuhi syarat atau sesuaikan filter Anda.</p>
+            </td>
+          </tr>
+        `;
+        safeCreateIcons();
+        return;
+      }
+
+      tbody.innerHTML = filtered.map((item, idx) => {
+        const s = item.siswa;
+        const kep = item.kepatuhan;
+
+        // Render Pill Ekstra Diikuti
+        let extraPillsHtml = '';
+        if (kep.listAktif.length === 0) {
+          extraPillsHtml = '<span class="text-slate-400 italic text-[11px]">(Belum mendaftar ekstra)</span>';
+        } else {
+          const pills = [];
+          if (kep.ikutPramuka) {
+            kep.ekskulPramukaList.forEach(p => {
+              pills.push(`<span class="px-2 py-0.5 bg-emerald-100 text-emerald-800 rounded-md font-bold text-[10px] border border-emerald-300 inline-flex items-center gap-1 shadow-2xs">â›º ${escapeHtml(p.namaEkskul)}</span>`);
+            });
+          }
+          kep.ekskulPilihanList.forEach(p => {
+            pills.push(`<span class="px-2 py-0.5 bg-indigo-50 text-indigo-700 rounded-md font-bold text-[10px] border border-indigo-200 inline-flex items-center gap-1 shadow-2xs">ðŸŽ¯ ${escapeHtml(p.namaEkskul)}</span>`);
+          });
+          extraPillsHtml = `<div class="flex flex-wrap items-center gap-1">${pills.join(' ')}</div>`;
+        }
+
+        return `
+          <tr class="hover:bg-slate-50 transition ${!kep.isLengkap ? 'bg-rose-50/20' : ''}">
+            <td class="py-3 px-3 text-center font-bold text-slate-400">${idx + 1}</td>
+            <td class="py-3 px-3">
+              <div class="font-bold text-slate-800">${escapeHtml(s.nama)}</div>
+              <div class="text-[11px] font-mono font-medium text-slate-500">NISN: ${escapeHtml(s.nisn)}</div>
+            </td>
+            <td class="py-3 px-2 text-center">
+              <span class="px-2.5 py-1 rounded-lg bg-slate-100 text-slate-700 font-black text-xs border border-slate-200">${escapeHtml(s.kelas)}</span>
+            </td>
+            <td class="py-3 px-3">
+              <span class="px-2.5 py-1 rounded-full text-[10px] font-black border ${kep.badgeColor} inline-block shadow-2xs" title="${escapeHtml(kep.rekomendasi)}">
+                ${escapeHtml(kep.statusText)}
+              </span>
+            </td>
+            <td class="py-3 px-3">
+              ${extraPillsHtml}
+            </td>
+            <td class="py-3 px-3">
+              <div class="text-[11px] text-slate-700 leading-snug font-medium">${escapeHtml(kep.keterangan)}</div>
+              <div class="text-[10px] text-slate-400 mt-0.5">${escapeHtml(kep.rekomendasi)}</div>
+            </td>
+            <td class="py-3 px-3 text-center">
+              <div class="flex items-center justify-center gap-1.5 flex-wrap">
+                <button type="button" onclick="daftarkanSiswaKeEkskulCepat('${escapeHtml(s.nisn)}')" class="px-2.5 py-1 bg-indigo-50 hover:bg-indigo-100 text-indigo-700 rounded-xl text-[11px] font-bold border border-indigo-200 transition inline-flex items-center gap-1 cursor-pointer shadow-2xs" title="Daftarkan siswa ke cabang ekstrakurikuler">
+                  <i data-lucide="user-plus" class="w-3 h-3"></i>
+                  <span>+ Daftar</span>
+                </button>
+                <button type="button" onclick="kirimWaOrtuKepatuhanEkskul('${escapeHtml(s.nisn)}')" class="px-2.5 py-1 bg-emerald-50 hover:bg-emerald-100 text-emerald-700 rounded-xl text-[11px] font-bold border border-emerald-200 transition inline-flex items-center gap-1 cursor-pointer shadow-2xs" title="Kirim Pesan WhatsApp Resmi ke Orang Tua">
+                  <i data-lucide="message-circle" class="w-3 h-3"></i>
+                  <span>WA Ortu</span>
+                </button>
+              </div>
+            </td>
+          </tr>
+        `;
+      }).join('');
+
+      safeCreateIcons();
+    }
+
+    // Modal Cepat Daftarkan Siswa ke Cabang Ekskul
+    async function daftarkanSiswaKeEkskulCepat(nisn) {
+      const siswa = masterSiswa.find(s => isSameNisn(s.nisn, nisn));
+      if (!siswa) {
+        Swal.fire('Data Tidak Ditemukan', 'Siswa tidak ditemukan dalam database.', 'error');
+        return;
+      }
+
+      const evalSem = document.getElementById('filterKepatuhanSemester')?.value || (appConfig.SEMESTER_AKTIF || '1');
+      const kep = evaluasiKepatuhanEkskulSiswa(siswa, evalSem);
+
+      if (!masterEkskul || masterEkskul.length === 0) {
+        Swal.fire('Ekskul Belum Dibuat', 'Belum ada cabang ekstrakurikuler terdaftar.', 'warning');
+        return;
+      }
+
+      // Bangun opsi ekskul
+      const currentEnrolledIds = (kep.listAktif || []).map(a => a.idEkskul);
+      let optionsHtml = '';
+      masterEkskul.forEach(e => {
+        const isEnrolled = currentEnrolledIds.includes(e.id);
+        const isPramuka = isEkskulPramuka(e);
+        const labelPramuka = isPramuka ? ' [Wajib Kelas 7]' : '';
+        const statusEnroll = isEnrolled ? ' (Sudah Diikuti)' : '';
+        optionsHtml += `<option value="${escapeHtml(e.id)}" ${isEnrolled ? 'disabled' : ''}>[${escapeHtml(e.id)}] ${escapeHtml(e.nama)}${labelPramuka}${statusEnroll}</option>`;
+      });
+
+      const { value: formValues } = await Swal.fire({
+        title: `Pendaftaran Ekstra Cepat`,
+        html: `
+          <div class="text-left text-xs space-y-3 p-1">
+            <div class="p-3 bg-slate-50 border border-slate-200 rounded-xl">
+              <div class="font-extrabold text-sm text-slate-800">${escapeHtml(siswa.nama)}</div>
+              <div class="text-slate-500 font-mono">NISN: ${escapeHtml(siswa.nisn)} | Kelas: <b>${escapeHtml(siswa.kelas)}</b></div>
+              <div class="mt-1">Status: <span class="px-2 py-0.5 rounded-full text-[10px] font-black border ${kep.badgeColor}">${escapeHtml(kep.statusText)}</span></div>
+              <div class="text-[11px] text-slate-600 mt-1">${escapeHtml(kep.keterangan)}</div>
+            </div>
+
+            <div>
+              <label class="block font-bold text-slate-700 uppercase mb-1">Pilih Cabang Ekstrakurikuler Tujuan:</label>
+              <select id="swalPilihEkskulCepat" class="w-full px-3 py-2 bg-white border border-slate-200 rounded-xl text-xs font-bold text-slate-800 focus:outline-none focus:border-indigo-500">
+                <option value="">-- Pilih Cabang Ekskul --</option>
+                ${optionsHtml}
+              </select>
+            </div>
+            <p class="text-[11px] text-slate-400">Pendaftaran akan langsung tersimpan aktif ke database kesiswaan sekolah.</p>
+          </div>
+        `,
+        focusConfirm: false,
+        showCancelButton: true,
+        confirmButtonText: 'Daftarkan Sekarang ðŸš€',
+        cancelButtonText: 'Batal',
+        confirmButtonColor: '#4f46e5',
+        preConfirm: () => {
+          const selectedId = document.getElementById('swalPilihEkskulCepat').value;
+          if (!selectedId) {
+            Swal.showValidationMessage('Silakan pilih salah satu cabang ekstrakurikuler!');
+            return false;
+          }
+          return { idEkskul: selectedId };
+        }
+      });
+
+      if (!formValues) return;
+
+      const targetEkskul = masterEkskul.find(e => e.id === formValues.idEkskul);
+      if (!targetEkskul) return;
+
+      Swal.fire({
+        title: 'Mendaftarkan Siswa...',
+        didOpen: () => Swal.showLoading(),
+        allowOutsideClick: false
+      });
+
+      try {
+        const res = await callBackendPost({
+          action: 'daftarEkskulMandiri',
+          nisn: siswa.nisn,
+          nama: siswa.nama,
+          kelas: siswa.kelas,
+          idEkskul: targetEkskul.id,
+          namaEkskul: targetEkskul.nama
+        });
+
+        // Tambahkan ke state lokal
+        const newRegId = 'REG-' + Date.now();
+        anggotaEkskul.push({
+          idDaftar: newRegId,
+          nisn: siswa.nisn,
+          nama: siswa.nama,
+          kelas: siswa.kelas,
+          idEkskul: targetEkskul.id,
+          namaEkskul: targetEkskul.nama,
+          status: 'AKTIF'
+        });
+
+        Swal.fire({
+          icon: 'success',
+          title: 'Berhasil Didaftarkan! ðŸŽ‰',
+          text: `${siswa.nama} berhasil didaftarkan ke cabang "${targetEkskul.nama}".`,
+          timer: 2000,
+          showConfirmButton: false
+        });
+
+        renderMonitoringKepatuhanEkskul();
+        renderAdminEkskul();
+        if (typeof renderRekapWalasEkskul === 'function') renderRekapWalasEkskul();
+      } catch (err) {
+        Swal.fire('Error', 'Gagal mendaftarkan siswa: ' + err.message, 'error');
+      }
+    }
+
+    // Kirim WhatsApp Pengingat Resmi ke Orang Tua Siswa
+    async function kirimWaOrtuKepatuhanEkskul(nisn) {
+      const siswa = masterSiswa.find(s => isSameNisn(s.nisn, nisn));
+      if (!siswa) {
+        Swal.fire('Data Tidak Ditemukan', 'Siswa tidak ditemukan.', 'error');
+        return;
+      }
+
+      const evalSem = document.getElementById('filterKepatuhanSemester')?.value || (appConfig.SEMESTER_AKTIF || '1');
+      const kep = evaluasiKepatuhanEkskulSiswa(siswa, evalSem);
+
+      let rawPhone = siswa.noHpOrtu || siswa.noHp || '';
+      if (!rawPhone) {
+        const { value: inputPhone } = await Swal.fire({
+          title: 'Nomor WhatsApp Orang Tua',
+          text: `Nomor telepon orang tua untuk ${siswa.nama} belum terdaftar. Masukkan nomor WhatsApp:`,
+          input: 'text',
+          inputPlaceholder: 'Contoh: 081234567890',
+          showCancelButton: true,
+          confirmButtonText: 'Kirim Pesan',
+          cancelButtonText: 'Batal'
+        });
+        if (!inputPhone) return;
+        rawPhone = inputPhone;
+      }
+
+      let cleanPhone = String(rawPhone).replace(/[^0-9]/g, '');
+      if (cleanPhone.startsWith('0')) cleanPhone = '62' + cleanPhone.slice(1);
+      else if (!cleanPhone.startsWith('62')) cleanPhone = '62' + cleanPhone;
+
+      const namaSekolah = appConfig.NAMA_SEKOLAH || 'Sekolah';
+      let pesan = `Yth. Bapak/Ibu Orang Tua / Wali dari ananda *${siswa.nama}* (Kelas ${siswa.kelas}),%0A%0A`;
+      pesan += `Kami dari Manajemen Kesiswaan *${namaSekolah}* menyampaikan informasi terkait kegiatan Ekstrakurikuler Sekolah:%0A%0A`;
+      pesan += `ðŸ“‹ *Status Saat Ini:* ${kep.statusText}%0A`;
+      pesan += `ðŸ“Œ *Keterangan:* ${kep.keterangan}%0A%0A`;
+      pesan += `*Ketentuan Ekstrakurikuler Sekolah:*%0A`;
+      if (kep.tingkat === 7) {
+        pesan += `â€¢ Kelas 7 Wajib mengikuti *Pramuka* dan minimal *1 Cabang Ekstra Pilihan*.%0A`;
+      } else if (kep.tingkat === 8) {
+        pesan += `â€¢ Kelas 8 Wajib mengambil *2 Cabang Ekstra Pilihan*.%0A`;
+      } else if (kep.tingkat === 9) {
+        pesan += `â€¢ Kelas 9 Wajib mengambil *2 Cabang Ekstra Pilihan* pada Semester 1.%0A`;
+      }
+      pesan += `%0AMohon Bapak/Ibu dapat membimbing ananda untuk segera memilih kegiatan ekstra melalui aplikasi sekolah.%0A%0ATerima kasih atas kerja sama dan perhatiannya.%0A%0ASalam hormat,%0A*Kesiswaan & Kurikulum ${namaSekolah}*`;
+
+      window.open(`https://api.whatsapp.com/send?phone=${cleanPhone}&text=${pesan}`, '_blank');
+    }
+
+    // Ekspor Data Audit Kepatuhan ke File CSV
+    function eksporCsvKepatuhanEkskul(hanyaKurang = false) {
+      const evalSem = document.getElementById('filterKepatuhanSemester')?.value || (appConfig.SEMESTER_AKTIF || '1');
+      const dataSiswa = masterSiswa || [];
+
+      let csv = "No,NISN,Nama Siswa,Kelas,Tingkat,Semester,Status Kepatuhan,Ikut Pramuka,Jumlah Pilihan,Ekstra Diikuti,No HP Ortu,Keterangan,Rekomendasi\n";
+      let no = 1;
+
+      dataSiswa.forEach(s => {
+        const kep = evaluasiKepatuhanEkskulSiswa(s, evalSem);
+        if (hanyaKurang && kep.isLengkap) return;
+
+        const listNama = kep.listAktif.map(a => a.namaEkskul).join('; ');
+        const row = [
+          no++,
+          `"${s.nisn || ''}"`,
+          `"${(s.nama || '').replace(/"/g, '""')}"`,
+          `"${s.kelas || ''}"`,
+          kep.tingkat || '-',
+          `"Semester ${evalSem}"`,
+          `"${kep.statusText}"`,
+          kep.ikutPramuka ? "YA" : "TIDAK",
+          kep.jmlPilihan,
+          `"${listNama.replace(/"/g, '""')}"`,
+          `"${s.noHpOrtu || s.noHp || ''}"`,
+          `"${(kep.keterangan || '').replace(/"/g, '""')}"`,
+          `"${(kep.rekomendasi || '').replace(/"/g, '""')}"`
+        ];
+        csv += row.join(',') + "\n";
+      });
+
+      const blob = new Blob(["\uFEFF" + csv], { type: 'text/csv;charset=utf-8;' });
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.setAttribute('href', url);
+      link.setAttribute('download', `Audit_Kepatuhan_Ekskul_Sem${evalSem}_${hanyaKurang ? 'Kurang' : 'Semua'}_${Date.now()}.csv`);
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    }
+
+    // Cetak Dokumen Resmi Rekap Audit Kepatuhan Ekstra A4
+    function cetakLaporanKepatuhanEkskulA4() {
+      const evalSem = document.getElementById('filterKepatuhanSemester')?.value || (appConfig.SEMESTER_AKTIF || '1');
+      const tingkatFilter = document.getElementById('filterKepatuhanTingkat')?.value || '';
+      const rombelFilter = document.getElementById('filterKepatuhanRombel')?.value || '';
+      const statusFilter = document.getElementById('filterKepatuhanStatus')?.value || '';
+
+      const printDiv = document.getElementById('printArea');
+      if (!printDiv) return;
+
+      const filtered = masterSiswa.filter(s => {
+        const kep = evaluasiKepatuhanEkskulSiswa(s, evalSem);
+        if (tingkatFilter && String(kep.tingkat) !== tingkatFilter) return false;
+        if (rombelFilter && s.kelas !== rombelFilter) return false;
+        if (statusFilter === 'KURANG' && kep.isLengkap) return false;
+        if (statusFilter === 'LENGKAP' && (!kep.isLengkap || kep.statusKode === 'BEBAS_EKSTRA')) return false;
+        if (statusFilter === 'BEBAS_EKSTRA' && kep.statusKode !== 'BEBAS_EKSTRA') return false;
+        return true;
+      });
+
+      const tglCetak = new Date().toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' });
+
+      let rowsHtml = filtered.map((s, idx) => {
+        const kep = evaluasiKepatuhanEkskulSiswa(s, evalSem);
+        const ekstras = kep.listAktif.map(a => a.namaEkskul).join(', ') || '-';
+        return `
+          <tr>
+            <td style="border: 1px solid #000; padding: 5px; text-align: center;">${idx + 1}</td>
+            <td style="border: 1px solid #000; padding: 5px; font-family: monospace;">${s.nisn}</td>
+            <td style="border: 1px solid #000; padding: 5px; font-weight: bold;">${s.nama}</td>
+            <td style="border: 1px solid #000; padding: 5px; text-align: center;">${s.kelas}</td>
+            <td style="border: 1px solid #000; padding: 5px; font-weight: bold;">${kep.statusText}</td>
+            <td style="border: 1px solid #000; padding: 5px;">${ekstras}</td>
+            <td style="border: 1px solid #000; padding: 5px; font-size: 8.5pt;">${kep.keterangan}</td>
+          </tr>
+        `;
+      }).join('');
+
+      printDiv.innerHTML = `
+        <div style="font-family: Arial, sans-serif; color: #000; padding: 20px; line-height: 1.3;">
+          <!-- KOP SURAT RESMI 2 LOGO -->
+          <table style="width: 100%; border-bottom: 3px double #000; padding-bottom: 8px; margin-bottom: 15px;">
+            <tr>
+              <td style="width: 15%; text-align: center; vertical-align: middle;">
+                <img src="${appConfig.LOGO_KIRI_PEMDA}" style="max-height: 70px; max-width: 70px;" alt="Logo Pemda">
+              </td>
+              <td style="width: 70%; text-align: center; vertical-align: middle;">
+                <h4 style="margin: 0; font-size: 11pt; font-weight: bold; text-transform: uppercase;">${appConfig.INSTANSI_PEMBINA}</h4>
+                <h2 style="margin: 3px 0; font-size: 14pt; font-weight: 900; text-transform: uppercase;">${appConfig.NAMA_SEKOLAH}</h2>
+                <p style="margin: 0; font-size: 8.5pt; color: #333;">${appConfig.ALAMAT_SEKOLAH}</p>
+              </td>
+              <td style="width: 15%; text-align: center; vertical-align: middle;">
+                <img src="${appConfig.LOGO_KANAN_SEKOLAH}" style="max-height: 70px; max-width: 70px;" alt="Logo Sekolah">
+              </td>
+            </tr>
+          </table>
+
+          <div style="text-align: center; margin-bottom: 15px;">
+            <h3 style="margin: 0; font-size: 12pt; font-weight: bold; text-decoration: underline; text-transform: uppercase;">LAPORAN AUDIT & KEPATUHAN EKSTRAKURIKULER SISWA</h3>
+            <p style="margin: 3px 0 0; font-size: 9.5pt;">Tahun Ajaran 2026/2027 - Semester ${evalSem === '2' ? '2 (Genap)' : '1 (Ganjil)'}</p>
+          </div>
+
+          <table style="width: 100%; border-collapse: collapse; font-size: 9pt; margin-bottom: 25px;">
+            <thead>
+              <tr style="background-color: #f2f2f2;">
+                <th style="border: 1px solid #000; padding: 6px; width: 5%;">No</th>
+                <th style="border: 1px solid #000; padding: 6px; width: 14%;">NISN</th>
+                <th style="border: 1px solid #000; padding: 6px; width: 22%;">Nama Lengkap Siswa</th>
+                <th style="border: 1px solid #000; padding: 6px; width: 8%;">Kelas</th>
+                <th style="border: 1px solid #000; padding: 6px; width: 15%;">Status Kepatuhan</th>
+                <th style="border: 1px solid #000; padding: 6px; width: 18%;">Cabang Ekstra</th>
+                <th style="border: 1px solid #000; padding: 6px; width: 18%;">Keterangan Beban</th>
+              </tr>
+            </thead>
+            <tbody>
+              ${rowsHtml || '<tr><td colspan="7" style="border: 1px solid #000; padding: 10px; text-align: center;">Tidak ada data siswa.</td></tr>'}
+            </tbody>
+          </table>
+
+          <table style="width: 100%; font-size: 10pt;">
+            <tr>
+              <td style="width: 50%; text-align: center;">
+                <p style="margin: 0;">Mengetahui,</p>
+                <p style="margin: 0; font-weight: bold;">Koordinator Ekstrakurikuler,</p>
+                <div style="height: 60px;"></div>
+                <p style="margin: 0; font-weight: bold; text-decoration: underline;">( Koordinator Kesiswaan )</p>
+                <p style="margin: 0;">NIP. -</p>
+              </td>
+              <td style="width: 50%; text-align: center;">
+                <p style="margin: 0;">${appConfig.KOTA_TITIMANGSA || 'Kota'}, ${tglCetak}</p>
+                <p style="margin: 0; font-weight: bold;">Kepala Sekolah,</p>
+                <div style="height: 60px;"></div>
+                <p style="margin: 0; font-weight: bold; text-decoration: underline;">${appConfig.NAMA_KEPSEK}</p>
+                <p style="margin: 0;">NIP. ${appConfig.NIP_KEPSEK}</p>
+              </td>
+            </tr>
+          </table>
+        </div>
+      `;
+
+      printDiv.classList.remove('hidden');
+      const cleanup = () => {
+        printDiv.classList.add('hidden');
+        window.removeEventListener('afterprint', cleanup);
+      };
+      window.addEventListener('afterprint', cleanup);
+      setTimeout(() => {
+        window.print();
+        setTimeout(cleanup, 2000);
+      }, 250);
+    }
+
 
     function handleAutoGenerateEkskulId() {
       const mode = document.getElementById('formEkskulMode')?.value;

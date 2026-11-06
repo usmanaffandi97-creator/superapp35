@@ -1,4 +1,4 @@
-/**
+﻿/**
  * ==============================================================================
  * SUPER APP SEKOLAH TERPADU — BACKEND GOOGLE APPS SCRIPT (GAS)
  * Database: 1 Google Sheet Terpadu (12 Tab)
@@ -26,6 +26,7 @@ const SHEET_LOG_KEBIASAAN = "LOG_KEBIASAAN";
 const SHEET_MASTER_TIBUM  = "MASTER_TIBUM";
 const SHEET_LOG_TIBUM     = "LOG_TIBUM";
 const SHEET_PENGUMUMAN    = "PENGUMUMAN";
+const SHEET_JURNAL_GURU   = "JURNAL_GURU";
 
 /**
  * Entry Point Web App GET (Melayani Web App HTML Native & REST API JSON untuk Vercel / Eksternal)
@@ -206,10 +207,18 @@ function executeActionCore(action, payload) {
       response = simpanMasterGuru(payload.guruList, payload.pin);
     } else if (action === "simpanMasterEkskul") {
       response = simpanMasterEkskul(payload.ekskulList, payload.pin);
+    } else if (action === "tambahAtauUpdateEkskul") {
+      response = tambahAtauUpdateEkskul(payload.ekskul, payload.pin);
+    } else if (action === "hapusEkskul") {
+      response = hapusEkskul(payload.idEkskul, payload.pin);
+    } else if (action === "simpanBulkAnggotaEkskul") {
+      response = simpanBulkAnggotaEkskul(payload.anggotaList, payload.pin);
     } else if (action === "updateProfilSiswa") {
       response = updateProfilSiswa(payload.nisn, payload.noHpOrtu);
     } else if (action === "simpanJurnalGuru") {
       response = simpanJurnalGuru(payload.jurnal);
+    } else if (action === "hapusJurnalGuru") {
+      response = hapusJurnalGuru(payload.id, payload.nip);
     } else if (action === "updatePinUser") {
       response = updatePinUser(payload.role, payload.id, payload.pin);
     } else if (action === "verifyAdminPin") {
@@ -341,6 +350,7 @@ function setupDatabase() {
       ["POIN_SP3", "90", "Ambang poin Surat Peringatan 3"],
       ["STATUS_PENDAFTARAN_EKSKUL", "BUKA", "Status pendaftaran ekstrakurikuler (BUKA / TUTUP)"],
       ["IZIN_CETAK_NILAI", "DIBUKA", "Izin cetak lembar nilai/rapor oleh siswa (DIBUKA / DITUTUP)"],
+      ["SEMESTER_AKTIF", "1", "Semester akademik aktif saat ini (1 = Ganjil, 2 = Genap)"],
       ["PENGUMUMAN_RUNNING", "Selamat datang di Super App Sekolah Terpadu! Pantau presensi, kebiasaan karakter, dan capaian belajar ananda.", "Running text pengumuman beranda"]
     ];
     defaultConfigs.forEach(row => sheetConfig.appendRow(row));
@@ -497,7 +507,17 @@ function setupDatabase() {
   ]);
   sheetLogTibum.getRange("D:D").setNumberFormat("@");
 
-  return { success: true, message: "12 Tab Database Super App Sekolah berhasil disiapkan!" };
+  // 13. PENGUMUMAN
+  getOrCreateSheet(SHEET_PENGUMUMAN, [
+    "ID", "Judul", "Isi", "Target_Audience", "Tgl_Mulai", "Tgl_Selesai", "Dibuat_Oleh", "Role_Pembuat", "Tgl_Dibuat"
+  ]);
+
+  // 14. JURNAL_GURU
+  getOrCreateSheet(SHEET_JURNAL_GURU, [
+    "ID_Jurnal", "NIP", "Nama_Guru", "Tanggal", "Kelas", "Mapel", "Topik", "Garis_Besar", "Hadir", "Total_Siswa", "Facts", "Feelings", "Findings", "Future", "Timestamp"
+  ]);
+
+  return { success: true, message: "14 Tab Database Super App Sekolah berhasil disiapkan!" };
 }
 
 /**
@@ -633,15 +653,23 @@ function getInitialData() {
   if (sheetAnggota && sheetAnggota.getLastRow() > 1) {
     const raw = sheetAnggota.getDataRange().getValues();
     for (let i = 1; i < raw.length; i++) {
-      if (!raw[i][0]) continue;
+      const nisnVal = String(raw[i][1] || "").trim();
+      const idEkskulVal = String(raw[i][4] || "").trim().toUpperCase();
+      // Lewati jika baris kosong (tidak ada ID dan tidak ada NISN)
+      if (!raw[i][0] && !nisnVal) continue;
+      if (!idEkskulVal && !nisnVal) continue;
+
+      // Toleransi input manual: jika ID_Pendaftaran di sheet dikosongkan oleh admin, buatkan ID otomatis
+      const idDaftar = raw[i][0] ? String(raw[i][0]).trim() : ("REG-" + String(i).padStart(4, "0"));
+
       dataAnggota.push({
-        idDaftar: raw[i][0],
-        nisn: String(raw[i][1]).padStart(10, "0"),
-        nama: raw[i][2],
-        kelas: raw[i][3],
-        idEkskul: raw[i][4],
-        namaEkskul: raw[i][5],
-        status: raw[i][7]
+        idDaftar: idDaftar,
+        nisn: nisnVal.padStart(10, "0"),
+        nama: raw[i][2] || "",
+        kelas: raw[i][3] || "",
+        idEkskul: idEkskulVal,
+        namaEkskul: raw[i][5] || "",
+        status: String(raw[i][7] || "AKTIF").trim().toUpperCase()
       });
     }
   }
@@ -830,6 +858,38 @@ function getInitialData() {
     }
   }
 
+  // 13. Jurnal Guru & Refleksi 4F
+  const sheetJurnalGuru = ss.getSheetByName("JURNAL_GURU");
+  const dataJurnalGuru = [];
+  if (sheetJurnalGuru && sheetJurnalGuru.getLastRow() > 1) {
+    const raw = sheetJurnalGuru.getDataRange().getValues();
+    for (let i = 1; i < raw.length; i++) {
+      if (!raw[i][0]) continue;
+      dataJurnalGuru.push({
+        id: String(raw[i][0]),
+        nip: String(raw[i][1]).trim(),
+        namaGuru: String(raw[i][2] || ""),
+        tanggal: formatTglFast(raw[i][3]),
+        kelas: String(raw[i][4] || ""),
+        mapel: String(raw[i][5] || ""),
+        topik: String(raw[i][6] || ""),
+        garisBesar: String(raw[i][7] || ""),
+        kehadiran: {
+          hadir: Number(raw[i][8] || 0),
+          total: Number(raw[i][9] || 0),
+          tidakHadir: Number(raw[i][9] || 0) - Number(raw[i][8] || 0)
+        },
+        refleksi4F: {
+          facts: String(raw[i][10] || "-"),
+          feelings: String(raw[i][11] || "-"),
+          findings: String(raw[i][12] || "-"),
+          future: String(raw[i][13] || "-")
+        },
+        tglDibuat: String(raw[i][14] || "")
+      });
+    }
+  }
+
   return {
     success: true,
     config: config,
@@ -845,6 +905,7 @@ function getInitialData() {
     logKebiasaan: dataKebiasaan,
     logTibum: dataLogTibum,
     pengumuman: dataPengumuman,
+    jurnalGuru: dataJurnalGuru,
     timestamp: new Date().toISOString()
   };
 }
@@ -958,28 +1019,59 @@ function simpanPresensiHarian(tanggal, kelas, dataAbsen, dicatatOleh) {
   const sheet = ss.getSheetByName(SHEET_PRESENSI_HARI);
   if (!sheet) return { success: false, error: "Sheet PRESENSI_HARI tidak ditemukan." };
 
-  // dataAbsen adalah array of: { nisn, nama, status: 'HADIR'|'SAKIT'|'IZIN'|'ALPHA'|'TERLAMBAT', keterangan }
-  // Exception-based: Hanya catat yang tidak hadir normal jika hemat baris, atau catat per siswa sekelas
   const now = new Date();
-  const tglStr = tanggal || formatTglFast(now);
+  const tglStr = tanggal || Utilities.formatDate(now, "GMT+7", "yyyy-MM-dd");
+  const todayStr = Utilities.formatDate(now, "GMT+7", "yyyy-MM-dd");
+
+  // Larang presensi tanggal di masa depan
+  if (tglStr > todayStr) {
+    return { success: false, error: "Presensi harian tidak dapat diisi untuk tanggal di masa depan (maksimal hari ini)." };
+  }
+
   const timeStr = Utilities.formatDate(now, "GMT+7", "yyyy-MM-dd HH:mm:ss");
 
   if (Array.isArray(dataAbsen) && dataAbsen.length > 0) {
-    const rowsToAdd = dataAbsen.map(item => [
-      "PRSH-" + Utilities.getUuid().slice(0, 8),
-      tglStr,
-      kelas,
-      String(item.nisn).padStart(10, "0"),
-      item.nama,
-      item.status || "HADIR",
-      item.keterangan || "",
-      dicatatOleh || "Wali Kelas",
-      timeStr
-    ]);
-    const nextRow = sheet.getLastRow() + 1;
-    sheet.getRange(nextRow, 1, rowsToAdd.length, rowsToAdd[0].length).setValues(rowsToAdd);
+    const raw = sheet.getDataRange().getValues();
+    const rowsToKeep = [raw[0] || [
+      "ID_Presensi", "Tanggal", "Kelas", "NISN", "Nama_Siswa", "Status_Kehadiran", "Keterangan", "Dicatat_Oleh", "Timestamp"
+    ]];
+    const existingIdMap = {};
+
+    // Kumpulkan data lama, singkirkan baris tanggal & kelas yang sama agar tidak terjadi double data
+    for (let i = 1; i < raw.length; i++) {
+      const rowTgl = formatTglFast(raw[i][1]);
+      const rowKelas = String(raw[i][2] || "").trim();
+      const rowNisn = String(raw[i][3] || "").padStart(10, "0");
+
+      if (rowTgl === tglStr && rowKelas === String(kelas).trim()) {
+        existingIdMap[rowNisn] = raw[i][0]; // simpan ID lama jika ada
+      } else {
+        rowsToKeep.push(raw[i]);
+      }
+    }
+
+    const rowsToAdd = dataAbsen.map(item => {
+      const formattedNisn = String(item.nisn).padStart(10, "0");
+      const idPresensi = existingIdMap[formattedNisn] || ("PRSH-" + Utilities.getUuid().slice(0, 8));
+      return [
+        idPresensi,
+        tglStr,
+        kelas,
+        formattedNisn,
+        item.nama || "",
+        item.status || "HADIR",
+        item.keterangan || "",
+        dicatatOleh || "Wali Kelas",
+        timeStr
+      ];
+    });
+
+    const finalRows = rowsToKeep.concat(rowsToAdd);
+    sheet.clearContents();
+    sheet.getRange(1, 1, finalRows.length, finalRows[0].length).setValues(finalRows);
+    sheet.getRange(1, 4, finalRows.length, 1).setNumberFormat("@");
     SpreadsheetApp.flush();
-    return { success: true, message: `Berhasil mencatat presensi harian kelas ${kelas} (${rowsToAdd.length} siswa).` };
+    return { success: true, message: `Berhasil mencatat/memperbarui presensi harian kelas ${kelas} (${rowsToAdd.length} siswa).` };
   }
 
   return { success: true, message: "Tidak ada data presensi yang disimpan." };
@@ -1030,31 +1122,51 @@ function simpanPresensiEkskul(tanggal, idEkskul, dataAbsen, dicatatOleh) {
   if (!sheet) return { success: false, error: "Sheet EKSKUL_ABSENSI tidak ditemukan." };
 
   const now = new Date();
-  const tglStr = tanggal || formatTglFast(now);
-  const timeStr = Utilities.formatDate(now, "GMT+7", "yyyy-MM-dd HH:mm:ss");
+  const tglStr = tanggal || Utilities.formatDate(now, "GMT+7", "yyyy-MM-dd");
+  const todayStr = Utilities.formatDate(now, "GMT+7", "yyyy-MM-dd");
 
-  // dataAbsen: array of { nisn, nama, kelas, status: 'SAKIT'|'IZIN'|'ALPHA', keterangan }
-  // Prinsip Exception-based: Pelatih hanya menyimpan siswa yang TIDAK HADIR
-  if (Array.isArray(dataAbsen) && dataAbsen.length > 0) {
-    const rowsToAdd = dataAbsen.map(item => [
-      "PRSE-" + Utilities.getUuid().slice(0, 8),
-      tglStr,
-      idEkskul,
-      String(item.nisn).padStart(10, "0"),
-      item.nama,
-      item.kelas,
-      item.status, // SAKIT, IZIN, ALPHA
-      item.keterangan || "",
-      dicatatOleh || "Pelatih Ekskul",
-      timeStr
-    ]);
-    const nextRow = sheet.getLastRow() + 1;
-    sheet.getRange(nextRow, 1, rowsToAdd.length, rowsToAdd[0].length).setValues(rowsToAdd);
-    SpreadsheetApp.flush();
-    return { success: true, message: `Presensi latihan berhasil disimpan (${rowsToAdd.length} siswa tidak hadir dicatat).` };
+  if (tglStr > todayStr) {
+    return { success: false, error: "Presensi ekstrakurikuler tidak dapat diisi untuk tanggal di masa depan." };
   }
 
-  return { success: true, message: "Semua siswa hadir (tidak ada catatan ketidakhadiran)." };
+  const timeStr = Utilities.formatDate(now, "GMT+7", "yyyy-MM-dd HH:mm:ss");
+
+  const raw = sheet.getDataRange().getValues();
+  const rowsToKeep = [raw[0] || [
+    "ID_Absen", "Tanggal", "ID_Ekskul", "NISN", "Nama_Siswa", "Kelas", "Status", "Keterangan", "Dicatat_Oleh", "Timestamp"
+  ]];
+
+  // Singkirkan data lama untuk tanggal & ekskul yang sama agar tidak duplicate data
+  for (let i = 1; i < raw.length; i++) {
+    const rowTgl = formatTglFast(raw[i][1]);
+    const rowEkskul = String(raw[i][2] || "").trim().toUpperCase();
+    if (rowTgl === tglStr && rowEkskul === String(idEkskul).trim().toUpperCase()) {
+      // Lewati (digantikan oleh data terbaru)
+    } else {
+      rowsToKeep.push(raw[i]);
+    }
+  }
+
+  const rowsToAdd = (Array.isArray(dataAbsen) ? dataAbsen : []).map(item => [
+    "PRSE-" + Utilities.getUuid().slice(0, 8),
+    tglStr,
+    idEkskul,
+    String(item.nisn).padStart(10, "0"),
+    item.nama,
+    item.kelas,
+    item.status, // SAKIT, IZIN, ALPHA
+    item.keterangan || "",
+    dicatatOleh || "Pelatih Ekskul",
+    timeStr
+  ]);
+
+  const finalRows = rowsToKeep.concat(rowsToAdd);
+  sheet.clearContents();
+  sheet.getRange(1, 1, finalRows.length, finalRows[0].length).setValues(finalRows);
+  sheet.getRange(1, 4, finalRows.length, 1).setNumberFormat("@");
+  SpreadsheetApp.flush();
+
+  return { success: true, message: `Presensi latihan berhasil diperbarui (${rowsToAdd.length} siswa tidak hadir dicatat).` };
 }
 
 function getPresensiEkskul(idEkskul, tanggal, nisn) {
@@ -1784,6 +1896,9 @@ function simpanMasterSiswa(siswaList, pin) {
   if (!isValidAdminPin(pin)) {
     return { success: false, error: "PIN Administrator salah!" };
   }
+  if (!Array.isArray(siswaList) || siswaList.length === 0) {
+    return { success: false, error: "Daftar siswa tidak boleh kosong. Operasi dibatalkan demi keamanan data." };
+  }
 
   const sheet = getSS().getSheetByName(SHEET_SISWA);
   if (!sheet) return { success: false, error: "Sheet DATA_SISWA tidak ditemukan." };
@@ -1793,29 +1908,25 @@ function simpanMasterSiswa(siswaList, pin) {
     sheet.getRange(2, 1, sheet.getLastRow() - 1, sheet.getLastColumn()).clearContent();
   }
 
-  if (Array.isArray(siswaList) && siswaList.length > 0) {
-    const rowsToAdd = siswaList.map(s => {
-      const nisnPad = String(s.nisn).padStart(10, "0");
-      return [
-        nisnPad,
-        s.nis || "",
-        s.nama,
-        s.kelas,
-        s.gender || "L",
-        s.tglLahir || "2010-01-01",
-        s.noHpOrtu || "",
-        s.pin || nisnPad.slice(-4),
-        s.nipGuruWali || ""
-      ];
-    });
-    sheet.getRange(2, 1, rowsToAdd.length, rowsToAdd[0].length).setValues(rowsToAdd);
-    sheet.getRange(2, 1, rowsToAdd.length, 1).setNumberFormat("@");
-    sheet.getRange(2, 8, rowsToAdd.length, 1).setNumberFormat("@");
-    SpreadsheetApp.flush();
-    return { success: true, message: `Berhasil memperbarui master siswa (${rowsToAdd.length} siswa).` };
-  }
-
-  return { success: true, message: "Daftar siswa dikosongkan." };
+  const rowsToAdd = siswaList.map(s => {
+    const nisnPad = String(s.nisn).padStart(10, "0");
+    return [
+      nisnPad,
+      s.nis || "",
+      s.nama,
+      s.kelas,
+      s.gender || "L",
+      s.tglLahir || "2010-01-01",
+      s.noHpOrtu || "",
+      s.pin || nisnPad.slice(-4),
+      s.nipGuruWali || ""
+    ];
+  });
+  sheet.getRange(2, 1, rowsToAdd.length, rowsToAdd[0].length).setValues(rowsToAdd);
+  sheet.getRange(2, 1, rowsToAdd.length, 1).setNumberFormat("@");
+  sheet.getRange(2, 8, rowsToAdd.length, 1).setNumberFormat("@");
+  SpreadsheetApp.flush();
+  return { success: true, message: `Berhasil memperbarui master siswa (${rowsToAdd.length} siswa).` };
 }
 
 /**
@@ -1869,6 +1980,9 @@ function simpanMasterGuru(guruList, pin) {
   if (!isValidAdminPin(pin)) {
     return { success: false, error: "PIN Administrator salah!" };
   }
+  if (!Array.isArray(guruList) || guruList.length === 0) {
+    return { success: false, error: "Daftar guru tidak boleh kosong. Operasi dibatalkan demi keamanan data." };
+  }
 
   const sheet = getSS().getSheetByName(SHEET_GURU);
   if (!sheet) return { success: false, error: "Sheet DATA_GURU tidak ditemukan." };
@@ -1877,30 +1991,29 @@ function simpanMasterGuru(guruList, pin) {
     sheet.getRange(2, 1, sheet.getLastRow() - 1, sheet.getLastColumn()).clearContent();
   }
 
-  if (Array.isArray(guruList) && guruList.length > 0) {
-    const rowsToAdd = guruList.map(g => [
-      String(g.nip),
-      g.nama,
-      g.peran,
-      g.rombelWali || "",
-      g.cabangEkskul || "",
-      g.mapel || "",
-      g.noHp || "",
-      g.pin || "1234"
-    ]);
-    sheet.getRange(2, 1, rowsToAdd.length, rowsToAdd[0].length).setValues(rowsToAdd);
-    sheet.getRange(2, 1, rowsToAdd.length, 1).setNumberFormat("@");
-    sheet.getRange(2, 8, rowsToAdd.length, 1).setNumberFormat("@");
-    SpreadsheetApp.flush();
-    return { success: true, message: `Berhasil memperbarui master guru (${rowsToAdd.length} staf).` };
-  }
-
-  return { success: true, message: "Daftar guru dikosongkan." };
+  const rowsToAdd = guruList.map(g => [
+    String(g.nip),
+    g.nama,
+    g.peran,
+    g.rombelWali || "",
+    g.cabangEkskul || "",
+    g.mapel || "",
+    g.noHp || "",
+    g.pin || "1234"
+  ]);
+  sheet.getRange(2, 1, rowsToAdd.length, rowsToAdd[0].length).setValues(rowsToAdd);
+  sheet.getRange(2, 1, rowsToAdd.length, 1).setNumberFormat("@");
+  sheet.getRange(2, 8, rowsToAdd.length, 1).setNumberFormat("@");
+  SpreadsheetApp.flush();
+  return { success: true, message: `Berhasil memperbarui master guru (${rowsToAdd.length} staf).` };
 }
 
 function simpanMasterEkskul(ekskulList, pin) {
   if (!isValidAdminPin(pin)) {
     return { success: false, error: "PIN Administrator salah!" };
+  }
+  if (!Array.isArray(ekskulList) || ekskulList.length === 0) {
+    return { success: false, error: "Daftar master ekskul tidak boleh kosong. Operasi dibatalkan demi keamanan data." };
   }
 
   const sheet = getSS().getSheetByName(SHEET_EKSKUL_MASTER);
@@ -1910,24 +2023,146 @@ function simpanMasterEkskul(ekskulList, pin) {
     sheet.getRange(2, 1, sheet.getLastRow() - 1, sheet.getLastColumn()).clearContent();
   }
 
-  if (Array.isArray(ekskulList) && ekskulList.length > 0) {
-    const rowsToAdd = ekskulList.map(e => [
-      e.id,
-      e.nama,
-      e.kategori || "Umum",
-      e.hari || "",
-      e.jam || "",
-      e.tempat || "",
-      Number(e.kuota) || 30,
-      e.pembina || "",
-      e.status || "BUKA"
-    ]);
-    sheet.getRange(2, 1, rowsToAdd.length, rowsToAdd[0].length).setValues(rowsToAdd);
-    SpreadsheetApp.flush();
-    return { success: true, message: `Berhasil memperbarui master ekskul (${rowsToAdd.length} cabang).` };
+  const rowsToAdd = ekskulList.map(e => [
+    e.id,
+    e.nama,
+    e.kategori || "Umum",
+    e.hari || "",
+    e.jam || "",
+    e.tempat || "",
+    Number(e.kuota) || 30,
+    e.pembina || "",
+    e.status || "BUKA"
+  ]);
+  sheet.getRange(2, 1, rowsToAdd.length, rowsToAdd[0].length).setValues(rowsToAdd);
+  SpreadsheetApp.flush();
+  return { success: true, message: `Berhasil memperbarui master ekskul (${rowsToAdd.length} cabang).` };
+}
+
+function tambahAtauUpdateEkskul(ekskul, pin) {
+  if (!isValidAdminPin(pin)) {
+    return { success: false, error: "PIN Administrator salah!" };
+  }
+  if (!ekskul || !ekskul.id || !ekskul.nama) {
+    return { success: false, error: "Data ekskul tidak lengkap (ID dan Nama wajib diisi)!" };
   }
 
-  return { success: true, message: "Daftar master ekskul dikosongkan." };
+  const ss = getSS();
+  const sheet = ss.getSheetByName(SHEET_EKSKUL_MASTER);
+  if (!sheet) return { success: false, error: "Sheet EKSKUL_MASTER tidak ditemukan." };
+
+  const raw = sheet.getDataRange().getValues();
+  const rowData = [
+    String(ekskul.id).trim().toUpperCase(),
+    String(ekskul.nama).trim(),
+    ekskul.kategori || "Umum",
+    ekskul.hari || "",
+    ekskul.jam || "",
+    ekskul.tempat || "",
+    Number(ekskul.kuota) || 30,
+    ekskul.pembina || "",
+    ekskul.status || "BUKA"
+  ];
+
+  for (let i = 1; i < raw.length; i++) {
+    if (String(raw[i][0]).trim().toUpperCase() === String(ekskul.id).trim().toUpperCase()) {
+      sheet.getRange(i + 1, 1, 1, rowData.length).setValues([rowData]);
+      SpreadsheetApp.flush();
+      return { success: true, message: `Berhasil memperbarui data ekskul ${ekskul.nama}.` };
+    }
+  }
+
+  sheet.appendRow(rowData);
+  SpreadsheetApp.flush();
+  return { success: true, message: `Berhasil menambahkan ekskul baru ${ekskul.nama}.` };
+}
+
+function hapusEkskul(idEkskul, pin) {
+  if (!isValidAdminPin(pin)) {
+    return { success: false, error: "PIN Administrator salah!" };
+  }
+  if (!idEkskul) {
+    return { success: false, error: "ID Ekskul tidak ditentukan!" };
+  }
+
+  const ss = getSS();
+  const sheet = ss.getSheetByName(SHEET_EKSKUL_MASTER);
+  if (!sheet || sheet.getLastRow() <= 1) return { success: false, error: "Sheet master ekskul kosong." };
+
+  const raw = sheet.getDataRange().getValues();
+  for (let i = 1; i < raw.length; i++) {
+    if (String(raw[i][0]).trim().toUpperCase() === String(idEkskul).trim().toUpperCase()) {
+      sheet.deleteRow(i + 1);
+      SpreadsheetApp.flush();
+      return { success: true, message: `Cabang ekstrakurikuler ${idEkskul} berhasil dihapus dari database.` };
+    }
+  }
+
+  return { success: false, error: `Ekskul dengan ID ${idEkskul} tidak ditemukan.` };
+}
+
+function simpanBulkAnggotaEkskul(anggotaList, pin) {
+  if (!isValidAdminPin(pin)) {
+    return { success: false, error: "PIN Administrator salah!" };
+  }
+  if (!Array.isArray(anggotaList) || anggotaList.length === 0) {
+    return { success: false, error: "Daftar siswa yang akan didaftarkan tidak boleh kosong." };
+  }
+
+  const ss = getSS();
+  const sheet = ss.getSheetByName(SHEET_EKSKUL_ANGGOTA);
+  if (!sheet) return { success: false, error: "Sheet EKSKUL_ANGGOTA tidak ditemukan." };
+
+  const raw = sheet.getDataRange().getValues();
+  const activeMap = {};
+  for (let i = 1; i < raw.length; i++) {
+    const rNisn = String(raw[i][1] || "").padStart(10, "0");
+    const rIdEkskul = String(raw[i][4] || "").trim().toUpperCase();
+    const rStatus = String(raw[i][7] || "").trim().toUpperCase();
+    if (rStatus === "AKTIF") {
+      activeMap[`${rNisn}_${rIdEkskul}`] = true;
+    }
+  }
+
+  const rowsToAdd = [];
+  const tglToday = Utilities.formatDate(new Date(), "GMT+7", "yyyy-MM-dd");
+
+  anggotaList.forEach(item => {
+    if (!item || !item.nisn || !item.idEkskul) return;
+    const formattedNisn = String(item.nisn).padStart(10, "0");
+    const idEkskul = String(item.idEkskul).trim().toUpperCase();
+    const key = `${formattedNisn}_${idEkskul}`;
+
+    // Lewati jika sudah terdaftar aktif
+    if (activeMap[key]) return;
+
+    const idDaftar = item.idDaftar || ("REG-" + Utilities.getUuid().slice(0, 8));
+    rowsToAdd.push([
+      idDaftar,
+      formattedNisn,
+      item.nama || "",
+      item.kelas || "",
+      idEkskul,
+      item.namaEkskul || "",
+      item.tanggalDaftar || tglToday,
+      "AKTIF"
+    ]);
+    activeMap[key] = true; // cegah duplikat dalam batch yang sama
+  });
+
+  if (rowsToAdd.length > 0) {
+    const startRow = sheet.getLastRow() + 1;
+    sheet.getRange(startRow, 1, rowsToAdd.length, 8).setValues(rowsToAdd);
+    sheet.getRange(startRow, 2, rowsToAdd.length, 1).setNumberFormat("@");
+    SpreadsheetApp.flush();
+  }
+
+  return {
+    success: true,
+    added: rowsToAdd.length,
+    totalRequested: anggotaList.length,
+    message: `Berhasil menambahkan ${rowsToAdd.length} siswa ke ekstrakurikuler.`
+  };
 }
 
 function updateProfilSiswa(nisn, noHpOrtu) {
@@ -1962,6 +2197,7 @@ function simpanJurnalGuru(jurnal) {
         "Hadir", "Total_Siswa", "Facts", "Feelings", "Findings", "Future", "Timestamp"
       ]);
     }
+    const idJurnal = String(jurnal.id || ("JRN-" + Date.now())).trim();
     const facts = (jurnal.refleksi4F && jurnal.refleksi4F.facts) || "-";
     const feelings = (jurnal.refleksi4F && jurnal.refleksi4F.feelings) || "-";
     const findings = (jurnal.refleksi4F && jurnal.refleksi4F.findings) || "-";
@@ -1969,8 +2205,8 @@ function simpanJurnalGuru(jurnal) {
     const hadir = (jurnal.kehadiran && jurnal.kehadiran.hadir) || 0;
     const total = (jurnal.kehadiran && jurnal.kehadiran.total) || 0;
 
-    sheet.appendRow([
-      jurnal.id || ("JRN-" + Date.now()),
+    const rowData = [
+      idJurnal,
       String(jurnal.nip || "").trim(),
       String(jurnal.namaGuru || "").trim(),
       String(jurnal.tanggal || "").trim(),
@@ -1985,11 +2221,57 @@ function simpanJurnalGuru(jurnal) {
       findings,
       future,
       new Date().toISOString()
-    ]);
+    ];
+
+    // Cek apakah jurnal dengan ID ini sudah ada -> Update jika sudah ada
+    let updated = false;
+    if (sheet.getLastRow() > 1) {
+      const raw = sheet.getDataRange().getValues();
+      for (let i = 1; i < raw.length; i++) {
+        if (String(raw[i][0]).trim() === idJurnal) {
+          sheet.getRange(i + 1, 1, 1, 15).setValues([rowData]);
+          updated = true;
+          break;
+        }
+      }
+    }
+
+    if (!updated) {
+      sheet.appendRow(rowData);
+    }
+
     SpreadsheetApp.flush();
-    return { success: true, message: "Catatan jurnal dan refleksi 4F guru berhasil disimpan di database." };
+    return { 
+      success: true, 
+      id: idJurnal,
+      message: updated ? "Catatan jurnal mengajar guru berhasil diperbarui." : "Catatan jurnal dan refleksi 4F guru berhasil disimpan di database." 
+    };
   } catch (err) {
     return { success: false, error: "Gagal menyimpan jurnal guru: " + err.message };
+  }
+}
+
+function hapusJurnalGuru(idJurnal, nip) {
+  if (!idJurnal) return { success: false, error: "ID Jurnal tidak valid." };
+  try {
+    const ss = getSS();
+    const sheet = ss.getSheetByName("JURNAL_GURU");
+    if (!sheet || sheet.getLastRow() <= 1) return { success: true, message: "Jurnal sudah tidak ada." };
+    const raw = sheet.getDataRange().getValues();
+    const targetId = String(idJurnal).trim();
+    for (let i = 1; i < raw.length; i++) {
+      if (String(raw[i][0]).trim() === targetId) {
+        if (nip && String(raw[i][1]).trim() !== String(nip).trim()) {
+          return { success: false, error: "Anda tidak berhak menghapus jurnal milik pendidik lain." };
+        }
+        sheet.deleteRow(i + 1);
+        SpreadsheetApp.flush();
+        return { success: true, message: "Catatan jurnal berhasil dihapus dari database." };
+      }
+    }
+    return { success: true, message: "Catatan jurnal tidak ditemukan di sheet." };
+  } catch (err) {
+    return { success: false, error: "Gagal menghapus jurnal guru: " + err.message };
   }
 }
 
