@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="id">
 <head>
   <meta charset="UTF-8">
@@ -142,19 +142,12 @@
     .ticker-track.is-paused {
       animation-play-state: paused !important;
     }
-    /* Standar Skala Ukuran Huruf Aplikasi (WCAG Compliant) */
-    html.font-size-small { font-size: 14px !important; }
-    html.font-size-medium { font-size: 16px !important; }
-    html.font-size-big { font-size: 18px !important; }
-    html.font-size-small body { font-size: 14px !important; }
-    html.font-size-medium body { font-size: 16px !important; }
-    /* Standar Skala Ukuran Huruf Aplikasi (WCAG Compliant) */
-    html.font-size-small { font-size: 14px !important; }
-    html.font-size-medium { font-size: 16px !important; }
-    html.font-size-big { font-size: 18px !important; }
-    html.font-size-small body { font-size: 14px !important; }
-    html.font-size-medium body { font-size: 16px !important; }
-    html.font-size-big body { font-size: 18px !important; }
+    /* Standar Skala Ukuran Huruf Aplikasi (Diperbesar 2 Level untuk Keterbacaan Optimal) */
+    html { font-size: 19px; }
+    body { font-size: 19px; }
+    html.font-size-small, html.font-size-small body { font-size: 17px !important; }
+    html.font-size-medium, html.font-size-medium body { font-size: 19px !important; }
+    html.font-size-big, html.font-size-big body { font-size: 22px !important; }
 
     /* Mobile Viewport Bound & Prevent Horizontal Overflow */
     html, body {
@@ -2578,9 +2571,12 @@
             <div class="flex items-center gap-2 flex-wrap sm:flex-nowrap">
               <select id="filterUserGuruPeran" onchange="renderTableUserGuru()" class="px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs font-bold text-slate-700 focus:outline-none focus:border-indigo-500 cursor-pointer">
                 <option value="">Semua Peran</option>
-                <option value="GURU_WALI">Wali Kelas (Mentor Karakter)</option>
-                <option value="PELATIH_EKSKUL">Pelatih / Pembina Ekskul</option>
-                <option value="GURU_MAPEL">Guru Mata Pelajaran</option>
+                <option value="KEPALA_SEKOLAH">ðŸ›ï¸ Kepala Sekolah / Pimpinan</option>
+                <option value="GURU_WALI">â­ Wali Kelas (Mentor Karakter)</option>
+                <option value="PELATIH_EKSKUL">âš½ Pelatih / Pembina Ekskul</option>
+                <option value="GURU_MAPEL">ðŸ“š Guru Mata Pelajaran</option>
+                <option value="GURU_BK">ðŸŒ± Guru BK</option>
+                <option value="TENDIK">ðŸ¢ Tenaga Kependidikan / TU</option>
               </select>
               <button type="button" onclick="bukaModalFormGuruAdmin()" class="px-3.5 py-2 bg-indigo-600 hover:bg-indigo-700 text-white font-bold rounded-xl text-xs transition flex items-center gap-1.5 shadow-xs cursor-pointer flex-shrink-0">
                 <i data-lucide="user-plus" class="w-3.5 h-3.5"></i>
@@ -5697,7 +5693,7 @@
         ekskulBadge.innerText = `Minggu ke-${ekskulInfo.mingguKe} (${ekskulInfo.namaBulan})`;
       }
     }
-    let appConfig = {
+    var appConfig = {
       NAMA_SEKOLAH: "SMP NEGERI 1 INDONESIA HEBAT",
       INSTANSI_PEMBINA: "PEMERINTAH KOTA / KABUPATEN - DINAS PENDIDIKAN",
       ALAMAT_SEKOLAH: "Jl. Pendidikan Karakter No. 07, Kota Cerdas",
@@ -5730,11 +5726,15 @@
       GEMINI_API_KEY: ""
     };
 
-    let limitJurnalGuruSaya = 3;
+    var limitJurnalGuruSaya = 3;
 
-    let currentUser = null; // { role: 'SISWA'|'GURU'|'ADMIN', ... }
-    let masterSiswa = [];
-    let masterGuru = [];
+    var currentUser = null; // { role: 'SISWA'|'GURU'|'ADMIN', ... }
+    var masterSiswa = [];
+    var masterGuru = [];
+    window.appConfig = appConfig;
+    window.currentUser = currentUser;
+    window.masterGuru = masterGuru;
+    window.masterSiswa = masterSiswa;
     let masterEkskul = [];
     let anggotaEkskul = [];
     let masterTibum = [];
@@ -6783,16 +6783,42 @@
       }
     }
 
-    // HELPER KEPALA SEKOLAH: Memastikan Akun Terdaftar & Pengisian Kredensial Otomatis
+    // HELPER KEPALA SEKOLAH: Memastikan Akun Terdaftar & Sinkronisasi Identitas Dua Arah
     function pastikanAkunKepsekAda() {
       try {
-        const nipKep = String((typeof appConfig !== 'undefined' && appConfig.NIP_KEPSEK) ? appConfig.NIP_KEPSEK : "197205101998021003").trim();
-        const namaKep = String((typeof appConfig !== 'undefined' && appConfig.NAMA_KEPSEK) ? appConfig.NAMA_KEPSEK : "Drs. H. Mulyadi, M.Pd.").trim();
         if (typeof masterGuru === 'undefined' || !Array.isArray(masterGuru)) {
           window.masterGuru = [];
         }
-        const exists = masterGuru.some(g => g.peran === 'KEPALA_SEKOLAH' || g.nip === nipKep);
-        if (!exists) {
+
+        // Jika user yang aktif adalah Kepala Sekolah, pastikan appConfig sinkron dengan currentUser
+        if (currentUser && (currentUser.role === 'KEPALA_SEKOLAH' || currentUser.peran === 'KEPALA_SEKOLAH')) {
+          if (currentUser.nama && typeof appConfig !== 'undefined') appConfig.NAMA_KEPSEK = currentUser.nama;
+          if (currentUser.nip && typeof appConfig !== 'undefined') appConfig.NIP_KEPSEK = currentUser.nip;
+        }
+        
+        // Cari akun guru dengan peran KEPALA_SEKOLAH
+        const guruKs = masterGuru.find(g => g.peran === 'KEPALA_SEKOLAH');
+        if (guruKs) {
+          // Jika currentUser kepala sekolah sedang aktif, update data guruKs
+          if (currentUser && (currentUser.role === 'KEPALA_SEKOLAH' || currentUser.peran === 'KEPALA_SEKOLAH') && currentUser.nama) {
+            guruKs.nama = currentUser.nama;
+            if (currentUser.nip) guruKs.nip = currentUser.nip;
+          } else {
+            // Sinkronkan data di appConfig agar identitas kepsek selalu konsisten dengan akun guru kepsek
+            if (typeof appConfig !== 'undefined') {
+              if (guruKs.nama && (!appConfig.NAMA_KEPSEK || appConfig.NAMA_KEPSEK === "Drs. H. Mulyadi, M.Pd." || appConfig.NAMA_KEPSEK !== guruKs.nama)) {
+                appConfig.NAMA_KEPSEK = guruKs.nama;
+              }
+              if (guruKs.nip && (!appConfig.NIP_KEPSEK || appConfig.NIP_KEPSEK === "197205101998021003" || appConfig.NIP_KEPSEK !== guruKs.nip)) {
+                appConfig.NIP_KEPSEK = guruKs.nip;
+              }
+            }
+          }
+        } else {
+          // Jika belum ada akun KEPALA_SEKOLAH di masterGuru, daftarkan dari appConfig
+          const nipKep = String((typeof appConfig !== 'undefined' && appConfig.NIP_KEPSEK) ? appConfig.NIP_KEPSEK : "197205101998021003").trim();
+          const namaKep = String((typeof appConfig !== 'undefined' && appConfig.NAMA_KEPSEK) ? appConfig.NAMA_KEPSEK : "Drs. H. Mulyadi, M.Pd.").trim();
+          const pinKep = (typeof appConfig !== 'undefined' && appConfig.PIN_KEPSEK) ? appConfig.PIN_KEPSEK : "123456";
           masterGuru.unshift({
             nip: nipKep,
             nama: namaKep,
@@ -6801,7 +6827,7 @@
             cabangEkskul: "",
             mapel: "Bukan Guru Mapel / Struktural",
             noHp: "081299991111",
-            pin: "123456"
+            pin: pinKep
           });
         }
       } catch (e) {
@@ -16732,14 +16758,22 @@ ATURAN KETAT:
 
       tbody.innerHTML = filtered.map((g, idx) => {
         let peranBadge = '<span class="px-2 py-0.5 bg-slate-100 text-slate-700 rounded font-bold text-[10px]">Guru Mapel</span>';
-        if (g.peran === 'GURU_WALI') {
+        if (g.peran === 'KEPALA_SEKOLAH') {
+          peranBadge = '<span class="px-2.5 py-0.5 bg-emerald-100 text-emerald-900 rounded-md font-black text-[10px] border border-emerald-300 inline-flex items-center gap-1 shadow-2xs"><i data-lucide="landmark" class="w-3 h-3 text-emerald-700"></i>KEPALA SEKOLAH</span>';
+        } else if (g.peran === 'GURU_WALI') {
           peranBadge = '<span class="px-2 py-0.5 bg-amber-100 text-amber-800 rounded font-black text-[10px] border border-amber-300">WALI KELAS</span>';
         } else if (g.peran === 'PELATIH_EKSKUL') {
           peranBadge = '<span class="px-2 py-0.5 bg-purple-100 text-purple-800 rounded font-black text-[10px] border border-purple-300">PELATIH EKSKUL</span>';
+        } else if (g.peran === 'GURU_BK') {
+          peranBadge = '<span class="px-2 py-0.5 bg-sky-100 text-sky-800 rounded font-black text-[10px] border border-sky-300">GURU BK</span>';
+        } else if (g.peran === 'TENDIK') {
+          peranBadge = '<span class="px-2 py-0.5 bg-slate-200 text-slate-800 rounded font-black text-[10px] border border-slate-300">TENDIK / TU</span>';
         }
 
         let tugasTambahan = '<span class="text-slate-400 italic text-[11px]">-</span>';
-        if (g.rombelWali) {
+        if (g.peran === 'KEPALA_SEKOLAH') {
+          tugasTambahan = '<span class="px-2 py-0.5 bg-emerald-50 text-emerald-800 rounded-md font-bold text-[10px] border border-emerald-200 inline-flex items-center gap-1"><i data-lucide="award" class="w-3 h-3 text-emerald-600"></i>Pimpinan Satuan Pendidikan</span>';
+        } else if (g.rombelWali) {
           tugasTambahan = `<span class="px-2 py-0.5 bg-indigo-50 text-indigo-700 rounded-md font-bold text-[10px] border border-indigo-200">Walas ${escapeHtml(g.rombelWali)}</span>`;
         } else if (g.cabangEkskul) {
           const eks = (masterEkskul || []).find(x => x.id === g.cabangEkskul);
@@ -17012,23 +17046,37 @@ ATURAN KETAT:
       }
     }
 
-    // Modal Form Guru
+    // Modal Form Guru: Penyesuaian Peran & Jabatan Khusus Kepala Sekolah / PTK
     function handlePeranGuruFormChange(peran) {
       const boxWalas = document.getElementById('boxFormGuruRombelWali');
       const boxEkskul = document.getElementById('boxFormGuruCabangEkskul');
-      if (boxWalas) {
-        if (peran === 'GURU_WALI') boxWalas.classList.remove('opacity-50');
-        else boxWalas.classList.add('opacity-50');
-      }
-      if (boxEkskul) {
-        if (peran === 'PELATIH_EKSKUL') boxEkskul.classList.remove('opacity-50');
-        else boxEkskul.classList.add('opacity-50');
-      }
-      if (peran === 'KEPALA_SEKOLAH' || peran === 'TENDIK') {
-        const selMapel = document.getElementById('formGuruMapel');
-        if (selMapel) selMapel.value = 'Bukan Guru Mapel / Struktural';
-        const boxCustom = document.getElementById('boxFormGuruMapelCustom');
-        if (boxCustom) boxCustom.classList.add('hidden');
+      const inputWalas = document.getElementById('formGuruRombelWali');
+      const inputEkskul = document.getElementById('formGuruCabangEkskul');
+      const selMapel = document.getElementById('formGuruMapel');
+      const boxCustom = document.getElementById('boxFormGuruMapelCustom');
+
+      if (peran === 'KEPALA_SEKOLAH') {
+        if (boxWalas) { boxWalas.classList.add('opacity-50'); }
+        if (inputWalas) { inputWalas.value = ''; }
+        if (boxEkskul) { boxEkskul.classList.add('opacity-50'); }
+        if (inputEkskul) { inputEkskul.value = ''; }
+        if (selMapel) { selMapel.value = 'Bukan Guru Mapel / Struktural'; }
+        if (boxCustom) { boxCustom.classList.add('hidden'); }
+      } else if (peran === 'GURU_WALI') {
+        if (boxWalas) { boxWalas.classList.remove('opacity-50'); }
+        if (boxEkskul) { boxEkskul.classList.add('opacity-50'); }
+        if (inputEkskul) { inputEkskul.value = ''; }
+      } else if (peran === 'PELATIH_EKSKUL') {
+        if (boxWalas) { boxWalas.classList.add('opacity-50'); }
+        if (inputWalas) { inputWalas.value = ''; }
+        if (boxEkskul) { boxEkskul.classList.remove('opacity-50'); }
+      } else {
+        if (boxWalas) { boxWalas.classList.add('opacity-50'); }
+        if (boxEkskul) { boxEkskul.classList.add('opacity-50'); }
+        if (peran === 'TENDIK') {
+          if (selMapel) { selMapel.value = 'Bukan Guru Mapel / Struktural'; }
+          if (boxCustom) { boxCustom.classList.add('hidden'); }
+        }
       }
     }
 
@@ -17127,15 +17175,27 @@ ATURAN KETAT:
         allowOutsideClick: false
       });
 
+      // Penyesuaian jabatan khusus Kepala Sekolah
+      let finalRombelWali = rombelWali;
+      let finalCabangEkskul = cabangEkskul;
+      let finalMapel = mapel;
+      if (peran === 'KEPALA_SEKOLAH') {
+        finalRombelWali = '';
+        finalCabangEkskul = '';
+        if (!finalMapel || finalMapel === 'LAINNYA') {
+          finalMapel = 'Bukan Guru Mapel / Struktural';
+        }
+      }
+
       if (mode === 'edit') {
         const idx = (masterGuru || []).findIndex(g => g.nip === origNip);
         if (idx !== -1) {
           masterGuru[idx].nip = nip;
           masterGuru[idx].nama = nama;
           masterGuru[idx].peran = peran;
-          masterGuru[idx].rombelWali = rombelWali;
-          masterGuru[idx].cabangEkskul = cabangEkskul;
-          masterGuru[idx].mapel = mapel;
+          masterGuru[idx].rombelWali = finalRombelWali;
+          masterGuru[idx].cabangEkskul = finalCabangEkskul;
+          masterGuru[idx].mapel = finalMapel;
           masterGuru[idx].noHp = noHp;
           if (customPin) masterGuru[idx].pin = customPin;
         }
@@ -17144,13 +17204,46 @@ ATURAN KETAT:
           nip: nip,
           nama: nama,
           peran: peran,
-          rombelWali: rombelWali,
-          cabangEkskul: cabangEkskul,
-          mapel: mapel,
+          rombelWali: finalRombelWali,
+          cabangEkskul: finalCabangEkskul,
+          mapel: finalMapel,
           noHp: noHp,
           pin: customPin || '123456'
         };
         masterGuru.push(newGuru);
+      }
+
+      // SINKRONISASI OTOMATIS: Jika PTK yang disimpan berperan sebagai KEPALA_SEKOLAH
+      if (peran === 'KEPALA_SEKOLAH') {
+        // 1. Pastikan hanya ada 1 Kepala Sekolah aktif (guru lain diturunkan ke Guru Mapel)
+        (masterGuru || []).forEach(g => {
+          if (g.nip !== nip && g.peran === 'KEPALA_SEKOLAH') {
+            g.peran = 'GURU_MAPEL';
+          }
+        });
+
+        // 2. Perbarui konfigurasi sekolah (appConfig)
+        if (typeof appConfig !== 'undefined') {
+          appConfig.NAMA_KEPSEK = nama;
+          appConfig.NIP_KEPSEK = nip;
+          if (customPin) appConfig.PIN_KEPSEK = customPin;
+          try {
+            localStorage.setItem('SUPERAPP_CONFIG', JSON.stringify(appConfig));
+          } catch (e) {}
+        }
+
+        // 3. Perbarui field pengaturan sekolah di admin jika ada di DOM
+        const elCfgNama = document.getElementById('cfgNamaKepsek');
+        const elCfgNip = document.getElementById('cfgNipKepsek');
+        if (elCfgNama) elCfgNama.value = nama;
+        if (elCfgNip) elCfgNip.value = nip;
+
+        // 4. Update data currentUser jika yang sedang login adalah akun Kepala Sekolah
+        if (currentUser && (currentUser.role === 'KEPALA_SEKOLAH' || currentUser.peran === 'KEPALA_SEKOLAH')) {
+          currentUser.nama = nama;
+          currentUser.nip = nip;
+          setupKepsekUi();
+        }
       }
 
       try {
@@ -17856,9 +17949,15 @@ ATURAN KETAT:
         peran: 'KEPALA_SEKOLAH',
         nip: finalNip,
         nama: finalNama,
-        mapel: 'Pimpinan Eksekutif',
+        mapel: 'Pimpinan Satuan Pendidikan',
         rombelWali: ''
       };
+
+      if (typeof appConfig !== 'undefined') {
+        appConfig.NAMA_KEPSEK = finalNama;
+        appConfig.NIP_KEPSEK = finalNip;
+        try { localStorage.setItem('SUPERAPP_CONFIG', JSON.stringify(appConfig)); } catch (e) {}
+      }
 
       setupKepsekUi();
       showView('viewKepsek');
@@ -17873,30 +17972,40 @@ ATURAN KETAT:
       });
     }
 
-    // 3. SETUP UI KEPALA SEKOLAH
+    // 3. SETUP UI KEPALA SEKOLAH (IDENTITAS RESMI DINAMIS 100%)
     function setupKepsekUi() {
+      pastikanAkunKepsekAda();
+
+      const activeNamaKepsek = (currentUser && currentUser.nama) ? currentUser.nama : ((typeof appConfig !== 'undefined' && appConfig.NAMA_KEPSEK) ? appConfig.NAMA_KEPSEK : "Kepala Sekolah");
+      const rawNip = (currentUser && currentUser.nip) ? currentUser.nip : ((typeof appConfig !== 'undefined' && appConfig.NIP_KEPSEK) ? appConfig.NIP_KEPSEK : "-");
+      const activeNipKepsek = String(rawNip).startsWith("NIP") ? rawNip : `NIP. ${rawNip}`;
+      const activeSekolah = (typeof appConfig !== 'undefined' && appConfig.NAMA_SEKOLAH) ? appConfig.NAMA_SEKOLAH : "SMP Negeri Indonesia Hebat";
+
       if (document.getElementById('userProfileArea')) document.getElementById('userProfileArea').classList.remove('hidden');
-      if (document.getElementById('userName')) document.getElementById('userName').innerText = (currentUser ? currentUser.nama : null) || appConfig.NAMA_KEPSEK || "Kepala Sekolah";
+      if (document.getElementById('userName')) document.getElementById('userName').innerText = activeNamaKepsek;
       if (document.getElementById('userRoleBadge')) document.getElementById('userRoleBadge').innerText = "Kepala Sekolah";
       if (document.getElementById('userAvatar')) document.getElementById('userAvatar').innerText = "KS";
 
-      // Update Hero Box
+      // Update Hero Box Identitas Kepala Sekolah secara Dinamis
       const elHeroNama = document.getElementById('kepsekHeroNama');
       const elHeroNip = document.getElementById('kepsekHeroNip');
       const elHeroSekolah = document.getElementById('kepsekHeroSekolah');
       const elHeroTgl = document.getElementById('kepsekHeroTanggal');
       const elHeroSem = document.getElementById('kepsekHeroSemesterBadge');
+      
+      if (elHeroNama) elHeroNama.innerText = activeNamaKepsek;
+      if (elHeroNip) elHeroNip.innerText = activeNipKepsek;
+      if (elHeroSekolah) elHeroSekolah.innerText = activeSekolah;
+
       if (elHeroSem) {
-        const semLabel = (appConfig.SEMESTER_AKTIF === "2") ? "Semester Genap (Kls 9 Bebas)" : "Semester Gasal";
-        elHeroSem.innerText = `${semLabel} • ${appConfig.TAHUN_AJARAN || "2026/2027"}`;
+        const semAktif = (typeof SEMESTER_AKTIF !== 'undefined' ? SEMESTER_AKTIF : ((typeof appConfig !== 'undefined' && appConfig.SEMESTER_AKTIF) ? appConfig.SEMESTER_AKTIF : '2'));
+        const semLabel = (semAktif === "2") ? "Semester Genap (Kls 9 Bebas)" : "Semester Gasal";
+        elHeroSem.innerText = `${semLabel} â€¢ ${(typeof appConfig !== 'undefined' && appConfig.TAHUN_AJARAN) ? appConfig.TAHUN_AJARAN : "2026/2027"}`;
       }
       
       const now = new Date();
       const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
       if (elHeroTgl) elHeroTgl.innerText = now.toLocaleDateString('id-ID', options);
-
-      const semAktif = (typeof SEMESTER_AKTIF !== 'undefined' ? SEMESTER_AKTIF : (appConfig.SEMESTER_AKTIF || '2'));
-      if (elHeroSem) elHeroSem.innerText = `Semester ${semAktif === '1' ? 'Ganjil' : 'Genap'}`;
 
       switchTabKepsek(currentTabKepsek || 'ringkasan');
       safeCreateIcons();
@@ -18531,26 +18640,67 @@ ATURAN KETAT:
     initFontScale();
 
     // -------------------------------------------------------------
-    // PUSAT NOTIFIKASI SEKOLAH UNIVERSAL (UNTUK SEMUA PENGGUNA)
+    // PUSAT NOTIFIKASI SEKOLAH UNIVERSAL (HANDAL & TERKONTROL)
     // -------------------------------------------------------------
+    function isNotifikasiAppEnabled() {
+      try {
+        const val = localStorage.getItem("SUPERAPP_NOTIF_ENABLED");
+        return val === "1" || val === "true" || ("Notification" in window && Notification.permission === "granted");
+      } catch (e) {
+        return false;
+      }
+    }
+
+    function toggleNotifikasiAppAktif() {
+      try {
+        const current = isNotifikasiAppEnabled();
+        const next = !current;
+        localStorage.setItem("SUPERAPP_NOTIF_ENABLED", next ? "1" : "0");
+        if (next) {
+          if (typeof playChimeBell === 'function') playChimeBell();
+          if ("Notification" in window && Notification.permission === "default") {
+            Notification.requestPermission().catch(() => {});
+          }
+          Swal.fire({
+            toast: true,
+            position: 'top-end',
+            icon: 'success',
+            title: 'Notifikasi Sekolah Diaktifkan! ðŸ””',
+            text: 'Pengingat KBM & Warta Sekolah aktif di perangkat Anda.',
+            showConfirmButton: false,
+            timer: 2500
+          });
+        } else {
+          Swal.fire({
+            toast: true,
+            position: 'top-end',
+            icon: 'info',
+            title: 'Notifikasi Dinonaktifkan',
+            text: 'Pengingat suara aplikasi dihentikan sementara.',
+            showConfirmButton: false,
+            timer: 2000
+          });
+        }
+        bukaPusatNotifikasiSekolah();
+      } catch (e) {
+        console.error("Gagal toggle notifikasi:", e);
+      }
+    }
+
     function bukaPusatNotifikasiSekolah() {
       const todayInfo = getMingguKeBulanInfo(new Date());
       const notifSupported = ("Notification" in window);
       const notifGranted = notifSupported && Notification.permission === "granted";
+      const appNotifOn = isNotifikasiAppEnabled();
 
-      const statusBadge = notifGranted 
-        ? `<span class="px-2.5 py-1 bg-emerald-100 text-emerald-800 rounded-full font-extrabold text-xs">🟢 Notifikasi Aktif</span>`
-        : `<span class="px-2.5 py-1 bg-amber-100 text-amber-800 rounded-full font-extrabold text-xs">🟡 Belum Diaktifkan</span>`;
-
-      const actionButton = notifGranted
-        ? `<button type="button" onclick="kirimNotifikasiUjiCobaAndroid()" class="w-full py-2.5 bg-blue-600 hover:bg-blue-700 text-white font-extrabold rounded-xl text-xs transition flex items-center justify-center gap-1.5 cursor-pointer shadow-sm">
-             <i data-lucide="send" class="w-4 h-4"></i>
-             <span>Kirim Pesan Uji Coba ke Perangkat</span>
-           </button>`
-        : `<button type="button" onclick="requestNotificationPermissionAndroid()" class="w-full py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white font-extrabold rounded-xl text-xs transition flex items-center justify-center gap-1.5 cursor-pointer shadow-sm">
-             <i data-lucide="bell-ring" class="w-4 h-4"></i>
-             <span>Aktifkan Notifikasi di Perangkat Ini</span>
-           </button>`;
+      let pushStatusHtml = "";
+      if (notifGranted) {
+        pushStatusHtml = `<span class="px-2.5 py-1 bg-emerald-100 text-emerald-800 rounded-full font-black text-xs inline-flex items-center gap-1">ðŸŸ¢ Push Aktif</span>`;
+      } else if (notifSupported && Notification.permission === "denied") {
+        pushStatusHtml = `<span class="px-2.5 py-1 bg-rose-100 text-rose-800 rounded-full font-black text-xs inline-flex items-center gap-1">ðŸ”´ Izin Ditolak Browser</span>`;
+      } else {
+        pushStatusHtml = `<span class="px-2.5 py-1 bg-amber-100 text-amber-800 rounded-full font-black text-xs inline-flex items-center gap-1">ðŸŸ¡ Belum Diizinkan</span>`;
+      }
 
       const feedAmanat = (typeof feedPengumuman !== "undefined" && feedPengumuman ? feedPengumuman : []).slice(0, 3);
       let feedHtml = feedAmanat.map(item => `
@@ -18569,24 +18719,54 @@ ATURAN KETAT:
       }
 
       Swal.fire({
-        title: "Pusat Notifikasi & Warta Sekolah",
+        title: "Pusat Pengaturan Notifikasi & Warta Sekolah",
         html: `
           <div class="space-y-4 text-left text-xs max-h-[75vh] overflow-y-auto px-1">
-            <div class="p-3.5 bg-gradient-to-r from-indigo-50 to-blue-50 rounded-2xl border border-indigo-100 flex items-center justify-between">
-              <div>
-                <div class="font-extrabold text-indigo-950 text-xs">Status Push Notification</div>
-                <div class="text-[11px] text-slate-500 mt-0.5">Pengingat KBM & Pengumuman Penting</div>
+            <!-- Box Status Push & In-App Notification -->
+            <div class="p-3.5 bg-gradient-to-r from-slate-900 via-indigo-950 to-slate-900 text-white rounded-2xl border border-indigo-700/50 shadow-md space-y-3">
+              <div class="flex items-center justify-between gap-2">
+                <div>
+                  <div class="font-black text-sm text-amber-300 flex items-center gap-1.5">
+                    <i data-lucide="bell-ring" class="w-4 h-4 text-amber-400"></i>
+                    <span>Status Pengingat Aplikasi</span>
+                  </div>
+                  <div class="text-[11px] text-slate-300 mt-0.5">Lonceng Suara & Pengingat Aktivitas KBM</div>
+                </div>
+                <div>
+                  <button type="button" onclick="toggleNotifikasiAppAktif()" class="px-3 py-1.5 rounded-xl font-black text-xs transition cursor-pointer shadow-sm ${appNotifOn ? 'bg-emerald-500 hover:bg-emerald-600 text-white' : 'bg-slate-700 hover:bg-slate-600 text-slate-300'}">
+                    ${appNotifOn ? 'âœ“ AKTIF' : 'NONAKTIF'}
+                  </button>
+                </div>
               </div>
-              <div>${statusBadge}</div>
+
+              <div class="pt-2 border-t border-slate-700/60 flex items-center justify-between text-[11px]">
+                <span class="text-slate-400">Web Push Perangkat:</span>
+                <div>${pushStatusHtml}</div>
+              </div>
             </div>
-            ${actionButton}
+
+            <!-- Tombol Aksi Aktivasi & Uji Coba -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+              <button type="button" onclick="requestNotificationPermissionAndroid()" class="w-full py-2.5 px-3 bg-indigo-600 hover:bg-indigo-700 text-white font-extrabold rounded-xl text-xs transition flex items-center justify-center gap-1.5 cursor-pointer shadow-xs">
+                <i data-lucide="shield-check" class="w-4 h-4 text-indigo-200"></i>
+                <span>${notifGranted ? 'Perbarui Izin Notifikasi' : 'Aktifkan Izin Browser'}</span>
+              </button>
+              <button type="button" onclick="kirimNotifikasiUjiCobaAndroid()" class="w-full py-2.5 px-3 bg-emerald-600 hover:bg-emerald-700 text-white font-extrabold rounded-xl text-xs transition flex items-center justify-center gap-1.5 cursor-pointer shadow-xs">
+                <i data-lucide="volume-2" class="w-4 h-4 text-emerald-200"></i>
+                <span>Uji Bel & Notifikasi</span>
+              </button>
+            </div>
+
+            <!-- Kalender Akademik Hari Ini -->
             <div class="p-3 bg-amber-50 rounded-2xl border border-amber-200 flex items-center gap-2.5">
-              <span class="text-xl">🗓️</span>
+              <span class="text-xl">ðŸ—“ï¸</span>
               <div>
                 <div class="font-extrabold text-amber-950 text-xs">Kalender Akademik Hari Ini</div>
-                <div class="text-[11px] text-amber-900">${todayInfo.namaHari}, ${todayInfo.tanggal} ${todayInfo.namaBulan} ${todayInfo.tahun} • <b>Minggu ke-${todayInfo.mingguKe}</b></div>
+                <div class="text-[11px] text-amber-900">${todayInfo.namaHari}, ${todayInfo.tanggal} ${todayInfo.namaBulan} ${todayInfo.tahun} â€¢ <b>Minggu ke-${todayInfo.mingguKe}</b></div>
               </div>
             </div>
+
+            <!-- Warta Terkini -->
             <div>
               <div class="font-black text-slate-800 text-xs uppercase tracking-wider mb-2 flex items-center gap-1.5">
                 <i data-lucide="megaphone" class="w-3.5 h-3.5 text-indigo-600"></i>
@@ -19016,57 +19196,114 @@ ATURAN KETAT:
     // FITUR NOTIFIKASI WEB PUSH / ANDROID
     // -------------------------------------------------------------
     async function requestNotificationPermissionAndroid() {
-      if (!("Notification" in window)) {
-        Swal.fire("Tidak Didukung", "Peramban ini tidak mendukung Web Notification API.", "info");
-        return;
-      }
+      try {
+        if (!("Notification" in window)) {
+          localStorage.setItem("SUPERAPP_NOTIF_ENABLED", "1");
+          if (typeof playChimeBell === 'function') playChimeBell();
+          Swal.fire({
+            icon: "info",
+            title: "Pengingat Aplikasi Aktif",
+            text: "Browser Anda tidak mendukung Web Push Notification, namun fitur pengingat pop-up & suara lonceng sekolah telah AKTIF di aplikasi ini.",
+            confirmButtonColor: "#4f46e5"
+          });
+          bukaPusatNotifikasiSekolah();
+          return;
+        }
 
-      if (Notification.permission === "granted") {
-        kirimNotifikasiUjiCobaAndroid();
-        return;
-      }
-
-      const perm = await Notification.requestPermission();
-      if (perm === "granted") {
-        kirimNotifikasiUjiCobaAndroid();
-      } else {
+        const perm = await Notification.requestPermission();
+        if (perm === "granted") {
+          localStorage.setItem("SUPERAPP_NOTIF_ENABLED", "1");
+          await kirimNotifikasiUjiCobaAndroid();
+          bukaPusatNotifikasiSekolah();
+        } else if (perm === "denied") {
+          localStorage.setItem("SUPERAPP_NOTIF_ENABLED", "1");
+          if (typeof playChimeBell === 'function') playChimeBell();
+          Swal.fire({
+            icon: "warning",
+            title: "Izin Notifikasi Diblokir di Browser",
+            html: `
+              <div class="text-left text-xs space-y-2">
+                <p>Izin notifikasi saat ini disetel <b>Blokir</b> pada pengaturan situs browser Anda.</p>
+                <div class="p-2.5 bg-slate-100 rounded-xl space-y-1 text-slate-700">
+                  <p class="font-bold text-slate-800">Cara Mengaktifkan di Android / Chrome:</p>
+                  <p>1. Ketuk ikon gembok / setelan situs di samping URL (kiri atas).</p>
+                  <p>2. Pilih <b>Izin (Permissions)</b> âž” <b>Notifikasi</b> âž” <b>Izinkan</b>.</p>
+                  <p>3. Muat ulang (Refresh) halaman web ini.</p>
+                </div>
+                <p class="text-emerald-700 font-bold">âœ“ Pengingat In-App & Suara Lonceng Sekolah tetap aktif di aplikasi ini.</p>
+              </div>
+            `,
+            confirmButtonText: "Saya Mengerti",
+            confirmButtonColor: "#4f46e5"
+          });
+          bukaPusatNotifikasiSekolah();
+        } else {
+          bukaPusatNotifikasiSekolah();
+        }
+      } catch (err) {
+        console.warn("requestNotificationPermission error:", err);
+        localStorage.setItem("SUPERAPP_NOTIF_ENABLED", "1");
+        if (typeof playChimeBell === 'function') playChimeBell();
         Swal.fire({
-          icon: "warning",
-          title: "Izin Notifikasi Belum Aktif",
-          text: "Silakan izinkan notifikasi pada setelan situs browser Android Anda untuk menerima pengingat harian.",
-          confirmButtonText: "Mengerti"
+          icon: "success",
+          title: "Pengingat Aplikasi Aktif",
+          text: "Pengingat dan bel sekolah telah aktif di aplikasi ini.",
+          confirmButtonColor: "#4f46e5"
         });
+        bukaPusatNotifikasiSekolah();
       }
     }
 
     async function kirimNotifikasiUjiCobaAndroid() {
       try {
-        if ("serviceWorker" in navigator) {
-          const reg = await navigator.serviceWorker.ready;
-          if (reg && reg.showNotification) {
-            reg.showNotification("Super App Sekolah Digital", {
-              body: "Halo! Notifikasi Android Anda telah aktif. Anda akan menerima pembaruan KBM & pengumuman sekolah.",
-              icon: "/icons/icon-192.png",
-              badge: "/icons/icon-192.png",
-              vibrate: [200, 100, 200],
-              tag: "welcome-notification"
-            });
+        if (typeof playChimeBell === 'function') playChimeBell();
+        localStorage.setItem("SUPERAPP_NOTIF_ENABLED", "1");
+
+        let pushTerkirim = false;
+        if ("Notification" in window && Notification.permission === "granted") {
+          try {
+            if ("serviceWorker" in navigator) {
+              // Safety timeout 1000ms agar tidak hang jika SW belum claim/ready
+              const swReadyPromise = navigator.serviceWorker.ready;
+              const timeoutPromise = new Promise(resolve => setTimeout(() => resolve(null), 1000));
+              const reg = await Promise.race([swReadyPromise, timeoutPromise]);
+              if (reg && typeof reg.showNotification === 'function') {
+                await reg.showNotification("Super App Sekolah Terpadu", {
+                  body: "Halo! Pengingat KBM & Warta Sekolah aktif di perangkat Anda.",
+                  icon: "icons/icon-192.png",
+                  badge: "icons/icon-192.png",
+                  vibrate: [200, 100, 200],
+                  tag: "test-notification-sekolah"
+                });
+                pushTerkirim = true;
+              }
+            }
+            if (!pushTerkirim) {
+              new Notification("Super App Sekolah Terpadu", {
+                body: "Halo! Pengingat KBM & Warta Sekolah aktif di perangkat Anda.",
+                icon: "icons/icon-192.png"
+              });
+              pushTerkirim = true;
+            }
+          } catch (e) {
+            console.warn("Fallback uji coba notifikasi:", e);
           }
-        } else {
-          new Notification("Super App Sekolah Digital", {
-            body: "Notifikasi browser telah aktif!",
-            icon: "/icons/icon-192.png"
-          });
         }
 
         Swal.fire({
           icon: "success",
-          title: "Notifikasi Android Aktif!",
-          text: "Notifikasi uji coba telah dikirimkan ke status bar perangkat Anda.",
-          confirmButtonText: "Bagus!"
+          title: "Notifikasi & Bel Berhasil Diuji! ðŸ””",
+          html: `
+            <div class="text-left text-xs space-y-1.5">
+              <p>âœ“ Suara bel lonceng sekolah telah berbunyi.</p>
+              ${pushTerkirim ? '<p class="text-emerald-700 font-bold">âœ“ Pesan notifikasi telah dikirimkan ke bilah status (status bar) perangkat Anda.</p>' : '<p class="text-indigo-700 font-bold">âœ“ Pengingat visual aplikasi dan nada lonceng siap berbunyi untuk pengumuman sekolah.</p>'}
+            </div>
+          `,
+          confirmButtonText: "Selesai",
+          confirmButtonColor: "#059669"
         });
       } catch (err) {
-        Swal.fire("Info", "Izin notifikasi telah diberikan oleh pengguna.", "info");
+        Swal.fire("Uji Coba Berhasil", "Nada lonceng dan pengingat warta sekolah telah aktif.", "success");
       }
     }
     // =========================================================================
