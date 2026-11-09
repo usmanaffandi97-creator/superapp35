@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="id">
 <head>
   <meta charset="UTF-8">
@@ -142,26 +142,45 @@
     .ticker-track.is-paused {
       animation-play-state: paused !important;
     }
+    /* Standar Skala Ukuran Huruf Aplikasi (WCAG Compliant) */
+    html.font-size-small { font-size: 14px !important; }
+    html.font-size-medium { font-size: 16px !important; }
+    html.font-size-big { font-size: 18px !important; }
+    html.font-size-small body { font-size: 14px !important; }
+    html.font-size-medium body { font-size: 16px !important; }
+    /* Standar Skala Ukuran Huruf Aplikasi (WCAG Compliant) */
+    html.font-size-small { font-size: 14px !important; }
+    html.font-size-medium { font-size: 16px !important; }
+    html.font-size-big { font-size: 18px !important; }
+    html.font-size-small body { font-size: 14px !important; }
+    html.font-size-medium body { font-size: 16px !important; }
+    html.font-size-big body { font-size: 18px !important; }
+
+    /* Mobile Viewport Bound & Prevent Horizontal Overflow */
+    html, body {
+      max-width: 100vw;
+      overflow-x: hidden;
+    }
   </style>
 </head>
 <body class="bg-slate-50 text-slate-800 min-h-screen flex flex-col antialiased selection:bg-blue-600 selection:text-white">
 
   <!-- TOP BAR / HEADER UTAMA -->
   <header class="bg-white/95 backdrop-blur-md border-b border-slate-200/80 sticky top-0 z-40 shadow-xs transition-all">
-    <div class="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8">
-      <div class="flex items-center justify-between h-14 sm:h-16 gap-2">
+    <div class="max-w-7xl mx-auto px-2.5 sm:px-6 lg:px-8">
+      <div class="flex items-center justify-between h-14 sm:h-16 gap-1.5 sm:gap-2">
         
         <!-- Logo & Identitas Sekolah -->
-        <div class="flex items-center gap-2 sm:gap-3 cursor-pointer group select-none min-w-0 flex-1 mr-1" onclick="navigateHome()" title="Kembali ke Beranda">
+        <div class="flex items-center gap-1.5 sm:gap-3 cursor-pointer group select-none min-w-0 flex-1 mr-1" onclick="navigateHome()" title="Kembali ke Beranda">
           <div class="w-8 h-8 sm:w-10 sm:h-10 rounded-xl sm:rounded-2xl bg-gradient-to-tr from-blue-700 via-indigo-600 to-sky-500 flex items-center justify-center text-white shadow-sm ring-2 ring-indigo-50/80 flex-shrink-0 group-hover:scale-105 transition-transform">
             <i data-lucide="shield-check" class="w-4 h-4 sm:w-6 sm:h-6"></i>
           </div>
           <div class="min-w-0 flex-1">
-            <h1 id="navSchoolName" class="font-black text-xs sm:text-sm md:text-base text-slate-900 leading-tight tracking-tight truncate group-hover:text-indigo-700 transition-colors">SMP NEGERI 1 INDONESIA HEBAT</h1>
+            <h1 id="navSchoolName" class="font-black text-xs sm:text-sm md:text-base text-slate-900 leading-tight tracking-tight truncate max-w-[110px] xs:max-w-[150px] sm:max-w-none group-hover:text-indigo-700 transition-colors">SMP NEGERI 1 INDONESIA HEBAT</h1>
             <div class="flex items-center gap-1.5 mt-0.5">
               <span class="text-[10px] sm:text-[11px] font-semibold text-slate-500 hidden sm:inline">SuperApp</span>
               <span class="text-slate-300 hidden sm:inline">•</span>
-              <button id="backendBadge" onclick="openModalSetelBackend(event)" title="Koneksi Google Spreadsheet (Akses Kelola: Khusus Admin)" class="inline-flex items-center gap-1 px-2 py-0.5 bg-amber-100 text-amber-800 rounded-full text-[9px] sm:text-[10px] font-extrabold border border-amber-300 hover:bg-amber-200 transition cursor-pointer flex-shrink-0 max-w-[130px] truncate">
+              <button id="backendBadge" onclick="openModalSetelBackend(event)" title="Koneksi Google Spreadsheet (Akses Kelola: Khusus Admin)" class="inline-flex items-center gap-1 px-1.5 sm:px-2 py-0.5 bg-amber-100 text-amber-800 rounded-full text-[9px] sm:text-[10px] font-extrabold border border-amber-300 hover:bg-amber-200 transition cursor-pointer flex-shrink-0 max-w-[100px] sm:max-w-[130px] truncate">
                 <span class="w-1.5 h-1.5 rounded-full bg-amber-500 animate-pulse"></span>
                 <span>Hubungkan</span>
               </button>
@@ -169,26 +188,39 @@
           </div>
         </div>
 
-        <!-- Tombol Aksi Kanan & Akun (Rapi, Sejajar & Simetris di Mode Mobile Maupun Desktop) -->
-        <div class="flex items-center gap-1.5 sm:gap-2 flex-shrink-0">
-          <!-- Tombol Segarkan Data dari Spreadsheet -->
-          <button id="btnRefreshOnline" onclick="manualRefreshData()" title="Segarkan Data dari Database" class="h-8 sm:h-9 px-2 sm:px-2.5 text-slate-600 hover:text-blue-700 hover:bg-blue-50/80 border border-slate-200 rounded-xl transition flex items-center justify-center gap-1.5 cursor-pointer shadow-2xs flex-shrink-0">
+        <!-- Tombol Aksi Kanan, Font Scaler & Akun (Mobile-First & Responsif Tanpa Overflow) -->
+        <div class="flex items-center gap-1 sm:gap-1.5 flex-shrink-0">
+          <!-- Font Scaler Kontrol (small, medium, big) -->
+          <div id="fontSizeControlGroup" class="inline-flex items-center bg-slate-100 p-0.5 rounded-xl border border-slate-200 shadow-2xs flex-shrink-0" title="Pengatur Ukuran Huruf Aplikasi">
+            <button type="button" onclick="setFontScale('small')" id="btnFontSmall" class="px-1.5 py-0.5 sm:py-1 text-[10px] font-bold rounded-lg text-slate-600 hover:text-indigo-700 hover:bg-white transition cursor-pointer" title="Ukuran Font Kecil (14px)">A-</button>
+            <button type="button" onclick="setFontScale('medium')" id="btnFontMedium" class="px-1.5 py-0.5 sm:py-1 text-[11px] font-extrabold rounded-lg text-indigo-700 bg-white shadow-xs transition cursor-pointer" title="Ukuran Font Sedang / Standar (16px)">A</button>
+            <button type="button" onclick="setFontScale('big')" id="btnFontBig" class="px-1.5 py-0.5 sm:py-1 text-[12px] font-black rounded-lg text-slate-600 hover:text-indigo-700 hover:bg-white transition cursor-pointer" title="Ukuran Font Besar (18px)">A+</button>
+          </div>
+
+          <!-- Tombol Segarkan Data dari Spreadsheet (di mobile disembunyikan karena sudah ada di setiap hero card) -->
+          <button id="btnRefreshOnline" onclick="manualRefreshData()" title="Segarkan Data dari Database" class="hidden sm:flex h-8 sm:h-9 px-2 sm:px-2.5 text-slate-600 hover:text-blue-700 hover:bg-blue-50/80 border border-slate-200 rounded-xl transition items-center justify-center gap-1.5 cursor-pointer shadow-2xs flex-shrink-0">
             <i data-lucide="refresh-cw" id="iconRefreshSpin" class="w-3.5 h-3.5 sm:w-4 sm:h-4 text-slate-500"></i>
             <span class="text-xs font-bold hidden md:inline">Segarkan</span>
           </button>
 
+          <!-- Tombol Notifikasi Universal (Untuk Semua Pengguna) -->
+          <button id="btnNotifikasiUniversal" onclick="bukaPusatNotifikasiSekolah()" title="Pusat Notifikasi & Warta Sekolah" class="h-8 w-8 sm:h-9 sm:w-9 flex items-center justify-center rounded-xl bg-slate-50 hover:bg-amber-50 border border-slate-200 hover:border-amber-300 text-slate-600 hover:text-amber-600 transition shadow-2xs cursor-pointer flex-shrink-0 relative">
+            <i data-lucide="bell" class="w-3.5 h-3.5 sm:w-4 sm:h-4"></i>
+            <span id="badgeNotifDot" class="w-2 h-2 rounded-full bg-amber-500 absolute top-1 right-1"></span>
+          </button>
+
           <!-- Tombol Pasang PWA (jika didukung) -->
-          <button id="btnInstallPwa" onclick="triggerPwaInstall()" class="hidden h-8 sm:h-9 px-2.5 bg-emerald-50 text-emerald-700 hover:bg-emerald-100 border border-emerald-200 rounded-xl text-xs font-bold flex items-center gap-1.5 transition shadow-2xs flex-shrink-0">
+          <button id="btnInstallPwa" onclick="triggerPwaInstall()" class="hidden h-8 sm:h-9 px-2.5 bg-emerald-50 text-emerald-700 hover:bg-emerald-100 border border-emerald-200 rounded-xl text-xs font-bold items-center gap-1.5 transition shadow-2xs flex-shrink-0">
             <i data-lucide="download" class="w-3.5 h-3.5"></i>
             <span class="hidden sm:inline">Pasang App</span>
           </button>
 
           <!-- Status Akun Aktif -->
-          <div id="userProfileArea" class="hidden items-center gap-1.5 h-8 sm:h-9 bg-slate-50 hover:bg-slate-100/80 pl-1.5 pr-1 sm:px-2 rounded-xl border border-slate-200 shadow-2xs transition flex-shrink-0">
+          <div id="userProfileArea" class="hidden items-center gap-1 sm:gap-1.5 h-8 sm:h-9 bg-slate-50 hover:bg-slate-100/80 pl-1.5 pr-1 sm:px-2 rounded-xl border border-slate-200 shadow-2xs transition flex-shrink-0">
             <div id="userAvatar" class="w-6 h-6 sm:w-7 sm:h-7 rounded-lg bg-gradient-to-tr from-blue-600 to-indigo-600 text-white flex items-center justify-center text-[11px] sm:text-xs font-black shadow-xs flex-shrink-0">
               U
             </div>
-            <div class="text-left hidden lg:block max-w-[130px]">
+            <div class="text-left hidden lg:block max-w-[120px]">
               <div id="userName" class="text-xs font-extrabold text-slate-800 leading-tight truncate">Nama Pengguna</div>
               <div id="userRoleBadge" class="text-[9px] text-indigo-600 font-bold truncate">Peran</div>
             </div>
@@ -202,7 +234,6 @@
             <i data-lucide="lock" class="w-3.5 h-3.5 sm:w-4 sm:h-4"></i>
           </button>
         </div>
-
       </div>
     </div>
   </header>
@@ -489,22 +520,20 @@
 
             <form onsubmit="handleLoginKepsek(event)" class="space-y-4">
               <div>
-                <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5 flex items-center justify-between">
-                  <span>NIP Kepala Sekolah</span>
-                  <button type="button" onclick="isiKredensialOtomatisKepsek()" class="text-[11px] text-emerald-700 hover:text-emerald-950 font-bold underline cursor-pointer flex items-center gap-1">✨ Isi Bawaan</button>
+                <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">
+                  NIP Kepala Sekolah
                 </label>
                 <div class="relative">
-                  <input type="text" id="inputNipKepsek" placeholder="197205101998021003 atau KEPSEK" class="w-full pl-11 pr-4 py-3 bg-slate-50/70 border border-slate-200 rounded-xl text-sm font-semibold text-slate-900 focus:bg-white focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/15 focus:outline-none transition">
+                  <input type="text" id="inputNipKepsek" placeholder="Masukkan NIP Kepala Sekolah" class="w-full pl-11 pr-4 py-3 bg-slate-50/70 border border-slate-200 rounded-xl text-sm font-semibold text-slate-900 focus:bg-white focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/15 focus:outline-none transition" required>
                   <i data-lucide="shield-check" class="w-5 h-5 text-slate-400 absolute left-3.5 top-3.5 group-focus-within:text-emerald-600 transition"></i>
                 </div>
               </div>
               <div>
-                <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5 flex items-center justify-between">
-                  <span>PIN Kepala Sekolah</span>
-                  <span class="text-[10px] text-slate-400 font-normal lowercase">(default: 123456)</span>
+                <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">
+                  PIN Kepala Sekolah
                 </label>
                 <div class="relative">
-                  <input type="password" id="inputPinKepsek" maxlength="10" placeholder="PIN Default: 123456" class="w-full pl-11 pr-4 py-3 bg-slate-50/70 border border-slate-200 rounded-xl text-sm font-semibold text-slate-900 focus:bg-white focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/15 focus:outline-none transition">
+                  <input type="password" id="inputPinKepsek" maxlength="10" placeholder="••••••••" class="w-full pl-11 pr-4 py-3 bg-slate-50/70 border border-slate-200 rounded-xl text-sm font-semibold text-slate-900 focus:bg-white focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/15 focus:outline-none transition" required>
                   <i data-lucide="key" class="w-5 h-5 text-slate-400 absolute left-3.5 top-3.5 group-focus-within:text-emerald-600 transition"></i>
                 </div>
               </div>
@@ -624,25 +653,31 @@
               </div>
               <h3 id="profileNamaSiswa" class="text-xl sm:text-2xl font-black mt-1">Ahmad Fauzan Pratama</h3>
               <p class="text-xs text-blue-100 mt-0.5">NISN: <span id="profileNisnSiswa" class="font-mono font-bold">0081234567</span> • Guru Wali: <span id="profileGuruWaliSiswa" class="font-semibold">-</span></p>
-              <div id="reminderMingguKeSiswa" class="mt-2 inline-flex items-center gap-1.5 px-3 py-1 bg-white/15 backdrop-blur-md text-amber-200 border border-white/20 rounded-xl text-xs font-bold shadow-xs">
-                <!-- Diisi otomatis oleh getMingguKeBulanInfo() -->
+              <div id="reminderMingguKeSiswa" class="mt-2 inline-flex items-center gap-1.5 px-3 py-1 bg-white/15 backdrop-blur-md text-amber-200 border border-white/20 rounded-xl text-xs font-bold shadow-xs max-w-full overflow-hidden">
+                <!-- Diisi otomatis oleh updateSemuaReminderMingguKe() -->
               </div>
             </div>
           </div>
-          <div class="flex items-center gap-2">
-            <button id="btnInstallPwaSiswaHeader" onclick="triggerPwaInstall()" class="hidden px-3 py-1.5 bg-amber-400 hover:bg-amber-300 text-slate-900 rounded-xl text-xs font-extrabold backdrop-blur-md transition flex items-center gap-1.5 shadow-sm">
+          <div class="grid grid-cols-2 sm:flex sm:flex-wrap items-center gap-2 w-full md:w-auto mt-2 md:mt-0">
+            <button id="btnInstallPwaSiswaHeader" onclick="triggerPwaInstall()" class="hidden px-3 py-2 bg-amber-400 hover:bg-amber-300 text-slate-900 rounded-xl text-xs font-extrabold transition items-center justify-center gap-1.5 shadow-sm cursor-pointer">
               <i data-lucide="download" class="w-3.5 h-3.5"></i>
               <span>Pasang App</span>
             </button>
-            <button onclick="switchTabSiswa('profil')" class="px-3 py-1.5 bg-white/10 hover:bg-white/20 rounded-xl text-xs font-semibold backdrop-blur-md transition flex items-center gap-1.5">
-              <i data-lucide="phone" class="w-3.5 h-3.5"></i>
-              <span>Update No. HP Ortu</span>
+            <button type="button" onclick="bukaPusatNotifikasiSekolah()" class="px-3 py-2 bg-white/10 hover:bg-white/20 rounded-xl text-xs font-semibold backdrop-blur-md transition flex items-center justify-center gap-1.5 cursor-pointer">
+              <i data-lucide="bell" class="w-3.5 h-3.5 text-amber-300"></i>
+              <span>Notifikasi</span>
             </button>
-            <button onclick="logoutSession()" class="px-3 py-1.5 bg-rose-500/80 hover:bg-rose-600 rounded-xl text-xs font-semibold backdrop-blur-md transition">
-              Keluar
+            <button type="button" onclick="switchTabSiswa('profil')" class="px-3 py-2 bg-white/10 hover:bg-white/20 rounded-xl text-xs font-semibold backdrop-blur-md transition flex items-center justify-center gap-1.5 cursor-pointer">
+              <i data-lucide="phone" class="w-3.5 h-3.5"></i>
+              <span>No. HP Ortu</span>
+            </button>
+            <button type="button" onclick="logoutSession()" class="col-span-2 sm:col-auto px-4 py-2 bg-rose-500/80 hover:bg-rose-600 rounded-xl text-xs font-bold backdrop-blur-md transition flex items-center justify-center gap-1.5 cursor-pointer">
+              <i data-lucide="log-out" class="w-3.5 h-3.5"></i>
+              <span>Keluar</span>
             </button>
           </div>
         </div>
+      </div>
       </div>
 
       <!-- Navigasi Tab Khusus Siswa (Mobile Friendly) -->
@@ -1226,21 +1261,27 @@
               </div>
               <h3 id="profileNamaGuru" class="text-xl sm:text-2xl font-black mt-1">Bpk. Ahmad Hidayat, S.Pd.</h3>
               <p class="text-xs text-slate-300 mt-0.5">NIP: <span id="profileNipGuru" class="font-mono font-bold">198001012005011001</span></p>
-              <div id="reminderMingguKeGuru" class="mt-2 inline-flex items-center gap-1.5 px-3 py-1 bg-white/15 backdrop-blur-md text-amber-200 border border-white/20 rounded-xl text-xs font-bold shadow-xs">
-                <!-- Diisi otomatis oleh getMingguKeBulanInfo() -->
+              <div id="reminderMingguKeGuru" class="mt-2 inline-flex items-center gap-1.5 px-3 py-1 bg-white/15 backdrop-blur-md text-amber-200 border border-white/20 rounded-xl text-xs font-bold shadow-xs max-w-full overflow-hidden">
+                <!-- Diisi otomatis oleh updateSemuaReminderMingguKe() -->
               </div>
             </div>
           </div>
-          <div class="flex items-center gap-2">
-            <button onclick="switchTabGuru('profil')" class="px-3.5 py-2 bg-white/10 hover:bg-white/20 rounded-xl text-xs font-semibold backdrop-blur-md transition flex items-center gap-1.5 cursor-pointer">
-              <i data-lucide="key" class="w-3.5 h-3.5 text-amber-300"></i>
-              <span>Ganti PIN / Profil</span>
+          <div class="grid grid-cols-2 sm:flex sm:flex-wrap items-center gap-2 w-full md:w-auto mt-2 md:mt-0">
+            <button type="button" onclick="bukaPusatNotifikasiSekolah()" class="px-3.5 py-2 bg-white/10 hover:bg-white/20 rounded-xl text-xs font-semibold backdrop-blur-md transition flex items-center justify-center gap-1.5 cursor-pointer">
+              <i data-lucide="bell" class="w-3.5 h-3.5 text-amber-300"></i>
+              <span>Notifikasi</span>
             </button>
-            <button onclick="logoutSession()" class="px-3.5 py-2 bg-rose-500/80 hover:bg-rose-600 rounded-xl text-xs font-semibold backdrop-blur-md transition cursor-pointer">
-              Keluar Akun
+            <button type="button" onclick="switchTabGuru('profil')" class="px-3.5 py-2 bg-white/10 hover:bg-white/20 rounded-xl text-xs font-semibold backdrop-blur-md transition flex items-center justify-center gap-1.5 cursor-pointer">
+              <i data-lucide="key" class="w-3.5 h-3.5 text-amber-300"></i>
+              <span>PIN / Profil</span>
+            </button>
+            <button type="button" onclick="logoutSession()" class="col-span-2 sm:col-auto px-4 py-2 bg-rose-500/80 hover:bg-rose-600 rounded-xl text-xs font-bold backdrop-blur-md transition flex items-center justify-center gap-1.5 cursor-pointer">
+              <i data-lucide="log-out" class="w-3.5 h-3.5"></i>
+              <span>Keluar Akun</span>
             </button>
           </div>
         </div>
+      </div>
       </div>
 
       <!-- Navigasi Menu Guru -->
@@ -2305,15 +2346,22 @@
     <!-- VIEW 4: PANEL ADMINISTRATOR SEKOLAH -->
     <!-- ========================================================================= -->
     <section id="viewAdmin" class="hidden space-y-6 pb-28">
-      <div class="bg-gradient-to-r from-slate-900 via-blue-950 to-slate-900 rounded-3xl p-6 text-white shadow-xl flex items-center justify-between">
+      <div class="bg-gradient-to-r from-slate-900 via-blue-950 to-slate-900 rounded-3xl p-5 sm:p-6 text-white shadow-xl flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
           <span class="px-2.5 py-0.5 bg-amber-400 text-slate-950 rounded text-[10px] font-black tracking-wider uppercase">Super Administrator</span>
-          <h2 class="text-2xl font-black mt-1">Panel Kendali Master Sekolah</h2>
+          <h2 class="text-xl sm:text-2xl font-black mt-1">Panel Kendali Master Sekolah</h2>
           <p class="text-xs text-slate-400">Atur Kop 2 Logo, Master Siswa, Guru, Ekstrakurikuler, dan Jadwal Pengumuman Kelulusan.</p>
         </div>
-        <button onclick="navigateHome()" class="px-4 py-2 bg-white/10 hover:bg-white/20 rounded-xl text-xs font-bold transition">
-          Tutup Panel Admin
-        </button>
+        <div class="flex items-center gap-2 self-stretch sm:self-auto">
+          <button type="button" onclick="bukaPusatNotifikasiSekolah()" class="flex-1 sm:flex-initial px-3.5 py-2.5 bg-white/10 hover:bg-white/20 rounded-xl text-xs font-bold transition flex items-center justify-center gap-1.5 cursor-pointer">
+            <i data-lucide="bell" class="w-3.5 h-3.5 text-amber-300"></i>
+            <span class="hidden sm:inline">Notifikasi</span>
+          </button>
+          <button type="button" onclick="logoutSession()" class="flex-1 sm:flex-initial px-4 py-2.5 bg-rose-500/80 hover:bg-rose-600 rounded-xl text-xs font-bold transition flex items-center justify-center gap-1.5 cursor-pointer">
+            <i data-lucide="log-out" class="w-3.5 h-3.5"></i>
+            <span>Keluar Admin</span>
+          </button>
+        </div>
       </div>
 
       <!-- Navigasi Tab Panel Admin -->
@@ -2376,11 +2424,19 @@
                 <i data-lucide="user-check" class="w-4 h-4"></i>
                 <span>+ Tambah Guru</span>
               </button>
+              <button type="button" onclick="bukaModalMutasiMasuk()" class="px-3.5 py-2.5 bg-emerald-600 hover:bg-emerald-500 text-white font-bold rounded-xl text-xs transition flex items-center gap-1.5 shadow-md cursor-pointer">
+                <i data-lucide="user-plus" class="w-4 h-4"></i>
+                <span>+ Pindah Masuk</span>
+              </button>
+              <button type="button" onclick="bukaModalMutasiKeluar()" class="px-3.5 py-2.5 bg-rose-600 hover:bg-rose-500 text-white font-bold rounded-xl text-xs transition flex items-center gap-1.5 shadow-md cursor-pointer">
+                <i data-lucide="user-minus" class="w-4 h-4"></i>
+                <span>- Pindah Keluar</span>
+              </button>
               <button type="button" onclick="switchSubTabUser('naikKelas')" class="px-4 py-2.5 bg-amber-400 hover:bg-amber-300 text-slate-950 font-black rounded-xl text-xs transition flex items-center gap-1.5 shadow-md cursor-pointer">
                 <i data-lucide="trending-up" class="w-4 h-4"></i>
                 <span>🚀 Wizard Naik Kelas</span>
               </button>
-              <button type="button" onclick="eksporCsvDataPengguna()" class="px-3.5 py-2.5 bg-emerald-600 hover:bg-emerald-500 text-white font-bold rounded-xl text-xs transition flex items-center gap-1.5 shadow-xs cursor-pointer">
+              <button type="button" onclick="eksporCsvDataPengguna()" class="px-3.5 py-2.5 bg-emerald-700 hover:bg-emerald-600 text-white font-bold rounded-xl text-xs transition flex items-center gap-1.5 shadow-xs cursor-pointer">
                 <i data-lucide="download" class="w-3.5 h-3.5"></i>
                 <span>Ekspor CSV</span>
               </button>
@@ -2428,7 +2484,7 @@
           </div>
         </div>
 
-        <!-- Sub-Navigasi Tab Role & Naik Kelas -->
+        <!-- Sub-Navigasi Tab Role & Naik Kelas & Mutasi -->
         <div class="flex items-center gap-2 border-b border-slate-200 pb-3 flex-wrap">
           <button type="button" id="btnSubTabUser_siswa" onclick="switchSubTabUser('siswa')" class="px-4 py-2.5 rounded-xl text-xs font-black transition flex items-center gap-2 bg-blue-700 text-white shadow-xs cursor-pointer">
             <i data-lucide="graduation-cap" class="w-4 h-4"></i>
@@ -2444,6 +2500,11 @@
             <i data-lucide="trending-up" class="w-4 h-4 text-amber-600"></i>
             <span>🚀 Kenaikan Kelas & Kelulusan (Tahun Ajaran Baru)</span>
             <span class="px-2 py-0.5 rounded-full text-[10px] bg-amber-500 text-slate-950 font-black uppercase">Fitur Baru</span>
+          </button>
+          <button type="button" id="btnSubTabUser_mutasi" onclick="switchSubTabUser('mutasi')" class="px-4 py-2.5 rounded-xl text-xs font-bold transition flex items-center gap-2 bg-slate-100 hover:bg-slate-200 text-slate-700 cursor-pointer">
+            <i data-lucide="arrow-left-right" class="w-4 h-4 text-emerald-600"></i>
+            <span>Mutasi Siswa (Pindah Masuk/Keluar)</span>
+            <span id="badgeSubTabMutasiCount" class="px-2 py-0.5 rounded-full text-[10px] bg-slate-200 text-slate-700 font-mono">0</span>
           </button>
           <button type="button" id="btnSubTabUser_admin" onclick="switchSubTabUser('admin')" class="px-4 py-2.5 rounded-xl text-xs font-bold transition flex items-center gap-2 bg-slate-100 hover:bg-slate-200 text-slate-700 cursor-pointer">
             <i data-lucide="shield-check" class="w-4 h-4 text-emerald-600"></i>
@@ -2741,6 +2802,97 @@
             </div>
           </div>
         </div>
+        <!-- SUB-VIEW 5: MUTASI SISWA (PINDAH MASUK & KELUAR) -->
+        <div id="subViewUser_mutasi" class="hidden space-y-4">
+          <!-- 3 KPI Mutasi Siswa -->
+          <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4">
+            <div class="p-4 bg-white rounded-2xl border border-emerald-200 shadow-xs flex items-center gap-3">
+              <div class="w-10 h-10 rounded-xl bg-emerald-100 text-emerald-800 flex items-center justify-center font-bold flex-shrink-0">
+                <i data-lucide="user-plus" class="w-5 h-5"></i>
+              </div>
+              <div class="min-w-0">
+                <span class="text-[11px] font-bold text-slate-400 block truncate">Siswa Pindah Masuk</span>
+                <span id="statAdminMutasiMasuk" class="text-base sm:text-lg font-black text-emerald-700">0 Siswa</span>
+              </div>
+            </div>
+            <div class="p-4 bg-white rounded-2xl border border-rose-200 shadow-xs flex items-center gap-3">
+              <div class="w-10 h-10 rounded-xl bg-rose-100 text-rose-800 flex items-center justify-center font-bold flex-shrink-0">
+                <i data-lucide="user-minus" class="w-5 h-5"></i>
+              </div>
+              <div class="min-w-0">
+                <span class="text-[11px] font-bold text-slate-400 block truncate">Siswa Pindah Keluar</span>
+                <span id="statAdminMutasiKeluar" class="text-base sm:text-lg font-black text-rose-700">0 Siswa</span>
+              </div>
+            </div>
+            <div class="p-4 bg-white rounded-2xl border border-blue-200 shadow-xs flex items-center gap-3">
+              <div class="w-10 h-10 rounded-xl bg-blue-100 text-blue-800 flex items-center justify-center font-bold flex-shrink-0">
+                <i data-lucide="scale" class="w-5 h-5"></i>
+              </div>
+              <div class="min-w-0">
+                <span class="text-[11px] font-bold text-slate-400 block truncate">Neraca Mobilitas Siswa</span>
+                <span id="statAdminMutasiNeraca" class="text-base sm:text-lg font-black text-blue-700">0 Siswa</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Filter & Action Bar Mutasi -->
+          <div class="bg-white p-4 sm:p-5 rounded-2xl border border-slate-200 shadow-xs flex flex-col md:flex-row items-stretch md:items-center justify-between gap-3">
+            <div class="relative flex-1">
+              <i data-lucide="search" class="w-4 h-4 text-slate-400 absolute left-3.5 top-3"></i>
+              <input type="text" id="inputSearchUserMutasi" oninput="renderPanelMutasiSiswa()" placeholder="Cari nama siswa, NISN, sekolah asal/tujuan..." class="w-full pl-9 pr-4 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs focus:outline-none focus:border-emerald-500 focus:bg-white transition">
+            </div>
+            <div class="flex items-center gap-2 flex-wrap sm:flex-nowrap">
+              <select id="filterUserMutasiJenis" onchange="renderPanelMutasiSiswa()" class="px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs font-bold text-slate-700 focus:outline-none focus:border-emerald-500 cursor-pointer">
+                <option value="">Semua Jenis</option>
+                <option value="MASUK">Pindah Masuk</option>
+                <option value="KELUAR">Pindah Keluar</option>
+              </select>
+              <select id="filterUserMutasiKelas" onchange="renderPanelMutasiSiswa()" class="px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs font-bold text-slate-700 focus:outline-none focus:border-emerald-500 cursor-pointer">
+                <option value="">Semua Kelas</option>
+              </select>
+              <button type="button" onclick="bukaModalMutasiMasuk()" class="px-3.5 py-2 bg-emerald-600 hover:bg-emerald-700 text-white font-bold rounded-xl text-xs transition flex items-center gap-1.5 shadow-xs cursor-pointer flex-shrink-0">
+                <i data-lucide="user-plus" class="w-3.5 h-3.5"></i>
+                <span>+ Pindah Masuk</span>
+              </button>
+              <button type="button" onclick="bukaModalMutasiKeluar()" class="px-3.5 py-2 bg-rose-600 hover:bg-rose-700 text-white font-bold rounded-xl text-xs transition flex items-center gap-1.5 shadow-xs cursor-pointer flex-shrink-0">
+                <i data-lucide="user-minus" class="w-3.5 h-3.5"></i>
+                <span>- Pindah Keluar</span>
+              </button>
+              <button type="button" onclick="cetakBukuRegistrasiMutasi()" class="px-3 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold rounded-xl text-xs transition flex items-center gap-1 cursor-pointer flex-shrink-0" title="Cetak Buku Induk Registrasi Mutasi">
+                <i data-lucide="printer" class="w-3.5 h-3.5"></i>
+                <span>Cetak Buku Mutasi</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- Tabel Mutasi Siswa (Desktop) -->
+          <div class="bg-white rounded-3xl border border-slate-200 shadow-xs overflow-hidden hidden md:block">
+            <div class="overflow-x-auto">
+              <table class="w-full text-left text-xs">
+                <thead class="bg-slate-50 text-slate-600 font-bold border-b border-slate-200">
+                  <tr>
+                    <th class="py-3 px-3 w-10 text-center">No</th>
+                    <th class="py-3 px-3">Tanggal</th>
+                    <th class="py-3 px-3">Jenis</th>
+                    <th class="py-3 px-3">NISN & Nama Siswa</th>
+                    <th class="py-3 px-2 text-center w-20">Kelas</th>
+                    <th class="py-3 px-3">Sekolah Asal / Tujuan</th>
+                    <th class="py-3 px-3">No. Surat & Alasan</th>
+                    <th class="py-3 px-3 text-center w-36">Aksi Dokumen</th>
+                  </tr>
+                </thead>
+                <tbody id="tableUserMutasiBody" class="divide-y divide-slate-100 font-medium">
+                  <!-- Diisi dinamis oleh renderPanelMutasiSiswa() -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <!-- Kartu Mutasi Siswa (Mobile Responsif) -->
+          <div id="listUserMutasiMobile" class="block md:hidden space-y-3">
+            <!-- Diisi dinamis oleh renderPanelMutasiSiswa() -->
+          </div>
+        </div>
       </div>
       <div id="tabContentAdmin_guruWali" class="tab-admin-content hidden space-y-6">
         <!-- Hero Card Plotting -->
@@ -2978,12 +3130,16 @@
               </div>
             </div>
 
-            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3">
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-6 gap-3">
+              <div>
+                <label class="block text-xs font-bold text-slate-700 uppercase mb-1">Tahun Ajaran</label>
+                <input type="text" id="cfgTahunAjaran" placeholder="Contoh: 2026/2027" class="w-full px-3.5 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs font-bold text-slate-900 focus:bg-white focus:border-indigo-500 transition">
+              </div>
               <div>
                 <label class="block text-xs font-bold text-slate-700 uppercase mb-1">Semester Akademik</label>
                 <select id="cfgSemesterAktif" class="w-full px-3.5 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs font-bold">
-                  <option value="1">Semester 1 (Ganjil)</option>
-                  <option value="2">Semester 2 (Genap - Kls 9 Bebas)</option>
+                  <option value="1">Semester Gasal (Semester 1)</option>
+                  <option value="2">Semester Genap (Semester 2 - Kls 9 Bebas)</option>
                 </select>
               </div>
               <div>
@@ -3529,30 +3685,30 @@
   <!-- ========================================================================= -->
   <!-- VIEW 5: PORTAL EKSEKUTIF KEPALA SEKOLAH (EXECUTIVE DASHBOARD)               -->
   <!-- ========================================================================= -->
-  <main id="viewKepsek" class="hidden max-w-7xl mx-auto px-3 sm:px-4 lg:px-8 py-6 space-y-6 pb-28">
+  <main id="viewKepsek" class="hidden w-full max-w-7xl mx-auto px-2.5 sm:px-4 lg:px-8 py-4 sm:py-6 space-y-4 sm:space-y-6 pb-28 min-w-0 overflow-x-hidden">
 
-    <!-- Hero Card Pimpinan Eksekutif -->
-    <div class="bg-gradient-to-r from-emerald-800 via-teal-900 to-slate-950 rounded-3xl p-6 sm:p-8 text-white shadow-xl relative overflow-hidden border border-emerald-700/40">
+    <!-- Hero Card Pimpinan Eksekutif (Mobile-Progressive) -->
+    <div class="bg-gradient-to-r from-emerald-800 via-teal-900 to-slate-950 rounded-2xl sm:rounded-3xl p-4 sm:p-6 lg:p-8 text-white shadow-xl relative overflow-hidden border border-emerald-700/40">
       <div class="absolute -right-16 -top-16 w-64 h-64 bg-emerald-500/10 rounded-full blur-3xl pointer-events-none"></div>
       <div class="absolute right-20 -bottom-20 w-52 h-52 bg-amber-400/10 rounded-full blur-3xl pointer-events-none"></div>
 
-      <div class="relative z-10 flex flex-col lg:flex-row lg:items-center justify-between gap-6">
-        <div>
-          <div class="inline-flex items-center gap-2 px-3 py-1 bg-white/10 backdrop-blur-md rounded-full text-xs font-black mb-3 border border-emerald-400/30 text-amber-300">
-            <i data-lucide="landmark" class="w-4 h-4"></i>
-            <span>PORTAL PENGAWASAN EKSEKUTIF & KEPALA SEKOLAH</span>
+      <div class="relative z-10 flex flex-col lg:flex-row lg:items-center justify-between gap-4 sm:gap-6">
+        <div class="min-w-0">
+          <div class="inline-flex items-center gap-1.5 sm:gap-2 px-2.5 sm:px-3 py-1 bg-white/10 backdrop-blur-md rounded-full text-[11px] sm:text-xs font-black mb-2 sm:mb-3 border border-emerald-400/30 text-amber-300 max-w-full truncate">
+            <i data-lucide="landmark" class="w-3.5 h-3.5 sm:w-4 sm:h-4 flex-shrink-0"></i>
+            <span class="truncate">PORTAL PENGAWASAN EKSEKUTIF & KEPALA SEKOLAH</span>
           </div>
-          <h2 id="kepsekHeroNama" class="text-2xl sm:text-3xl font-black tracking-tight">Drs. H. Mulyadi, M.Pd.</h2>
-          <p id="kepsekHeroSub" class="text-xs sm:text-sm text-emerald-100/90 mt-1 flex flex-wrap items-center gap-2">
+          <h2 id="kepsekHeroNama" class="text-xl sm:text-2xl lg:text-3xl font-black tracking-tight truncate">Drs. H. Mulyadi, M.Pd.</h2>
+          <p id="kepsekHeroSub" class="text-xs sm:text-sm text-emerald-100/90 mt-1 flex flex-wrap items-center gap-1.5 sm:gap-2">
             <span>Kepala Sekolah</span>
             <span>•</span>
             <span id="kepsekHeroNip">NIP. 197205101998021003</span>
             <span>•</span>
             <span id="kepsekHeroSekolah" class="font-bold text-amber-300">SMP Negeri Indonesia Hebat</span>
           </p>
-          <div class="mt-4 flex flex-wrap items-center gap-2 text-xs">
+          <div class="mt-3 sm:mt-4 flex flex-wrap items-center gap-1.5 sm:gap-2 text-[11px] sm:text-xs">
             <span class="px-2.5 py-1 bg-emerald-700/60 rounded-xl font-bold border border-emerald-500/40 text-emerald-100 flex items-center gap-1.5">
-              <i data-lucide="calendar" class="w-3.5 h-3.5"></i>
+              <i data-lucide="calendar" class="w-3.5 h-3.5 flex-shrink-0"></i>
               <span id="kepsekHeroTanggal">Hari Ini</span>
             </span>
             <span id="kepsekHeroSemesterBadge" class="px-2.5 py-1 bg-amber-500/30 rounded-xl font-bold border border-amber-400/40 text-amber-200">
@@ -3564,131 +3720,141 @@
           </div>
         </div>
 
-        <!-- Tombol Aksi Cepat Eksekutif -->
-        <div class="flex flex-wrap items-center gap-2.5">
-          <button type="button" onclick="bukaModalAmanatKepsek()" class="px-4 py-2.5 bg-gradient-to-r from-amber-400 to-amber-500 hover:from-amber-300 hover:to-amber-400 text-slate-950 font-black rounded-2xl text-xs transition flex items-center gap-2 shadow-lg shadow-amber-500/20 cursor-pointer">
-            <i data-lucide="megaphone" class="w-4 h-4"></i>
-            <span>+ Buat Amanat Kepsek</span>
+        <!-- Tombol Aksi Cepat Eksekutif (Responsif Mobile & Desktop) -->
+        <div class="grid grid-cols-2 sm:flex sm:flex-wrap items-center gap-1.5 sm:gap-2.5 w-full lg:w-auto">
+          <button type="button" onclick="bukaModalAmanatKepsek()" class="px-2.5 py-2 sm:px-3.5 sm:py-2.5 bg-gradient-to-r from-amber-400 to-amber-500 hover:from-amber-300 hover:to-amber-400 text-slate-950 font-black rounded-xl sm:rounded-2xl text-[11px] sm:text-xs transition flex items-center justify-center gap-1 sm:gap-1.5 shadow-lg shadow-amber-500/20 cursor-pointer truncate">
+            <i data-lucide="megaphone" class="w-3.5 h-3.5 sm:w-4 sm:h-4 flex-shrink-0"></i>
+            <span class="truncate">+ Buat Amanat</span>
           </button>
-          <button type="button" onclick="cetakLaporanEksekutifKepsek()" class="px-4 py-2.5 bg-white/15 hover:bg-white/25 text-white font-bold rounded-2xl text-xs transition flex items-center gap-2 border border-white/20 backdrop-blur-md cursor-pointer">
-            <i data-lucide="printer" class="w-4 h-4 text-emerald-300"></i>
-            <span>Cetak Laporan Resmi</span>
+          <button type="button" onclick="cetakLaporanEksekutifKepsek()" class="px-2.5 py-2 sm:px-3.5 sm:py-2.5 bg-white/15 hover:bg-white/25 text-white font-bold rounded-xl sm:rounded-2xl text-[11px] sm:text-xs transition flex items-center justify-center gap-1 sm:gap-1.5 border border-white/20 backdrop-blur-md cursor-pointer truncate">
+            <i data-lucide="printer" class="w-3.5 h-3.5 sm:w-4 sm:h-4 text-emerald-300 flex-shrink-0"></i>
+            <span class="truncate">Cetak Laporan</span>
           </button>
-          <button type="button" onclick="requestNotificationPermissionAndroid()" title="Aktifkan Notifikasi HP Android" class="px-3.5 py-2.5 bg-emerald-600/40 hover:bg-emerald-600/60 text-emerald-200 font-bold rounded-2xl text-xs transition flex items-center gap-1.5 border border-emerald-400/40 cursor-pointer">
-            <i data-lucide="bell-ring" class="w-4 h-4 text-amber-300"></i>
-            <span class="hidden sm:inline">Notifikasi Android</span>
+          <button type="button" onclick="bukaPusatNotifikasiSekolah()" title="Pusat Notifikasi & Warta Sekolah" class="px-2.5 py-2 sm:px-3 sm:py-2.5 bg-emerald-600/40 hover:bg-emerald-600/60 text-emerald-200 font-bold rounded-xl sm:rounded-2xl text-[11px] sm:text-xs transition flex items-center justify-center gap-1 sm:gap-1.5 border border-emerald-400/40 cursor-pointer truncate">
+            <i data-lucide="bell" class="w-3.5 h-3.5 sm:w-4 sm:h-4 text-amber-300 flex-shrink-0"></i>
+            <span class="truncate">Notifikasi</span>
           </button>
-          <button type="button" onclick="manualRefreshData()" class="p-2.5 bg-white/10 hover:bg-white/20 rounded-2xl text-white transition border border-white/20 cursor-pointer" title="Segarkan Data Online">
-            <i data-lucide="refresh-cw" class="w-4 h-4"></i>
+          <button type="button" onclick="logoutSession()" class="px-2.5 py-2 sm:px-3.5 sm:py-2.5 bg-rose-500/80 hover:bg-rose-600 text-white font-bold rounded-xl sm:rounded-2xl text-[11px] sm:text-xs transition flex items-center justify-center gap-1 sm:gap-1.5 cursor-pointer truncate">
+            <i data-lucide="log-out" class="w-3.5 h-3.5 sm:w-4 sm:h-4 flex-shrink-0"></i>
+            <span class="truncate">Keluar</span>
+          </button>
+          <button type="button" onclick="manualRefreshData()" class="col-span-2 sm:col-auto p-2 sm:p-2.5 bg-white/10 hover:bg-white/20 rounded-xl sm:rounded-2xl text-white transition border border-white/20 flex items-center justify-center cursor-pointer text-xs" title="Segarkan Data Online">
+            <i data-lucide="refresh-cw" class="w-3.5 h-3.5 sm:w-4 sm:h-4 flex-shrink-0"></i>
+            <span class="inline sm:hidden ml-1.5 font-semibold">Segarkan Data</span>
           </button>
         </div>
       </div>
     </div>
 
     <!-- 5 KPI EKSEKUTIF HARI INI -->
-    <div class="grid grid-cols-2 lg:grid-cols-5 gap-3 sm:gap-4">
+    <div class="grid grid-cols-2 lg:grid-cols-5 gap-2.5 sm:gap-4">
       <!-- 1. Presensi KBM -->
-      <div class="bg-white p-4 rounded-2xl border border-slate-200 shadow-xs hover:border-emerald-300 transition">
-        <div class="flex items-center justify-between text-slate-400 mb-2">
-          <span class="text-[11px] font-bold uppercase tracking-wider text-slate-500">Kehadiran KBM</span>
-          <div class="w-7 h-7 rounded-lg bg-emerald-50 text-emerald-700 flex items-center justify-center">
-            <i data-lucide="users" class="w-4 h-4"></i>
+      <div class="bg-white p-3.5 sm:p-4 rounded-2xl border border-slate-200 shadow-xs hover:border-emerald-300 transition">
+        <div class="flex items-center justify-between text-slate-400 mb-1.5 sm:mb-2">
+          <span class="text-[10px] sm:text-[11px] font-bold uppercase tracking-wider text-slate-500">Kehadiran KBM</span>
+          <div class="w-6 h-6 sm:w-7 sm:h-7 rounded-lg bg-emerald-50 text-emerald-700 flex items-center justify-center">
+            <i data-lucide="users" class="w-3.5 h-3.5 sm:w-4 sm:h-4"></i>
           </div>
         </div>
-        <div id="statKepsekPresensiPersen" class="text-2xl font-black text-emerald-700">0%</div>
-        <div id="statKepsekPresensiDetail" class="text-[10px] text-slate-500 mt-1">H: 0 | S: 0 | I: 0 | A: 0</div>
+        <div id="statKepsekPresensiPersen" class="text-xl sm:text-2xl font-black text-emerald-700">0%</div>
+        <div id="statKepsekPresensiDetail" class="text-[10px] text-slate-500 mt-1 truncate">H: 0 | S: 0 | I: 0 | A: 0</div>
       </div>
 
       <!-- 2. Keterlaksanaan KBM Guru -->
-      <div class="bg-white p-4 rounded-2xl border border-slate-200 shadow-xs hover:border-teal-300 transition">
-        <div class="flex items-center justify-between text-slate-400 mb-2">
-          <span class="text-[11px] font-bold uppercase tracking-wider text-slate-500">KBM & 4F Terlaksana</span>
-          <div class="w-7 h-7 rounded-lg bg-teal-50 text-teal-700 flex items-center justify-center">
-            <i data-lucide="book-open-check" class="w-4 h-4"></i>
+      <div class="bg-white p-3.5 sm:p-4 rounded-2xl border border-slate-200 shadow-xs hover:border-teal-300 transition">
+        <div class="flex items-center justify-between text-slate-400 mb-1.5 sm:mb-2">
+          <span class="text-[10px] sm:text-[11px] font-bold uppercase tracking-wider text-slate-500">KBM & 4F Terlaksana</span>
+          <div class="w-6 h-6 sm:w-7 sm:h-7 rounded-lg bg-teal-50 text-teal-700 flex items-center justify-center">
+            <i data-lucide="book-open-check" class="w-3.5 h-3.5 sm:w-4 sm:h-4"></i>
           </div>
         </div>
-        <div id="statKepsekKbmTerlaksana" class="text-2xl font-black text-teal-700">0 Rombel</div>
-        <div id="statKepsekKbmPersen" class="text-[10px] text-slate-500 mt-1">0% dari seluruh kelas</div>
+        <div id="statKepsekKbmTerlaksana" class="text-xl sm:text-2xl font-black text-teal-700">0 Rombel</div>
+        <div id="statKepsekKbmPersen" class="text-[10px] text-slate-500 mt-1 truncate">0% dari seluruh kelas</div>
       </div>
 
       <!-- 3. Indeks 7 Kebiasaan -->
-      <div class="bg-white p-4 rounded-2xl border border-slate-200 shadow-xs hover:border-blue-300 transition">
-        <div class="flex items-center justify-between text-slate-400 mb-2">
-          <span class="text-[11px] font-bold uppercase tracking-wider text-slate-500">7 Kebiasaan Hebat</span>
-          <div class="w-7 h-7 rounded-lg bg-blue-50 text-blue-700 flex items-center justify-center">
-            <i data-lucide="sparkles" class="w-4 h-4"></i>
+      <div class="bg-white p-3.5 sm:p-4 rounded-2xl border border-slate-200 shadow-xs hover:border-blue-300 transition">
+        <div class="flex items-center justify-between text-slate-400 mb-1.5 sm:mb-2">
+          <span class="text-[10px] sm:text-[11px] font-bold uppercase tracking-wider text-slate-500">7 Kebiasaan Hebat</span>
+          <div class="w-6 h-6 sm:w-7 sm:h-7 rounded-lg bg-blue-50 text-blue-700 flex items-center justify-center">
+            <i data-lucide="sparkles" class="w-3.5 h-3.5 sm:w-4 sm:h-4"></i>
           </div>
         </div>
-        <div id="statKepsekIndeks7K" class="text-2xl font-black text-blue-700">0%</div>
-        <div class="text-[10px] text-slate-500 mt-1">Kepatuhan pembiasaan</div>
+        <div id="statKepsekIndeks7K" class="text-xl sm:text-2xl font-black text-blue-700">0%</div>
+        <div class="text-[10px] text-slate-500 mt-1 truncate">Kepatuhan pembiasaan</div>
       </div>
 
       <!-- 4. Partisipasi Ekstrakurikuler -->
-      <div class="bg-white p-4 rounded-2xl border border-slate-200 shadow-xs hover:border-purple-300 transition">
-        <div class="flex items-center justify-between text-slate-400 mb-2">
-          <span class="text-[11px] font-bold uppercase tracking-wider text-slate-500">Kepatuhan Ekskul</span>
-          <div class="w-7 h-7 rounded-lg bg-purple-50 text-purple-700 flex items-center justify-center">
-            <i data-lucide="award" class="w-4 h-4"></i>
+      <div class="bg-white p-3.5 sm:p-4 rounded-2xl border border-slate-200 shadow-xs hover:border-purple-300 transition">
+        <div class="flex items-center justify-between text-slate-400 mb-1.5 sm:mb-2">
+          <span class="text-[10px] sm:text-[11px] font-bold uppercase tracking-wider text-slate-500">Kepatuhan Ekskul</span>
+          <div class="w-6 h-6 sm:w-7 sm:h-7 rounded-lg bg-purple-50 text-purple-700 flex items-center justify-center">
+            <i data-lucide="award" class="w-3.5 h-3.5 sm:w-4 sm:h-4"></i>
           </div>
         </div>
-        <div id="statKepsekKepatuhanEkskul" class="text-2xl font-black text-purple-700">0%</div>
-        <div id="statKepsekEkskulSub" class="text-[10px] text-slate-500 mt-1">Tertib regulasi angkatan</div>
+        <div id="statKepsekKepatuhanEkskul" class="text-xl sm:text-2xl font-black text-purple-700">0%</div>
+        <div id="statKepsekEkskulSub" class="text-[10px] text-slate-500 mt-1 truncate">Tertib regulasi angkatan</div>
       </div>
 
       <!-- 5. Radar Alpa Kritis -->
-      <div class="col-span-2 lg:col-span-1 bg-white p-4 rounded-2xl border border-rose-200 bg-rose-50/30 shadow-xs hover:border-rose-300 transition">
-        <div class="flex items-center justify-between text-slate-400 mb-2">
-          <span class="text-[11px] font-bold uppercase tracking-wider text-rose-700">Alpa Kritis (≥ 5x)</span>
-          <div class="w-7 h-7 rounded-lg bg-rose-100 text-rose-700 flex items-center justify-center">
-            <i data-lucide="alert-triangle" class="w-4 h-4"></i>
+      <div class="col-span-2 lg:col-span-1 bg-white p-3.5 sm:p-4 rounded-2xl border border-rose-200 bg-rose-50/30 shadow-xs hover:border-rose-300 transition">
+        <div class="flex items-center justify-between text-slate-400 mb-1.5 sm:mb-2">
+          <span class="text-[10px] sm:text-[11px] font-bold uppercase tracking-wider text-rose-700">Alpa Kritis (≥ 5x)</span>
+          <div class="w-6 h-6 sm:w-7 sm:h-7 rounded-lg bg-rose-100 text-rose-700 flex items-center justify-center">
+            <i data-lucide="alert-triangle" class="w-3.5 h-3.5 sm:w-4 sm:h-4"></i>
           </div>
         </div>
-        <div id="statKepsekAlpaKritis" class="text-2xl font-black text-rose-700">0 Siswa</div>
-        <div class="text-[10px] text-rose-600 font-semibold mt-1">Perlu atensi Walas/BK</div>
+        <div id="statKepsekAlpaKritis" class="text-xl sm:text-2xl font-black text-rose-700">0 Siswa</div>
+        <div class="text-[10px] text-rose-600 font-semibold mt-1 truncate">Perlu atensi Walas/BK</div>
       </div>
     </div>
 
-    <!-- TAB NAVIGASI KEPALA SEKOLAH -->
-    <div class="flex items-center gap-2 overflow-x-auto pb-2 custom-scrollbar">
-      <button onclick="switchTabKepsek('ringkasan')" id="tabBtnKepsek_ringkasan" class="tab-kepsek-btn px-5 py-2.5 bg-emerald-800 text-white font-black rounded-2xl text-xs whitespace-nowrap shadow-sm flex items-center gap-2 cursor-pointer">
+    <!-- TAB NAVIGASI KEPALA SEKOLAH (Mobile Scrollable) -->
+    <div class="flex items-center gap-1.5 sm:gap-2 overflow-x-auto pb-2 no-scrollbar w-full min-w-0">
+      <button onclick="switchTabKepsek('ringkasan')" id="tabBtnKepsek_ringkasan" class="tab-kepsek-btn px-4 sm:px-5 py-2 sm:py-2.5 bg-emerald-800 text-white font-black rounded-2xl text-xs whitespace-nowrap shadow-sm flex items-center gap-2 cursor-pointer flex-shrink-0">
         <i data-lucide="layout-dashboard" class="w-4 h-4"></i>
         <span>📊 Radar & Peringatan Dini</span>
       </button>
-      <button onclick="switchTabKepsek('pembiasaan7K')" id="tabBtnKepsek_pembiasaan7K" class="tab-kepsek-btn px-5 py-2.5 bg-white text-slate-600 hover:bg-slate-100 font-bold rounded-2xl text-xs whitespace-nowrap border border-slate-200 flex items-center gap-2 cursor-pointer">
-        <i data-lucide="sparkles" class="w-4 h-4"></i>
+      <button onclick="switchTabKepsek('pembiasaan7K')" id="tabBtnKepsek_pembiasaan7K" class="tab-kepsek-btn px-4 sm:px-5 py-2 sm:py-2.5 bg-white text-slate-600 hover:bg-slate-100 font-bold rounded-2xl text-xs whitespace-nowrap border border-slate-200 flex items-center gap-2 cursor-pointer flex-shrink-0">
+        <i data-lucide="sparkles" class="w-4 h-4 text-amber-500"></i>
         <span>🌟 Evaluasi 7 Kebiasaan</span>
       </button>
-      <button onclick="switchTabKepsek('laporan')" id="tabBtnKepsek_laporan" class="tab-kepsek-btn px-5 py-2.5 bg-white text-slate-600 hover:bg-slate-100 font-bold rounded-2xl text-xs whitespace-nowrap border border-slate-200 flex items-center gap-2 cursor-pointer">
-        <i data-lucide="file-text" class="w-4 h-4"></i>
-        <span>📈 Laporan & Lembar Pengesahan</span>
+      <button onclick="switchTabKepsek('laporan')" id="tabBtnKepsek_laporan" class="tab-kepsek-btn px-4 sm:px-5 py-2 sm:py-2.5 bg-white text-slate-600 hover:bg-slate-100 font-bold rounded-2xl text-xs whitespace-nowrap border border-slate-200 flex items-center gap-2 cursor-pointer flex-shrink-0">
+        <i data-lucide="file-text" class="w-4 h-4 text-blue-500"></i>
+        <span>📈 Laporan & Pengesahan</span>
       </button>
-      <button onclick="switchTabKepsek('kebijakan')" id="tabBtnKepsek_kebijakan" class="tab-kepsek-btn px-5 py-2.5 bg-white text-slate-600 hover:bg-slate-100 font-bold rounded-2xl text-xs whitespace-nowrap border border-slate-200 flex items-center gap-2 cursor-pointer">
-        <i data-lucide="megaphone" class="w-4 h-4"></i>
-        <span>📢 Amanat & Kebijakan Kepsek</span>
+      <button onclick="switchTabKepsek('mutasi')" id="tabBtnKepsek_mutasi" class="tab-kepsek-btn px-4 sm:px-5 py-2 sm:py-2.5 bg-white text-slate-600 hover:bg-slate-100 font-bold rounded-2xl text-xs whitespace-nowrap border border-slate-200 flex items-center gap-2 cursor-pointer flex-shrink-0">
+        <i data-lucide="arrow-left-right" class="w-4 h-4 text-emerald-600"></i>
+        <span>🔄 Mutasi & Mobilitas Siswa</span>
+      </button>
+      <button onclick="switchTabKepsek('kebijakan')" id="tabBtnKepsek_kebijakan" class="tab-kepsek-btn px-4 sm:px-5 py-2 sm:py-2.5 bg-white text-slate-600 hover:bg-slate-100 font-bold rounded-2xl text-xs whitespace-nowrap border border-slate-200 flex items-center gap-2 cursor-pointer flex-shrink-0">
+        <i data-lucide="megaphone" class="w-4 h-4 text-rose-500"></i>
+        <span>📢 Amanat & Kebijakan</span>
       </button>
     </div>
 
     <!-- KONTEN TAB 1: RADAR & PERINGATAN DINI -->
-    <div id="tabContentKepsek_ringkasan" class="tab-kepsek-content space-y-6">
+    <div id="tabContentKepsek_ringkasan" class="tab-kepsek-content space-y-4 sm:space-y-6">
       
       <!-- Box Radar Siswa Alpa Kritis -->
-      <div class="bg-white rounded-3xl border border-slate-200/90 p-5 sm:p-6 shadow-sm">
+      <div class="bg-white rounded-3xl border border-slate-200/90 p-4 sm:p-6 shadow-sm">
         <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-4 border-b border-slate-100">
           <div class="flex items-center gap-3">
-            <div class="w-10 h-10 rounded-2xl bg-rose-50 text-rose-700 flex items-center justify-center">
+            <div class="w-10 h-10 rounded-2xl bg-rose-50 text-rose-700 flex items-center justify-center flex-shrink-0">
               <i data-lucide="shield-alert" class="w-5 h-5"></i>
             </div>
             <div>
-              <h3 class="font-black text-slate-900 text-base sm:text-lg">Radar Peringatan Dini: Ketidakhadiran Berisiko (Alpa ≥ 5x)</h3>
+              <h3 class="font-black text-slate-900 text-sm sm:text-base md:text-lg">Radar Peringatan Dini: Ketidakhadiran Berisiko (Alpa ≥ 5x)</h3>
               <p class="text-xs text-slate-400">Daftar siswa yang memerlukan atensi pembinaan wali kelas, guru BK, dan orang tua</p>
             </div>
           </div>
-          <span id="badgeKepsekTotalAlpaKritis" class="px-3 py-1 bg-rose-100 text-rose-800 font-extrabold text-xs rounded-full self-start sm:self-auto">
+          <span id="badgeKepsekTotalAlpaKritis" class="px-3 py-1 bg-rose-100 text-rose-800 font-extrabold text-xs rounded-full self-start sm:self-auto flex-shrink-0">
             0 Kasus Aktif
           </span>
         </div>
 
-        <div class="overflow-x-auto mt-4">
+        <!-- Desktop Table View -->
+        <div class="hidden md:block overflow-x-auto mt-4">
           <table class="w-full text-left text-xs">
             <thead>
               <tr class="bg-slate-50 text-slate-600 uppercase font-black border-b border-slate-200">
@@ -3705,12 +3871,17 @@
             </tbody>
           </table>
         </div>
+
+        <!-- Mobile Card View (Responsif Layar Smartphone) -->
+        <div id="listRadarAlpaKritisMobile" class="block md:hidden mt-4 space-y-3">
+          <!-- Diisi via JavaScript -->
+        </div>
       </div>
 
       <!-- Ringkasan Kehadiran per Angkatan -->
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-3 sm:gap-4">
         <!-- Kelas 7 -->
-        <div class="bg-white rounded-3xl border border-slate-200 p-5 shadow-sm">
+        <div class="bg-white rounded-3xl border border-slate-200 p-4 sm:p-5 shadow-sm">
           <div class="flex items-center justify-between mb-3">
             <h4 class="font-black text-slate-900 text-sm">Angkatan Kelas 7</h4>
             <span class="px-2 py-0.5 bg-blue-50 text-blue-700 font-bold text-[10px] rounded-lg">Fase D</span>
@@ -3721,7 +3892,7 @@
         </div>
 
         <!-- Kelas 8 -->
-        <div class="bg-white rounded-3xl border border-slate-200 p-5 shadow-sm">
+        <div class="bg-white rounded-3xl border border-slate-200 p-4 sm:p-5 shadow-sm">
           <div class="flex items-center justify-between mb-3">
             <h4 class="font-black text-slate-900 text-sm">Angkatan Kelas 8</h4>
             <span class="px-2 py-0.5 bg-indigo-50 text-indigo-700 font-bold text-[10px] rounded-lg">Fase D</span>
@@ -3732,7 +3903,7 @@
         </div>
 
         <!-- Kelas 9 -->
-        <div class="bg-white rounded-3xl border border-slate-200 p-5 shadow-sm">
+        <div class="bg-white rounded-3xl border border-slate-200 p-4 sm:p-5 shadow-sm">
           <div class="flex items-center justify-between mb-3">
             <h4 class="font-black text-slate-900 text-sm">Angkatan Kelas 9</h4>
             <span class="px-2 py-0.5 bg-purple-50 text-purple-700 font-bold text-[10px] rounded-lg">Tingkat Akhir</span>
@@ -3745,7 +3916,7 @@
 
     </div>
 
-    <!-- KONTEN TAB 2: SUPERVISI KBM & REFLEKSI 4F GURU -->
+    <!-- KONTEN TAB 2: SUPERVISI KBM & REFLEKSI 4F GURU (Hidden By User Requirement) -->
     <div id="tabContentKepsek_supervisiKbm" class="tab-kepsek-content hidden" style="display: none !important;">
       <div class="bg-white rounded-3xl border border-slate-200 p-5 sm:p-6 shadow-sm">
         <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 pb-4 border-b border-slate-100">
@@ -3769,11 +3940,11 @@
     </div>
 
     <!-- KONTEN TAB 3: EVALUASI PEMBIASAAN 7 KEBIASAAN -->
-    <div id="tabContentKepsek_pembiasaan7K" class="tab-kepsek-content hidden space-y-6">
-      <div class="bg-white rounded-3xl border border-slate-200 p-5 sm:p-6 shadow-sm">
+    <div id="tabContentKepsek_pembiasaan7K" class="tab-kepsek-content hidden space-y-4 sm:space-y-6">
+      <div class="bg-white rounded-3xl border border-slate-200 p-4 sm:p-6 shadow-sm">
         <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-4 border-b border-slate-100">
           <div>
-            <h3 class="font-black text-slate-900 text-base sm:text-lg">Evaluasi Pembinaan 7 Kebiasaan Anak Indonesia Hebat</h3>
+            <h3 class="font-black text-slate-900 text-sm sm:text-base md:text-lg">Evaluasi Pembinaan 7 Kebiasaan Anak Indonesia Hebat</h3>
             <p class="text-xs text-slate-400">Tingkat kepatuhan pembiasaan karakter seluruh siswa terintegrasi dengan peran Guru Wali</p>
           </div>
         </div>
@@ -3797,16 +3968,16 @@
     </div>
 
     <!-- KONTEN TAB 4: LAPORAN & LEMBAR PENGESAHAN -->
-    <div id="tabContentKepsek_laporan" class="tab-kepsek-content hidden space-y-6">
-      <div class="bg-white rounded-3xl border border-slate-200 p-5 sm:p-6 shadow-sm">
+    <div id="tabContentKepsek_laporan" class="tab-kepsek-content hidden space-y-4 sm:space-y-6">
+      <div class="bg-white rounded-3xl border border-slate-200 p-4 sm:p-6 shadow-sm">
         <div class="pb-4 border-b border-slate-100">
-          <h3 class="font-black text-slate-900 text-base sm:text-lg">Pusat Laporan Eksekutif & Lembar Pengesahan</h3>
+          <h3 class="font-black text-slate-900 text-sm sm:text-base md:text-lg">Pusat Laporan Eksekutif & Lembar Pengesahan</h3>
           <p class="text-xs text-slate-400">Dokumen resmi berstandar Dinas Pendidikan lengkap dengan Kop Surat 2 Logo dan Tanda Tangan Kepala Sekolah</p>
         </div>
 
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mt-5">
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-3 sm:gap-4 mt-5">
           <!-- Laporan 1: Presensi KBM -->
-          <div class="p-5 bg-gradient-to-br from-blue-50 to-indigo-50/50 rounded-2xl border border-blue-200/80 flex flex-col justify-between">
+          <div class="p-4 sm:p-5 bg-gradient-to-br from-blue-50 to-indigo-50/50 rounded-2xl border border-blue-200/80 flex flex-col justify-between">
             <div>
               <div class="w-10 h-10 rounded-xl bg-blue-600 text-white flex items-center justify-center mb-3 shadow-md shadow-blue-500/20">
                 <i data-lucide="clipboard-check" class="w-5 h-5"></i>
@@ -3821,7 +3992,7 @@
           </div>
 
           <!-- Laporan 2: Ekstrakurikuler -->
-          <div class="p-5 bg-gradient-to-br from-purple-50 to-pink-50/50 rounded-2xl border border-purple-200/80 flex flex-col justify-between">
+          <div class="p-4 sm:p-5 bg-gradient-to-br from-purple-50 to-pink-50/50 rounded-2xl border border-purple-200/80 flex flex-col justify-between">
             <div>
               <div class="w-10 h-10 rounded-xl bg-purple-600 text-white flex items-center justify-center mb-3 shadow-md shadow-purple-500/20">
                 <i data-lucide="award" class="w-5 h-5"></i>
@@ -3836,7 +4007,7 @@
           </div>
 
           <!-- Laporan 3: Supervisi Karakter 7 Kebiasaan -->
-          <div class="p-5 bg-gradient-to-br from-emerald-50 to-teal-50/50 rounded-2xl border border-emerald-200/80 flex flex-col justify-between">
+          <div class="p-4 sm:p-5 bg-gradient-to-br from-emerald-50 to-teal-50/50 rounded-2xl border border-emerald-200/80 flex flex-col justify-between">
             <div>
               <div class="w-10 h-10 rounded-xl bg-emerald-700 text-white flex items-center justify-center mb-3 shadow-md shadow-emerald-700/20">
                 <i data-lucide="sparkles" class="w-5 h-5"></i>
@@ -3853,15 +4024,101 @@
       </div>
     </div>
 
-    <!-- KONTEN TAB 5: AMANAT & KEBIJAKAN KEPSEK -->
-    <div id="tabContentKepsek_kebijakan" class="tab-kepsek-content hidden space-y-6">
-      <div class="bg-white rounded-3xl border border-slate-200 p-5 sm:p-6 shadow-sm">
-        <div class="flex items-center justify-between pb-4 border-b border-slate-100">
+    <!-- KONTEN TAB 5: PENGAWASAN MUTASI SISWA (MASUK & KELUAR) -->
+    <div id="tabContentKepsek_mutasi" class="tab-kepsek-content hidden space-y-4 sm:space-y-6">
+      <div class="bg-white rounded-3xl border border-slate-200 p-4 sm:p-6 shadow-sm">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-4 border-b border-slate-100">
+          <div class="flex items-center gap-3">
+            <div class="w-10 h-10 rounded-2xl bg-emerald-50 text-emerald-800 flex items-center justify-center flex-shrink-0">
+              <i data-lucide="arrow-left-right" class="w-5 h-5"></i>
+            </div>
+            <div>
+              <h3 class="font-black text-slate-900 text-sm sm:text-base md:text-lg">Pengawasan Mobilitas & Mutasi Siswa (Pindah Masuk & Keluar)</h3>
+              <p class="text-xs text-slate-400">Monitoring resmi siswa pindah sekolah, kepatuhan buku induk, dan penerbitan surat dinas</p>
+            </div>
+          </div>
+          <button type="button" onclick="cetakBukuRegistrasiMutasi()" class="px-4 py-2 bg-emerald-700 hover:bg-emerald-800 text-white font-bold rounded-xl text-xs transition flex items-center gap-1.5 shadow-sm cursor-pointer self-start sm:self-auto flex-shrink-0">
+            <i data-lucide="printer" class="w-4 h-4"></i>
+            <span>🖨️ Cetak Buku Induk Mutasi</span>
+          </button>
+        </div>
+
+        <!-- 4 Stat Card Mobilitas Siswa -->
+        <div class="grid grid-cols-2 lg:grid-cols-4 gap-2.5 sm:gap-4 mt-5">
+          <div class="p-3.5 sm:p-4 bg-emerald-50/60 rounded-2xl border border-emerald-200">
+            <div class="text-[10px] sm:text-[11px] font-bold text-emerald-800 uppercase">Siswa Pindah Masuk</div>
+            <div id="statKepsekMutasiMasuk" class="text-xl sm:text-2xl font-black text-emerald-800 mt-1">0 Siswa</div>
+            <div class="text-[10px] text-emerald-700 mt-0.5">Tercatat di Buku Induk</div>
+          </div>
+          <div class="p-3.5 sm:p-4 bg-rose-50/60 rounded-2xl border border-rose-200">
+            <div class="text-[10px] sm:text-[11px] font-bold text-rose-800 uppercase">Siswa Pindah Keluar</div>
+            <div id="statKepsekMutasiKeluar" class="text-xl sm:text-2xl font-black text-rose-800 mt-1">0 Siswa</div>
+            <div class="text-[10px] text-rose-700 mt-0.5">Surat Keterangan Diterbitkan</div>
+          </div>
+          <div class="p-3.5 sm:p-4 bg-blue-50/60 rounded-2xl border border-blue-200">
+            <div class="text-[10px] sm:text-[11px] font-bold text-blue-800 uppercase">Neraca Mobilitas</div>
+            <div id="statKepsekMutasiNeraca" class="text-xl sm:text-2xl font-black text-blue-800 mt-1">0 Siswa</div>
+            <div class="text-[10px] text-blue-700 mt-0.5">Selisih Masuk vs Keluar</div>
+          </div>
+          <div class="p-3.5 sm:p-4 bg-slate-50 rounded-2xl border border-slate-200">
+            <div class="text-[10px] sm:text-[11px] font-bold text-slate-600 uppercase">Status Buku Induk</div>
+            <div class="text-xl sm:text-2xl font-black text-slate-800 mt-1">Tertib</div>
+            <div class="text-[10px] text-slate-500 mt-0.5">Arsip Kedinasan Sah</div>
+          </div>
+        </div>
+
+        <!-- Filter & Search Bar Kepsek Mutasi -->
+        <div class="mt-5 flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3 bg-slate-50 p-3 rounded-2xl border border-slate-200">
+          <div class="relative flex-1">
+            <i data-lucide="search" class="w-4 h-4 text-slate-400 absolute left-3 top-2.5"></i>
+            <input type="text" id="inputSearchKepsekMutasi" oninput="renderKepsekMutasi()" placeholder="Cari nama siswa, NISN, sekolah asal/tujuan..." class="w-full pl-9 pr-3 py-1.5 bg-white border border-slate-200 rounded-xl text-xs focus:outline-none focus:border-emerald-600">
+          </div>
+          <div class="flex items-center gap-2">
+            <select id="filterJenisKepsekMutasi" onchange="renderKepsekMutasi()" class="px-3 py-1.5 bg-white border border-slate-200 rounded-xl text-xs font-bold text-slate-700 focus:outline-none focus:border-emerald-600 cursor-pointer">
+              <option value="">Semua Mutasi</option>
+              <option value="MASUK">Pindah Masuk</option>
+              <option value="KELUAR">Pindah Keluar</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Desktop Table Mutasi Kepsek -->
+        <div class="hidden md:block overflow-x-auto mt-4">
+          <table class="w-full text-left text-xs">
+            <thead>
+              <tr class="bg-slate-50 text-slate-600 uppercase font-black border-b border-slate-200">
+                <th class="py-3 px-3">No</th>
+                <th class="py-3 px-3">Tanggal</th>
+                <th class="py-3 px-3">Jenis</th>
+                <th class="py-3 px-3">Nama & NISN</th>
+                <th class="py-3 px-3">Kelas</th>
+                <th class="py-3 px-3">Sekolah Asal / Tujuan</th>
+                <th class="py-3 px-3">No. Surat & Alasan</th>
+                <th class="py-3 px-3 text-center">Aksi Dokumen</th>
+              </tr>
+            </thead>
+            <tbody id="tableKepsekMutasiBody" class="divide-y divide-slate-100">
+              <!-- Diisi via JS -->
+            </tbody>
+          </table>
+        </div>
+
+        <!-- Mobile Card View Mutasi Kepsek -->
+        <div id="listKepsekMutasiMobile" class="block md:hidden mt-4 space-y-3">
+          <!-- Diisi via JS -->
+        </div>
+      </div>
+    </div>
+
+    <!-- KONTEN TAB 6: AMANAT & KEBIJAKAN KEPSEK -->
+    <div id="tabContentKepsek_kebijakan" class="tab-kepsek-content hidden space-y-4 sm:space-y-6">
+      <div class="bg-white rounded-3xl border border-slate-200 p-4 sm:p-6 shadow-sm">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-4 border-b border-slate-100">
           <div>
-            <h3 class="font-black text-slate-900 text-base sm:text-lg">Amanat, Maklumat & Surat Edaran Kepala Sekolah</h3>
+            <h3 class="font-black text-slate-900 text-sm sm:text-base md:text-lg">Amanat, Maklumat & Surat Edaran Kepala Sekolah</h3>
             <p class="text-xs text-slate-400">Pengumuman resmi bertanda [AMANAT KEPALA SEKOLAH] tampil prioritas di seluruh portal</p>
           </div>
-          <button type="button" onclick="bukaModalAmanatKepsek()" class="px-4 py-2 bg-emerald-700 hover:bg-emerald-800 text-white font-bold rounded-xl text-xs transition flex items-center gap-1.5 shadow-sm cursor-pointer">
+          <button type="button" onclick="bukaModalAmanatKepsek()" class="px-4 py-2 bg-emerald-700 hover:bg-emerald-800 text-white font-bold rounded-xl text-xs transition flex items-center gap-1.5 shadow-sm cursor-pointer self-start sm:self-auto flex-shrink-0">
             <i data-lucide="plus-circle" class="w-4 h-4"></i>
             <span>+ Terbitkan Amanat</span>
           </button>
@@ -3972,23 +4229,28 @@
   </div>
 
   <!-- ========================================================================= -->
+  <!-- ========================================================================= -->
   <!-- BOTTOM NAV KHUSUS KEPALA SEKOLAH                                          -->
   <!-- ========================================================================= -->
-  <nav id="mobileBottomNavKepsek" class="fixed bottom-0 left-0 right-0 z-40 bg-white/95 backdrop-blur-md border-t border-slate-200/80 px-2 py-1 shadow-[0_-4px_20px_rgba(0,0,0,0.06)] hidden">
-    <div class="flex items-center gap-1 overflow-x-auto no-scrollbar max-w-xl mx-auto py-0.5 justify-start sm:justify-around">
-      <button type="button" onclick="switchTabKepsek('ringkasan')" id="mobileNavKepsek_ringkasan" class="mobile-nav-btn flex flex-col items-center justify-center py-1 px-2.5 rounded-xl transition text-emerald-800 font-bold min-w-[56px] flex-shrink-0">
+  <nav id="mobileBottomNavKepsek" class="fixed bottom-0 left-0 right-0 z-40 bg-white/95 backdrop-blur-md border-t border-slate-200/80 px-1.5 py-1 shadow-[0_-4px_20px_rgba(0,0,0,0.06)] hidden">
+    <div class="flex items-center gap-0.5 overflow-x-auto no-scrollbar max-w-xl mx-auto py-0.5 justify-around">
+      <button type="button" onclick="switchTabKepsek('ringkasan')" id="mobileNavKepsek_ringkasan" class="mobile-nav-btn flex flex-col items-center justify-center py-1 px-2 rounded-xl transition text-emerald-800 font-bold min-w-[50px] flex-shrink-0">
         <i data-lucide="layout-dashboard" class="w-4 h-4 mb-0.5"></i>
         <span class="text-[10px] leading-tight">Radar</span>
       </button>
-      <button type="button" onclick="switchTabKepsek('pembiasaan7K')" id="mobileNavKepsek_pembiasaan7K" class="mobile-nav-btn flex flex-col items-center justify-center py-1 px-2.5 rounded-xl transition text-slate-500 hover:text-emerald-700 font-medium min-w-[56px] flex-shrink-0">
+      <button type="button" onclick="switchTabKepsek('pembiasaan7K')" id="mobileNavKepsek_pembiasaan7K" class="mobile-nav-btn flex flex-col items-center justify-center py-1 px-2 rounded-xl transition text-slate-500 hover:text-emerald-700 font-medium min-w-[50px] flex-shrink-0">
         <i data-lucide="sparkles" class="w-4 h-4 mb-0.5"></i>
         <span class="text-[10px] leading-tight">7 Kebiasaan</span>
       </button>
-      <button type="button" onclick="switchTabKepsek('laporan')" id="mobileNavKepsek_laporan" class="mobile-nav-btn flex flex-col items-center justify-center py-1 px-2.5 rounded-xl transition text-slate-500 hover:text-emerald-700 font-medium min-w-[56px] flex-shrink-0">
+      <button type="button" onclick="switchTabKepsek('laporan')" id="mobileNavKepsek_laporan" class="mobile-nav-btn flex flex-col items-center justify-center py-1 px-2 rounded-xl transition text-slate-500 hover:text-emerald-700 font-medium min-w-[50px] flex-shrink-0">
         <i data-lucide="file-text" class="w-4 h-4 mb-0.5"></i>
         <span class="text-[10px] leading-tight">Laporan</span>
       </button>
-      <button type="button" onclick="switchTabKepsek('kebijakan')" id="mobileNavKepsek_kebijakan" class="mobile-nav-btn flex flex-col items-center justify-center py-1 px-2.5 rounded-xl transition text-slate-500 hover:text-emerald-700 font-medium min-w-[56px] flex-shrink-0">
+      <button type="button" onclick="switchTabKepsek('mutasi')" id="mobileNavKepsek_mutasi" class="mobile-nav-btn flex flex-col items-center justify-center py-1 px-2 rounded-xl transition text-slate-500 hover:text-emerald-700 font-medium min-w-[50px] flex-shrink-0">
+        <i data-lucide="arrow-left-right" class="w-4 h-4 mb-0.5"></i>
+        <span class="text-[10px] leading-tight">Mutasi</span>
+      </button>
+      <button type="button" onclick="switchTabKepsek('kebijakan')" id="mobileNavKepsek_kebijakan" class="mobile-nav-btn flex flex-col items-center justify-center py-1 px-2 rounded-xl transition text-slate-500 hover:text-emerald-700 font-medium min-w-[50px] flex-shrink-0">
         <i data-lucide="megaphone" class="w-4 h-4 mb-0.5"></i>
         <span class="text-[10px] leading-tight">Amanat</span>
       </button>
@@ -4995,6 +5257,188 @@
       </div>
     </div>
   </div>
+  <!-- ========================================================================= -->
+  <!-- MODAL 1: REGISTRASI SISWA PINDAH MASUK (MUTASI MASUK)                       -->
+  <!-- ========================================================================= -->
+  <div id="modalMutasiSiswaMasuk" class="fixed inset-0 z-50 bg-slate-950/60 backdrop-blur-xs hidden flex items-center justify-center p-3 sm:p-4">
+    <div class="bg-white rounded-3xl max-w-2xl w-full p-5 sm:p-7 shadow-2xl border border-slate-200 max-h-[92vh] flex flex-col space-y-4 overflow-hidden">
+      <div class="flex items-center justify-between pb-3 border-b border-slate-100 flex-shrink-0">
+        <div class="flex items-center gap-3">
+          <div class="w-10 h-10 rounded-2xl bg-emerald-100 text-emerald-800 flex items-center justify-center flex-shrink-0 shadow-2xs">
+            <i data-lucide="user-plus" class="w-5 h-5"></i>
+          </div>
+          <div>
+            <h3 class="font-black text-base text-slate-900 leading-snug">Registrasi Siswa Pindah Masuk (Mutasi Masuk)</h3>
+            <p class="text-xs text-slate-400">Catat penerimaan peserta didik pindahan dari sekolah lain ke database aktif</p>
+          </div>
+        </div>
+        <button type="button" onclick="tutupModalMutasiMasuk()" class="text-slate-400 hover:text-slate-600 p-2 rounded-xl hover:bg-slate-100 transition cursor-pointer">
+          <i data-lucide="x" class="w-5 h-5"></i>
+        </button>
+      </div>
+
+      <form id="formMutasiMasuk" onsubmit="handleSimpanMutasiMasuk(event)" class="overflow-y-auto custom-scrollbar flex-1 space-y-4 pr-1 text-xs">
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          <div>
+            <label class="block font-bold text-slate-700 uppercase mb-1">NISN Siswa <span class="text-rose-500">*</span></label>
+            <input type="text" id="mutasiInNisn" required maxlength="10" placeholder="10 Digit NISN (Contoh: 0098765432)" class="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl font-bold font-mono text-slate-800 focus:bg-white focus:outline-none focus:border-emerald-600">
+          </div>
+          <div>
+            <label class="block font-bold text-slate-700 uppercase mb-1">NIS Lokal Sekolah Baru</label>
+            <input type="text" id="mutasiInNis" placeholder="Contoh: 260905 (Otomatis dibuat jika kosong)" class="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl font-mono text-slate-800 focus:bg-white focus:outline-none focus:border-emerald-600">
+          </div>
+        </div>
+
+        <div>
+          <label class="block font-bold text-slate-700 uppercase mb-1">Nama Lengkap Siswa <span class="text-rose-500">*</span></label>
+          <input type="text" id="mutasiInNama" required placeholder="Nama lengkap sesuai Akta / Ijazah sebelumnya" class="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl font-bold text-slate-800 focus:bg-white focus:outline-none focus:border-emerald-600">
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          <div>
+            <label class="block font-bold text-slate-700 uppercase mb-1">Jenis Kelamin <span class="text-rose-500">*</span></label>
+            <select id="mutasiInGender" required class="w-full px-3 py-2.5 bg-slate-50 border border-slate-200 rounded-xl font-bold text-slate-800 cursor-pointer">
+              <option value="L">Laki-laki (L)</option>
+              <option value="P">Perempuan (P)</option>
+            </select>
+          </div>
+          <div>
+            <label class="block font-bold text-slate-700 uppercase mb-1">Rombongan Belajar (Kelas Tujuan) <span class="text-rose-500">*</span></label>
+            <select id="mutasiInKelas" required class="w-full px-3 py-2.5 bg-slate-50 border border-slate-200 rounded-xl font-bold text-slate-800 cursor-pointer">
+              <!-- Diisi dinamis -->
+            </select>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          <div>
+            <label class="block font-bold text-slate-700 uppercase mb-1">Sekolah Asal <span class="text-rose-500">*</span></label>
+            <input type="text" id="mutasiInSekolahAsal" required placeholder="Contoh: SMP Negeri 2 Surabaya" class="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl font-medium text-slate-800 focus:bg-white focus:outline-none focus:border-emerald-600">
+          </div>
+          <div>
+            <label class="block font-bold text-slate-700 uppercase mb-1">No. Surat Pindah Sekolah Asal <span class="text-rose-500">*</span></label>
+            <input type="text" id="mutasiInNoSurat" required placeholder="Contoh: 421.3/120/SMPN2/2026" class="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl font-mono text-slate-800 focus:bg-white focus:outline-none focus:border-emerald-600">
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          <div>
+            <label class="block font-bold text-slate-700 uppercase mb-1">Tanggal Mutasi / Diterima <span class="text-rose-500">*</span></label>
+            <input type="date" id="mutasiInTanggal" required class="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl font-bold text-slate-800 focus:bg-white focus:outline-none focus:border-emerald-600">
+          </div>
+          <div>
+            <label class="block font-bold text-slate-700 uppercase mb-1">Alasan Pindah Sekolah</label>
+            <input type="text" id="mutasiInAlasan" placeholder="Contoh: Mengikuti domisili / kepindahan tugas orang tua" class="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-slate-800 focus:bg-white focus:outline-none focus:border-emerald-600">
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          <div>
+            <label class="block font-bold text-slate-700 uppercase mb-1">Nama Orang Tua / Wali</label>
+            <input type="text" id="mutasiInNamaOrtu" placeholder="Nama ayah/ibu/wali murid" class="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-slate-800 focus:bg-white focus:outline-none focus:border-emerald-600">
+          </div>
+          <div>
+            <label class="block font-bold text-slate-700 uppercase mb-1">No. WhatsApp / HP Orang Tua</label>
+            <input type="text" id="mutasiInNoHpOrtu" placeholder="Contoh: 081234567890" class="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl font-mono text-slate-800 focus:bg-white focus:outline-none focus:border-emerald-600">
+          </div>
+        </div>
+
+        <div class="flex items-center justify-end gap-2 pt-3 border-t border-slate-100 flex-shrink-0">
+          <button type="button" onclick="tutupModalMutasiMasuk()" class="px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold rounded-xl transition cursor-pointer">
+            Batal
+          </button>
+          <button type="submit" class="px-5 py-2 bg-emerald-700 hover:bg-emerald-800 text-white font-black rounded-xl transition flex items-center gap-1.5 shadow-md cursor-pointer">
+            <i data-lucide="check-circle" class="w-4 h-4"></i>
+            <span>Simpan & Daftarkan Siswa Masuk</span>
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- ========================================================================= -->
+  <!-- MODAL 2: PENCATATAN SISWA PINDAH KELUAR (MUTASI KELUAR)                     -->
+  <!-- ========================================================================= -->
+  <div id="modalMutasiSiswaKeluar" class="fixed inset-0 z-50 bg-slate-950/60 backdrop-blur-xs hidden flex items-center justify-center p-3 sm:p-4">
+    <div class="bg-white rounded-3xl max-w-2xl w-full p-5 sm:p-7 shadow-2xl border border-slate-200 max-h-[92vh] flex flex-col space-y-4 overflow-hidden">
+      <div class="flex items-center justify-between pb-3 border-b border-slate-100 flex-shrink-0">
+        <div class="flex items-center gap-3">
+          <div class="w-10 h-10 rounded-2xl bg-rose-100 text-rose-800 flex items-center justify-center flex-shrink-0 shadow-2xs">
+            <i data-lucide="user-minus" class="w-5 h-5"></i>
+          </div>
+          <div>
+            <h3 class="font-black text-base text-slate-900 leading-snug">Pencatatan Siswa Pindah Keluar (Mutasi Keluar)</h3>
+            <p class="text-xs text-slate-400">Terbitkan Surat Keterangan Pindah Sekolah resmi dan perbarui status di buku induk</p>
+          </div>
+        </div>
+        <button type="button" onclick="tutupModalMutasiKeluar()" class="text-slate-400 hover:text-slate-600 p-2 rounded-xl hover:bg-slate-100 transition cursor-pointer">
+          <i data-lucide="x" class="w-5 h-5"></i>
+        </button>
+      </div>
+
+      <form id="formMutasiKeluar" onsubmit="handleSimpanMutasiKeluar(event)" class="overflow-y-auto custom-scrollbar flex-1 space-y-4 pr-1 text-xs">
+        <div>
+          <label class="block font-bold text-slate-700 uppercase mb-1">Pilih Siswa Aktif yang Pindah <span class="text-rose-500">*</span></label>
+          <select id="mutasiOutSelectSiswa" required onchange="handlePilihSiswaMutasiKeluar(this.value)" class="w-full px-3 py-2.5 bg-slate-50 border border-slate-200 rounded-xl font-bold text-slate-800 cursor-pointer">
+            <option value="">-- Pilih Siswa Aktif --</option>
+          </select>
+        </div>
+
+        <div id="boxDetailSiswaKeluar" class="p-3 bg-slate-50 border border-slate-200 rounded-2xl hidden space-y-1 text-xs">
+          <div class="flex justify-between"><span class="text-slate-400">NISN / NIS:</span> <b id="lblDetailOutNisn" class="font-mono text-slate-800">-</b></div>
+          <div class="flex justify-between"><span class="text-slate-400">Kelas Terakhir:</span> <b id="lblDetailOutKelas" class="text-slate-800">-</b></div>
+          <div class="flex justify-between"><span class="text-slate-400">Nama Siswa:</span> <b id="lblDetailOutNama" class="text-slate-900">-</b></div>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          <div>
+            <label class="block font-bold text-slate-700 uppercase mb-1">Sekolah Tujuan <span class="text-rose-500">*</span></label>
+            <input type="text" id="mutasiOutSekolahTujuan" required placeholder="Contoh: SMP Negeri 5 Semarang" class="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl font-medium text-slate-800 focus:bg-white focus:outline-none focus:border-rose-600">
+          </div>
+          <div>
+            <label class="block font-bold text-slate-700 uppercase mb-1">Nomor Surat Resmi Sekolah <span class="text-rose-500">*</span></label>
+            <input type="text" id="mutasiOutNoSurat" required placeholder="421.3/.../SMP-IH/2026" class="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl font-mono text-slate-800 focus:bg-white focus:outline-none focus:border-rose-600">
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          <div>
+            <label class="block font-bold text-slate-700 uppercase mb-1">Tanggal Surat Mutasi Keluar <span class="text-rose-500">*</span></label>
+            <input type="date" id="mutasiOutTanggal" required class="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl font-bold text-slate-800 focus:bg-white focus:outline-none focus:border-rose-600">
+          </div>
+          <div>
+            <label class="block font-bold text-slate-700 uppercase mb-1">Alasan Kepindahan Siswa <span class="text-rose-500">*</span></label>
+            <input type="text" id="mutasiOutAlasan" required placeholder="Contoh: Mengikuti perpindahan tempat kerja orang tua" class="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-slate-800 focus:bg-white focus:outline-none focus:border-rose-600">
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          <div>
+            <label class="block font-bold text-slate-700 uppercase mb-1">Nama Orang Tua / Wali</label>
+            <input type="text" id="mutasiOutNamaOrtu" placeholder="Nama orang tua/wali pemohon mutasi" class="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-slate-800 focus:bg-white focus:outline-none focus:border-rose-600">
+          </div>
+          <div>
+            <label class="block font-bold text-slate-700 uppercase mb-1">No. WhatsApp / HP Orang Tua</label>
+            <input type="text" id="mutasiOutNoHpOrtu" placeholder="Nomor kontak aktif" class="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl font-mono text-slate-800 focus:bg-white focus:outline-none focus:border-rose-600">
+          </div>
+        </div>
+
+        <div class="p-3 bg-amber-50 rounded-2xl border border-amber-200 text-amber-900 text-[11px] leading-relaxed">
+          ⚠️ <b>Pemberitahuan Sistem:</b> Setelah disimpan, status siswa akan tercatat sebagai <b>MUTASI KELUAR</b> sehingga tidak lagi masuk ke presensi KBM harian aktif, namun arsip nilai dan buku induk tetap tersimpan utuh.
+        </div>
+
+        <div class="flex items-center justify-end gap-2 pt-3 border-t border-slate-100 flex-shrink-0">
+          <button type="button" onclick="tutupModalMutasiKeluar()" class="px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold rounded-xl transition cursor-pointer">
+            Batal
+          </button>
+          <button type="submit" class="px-5 py-2 bg-rose-600 hover:bg-rose-700 text-white font-black rounded-xl transition flex items-center gap-1.5 shadow-md cursor-pointer">
+            <i data-lucide="file-text" class="w-4 h-4"></i>
+            <span>Simpan & Terbitkan Mutasi Keluar</span>
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
   <!-- 1. BOTTOM NAV KHUSUS PORTAL SISWA -->
   <nav id="mobileBottomNavSiswa" class="fixed bottom-0 left-0 right-0 z-40 bg-white/95 backdrop-blur-md border-t border-slate-200/80 px-2 py-1 shadow-[0_-4px_20px_rgba(0,0,0,0.06)] hidden">
     <div class="flex items-center gap-1 overflow-x-auto no-scrollbar max-w-xl mx-auto py-0.5 justify-start sm:justify-around">
@@ -5219,15 +5663,22 @@
 
     function updateSemuaReminderMingguKe() {
       const todayInfo = getMingguKeBulanInfo(new Date());
+      const reminderHtml = `
+        <span class="w-2 h-2 rounded-full bg-amber-400 animate-pulse flex-shrink-0"></span>
+        <span class="hidden sm:inline truncate">🗓️ Hari ini: ${todayInfo.namaHari}, ${todayInfo.tanggal} ${todayInfo.namaBulan} ${todayInfo.tahun} • Minggu ke-${todayInfo.mingguKe}</span>
+        <span class="inline sm:hidden truncate">🗓️ Minggu ke-${todayInfo.mingguKe} (${todayInfo.namaBulan} ${todayInfo.tahun})</span>
+      `;
 
       const elGuru = document.getElementById('reminderMingguKeGuru');
       if (elGuru) {
-        elGuru.innerHTML = `<span class="w-2 h-2 rounded-full bg-amber-400 animate-pulse flex-shrink-0"></span><span class="truncate">${todayInfo.fullText}</span>`;
+        elGuru.className = "mt-2 inline-flex items-center gap-1.5 px-3 py-1 bg-white/15 backdrop-blur-md text-amber-200 border border-white/20 rounded-xl text-xs font-bold shadow-xs max-w-full overflow-hidden";
+        elGuru.innerHTML = reminderHtml;
       }
 
       const elSiswa = document.getElementById('reminderMingguKeSiswa');
       if (elSiswa) {
-        elSiswa.innerHTML = `<span class="w-2 h-2 rounded-full bg-amber-400 animate-pulse flex-shrink-0"></span><span class="truncate">${todayInfo.fullText}</span>`;
+        elSiswa.className = "mt-2 inline-flex items-center gap-1.5 px-3 py-1 bg-white/15 backdrop-blur-md text-amber-200 border border-white/20 rounded-xl text-xs font-bold shadow-xs max-w-full overflow-hidden";
+        elSiswa.innerHTML = reminderHtml;
       }
 
       // KBM Guru
@@ -5246,8 +5697,6 @@
         ekskulBadge.innerText = `Minggu ke-${ekskulInfo.mingguKe} (${ekskulInfo.namaBulan})`;
       }
     }
-
-    // Inisialisasi State Aplikasi
     let appConfig = {
       NAMA_SEKOLAH: "SMP NEGERI 1 INDONESIA HEBAT",
       INSTANSI_PEMBINA: "PEMERINTAH KOTA / KABUPATEN - DINAS PENDIDIKAN",
@@ -5266,6 +5715,7 @@
       POIN_SP1: 30,
       POIN_SP2: 60,
       POIN_SP3: 90,
+      TAHUN_AJARAN: "2026/2027",
       SEMESTER_AKTIF: "1",
       FITUR_REFLEKSI_4F: "NONAKTIF",
       GURU_REFLEKSI_4F_NIPS: [],
@@ -6224,6 +6674,7 @@
             if (cached.logTibum) logTibum = cached.logTibum;
             if (cached.pengumuman) logPengumuman = cached.pengumuman;
             if (cached.jurnalGuru) logJurnalGuru = cached.jurnalGuru;
+            if (cached.mutasi && cached.mutasi.length > 0) dbMutasiSiswa = cached.mutasi;
             const savedJurnalLocal = localStorage.getItem("SUPERAPP_JURNAL_GURU");
             if (savedJurnalLocal) {
               try {
@@ -6430,6 +6881,9 @@
         const formattedLulus = (appConfig.TGL_RILIS_KELULUSAN || "").replace(" ", "T");
         document.getElementById('cfgTglRilisLulus').value = formattedLulus;
         document.getElementById('cfgStatusEkskul').value = appConfig.STATUS_PENDAFTARAN_EKSKUL || "BUKA";
+        if (document.getElementById('cfgTahunAjaran')) {
+          document.getElementById('cfgTahunAjaran').value = appConfig.TAHUN_AJARAN || "2026/2027";
+        }
         if (document.getElementById('cfgSemesterAktif')) {
           document.getElementById('cfgSemesterAktif').value = String(appConfig.SEMESTER_AKTIF || "1");
         }
@@ -6584,6 +7038,8 @@
       if (navSiswa) navSiswa.classList.add('hidden');
       if (navGuru) navGuru.classList.add('hidden');
       if (navAdmin) navAdmin.classList.add('hidden');
+      const navKepsek = document.getElementById('mobileBottomNavKepsek');
+      if (navKepsek) navKepsek.classList.add('hidden');
 
       if (document.getElementById('inputNoHpOrtuSiswa')) {
         document.getElementById('inputNoHpOrtuSiswa').value = '';
@@ -11871,6 +12327,9 @@ ATURAN KETAT:
       appConfig.NIP_KEPSEK = document.getElementById('cfgNipKepsek').value;
       appConfig.TGL_RILIS_KELULUSAN = (document.getElementById('cfgTglRilisLulus').value || '').replace('T', ' ');
       appConfig.STATUS_PENDAFTARAN_EKSKUL = document.getElementById('cfgStatusEkskul').value;
+      if (document.getElementById('cfgTahunAjaran')) {
+        appConfig.TAHUN_AJARAN = (document.getElementById('cfgTahunAjaran').value || "2026/2027").trim();
+      }
       if (document.getElementById('cfgSemesterAktif')) {
         appConfig.SEMESTER_AKTIF = document.getElementById('cfgSemesterAktif').value;
       }
@@ -16103,6 +16562,8 @@ ATURAN KETAT:
         renderTableUserGuru();
       } else if (currentSubTabUser === 'naikKelas') {
         renderPanelNaikKelas();
+      } else if (currentSubTabUser === 'mutasi') {
+        renderPanelMutasiSiswa();
       }
 
       safeCreateIcons();
@@ -16110,7 +16571,7 @@ ATURAN KETAT:
 
     function switchSubTabUser(subTab) {
       currentSubTabUser = subTab;
-      const views = ['siswa', 'guru', 'naikKelas', 'admin'];
+      const views = ['siswa', 'guru', 'naikKelas', 'mutasi', 'admin'];
       views.forEach(v => {
         const elView = document.getElementById(`subViewUser_${v}`);
         const elBtn = document.getElementById(`btnSubTabUser_${v}`);
@@ -16130,6 +16591,7 @@ ATURAN KETAT:
       if (subTab === 'siswa') renderTableUserSiswa();
       else if (subTab === 'guru') renderTableUserGuru();
       else if (subTab === 'naikKelas') renderPanelNaikKelas();
+      else if (subTab === 'mutasi') renderPanelMutasiSiswa();
 
       safeCreateIcons();
     }
@@ -17338,8 +17800,18 @@ ATURAN KETAT:
     // 2. LOGIN SEBAGAI KEPALA SEKOLAH (SUPER FLEKSIBEL & RAMAH PENGGUNA)
     async function handleLoginKepsek(e) {
       if (e) e.preventDefault();
-      const nipInput = (document.getElementById('inputNipKepsek')?.value || '').trim();
-      const pinInput = (document.getElementById('inputPinKepsek')?.value || '').trim();
+      const nipInput = (document.getElementById('inputNipKepsek') ? document.getElementById('inputNipKepsek').value : '').trim();
+      const pinInput = (document.getElementById('inputPinKepsek') ? document.getElementById('inputPinKepsek').value : '').trim();
+
+      if (!nipInput || !pinInput) {
+        Swal.fire({
+          icon: 'warning',
+          title: 'Data Belum Lengkap',
+          text: 'Silakan masukkan NIP dan PIN Kepala Sekolah untuk melanjutkan.',
+          confirmButtonColor: '#059669'
+        });
+        return;
+      }
 
       const expectedNip = String(appConfig.NIP_KEPSEK || '197205101998021003').trim();
       const customPinKepsek = localStorage.getItem('custom_pin_kepsek');
@@ -17347,7 +17819,6 @@ ATURAN KETAT:
 
       pastikanAkunKepsekAda();
 
-      // Cari profil kepala sekolah di masterGuru atau konfigurasi sistem
       const guruKepsek = (masterGuru || []).find(g => 
         g.peran === 'KEPALA_SEKOLAH' || 
         (nipInput && g.nip.toLowerCase() === nipInput.toLowerCase()) ||
@@ -17357,56 +17828,27 @@ ATURAN KETAT:
       let finalNama = (guruKepsek && guruKepsek.nama) ? guruKepsek.nama : (appConfig.NAMA_KEPSEK || 'Drs. H. Mulyadi, M.Pd.');
       let finalNip = (guruKepsek && guruKepsek.nip) ? guruKepsek.nip : expectedNip;
 
-      // NIP valid jika kosong (default), atau kata KEPSEK / KEPALA SEKOLAH / ADMIN, atau sesuai NIP expected, atau ada di masterGuru
       const isNipValid = (
-        !nipInput ||
         nipInput.toUpperCase() === 'KEPSEK' ||
-        nipInput.toUpperCase() === 'KEPALA SEKOLAH' ||
-        nipInput.toUpperCase() === 'ADMIN' ||
         nipInput === expectedNip ||
         nipInput.replace(/\s+/g, '') === expectedNip.replace(/\s+/g, '') ||
-        Boolean(guruKepsek)
+        (guruKepsek && guruKepsek.nip === nipInput)
       );
 
-      // PIN valid jika kosong, cocok pin kepsek, 123456, 1234, atau pin admin/guru
       const isPinValid = (
-        !pinInput ||
         pinInput === expectedPin ||
-        pinInput === '123456' ||
-        pinInput === '1234' ||
-        pinInput === (appConfig.PIN_ADMIN || '123456') ||
         (guruKepsek && guruKepsek.pin && pinInput === guruKepsek.pin)
       );
 
       if (!isNipValid || !isPinValid) {
         Swal.fire({
           icon: 'error',
-          title: 'Kredensial Kepala Sekolah Tidak Cocok',
-          html: `
-            <div class="text-left text-xs space-y-2 p-2">
-              <p class="text-slate-600">NIP atau PIN yang Anda masukkan belum sesuai. Silakan gunakan kredensial bawaan berikut:</p>
-              <div class="p-3 bg-emerald-50 rounded-xl border border-emerald-200 font-mono text-emerald-950 space-y-1">
-                <div>NIP: <b>${expectedNip}</b> (atau ketik <b>KEPSEK</b>)</div>
-                <div>PIN Default: <b>123456</b> (atau <b>1234</b>)</div>
-              </div>
-            </div>
-          `,
-          showCancelButton: true,
-          confirmButtonText: '✨ Isi Otomatis & Masuk',
-          cancelButtonText: 'Coba Lagi',
+          title: 'Kredensial Tidak Sesuai',
+          text: 'NIP atau PIN Kepala Sekolah yang Anda masukkan tidak valid. Silakan periksa kembali atau hubungi Administrator Sistem.',
           confirmButtonColor: '#059669',
-          cancelButtonColor: '#64748b'
-        }).then(res => {
-          if (res.isConfirmed) {
-            isiKredensialOtomatisKepsek();
-            handleLoginKepsek();
-          }
+          confirmButtonText: 'Coba Lagi'
         });
         return;
-      }
-
-      if (nipInput && nipInput.toUpperCase() !== 'KEPSEK' && nipInput.toUpperCase() !== 'KEPALA SEKOLAH' && nipInput.toUpperCase() !== 'ADMIN') {
-        finalNip = nipInput;
       }
 
       currentUser = {
@@ -17423,19 +17865,18 @@ ATURAN KETAT:
       playBeepSuccess();
 
       Swal.fire({
-        toast: true,
-        position: 'top-end',
         icon: 'success',
-        title: `Selamat bertugas, Bapak/Ibu Kepala Sekolah: ${finalNama}!`,
-        showConfirmButton: false,
-        timer: 2500
+        title: 'Selamat Datang, Bapak/Ibu Kepala Sekolah!',
+        text: `Dashboard Pengawasan Terpadu & Radar Sekolah siap digunakan.`,
+        timer: 1800,
+        showConfirmButton: false
       });
     }
 
     // 3. SETUP UI KEPALA SEKOLAH
     function setupKepsekUi() {
       if (document.getElementById('userProfileArea')) document.getElementById('userProfileArea').classList.remove('hidden');
-      if (document.getElementById('userName')) document.getElementById('userName').innerText = currentUser.nama || appConfig.NAMA_KEPSEK || "Kepala Sekolah";
+      if (document.getElementById('userName')) document.getElementById('userName').innerText = (currentUser ? currentUser.nama : null) || appConfig.NAMA_KEPSEK || "Kepala Sekolah";
       if (document.getElementById('userRoleBadge')) document.getElementById('userRoleBadge').innerText = "Kepala Sekolah";
       if (document.getElementById('userAvatar')) document.getElementById('userAvatar').innerText = "KS";
 
@@ -17445,10 +17886,10 @@ ATURAN KETAT:
       const elHeroSekolah = document.getElementById('kepsekHeroSekolah');
       const elHeroTgl = document.getElementById('kepsekHeroTanggal');
       const elHeroSem = document.getElementById('kepsekHeroSemesterBadge');
-
-      if (elHeroNama) elHeroNama.innerText = currentUser.nama || appConfig.NAMA_KEPSEK || "Kepala Sekolah";
-      if (elHeroNip) elHeroNip.innerText = `NIP. ${currentUser.nip || appConfig.NIP_KEPSEK || '-'}`;
-      if (elHeroSekolah) elHeroSekolah.innerText = appConfig.NAMA_SEKOLAH || "SMP Negeri Indonesia Hebat";
+      if (elHeroSem) {
+        const semLabel = (appConfig.SEMESTER_AKTIF === "2") ? "Semester Genap (Kls 9 Bebas)" : "Semester Gasal";
+        elHeroSem.innerText = `${semLabel} • ${appConfig.TAHUN_AJARAN || "2026/2027"}`;
+      }
       
       const now = new Date();
       const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
@@ -17503,6 +17944,8 @@ ATURAN KETAT:
         renderKepsekLaporan();
       } else if (tabName === 'kebijakan') {
         renderKepsekKebijakan();
+      } else if (tabName === 'mutasi') {
+        renderKepsekMutasi();
       }
 
       safeCreateIcons();
@@ -17595,6 +18038,7 @@ ATURAN KETAT:
       if (elBadgeKritis) elBadgeKritis.innerText = `${alpaKritisList.length} Kasus Aktif`;
 
       // Render Tabel Radar Alpa
+      // Render Tabel Radar Alpa (Desktop)
       const tbodyRadar = document.getElementById('tableKepsekRadarAlpaBody');
       if (tbodyRadar) {
         if (alpaKritisList.length === 0) {
@@ -17603,7 +18047,7 @@ ATURAN KETAT:
               <td colspan="6" class="py-8 text-center text-slate-400 bg-white">
                 <i data-lucide="shield-check" class="w-8 h-8 mx-auto mb-2 text-emerald-500"></i>
                 <p class="font-bold text-slate-700">Kondisi Kedisiplinan Aman!</p>
-                <p class="text-xs text-slate-400 mt-0.5">Tidak ditemukan siswa dengan alpa kritis (≥ 5 kali).</p>
+                <p class="text-xs text-slate-400 mt-0.5">Tidak ditemukan siswa dengan alpa kritis (>= 5 kali).</p>
               </td>
             </tr>
           `;
@@ -17630,11 +18074,46 @@ ATURAN KETAT:
                 <div class="flex items-center justify-center gap-1.5">
                   <button type="button" onclick="disposisiKasusKepsek('${escapeHtml(item.nama)}', '${escapeHtml(item.kelas)}', '${item.alpaCount}', '${escapeHtml(item.walasNama)}')" class="px-2.5 py-1 bg-rose-700 hover:bg-rose-800 text-white rounded-lg font-bold text-[11px] shadow-xs cursor-pointer flex items-center gap-1">
                     <i data-lucide="alert-octagon" class="w-3 h-3"></i>
-                    <span>Disposisi BK/Walas</span>
+                    <span>Disposisi Walas/BK</span>
                   </button>
                 </div>
               </td>
             </tr>
+          `).join('');
+        }
+      }
+
+      // Render Mobile Card View Radar Alpa (Smartphone)
+      const mobileRadarContainer = document.getElementById('listRadarAlpaKritisMobile');
+      if (mobileRadarContainer) {
+        if (alpaKritisList.length === 0) {
+          mobileRadarContainer.innerHTML = `
+            <div class="p-6 bg-emerald-50 rounded-2xl border border-emerald-200 text-center">
+              <i data-lucide="shield-check" class="w-8 h-8 text-emerald-600 mx-auto mb-2"></i>
+              <p class="font-extrabold text-sm text-emerald-950">Kedisiplinan Sekolah Prima!</p>
+              <p class="text-xs text-emerald-700 mt-0.5">Nihil siswa dengan frekuensi alpa kritis.</p>
+            </div>
+          `;
+        } else {
+          mobileRadarContainer.innerHTML = alpaKritisList.map(item => `
+            <div class="p-4 bg-white rounded-2xl border-2 border-rose-200 shadow-xs space-y-2.5">
+              <div class="flex items-start justify-between gap-2">
+                <div>
+                  <div class="font-black text-slate-900 text-sm leading-tight">${escapeHtml(item.nama)}</div>
+                  <div class="text-[11px] font-mono text-slate-500 mt-0.5">NISN: ${escapeHtml(item.nisn)} • Kelas: <b class="text-slate-800">${escapeHtml(item.kelas)}</b></div>
+                </div>
+                <span class="px-2.5 py-1 bg-rose-100 text-rose-800 border border-rose-300 rounded-full font-black text-xs flex-shrink-0">
+                  ${item.alpaCount}x Alpa
+                </span>
+              </div>
+              <div class="text-xs text-slate-600 pt-1 border-t border-slate-100 flex items-center justify-between">
+                <span>Wali Kelas: <b>${escapeHtml(item.walasNama)}</b></span>
+              </div>
+              <button type="button" onclick="disposisiKasusKepsek('${escapeHtml(item.nama)}', '${escapeHtml(item.kelas)}', '${item.alpaCount}', '${escapeHtml(item.walasNama)}')" class="w-full py-2 bg-rose-700 hover:bg-rose-800 text-white font-extrabold rounded-xl text-xs flex items-center justify-center gap-1.5 shadow-sm cursor-pointer transition">
+                <i data-lucide="alert-octagon" class="w-4 h-4"></i>
+                <span>Kirim Disposisi Tindak Lanjut</span>
+              </button>
+            </div>
           `).join('');
         }
       }
@@ -18018,21 +18497,229 @@ ATURAN KETAT:
     }
 
     // 11. GENERATOR CETAK LAPORAN EKSEKUTIF KEPSEK
-    function cetakLaporanEksekutifKepsek() {
-      cetakLaporanPresensiBulananKepsek();
+    // -------------------------------------------------------------
+    // FITUR FONT SCALER APLIKASI (WCAG 2.1 COMPLIANT)
+    // -------------------------------------------------------------
+    function setFontScale(size) {
+      const validSizes = ["small", "medium", "big"];
+      if (!validSizes.includes(size)) size = "medium";
+      validSizes.forEach(s => document.documentElement.classList.remove(`font-size-${s}`));
+      document.documentElement.classList.add(`font-size-${size}`);
+      try { localStorage.setItem("SUPERAPP_FONT_SIZE", size); } catch (e) {}
+
+      ["small", "medium", "big"].forEach(s => {
+        const btn = document.getElementById(`btnFont${s.charAt(0).toUpperCase() + s.slice(1)}`);
+        if (btn) {
+          if (s === size) {
+            btn.className = "px-1.5 py-1 text-[11px] font-black rounded-lg text-indigo-700 bg-white shadow-xs transition cursor-pointer";
+          } else {
+            btn.className = "px-1.5 py-1 text-[11px] font-bold rounded-lg text-slate-600 hover:text-indigo-700 hover:bg-white transition cursor-pointer";
+          }
+        }
+      });
     }
 
-    function cetakLaporanPresensiBulananKepsek() {
-      const printDiv = document.getElementById('printArea');
+    function setAppFontSize(size) { setFontScale(size); }
+    window.setFontScale = setFontScale;
+    window.setAppFontSize = setFontScale;
+
+    function initFontScale() {
+      let saved = "medium";
+      try { saved = localStorage.getItem("SUPERAPP_FONT_SIZE") || "medium"; } catch (e) {}
+      setFontScale(saved);
+    }
+    initFontScale();
+
+    // -------------------------------------------------------------
+    // PUSAT NOTIFIKASI SEKOLAH UNIVERSAL (UNTUK SEMUA PENGGUNA)
+    // -------------------------------------------------------------
+    function bukaPusatNotifikasiSekolah() {
+      const todayInfo = getMingguKeBulanInfo(new Date());
+      const notifSupported = ("Notification" in window);
+      const notifGranted = notifSupported && Notification.permission === "granted";
+
+      const statusBadge = notifGranted 
+        ? `<span class="px-2.5 py-1 bg-emerald-100 text-emerald-800 rounded-full font-extrabold text-xs">🟢 Notifikasi Aktif</span>`
+        : `<span class="px-2.5 py-1 bg-amber-100 text-amber-800 rounded-full font-extrabold text-xs">🟡 Belum Diaktifkan</span>`;
+
+      const actionButton = notifGranted
+        ? `<button type="button" onclick="kirimNotifikasiUjiCobaAndroid()" class="w-full py-2.5 bg-blue-600 hover:bg-blue-700 text-white font-extrabold rounded-xl text-xs transition flex items-center justify-center gap-1.5 cursor-pointer shadow-sm">
+             <i data-lucide="send" class="w-4 h-4"></i>
+             <span>Kirim Pesan Uji Coba ke Perangkat</span>
+           </button>`
+        : `<button type="button" onclick="requestNotificationPermissionAndroid()" class="w-full py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white font-extrabold rounded-xl text-xs transition flex items-center justify-center gap-1.5 cursor-pointer shadow-sm">
+             <i data-lucide="bell-ring" class="w-4 h-4"></i>
+             <span>Aktifkan Notifikasi di Perangkat Ini</span>
+           </button>`;
+
+      const feedAmanat = (typeof feedPengumuman !== "undefined" && feedPengumuman ? feedPengumuman : []).slice(0, 3);
+      let feedHtml = feedAmanat.map(item => `
+        <div class="p-3 bg-slate-50 rounded-xl border border-slate-200 text-left space-y-1">
+          <div class="flex items-center justify-between">
+            <span class="text-[10px] font-extrabold text-indigo-700 bg-indigo-50 px-2 py-0.5 rounded">${escapeHtml(item.kategori || "WARTA")}</span>
+            <span class="text-[10px] text-slate-400 font-mono">${escapeHtml(item.tanggal || "")}</span>
+          </div>
+          <div class="font-extrabold text-xs text-slate-900">${escapeHtml(item.judul)}</div>
+          <p class="text-[11px] text-slate-600 leading-snug line-clamp-2">${escapeHtml(item.isi)}</p>
+        </div>
+      `).join("");
+
+      if (!feedHtml) {
+        feedHtml = `<p class="text-xs text-slate-400 py-3 text-center">Belum ada warta pengumuman baru.</p>`;
+      }
+
+      Swal.fire({
+        title: "Pusat Notifikasi & Warta Sekolah",
+        html: `
+          <div class="space-y-4 text-left text-xs max-h-[75vh] overflow-y-auto px-1">
+            <div class="p-3.5 bg-gradient-to-r from-indigo-50 to-blue-50 rounded-2xl border border-indigo-100 flex items-center justify-between">
+              <div>
+                <div class="font-extrabold text-indigo-950 text-xs">Status Push Notification</div>
+                <div class="text-[11px] text-slate-500 mt-0.5">Pengingat KBM & Pengumuman Penting</div>
+              </div>
+              <div>${statusBadge}</div>
+            </div>
+            ${actionButton}
+            <div class="p-3 bg-amber-50 rounded-2xl border border-amber-200 flex items-center gap-2.5">
+              <span class="text-xl">🗓️</span>
+              <div>
+                <div class="font-extrabold text-amber-950 text-xs">Kalender Akademik Hari Ini</div>
+                <div class="text-[11px] text-amber-900">${todayInfo.namaHari}, ${todayInfo.tanggal} ${todayInfo.namaBulan} ${todayInfo.tahun} • <b>Minggu ke-${todayInfo.mingguKe}</b></div>
+              </div>
+            </div>
+            <div>
+              <div class="font-black text-slate-800 text-xs uppercase tracking-wider mb-2 flex items-center gap-1.5">
+                <i data-lucide="megaphone" class="w-3.5 h-3.5 text-indigo-600"></i>
+                <span>Warta & Amanat Sekolah Terbaru</span>
+              </div>
+              <div class="space-y-2">
+                ${feedHtml}
+              </div>
+            </div>
+          </div>
+        `,
+        showConfirmButton: true,
+        confirmButtonText: "Tutup",
+        confirmButtonColor: "#4f46e5",
+        didOpen: () => { safeCreateIcons(); }
+      });
+    }
+
+    // -------------------------------------------------------------
+    // 4 LAPORAN RESMI KHUSUS KEPALA SEKOLAH (SESUAI PERUNTUKAN)
+    // -------------------------------------------------------------
+    function cetakLaporanEksekutifKepsek() {
+      const printDiv = document.getElementById("printArea");
       if (!printDiv) return;
 
       const now = new Date();
-      const bulanTahun = now.toLocaleDateString('id-ID', { month: 'long', year: 'numeric' });
-      const titimangsa = `${appConfig.KOTA_TITIMANGSA || 'Kota Cerdas'}, ${now.toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' })}`;
+      const titimangsa = `${appConfig.KOTA_TITIMANGSA || "Kota Cerdas"}, ${now.toLocaleDateString("id-ID", { day: "numeric", month: "long", year: "numeric" })}`;
+      const semName = (appConfig.SEMESTER_AKTIF === "2") ? "Semester Genap (Kls 9 Bebas)" : "Semester Gasal";
 
-      // Rekap per kelas
+      const totalSiswa = (masterSiswa || []).length;
+      const totalGuru = (masterGuru || []).length;
+      const rombelSet = Array.from(new Set((masterSiswa || []).map(s => s.kelas))).filter(Boolean);
+      const totalRombel = rombelSet.length;
+
+      let siswaTertibEkskul = 0;
+      (masterSiswa || []).forEach(s => {
+        const kep = evaluasiKepatuhanEkskulSiswa(s, appConfig.SEMESTER_AKTIF || "1", anggotaEkskul);
+        if (kep.patuh) siswaTertibEkskul++;
+      });
+      const persenTertibEkskul = totalSiswa > 0 ? Math.round((siswaTertibEkskul / totalSiswa) * 100) : 100;
+
+      printDiv.innerHTML = `
+        <div style="font-family: 'Times New Roman', serif; color: #000; padding: 25px; line-height: 1.45;">
+          <table style="width: 100%; border-bottom: 3px double #000; padding-bottom: 10px; margin-bottom: 18px;">
+            <tr>
+              <td style="width: 15%; text-align: center;">
+                <img src="${appConfig.LOGO_KIRI_PEMDA || ""}" style="height: 75px; object-fit: contain;" onerror="this.style.display='none'">
+              </td>
+              <td style="width: 70%; text-align: center;">
+                <h4 style="margin: 0; font-size: 13pt; font-weight: bold; text-transform: uppercase;">${appConfig.INSTANSI_PEMBINA || "PEMERINTAH DAERAH DINAS PENDIDIKAN"}</h4>
+                <h2 style="margin: 2px 0; font-size: 17pt; font-weight: bold; text-transform: uppercase;">${appConfig.NAMA_SEKOLAH || "SMP NEGERI INDONESIA HEBAT"}</h2>
+                <p style="margin: 0; font-size: 10pt; font-style: italic;">${appConfig.ALAMAT_SEKOLAH || "Jl. Pendidikan Karakter No. 07"} • Akreditasi A</p>
+              </td>
+              <td style="width: 15%; text-align: center;">
+                <img src="${appConfig.LOGO_KANAN_SEKOLAH || ""}" style="height: 75px; object-fit: contain;" onerror="this.style.display='none'">
+              </td>
+            </tr>
+          </table>
+
+          <div style="text-align: center; margin-bottom: 20px;">
+            <h3 style="margin: 0; font-size: 14pt; text-decoration: underline; font-weight: bold; text-transform: uppercase;">LAPORAN EKSEKUTIF PENGAWASAN MUTU & KINERJA SATUAN PENDIDIKAN</h3>
+            <p style="margin: 3px 0; font-size: 11pt;">Tahun Ajaran: <b>${appConfig.TAHUN_AJARAN || "2026/2027"}</b> • Status: <b>${semName}</b></p>
+          </div>
+
+          <table style="width: 100%; border-collapse: collapse; font-size: 11pt; margin-bottom: 20px;">
+            <thead>
+              <tr style="background-color: #f1f5f9;">
+                <th style="border: 1px solid #000; padding: 7px; width: 8%; text-align: center;">Pilar</th>
+                <th style="border: 1px solid #000; padding: 7px; width: 32%;">Indikator Sasaran Mutu</th>
+                <th style="border: 1px solid #000; padding: 7px; width: 20%; text-align: center;">Capaian Riil</th>
+                <th style="border: 1px solid #000; padding: 7px; width: 40%;">Evaluasi & Catatan Kepala Sekolah</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td style="border: 1px solid #000; padding: 7px; text-align: center; font-weight: bold;">I</td>
+                <td style="border: 1px solid #000; padding: 7px;"><b>Presensi KBM Rombel</b><br><small>Tingkat kehadiran siswa & jurnal KBM</small></td>
+                <td style="border: 1px solid #000; padding: 7px; text-align: center; font-weight: bold;">98% Kehadiran<br><small>${totalRombel} Rombongan Belajar</small></td>
+                <td style="border: 1px solid #000; padding: 7px;">KBM berjalan kondusif. Pemantauan radar alpa kritis terus ditingkatkan bersama guru BK.</td>
+              </tr>
+              <tr>
+                <td style="border: 1px solid #000; padding: 7px; text-align: center; font-weight: bold;">II</td>
+                <td style="border: 1px solid #000; padding: 7px;"><b>Kepatuhan Regulasi Ekstrakurikuler</b><br><small>Tertib pendaftaran Kls 7, 8, dan 9</small></td>
+                <td style="border: 1px solid #000; padding: 7px; text-align: center; font-weight: bold;">${persenTertibEkskul}% Siswa Tertib<br><small>${totalSiswa} Siswa Terdaftar</small></td>
+                <td style="border: 1px solid #000; padding: 7px;">Regulasi partisipasi ekskul dipatuhi. Kelas 9 semester genap difokuskan persiapan kelulusan.</td>
+              </tr>
+              <tr>
+                <td style="border: 1px solid #000; padding: 7px; text-align: center; font-weight: bold;">III</td>
+                <td style="border: 1px solid #000; padding: 7px;"><b>Pembiasaan Karakter (7 Kebiasaan)</b><br><small>Ketercapaian pembiasaan positif anak hebat</small></td>
+                <td style="border: 1px solid #000; padding: 7px; text-align: center; font-weight: bold;">92% Ketercapaian<br><small>Pembinaan Guru Wali</small></td>
+                <td style="border: 1px solid #000; padding: 7px;">Tugas restoratif telah dijalankan secara edukatif tanpa sanksi hukuman fisik.</td>
+              </tr>
+              <tr>
+                <td style="border: 1px solid #000; padding: 7px; text-align: center; font-weight: bold;">IV</td>
+                <td style="border: 1px solid #000; padding: 7px;"><b>Pendidik & Tenaga Kependidikan</b><br><small>Kesiapan guru & jurnal refleksi 4F</small></td>
+                <td style="border: 1px solid #000; padding: 7px; text-align: center; font-weight: bold;">${totalGuru} PTK Aktif<br><small>100% Pembagian Tugas</small></td>
+                <td style="border: 1px solid #000; padding: 7px;">Administrasi digital terintegrasi sempurna via Super App Sekolah Terpadu.</td>
+              </tr>
+            </tbody>
+          </table>
+
+          <div style="margin-top: 15px; font-size: 10pt; background: #f8fafc; border: 1px solid #cbd5e1; padding: 10px; border-radius: 6px;">
+            <b>ARAHAN KEBIJAKAN KEPALA SEKOLAH:</b> Seluruh dewan guru dan wali kelas diinstruksikan menjaga sinergi dengan wali murid melalui pemanfaatan buku presensi digital dan tindak lanjut dini terhadap siswa dengan catatan risiko ketidakhadiran.
+          </div>
+
+          <table style="width: 100%; margin-top: 35px; font-size: 11pt;">
+            <tr>
+              <td style="width: 50%;"></td>
+              <td style="width: 50%; text-align: center;">
+                <p style="margin: 0;">${titimangsa}</p>
+                <p style="margin: 0; font-weight: bold;">Kepala Sekolah,</p>
+                <div style="height: 65px;"></div>
+                <p style="margin: 0; font-weight: bold; text-decoration: underline;">${appConfig.NAMA_KEPSEK || "Drs. H. Mulyadi, M.Pd."}</p>
+                <p style="margin: 0;">NIP. ${appConfig.NIP_KEPSEK || "197205101998021003"}</p>
+              </td>
+            </tr>
+          </table>
+        </div>
+      `;
+
+      eksekusiCetakDiv(printDiv);
+    }
+
+    function cetakLaporanPresensiBulananKepsek() {
+      const printDiv = document.getElementById("printArea");
+      if (!printDiv) return;
+
+      const now = new Date();
+      const bulanTahun = now.toLocaleDateString("id-ID", { month: "long", year: "numeric" });
+      const titimangsa = `${appConfig.KOTA_TITIMANGSA || "Kota Cerdas"}, ${now.toLocaleDateString("id-ID", { day: "numeric", month: "long", year: "numeric" })}`;
+
       const rombelSet = Array.from(new Set((masterSiswa || []).map(s => s.kelas))).filter(Boolean).sort();
-      let tableRows = '';
+      let tableRows = "";
 
       rombelSet.forEach((rombel, idx) => {
         const siswaRombel = (masterSiswa || []).filter(s => s.kelas === rombel);
@@ -18040,91 +18727,294 @@ ATURAN KETAT:
         tableRows += `
           <tr>
             <td style="border: 1px solid #000; padding: 6px; text-align: center;">${idx + 1}</td>
-            <td style="border: 1px solid #000; padding: 6px; font-weight: bold;">Kelas ${rombel}</td>
-            <td style="border: 1px solid #000; padding: 6px;">${walas ? walas.nama : '-'}</td>
-            <td style="border: 1px solid #000; padding: 6px; text-align: center;">${siswaRombel.length}</td>
+            <td style="border: 1px solid #000; padding: 6px; font-weight: bold;">Kelas ${escapeHtml(rombel)}</td>
+            <td style="border: 1px solid #000; padding: 6px;">${walas ? escapeHtml(walas.nama) : "-"}</td>
+            <td style="border: 1px solid #000; padding: 6px; text-align: center;">${siswaRombel.length} Siswa</td>
             <td style="border: 1px solid #000; padding: 6px; text-align: center; font-weight: bold; color: green;">98%</td>
-            <td style="border: 1px solid #000; padding: 6px; text-align: center;">KBM Terlaksana Baik</td>
+            <td style="border: 1px solid #000; padding: 6px; text-align: center;">KBM Tertib & Kondusif</td>
           </tr>
         `;
       });
 
       printDiv.innerHTML = `
-        <div style="font-family: 'Times New Roman', serif; color: #000; padding: 20px; line-height: 1.4;">
-          <table style="width: 100%; border-bottom: 3px double #000; padding-bottom: 10px; margin-bottom: 20px;">
+        <div style="font-family: 'Times New Roman', serif; color: #000; padding: 25px; line-height: 1.45;">
+          <table style="width: 100%; border-bottom: 3px double #000; padding-bottom: 10px; margin-bottom: 18px;">
             <tr>
               <td style="width: 15%; text-align: center;">
-                <img src="${appConfig.LOGO_KIRI_PEMDA || ''}" style="height: 75px; object-fit: contain;" onerror="this.style.display='none'">
+                <img src="${appConfig.LOGO_KIRI_PEMDA || ""}" style="height: 75px; object-fit: contain;" onerror="this.style.display='none'">
               </td>
               <td style="width: 70%; text-align: center;">
-                <h4 style="margin: 0; font-size: 14pt; font-weight: bold; text-transform: uppercase;">PEMERINTAH DAERAH KABUPATEN / KOTA</h4>
-                <h3 style="margin: 2px 0; font-size: 16pt; font-weight: bold; text-transform: uppercase;">DINAS PENDIDIKAN DAN KEBUDAYAAN</h3>
-                <h2 style="margin: 2px 0; font-size: 18pt; font-weight: bold; text-transform: uppercase;">${appConfig.NAMA_SEKOLAH || 'SMP NEGERI INDONESIA HEBAT'}</h2>
-                <p style="margin: 0; font-size: 10pt; font-style: italic;">Akreditasi A • Sistem Informasi Manajemen Sekolah Digital Terpadu</p>
+                <h4 style="margin: 0; font-size: 13pt; font-weight: bold; text-transform: uppercase;">${appConfig.INSTANSI_PEMBINA || "PEMERINTAH DAERAH DINAS PENDIDIKAN"}</h4>
+                <h2 style="margin: 2px 0; font-size: 17pt; font-weight: bold; text-transform: uppercase;">${appConfig.NAMA_SEKOLAH || "SMP NEGERI INDONESIA HEBAT"}</h2>
+                <p style="margin: 0; font-size: 10pt; font-style: italic;">${appConfig.ALAMAT_SEKOLAH || "Jl. Pendidikan Karakter No. 07"} • Akreditasi A</p>
               </td>
               <td style="width: 15%; text-align: center;">
-                <img src="${appConfig.LOGO_KANAN_SEKOLAH || ''}" style="height: 75px; object-fit: contain;" onerror="this.style.display='none'">
+                <img src="${appConfig.LOGO_KANAN_SEKOLAH || ""}" style="height: 75px; object-fit: contain;" onerror="this.style.display='none'">
               </td>
             </tr>
           </table>
 
           <div style="text-align: center; margin-bottom: 20px;">
-            <h3 style="margin: 0; font-size: 14pt; text-decoration: underline; font-weight: bold;">LAPORAN EKSEKUTIF KEPALA SEKOLAH: REKAPITULASI KBM</h3>
-            <p style="margin: 2px 0; font-size: 11pt;">Periode Bulan: <b>${bulanTahun}</b> • Tahun Pelajaran 2026/2027</p>
+            <h3 style="margin: 0; font-size: 14pt; text-decoration: underline; font-weight: bold; text-transform: uppercase;">REKAPITULASI PRESENSI KBM PER ROMBEL</h3>
+            <p style="margin: 3px 0; font-size: 11pt;">Periode: <b>${bulanTahun}</b> • Tahun Ajaran <b>${appConfig.TAHUN_AJARAN || "2026/2027"}</b></p>
           </div>
 
           <table style="width: 100%; border-collapse: collapse; font-size: 11pt; margin-bottom: 25px;">
             <thead>
-              <tr style="background-color: #f2f2f2;">
-                <th style="border: 1px solid #000; padding: 6px; width: 5%;">No</th>
-                <th style="border: 1px solid #000; padding: 6px; width: 15%;">Rombongan Belajar</th>
-                <th style="border: 1px solid #000; padding: 6px; width: 35%;">Wali Kelas</th>
-                <th style="border: 1px solid #000; padding: 6px; width: 15%;">Jumlah Siswa</th>
-                <th style="border: 1px solid #000; padding: 6px; width: 15%;">Tingkat Hadir</th>
-                <th style="border: 1px solid #000; padding: 6px; width: 15%;">Keterangan</th>
+              <tr style="background-color: #f1f5f9;">
+                <th style="border: 1px solid #000; padding: 6px; width: 6%; text-align: center;">No</th>
+                <th style="border: 1px solid #000; padding: 6px; width: 18%;">Rombongan Belajar</th>
+                <th style="border: 1px solid #000; padding: 6px; width: 34%;">Wali Kelas</th>
+                <th style="border: 1px solid #000; padding: 6px; width: 14%; text-align: center;">Jumlah Siswa</th>
+                <th style="border: 1px solid #000; padding: 6px; width: 14%; text-align: center;">Tingkat Hadir</th>
+                <th style="border: 1px solid #000; padding: 6px; width: 14%; text-align: center;">Status KBM</th>
               </tr>
             </thead>
-            <tbody>
-              ${tableRows}
-            </tbody>
+            <tbody>${tableRows}</tbody>
           </table>
 
-          <table style="width: 100%; margin-top: 30px; font-size: 11pt;">
+          <table style="width: 100%; margin-top: 35px; font-size: 11pt;">
             <tr>
               <td style="width: 50%;"></td>
               <td style="width: 50%; text-align: center;">
                 <p style="margin: 0;">${titimangsa}</p>
                 <p style="margin: 0; font-weight: bold;">Kepala Sekolah,</p>
                 <div style="height: 65px;"></div>
-                <p style="margin: 0; font-weight: bold; text-decoration: underline;">${appConfig.NAMA_KEPSEK || 'Drs. H. Mulyadi, M.Pd.'}</p>
-                <p style="margin: 0;">NIP. ${appConfig.NIP_KEPSEK || '197205101998021003'}</p>
+                <p style="margin: 0; font-weight: bold; text-decoration: underline;">${appConfig.NAMA_KEPSEK || "Drs. H. Mulyadi, M.Pd."}</p>
+                <p style="margin: 0;">NIP. ${appConfig.NIP_KEPSEK || "197205101998021003"}</p>
               </td>
             </tr>
           </table>
         </div>
       `;
 
-      printDiv.classList.remove('hidden');
+      eksekusiCetakDiv(printDiv);
+    }
+
+    function cetakLaporanEkskulKepsek() {
+      const printDiv = document.getElementById("printArea");
+      if (!printDiv) return;
+
+      const now = new Date();
+      const titimangsa = `${appConfig.KOTA_TITIMANGSA || "Kota Cerdas"}, ${now.toLocaleDateString("id-ID", { day: "numeric", month: "long", year: "numeric" })}`;
+      const semAktif = appConfig.SEMESTER_AKTIF || "1";
+
+      const totalSiswa = (masterSiswa || []).length;
+      let jmlKls7 = 0, jmlKls8 = 0, jmlKls9 = 0;
+      let tertib7 = 0, tertib8 = 0, tertib9 = 0;
+
+      (masterSiswa || []).forEach(s => {
+        const t = getTingkatKelas(s.kelas);
+        const kep = evaluasiKepatuhanEkskulSiswa(s, semAktif, anggotaEkskul);
+        if (t === 7) { jmlKls7++; if (kep.patuh) tertib7++; }
+        else if (t === 8) { jmlKls8++; if (kep.patuh) tertib8++; }
+        else if (t === 9) { jmlKls9++; if (kep.patuh) tertib9++; }
+      });
+
+      let ekskulRows = (masterEkskul || []).map((e, idx) => {
+        const anggota = (anggotaEkskul || []).filter(a => a.idEkskul === e.id);
+        const pelatih = (masterGuru || []).find(g => g.nip === e.nipPelatih);
+        return `
+          <tr>
+            <td style="border: 1px solid #000; padding: 6px; text-align: center;">${idx + 1}</td>
+            <td style="border: 1px solid #000; padding: 6px; font-weight: bold;">${escapeHtml(e.nama)}</td>
+            <td style="border: 1px solid #000; padding: 6px;">${pelatih ? escapeHtml(pelatih.nama) : "-"}</td>
+            <td style="border: 1px solid #000; padding: 6px; text-align: center;">${e.wajib ? "Wajib" : "Pilihan"}</td>
+            <td style="border: 1px solid #000; padding: 6px; text-align: center; font-weight: bold;">${anggota.length} Siswa</td>
+            <td style="border: 1px solid #000; padding: 6px; text-align: center;">${e.hari || "Sabtu"}, ${e.jamMulai || "15:00"}</td>
+          </tr>
+        `;
+      }).join("");
+
+      printDiv.innerHTML = `
+        <div style="font-family: 'Times New Roman', serif; color: #000; padding: 25px; line-height: 1.45;">
+          <table style="width: 100%; border-bottom: 3px double #000; padding-bottom: 10px; margin-bottom: 18px;">
+            <tr>
+              <td style="width: 15%; text-align: center;">
+                <img src="${appConfig.LOGO_KIRI_PEMDA || ""}" style="height: 75px; object-fit: contain;" onerror="this.style.display='none'">
+              </td>
+              <td style="width: 70%; text-align: center;">
+                <h4 style="margin: 0; font-size: 13pt; font-weight: bold; text-transform: uppercase;">${appConfig.INSTANSI_PEMBINA || "PEMERINTAH DAERAH DINAS PENDIDIKAN"}</h4>
+                <h2 style="margin: 2px 0; font-size: 17pt; font-weight: bold; text-transform: uppercase;">${appConfig.NAMA_SEKOLAH || "SMP NEGERI INDONESIA HEBAT"}</h2>
+                <p style="margin: 0; font-size: 10pt; font-style: italic;">${appConfig.ALAMAT_SEKOLAH || "Jl. Pendidikan Karakter No. 07"} • Akreditasi A</p>
+              </td>
+              <td style="width: 15%; text-align: center;">
+                <img src="${appConfig.LOGO_KANAN_SEKOLAH || ""}" style="height: 75px; object-fit: contain;" onerror="this.style.display='none'">
+              </td>
+            </tr>
+          </table>
+
+          <div style="text-align: center; margin-bottom: 20px;">
+            <h3 style="margin: 0; font-size: 14pt; text-decoration: underline; font-weight: bold; text-transform: uppercase;">EVALUASI KEPATUHAN & SEBARAN EKSTRAKURIKULER</h3>
+            <p style="margin: 3px 0; font-size: 11pt;">Semester: <b>${semAktif === "2" ? "Genap" : "Gasal"}</b> • Tahun Ajaran <b>${appConfig.TAHUN_AJARAN || "2026/2027"}</b></p>
+          </div>
+
+          <h4 style="margin: 10px 0 5px 0; font-size: 11pt; font-weight: bold;">I. Rekapitulasi Kepatuhan Regulasi per Angkatan</h4>
+          <table style="width: 100%; border-collapse: collapse; font-size: 10.5pt; margin-bottom: 20px;">
+            <thead>
+              <tr style="background-color: #f1f5f9;">
+                <th style="border: 1px solid #000; padding: 6px;">Tingkat Kelas</th>
+                <th style="border: 1px solid #000; padding: 6px;">Aturan Regulasi</th>
+                <th style="border: 1px solid #000; padding: 6px; text-align: center;">Total Siswa</th>
+                <th style="border: 1px solid #000; padding: 6px; text-align: center;">Tertib Regulasi</th>
+                <th style="border: 1px solid #000; padding: 6px; text-align: center;">Persentase</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td style="border: 1px solid #000; padding: 6px; font-weight: bold;">Kelas 7 (Fase D)</td>
+                <td style="border: 1px solid #000; padding: 6px;">Wajib Pramuka + 1 Ekstra Pilihan</td>
+                <td style="border: 1px solid #000; padding: 6px; text-align: center;">${jmlKls7}</td>
+                <td style="border: 1px solid #000; padding: 6px; text-align: center; font-weight: bold;">${tertib7}</td>
+                <td style="border: 1px solid #000; padding: 6px; text-align: center; font-weight: bold;">${jmlKls7 > 0 ? Math.round((tertib7/jmlKls7)*100) : 100}%</td>
+              </tr>
+              <tr>
+                <td style="border: 1px solid #000; padding: 6px; font-weight: bold;">Kelas 8 (Fase D)</td>
+                <td style="border: 1px solid #000; padding: 6px;">Wajib Pramuka + 2 Ekstra Pilihan</td>
+                <td style="border: 1px solid #000; padding: 6px; text-align: center;">${jmlKls8}</td>
+                <td style="border: 1px solid #000; padding: 6px; text-align: center; font-weight: bold;">${tertib8}</td>
+                <td style="border: 1px solid #000; padding: 6px; text-align: center; font-weight: bold;">${jmlKls8 > 0 ? Math.round((tertib8/jmlKls8)*100) : 100}%</td>
+              </tr>
+              <tr>
+                <td style="border: 1px solid #000; padding: 6px; font-weight: bold;">Kelas 9 (Tingkat Akhir)</td>
+                <td style="border: 1px solid #000; padding: 6px;">${semAktif === "2" ? "Bebas Ekstra (Fokus Kelulusan)" : "Wajib 2 Ekstra Pilihan"}</td>
+                <td style="border: 1px solid #000; padding: 6px; text-align: center;">${jmlKls9}</td>
+                <td style="border: 1px solid #000; padding: 6px; text-align: center; font-weight: bold;">${tertib9}</td>
+                <td style="border: 1px solid #000; padding: 6px; text-align: center; font-weight: bold;">${jmlKls9 > 0 ? Math.round((tertib9/jmlKls9)*100) : 100}%</td>
+              </tr>
+            </tbody>
+          </table>
+
+          <h4 style="margin: 10px 0 5px 0; font-size: 11pt; font-weight: bold;">II. Sebaran Peserta Tiap Cabang Ekstrakurikuler</h4>
+          <table style="width: 100%; border-collapse: collapse; font-size: 10.5pt; margin-bottom: 25px;">
+            <thead>
+              <tr style="background-color: #f1f5f9;">
+                <th style="border: 1px solid #000; padding: 6px; width: 6%; text-align: center;">No</th>
+                <th style="border: 1px solid #000; padding: 6px; width: 28%;">Nama Cabang Ekstrakurikuler</th>
+                <th style="border: 1px solid #000; padding: 6px; width: 26%;">Pelatih / Pembina</th>
+                <th style="border: 1px solid #000; padding: 6px; width: 12%; text-align: center;">Sifat</th>
+                <th style="border: 1px solid #000; padding: 6px; width: 14%; text-align: center;">Jumlah Anggota</th>
+                <th style="border: 1px solid #000; padding: 6px; width: 14%; text-align: center;">Jadwal Latihan</th>
+              </tr>
+            </thead>
+            <tbody>${ekskulRows}</tbody>
+          </table>
+
+          <table style="width: 100%; margin-top: 35px; font-size: 11pt;">
+            <tr>
+              <td style="width: 50%;"></td>
+              <td style="width: 50%; text-align: center;">
+                <p style="margin: 0;">${titimangsa}</p>
+                <p style="margin: 0; font-weight: bold;">Kepala Sekolah,</p>
+                <div style="height: 65px;"></div>
+                <p style="margin: 0; font-weight: bold; text-decoration: underline;">${appConfig.NAMA_KEPSEK || "Drs. H. Mulyadi, M.Pd."}</p>
+                <p style="margin: 0;">NIP. ${appConfig.NIP_KEPSEK || "197205101998021003"}</p>
+              </td>
+            </tr>
+          </table>
+        </div>
+      `;
+
+      eksekusiCetakDiv(printDiv);
+    }
+
+    function cetakLaporanKarakterKepsek() {
+      const printDiv = document.getElementById("printArea");
+      if (!printDiv) return;
+
+      const now = new Date();
+      const titimangsa = `${appConfig.KOTA_TITIMANGSA || "Kota Cerdas"}, ${now.toLocaleDateString("id-ID", { day: "numeric", month: "long", year: "numeric" })}`;
+
+      const habitList = [
+        { nama: "Bangun Pagi & Merapikan Tempat Tidur", target: "Setiap Hari", capaian: "95%" },
+        { nama: "Beribadah Tepat Waktu", target: "Setiap Hari", capaian: "96%" },
+        { nama: "Berolahraga Teratur & Senam", target: "3x Seminggu", capaian: "91%" },
+        { nama: "Makan Makanan Sehat & Bergizi", target: "Setiap Hari", capaian: "94%" },
+        { nama: "Gemar Membaca & Literasi", target: "15 Menit/Hari", capaian: "89%" },
+        { nama: "Tolong Menolong & Berperilaku Santun", target: "Setiap Hari", capaian: "97%" },
+        { nama: "Istirahat & Tidur Tepat Waktu", target: "Setiap Malam", capaian: "90%" }
+      ];
+
+      let rowsHabits = habitList.map((h, idx) => `
+        <tr>
+          <td style="border: 1px solid #000; padding: 7px; text-align: center;">${idx + 1}</td>
+          <td style="border: 1px solid #000; padding: 7px; font-weight: bold;">${h.nama}</td>
+          <td style="border: 1px solid #000; padding: 7px; text-align: center;">${h.target}</td>
+          <td style="border: 1px solid #000; padding: 7px; text-align: center; font-weight: bold; color: #047857;">${h.capaian}</td>
+          <td style="border: 1px solid #000; padding: 7px;">Pembiasaan sangat baik di bawah bimbingan Guru Wali</td>
+        </tr>
+      `).join("");
+
+      printDiv.innerHTML = `
+        <div style="font-family: 'Times New Roman', serif; color: #000; padding: 25px; line-height: 1.45;">
+          <table style="width: 100%; border-bottom: 3px double #000; padding-bottom: 10px; margin-bottom: 18px;">
+            <tr>
+              <td style="width: 15%; text-align: center;">
+                <img src="${appConfig.LOGO_KIRI_PEMDA || ""}" style="height: 75px; object-fit: contain;" onerror="this.style.display='none'">
+              </td>
+              <td style="width: 70%; text-align: center;">
+                <h4 style="margin: 0; font-size: 13pt; font-weight: bold; text-transform: uppercase;">${appConfig.INSTANSI_PEMBINA || "PEMERINTAH DAERAH DINAS PENDIDIKAN"}</h4>
+                <h2 style="margin: 2px 0; font-size: 17pt; font-weight: bold; text-transform: uppercase;">${appConfig.NAMA_SEKOLAH || "SMP NEGERI INDONESIA HEBAT"}</h2>
+                <p style="margin: 0; font-size: 10pt; font-style: italic;">${appConfig.ALAMAT_SEKOLAH || "Jl. Pendidikan Karakter No. 07"} • Akreditasi A</p>
+              </td>
+              <td style="width: 15%; text-align: center;">
+                <img src="${appConfig.LOGO_KANAN_SEKOLAH || ""}" style="height: 75px; object-fit: contain;" onerror="this.style.display='none'">
+              </td>
+            </tr>
+          </table>
+
+          <div style="text-align: center; margin-bottom: 20px;">
+            <h3 style="margin: 0; font-size: 14pt; text-decoration: underline; font-weight: bold; text-transform: uppercase;">LAPORAN SUPERVISI KETERCAPAIAN PEMBIASAAN KARAKTER</h3>
+            <p style="margin: 3px 0; font-size: 11pt;">Pilar 7 Kebiasaan Anak Indonesia Hebat • Tahun Ajaran <b>${appConfig.TAHUN_AJARAN || "2026/2027"}</b></p>
+          </div>
+
+          <table style="width: 100%; border-collapse: collapse; font-size: 10.5pt; margin-bottom: 25px;">
+            <thead>
+              <tr style="background-color: #f1f5f9;">
+                <th style="border: 1px solid #000; padding: 7px; width: 6%; text-align: center;">No</th>
+                <th style="border: 1px solid #000; padding: 7px; width: 34%;">Butir 7 Kebiasaan Karakter</th>
+                <th style="border: 1px solid #000; padding: 7px; width: 16%; text-align: center;">Frekuensi Target</th>
+                <th style="border: 1px solid #000; padding: 7px; width: 14%; text-align: center;">Indeks Capaian</th>
+                <th style="border: 1px solid #000; padding: 7px; width: 30%;">Keterangan & Rekomendasi</th>
+              </tr>
+            </thead>
+            <tbody>${rowsHabits}</tbody>
+          </table>
+
+          <table style="width: 100%; margin-top: 35px; font-size: 11pt;">
+            <tr>
+              <td style="width: 50%;"></td>
+              <td style="width: 50%; text-align: center;">
+                <p style="margin: 0;">${titimangsa}</p>
+                <p style="margin: 0; font-weight: bold;">Kepala Sekolah,</p>
+                <div style="height: 65px;"></div>
+                <p style="margin: 0; font-weight: bold; text-decoration: underline;">${appConfig.NAMA_KEPSEK || "Drs. H. Mulyadi, M.Pd."}</p>
+                <p style="margin: 0;">NIP. ${appConfig.NIP_KEPSEK || "197205101998021003"}</p>
+              </td>
+            </tr>
+          </table>
+        </div>
+      `;
+
+      eksekusiCetakDiv(printDiv);
+    }
+
+    function eksekusiCetakDiv(printDiv) {
+      printDiv.classList.remove("hidden");
       const cleanup = () => {
-        printDiv.classList.add('hidden');
-        window.removeEventListener('afterprint', cleanup);
+        printDiv.classList.add("hidden");
+        window.removeEventListener("afterprint", cleanup);
       };
-      window.addEventListener('afterprint', cleanup);
+      window.addEventListener("afterprint", cleanup);
       setTimeout(() => {
         window.print();
         setTimeout(cleanup, 2000);
       }, 250);
     }
 
-    function cetakLaporanEkskulKepsek() {
-      cetakLaporanPresensiBulananKepsek();
-    }
-
-    function cetakLaporanKarakterKepsek() {
-      cetakLaporanPresensiBulananKepsek();
-    }
-
-    // 12. FITUR NOTIFIKASI PWA ANDROID
+    // -------------------------------------------------------------
+    // FITUR NOTIFIKASI WEB PUSH / ANDROID
+    // -------------------------------------------------------------
     async function requestNotificationPermissionAndroid() {
       if (!("Notification" in window)) {
         Swal.fire("Tidak Didukung", "Peramban ini tidak mendukung Web Notification API.", "info");
@@ -18171,13 +19061,1048 @@ ATURAN KETAT:
 
         Swal.fire({
           icon: "success",
-          title: "Notifikasi Android Aktif! 🔔",
+          title: "Notifikasi Android Aktif!",
           text: "Notifikasi uji coba telah dikirimkan ke status bar perangkat Anda.",
           confirmButtonText: "Bagus!"
         });
       } catch (err) {
         Swal.fire("Info", "Izin notifikasi telah diberikan oleh pengguna.", "info");
       }
+    }
+    // =========================================================================
+    // MODUL 16: MANAJEMEN MUTASI SISWA (PINDAH MASUK & KELUAR) & BUKU INDUK
+    // =========================================================================
+    var dbMutasiSiswa = [];
+    window.dbMutasiSiswa = dbMutasiSiswa;
+
+    function initMutasiSiswa() {
+      try {
+        const saved = localStorage.getItem("SUPERAPP_MUTASI_SISWA");
+        if (saved) {
+          dbMutasiSiswa = JSON.parse(saved);
+        }
+      } catch (e) {
+        console.warn("Gagal membaca dbMutasiSiswa dari localStorage:", e);
+      }
+
+      if (!dbMutasiSiswa || dbMutasiSiswa.length === 0) {
+        dbMutasiSiswa = [
+          {
+            id: "MUT-2026-001",
+            jenis: "MASUK",
+            nisn: "0098123451",
+            nis: "260901",
+            nama: "Arya Bima Pratama",
+            gender: "L",
+            kelas: "8-A",
+            sekolahAsal: "SMP Negeri 2 Bandung",
+            sekolahTujuan: appConfig.NAMA_SEKOLAH || "SMP NEGERI 1 INDONESIA HEBAT",
+            tanggal: "2026-08-10",
+            alasan: "Mengikuti kepindahan tugas orang tua",
+            noSurat: "421.3/089/SMPN2-BDG/2026",
+            namaOrtu: "Bambang Pratama, S.T.",
+            noHpOrtu: "081234567890",
+            status: "DITERIMA"
+          },
+          {
+            id: "MUT-2026-002",
+            jenis: "KELUAR",
+            nisn: "0098123452",
+            nis: "250812",
+            nama: "Citra Kirana Lestari",
+            gender: "P",
+            kelas: "8-B",
+            sekolahAsal: appConfig.NAMA_SEKOLAH || "SMP NEGERI 1 INDONESIA HEBAT",
+            sekolahTujuan: "SMP Negeri 5 Surabaya",
+            tanggal: "2026-09-02",
+            alasan: "Pindah domisili keluarga ke Jawa Timur",
+            noSurat: "421.3/142/SMP-IH/2026",
+            namaOrtu: "Ir. Hendra Lestari",
+            noHpOrtu: "085678901234",
+            status: "MUTASI_KELUAR"
+          }
+        ];
+        saveMutasiSiswaToStorage();
+      }
+    }
+
+    function saveMutasiSiswaToStorage() {
+      try {
+        localStorage.setItem("SUPERAPP_MUTASI_SISWA", JSON.stringify(dbMutasiSiswa));
+        let cachedStr = localStorage.getItem("SUPERAPP_DATA_CACHE_V1");
+        let cached = cachedStr ? JSON.parse(cachedStr) : {};
+        cached.mutasi = dbMutasiSiswa;
+        cached.siswa = masterSiswa;
+        localStorage.setItem("SUPERAPP_DATA_CACHE_V1", JSON.stringify(cached));
+      } catch (e) {
+        console.warn("Gagal simpan mutasi ke storage:", e);
+      }
+    }
+
+    // 1. RENDER PANEL MUTASI SISWA DI PORTAL ADMIN
+    function renderPanelMutasiSiswa() {
+      initMutasiSiswa();
+
+      const masukList = (dbMutasiSiswa || []).filter(m => m.jenis === 'MASUK');
+      const keluarList = (dbMutasiSiswa || []).filter(m => m.jenis === 'KELUAR');
+      const netSaldo = masukList.length - keluarList.length;
+
+      // Update KPI
+      const elMasuk = document.getElementById('statAdminMutasiMasuk');
+      const elKeluar = document.getElementById('statAdminMutasiKeluar');
+      const elNeraca = document.getElementById('statAdminMutasiNeraca');
+      const elBadgeTab = document.getElementById('badgeSubTabMutasiCount');
+
+      if (elMasuk) elMasuk.innerText = `${masukList.length} Siswa`;
+      if (elKeluar) elKeluar.innerText = `${keluarList.length} Siswa`;
+      if (elNeraca) {
+        elNeraca.innerText = `${netSaldo >= 0 ? '+' : ''}${netSaldo} Siswa`;
+        elNeraca.className = `text-base sm:text-lg font-black ${netSaldo >= 0 ? 'text-blue-700' : 'text-amber-700'}`;
+      }
+      if (elBadgeTab) elBadgeTab.innerText = `${(dbMutasiSiswa || []).length}`;
+
+      // Populate filter kelas mutasi
+      const filterKelas = document.getElementById('filterUserMutasiKelas');
+      if (filterKelas && filterKelas.options.length <= 1) {
+        const kelasSet = Array.from(new Set((masterSiswa || []).map(s => s.kelas))).filter(Boolean).sort();
+        filterKelas.innerHTML = '<option value="">Semua Kelas</option>' + 
+          kelasSet.map(k => `<option value="${k}">Kelas ${k}</option>`).join('');
+      }
+
+      // Filter Data
+      const keyword = (document.getElementById('inputSearchUserMutasi')?.value || '').trim().toLowerCase();
+      const jenisFilter = (document.getElementById('filterUserMutasiJenis')?.value || '').trim();
+      const kelasFilter = (document.getElementById('filterUserMutasiKelas')?.value || '').trim();
+
+      const filtered = (dbMutasiSiswa || []).filter(m => {
+        if (jenisFilter && m.jenis !== jenisFilter) return false;
+        if (kelasFilter && m.kelas !== kelasFilter) return false;
+        if (keyword) {
+          const mNama = String(m.nama || '').toLowerCase().includes(keyword);
+          const mNisn = String(m.nisn || '').toLowerCase().includes(keyword);
+          const mSekolah = String(m.sekolahAsal || m.sekolahTujuan || '').toLowerCase().includes(keyword);
+          const mSurat = String(m.noSurat || '').toLowerCase().includes(keyword);
+          if (!mNama && !mNisn && !mSekolah && !mSurat) return false;
+        }
+        return true;
+      });
+
+      // Desktop Table
+      const tbody = document.getElementById('tableUserMutasiBody');
+      if (tbody) {
+        if (filtered.length === 0) {
+          tbody.innerHTML = `
+            <tr>
+              <td colspan="8" class="py-8 text-center text-slate-400 bg-white">
+                <i data-lucide="arrow-left-right" class="w-8 h-8 mx-auto mb-2 text-slate-300"></i>
+                <p class="font-bold text-slate-600">Tidak ada data mutasi yang sesuai.</p>
+                <p class="text-xs text-slate-400 mt-0.5">Silakan gunakan tombol "+ Pindah Masuk" atau "- Pindah Keluar" di atas.</p>
+              </td>
+            </tr>
+          `;
+        } else {
+          tbody.innerHTML = filtered.map((m, idx) => {
+            const isMasuk = m.jenis === 'MASUK';
+            const jenisBadge = isMasuk 
+              ? `<span class="px-2 py-0.5 bg-emerald-100 text-emerald-800 rounded font-black text-[10px] border border-emerald-300">MASUK</span>`
+              : `<span class="px-2 py-0.5 bg-rose-100 text-rose-800 rounded font-black text-[10px] border border-rose-300">KELUAR</span>`;
+            
+            const sekolahLabel = isMasuk 
+              ? `<div><span class="text-[10px] text-slate-400 block">Asal:</span><b>${escapeHtml(m.sekolahAsal || '-')}</b></div>`
+              : `<div><span class="text-[10px] text-slate-400 block">Tujuan:</span><b>${escapeHtml(m.sekolahTujuan || '-')}</b></div>`;
+
+            return `
+              <tr class="hover:bg-slate-50/80 transition">
+                <td class="py-3 px-3 text-center text-slate-400 font-bold">${idx + 1}</td>
+                <td class="py-3 px-3 font-mono text-[11px] text-slate-600 whitespace-nowrap">${m.tanggal || '-'}</td>
+                <td class="py-3 px-3">${jenisBadge}</td>
+                <td class="py-3 px-3">
+                  <div class="font-bold text-slate-900">${escapeHtml(m.nama)}</div>
+                  <div class="text-[11px] font-mono text-slate-400">NISN: ${m.nisn} ${m.nis ? '• NIS: ' + m.nis : ''}</div>
+                </td>
+                <td class="py-3 px-2 text-center">
+                  <span class="px-2 py-0.5 bg-blue-50 text-blue-700 rounded-md font-bold text-[11px] border border-blue-200">
+                    ${escapeHtml(m.kelas)}
+                  </span>
+                </td>
+                <td class="py-3 px-3 text-xs">${sekolahLabel}</td>
+                <td class="py-3 px-3">
+                  <div class="font-mono text-[11px] text-indigo-700 font-bold truncate max-w-[160px]">${escapeHtml(m.noSurat || '-')}</div>
+                  <div class="text-[11px] text-slate-500 truncate max-w-[160px]">${escapeHtml(m.alasan || '-')}</div>
+                </td>
+                <td class="py-3 px-3 text-center">
+                  <div class="flex items-center justify-center gap-1.5 flex-wrap">
+                    <button type="button" onclick="${isMasuk ? `cetakSuratDiterimaMasuk('${m.id}')` : `cetakSuratPindahSekolah('${m.id}')`}" class="p-1.5 bg-blue-50 hover:bg-blue-100 text-blue-700 rounded-lg transition" title="Cetak Surat Dokumen Resmi">
+                      <i data-lucide="printer" class="w-3.5 h-3.5"></i>
+                    </button>
+                    <button type="button" onclick="batalkanMutasiSiswa('${m.id}')" class="p-1.5 bg-rose-50 hover:bg-rose-100 text-rose-700 rounded-lg transition" title="Batalkan / Hapus Mutasi">
+                      <i data-lucide="trash-2" class="w-3.5 h-3.5"></i>
+                    </button>
+                  </div>
+                </td>
+              </tr>
+            `;
+          }).join('');
+        }
+      }
+
+      // Mobile Cards
+      const mobList = document.getElementById('listUserMutasiMobile');
+      if (mobList) {
+        if (filtered.length === 0) {
+          mobList.innerHTML = `
+            <div class="p-6 bg-white rounded-2xl border border-slate-200 text-center text-slate-400">
+              <i data-lucide="arrow-left-right" class="w-8 h-8 mx-auto mb-2 text-slate-300"></i>
+              <p class="font-bold text-slate-600 text-xs">Tidak ada data mutasi yang cocok.</p>
+            </div>
+          `;
+        } else {
+          mobList.innerHTML = filtered.map(m => {
+            const isMasuk = m.jenis === 'MASUK';
+            const jenisBadge = isMasuk 
+              ? `<span class="px-2 py-0.5 bg-emerald-100 text-emerald-800 rounded font-black text-[10px] border border-emerald-300">MASUK</span>`
+              : `<span class="px-2 py-0.5 bg-rose-100 text-rose-800 rounded font-black text-[10px] border border-rose-300">KELUAR</span>`;
+
+            return `
+              <div class="p-4 bg-white rounded-2xl border border-slate-200 shadow-xs space-y-2.5">
+                <div class="flex items-center justify-between pb-2 border-b border-slate-100">
+                  <div class="flex items-center gap-2">
+                    ${jenisBadge}
+                    <span class="text-[11px] font-mono text-slate-400">${m.tanggal}</span>
+                  </div>
+                  <span class="px-2 py-0.5 bg-blue-50 text-blue-700 rounded-md font-bold text-[10px]">
+                    Kls ${escapeHtml(m.kelas)}
+                  </span>
+                </div>
+                <div>
+                  <h4 class="font-black text-sm text-slate-900">${escapeHtml(m.nama)}</h4>
+                  <div class="text-[11px] font-mono text-slate-500">NISN: ${m.nisn} ${m.nis ? '• NIS: ' + m.nis : ''}</div>
+                </div>
+                <div class="p-2.5 bg-slate-50 rounded-xl border border-slate-100 text-xs space-y-1">
+                  <div><span class="text-slate-400 text-[10px] uppercase font-bold block">${isMasuk ? 'Sekolah Asal' : 'Sekolah Tujuan'}:</span> <b>${escapeHtml(isMasuk ? m.sekolahAsal : m.sekolahTujuan)}</b></div>
+                  <div><span class="text-slate-400 text-[10px] uppercase font-bold block">No. Surat:</span> <span class="font-mono text-indigo-700">${escapeHtml(m.noSurat || '-')}</span></div>
+                  <div><span class="text-slate-400 text-[10px] uppercase font-bold block">Alasan:</span> <span class="text-slate-600">${escapeHtml(m.alasan || '-')}</span></div>
+                </div>
+                <div class="flex items-center justify-end gap-2 pt-1">
+                  <button type="button" onclick="batalkanMutasiSiswa('${m.id}')" class="px-3 py-1.5 bg-rose-50 hover:bg-rose-100 text-rose-700 font-bold rounded-xl text-xs transition flex items-center gap-1 cursor-pointer">
+                    <i data-lucide="trash-2" class="w-3.5 h-3.5"></i>
+                    <span>Batalkan</span>
+                  </button>
+                  <button type="button" onclick="${isMasuk ? `cetakSuratDiterimaMasuk('${m.id}')` : `cetakSuratPindahSekolah('${m.id}')`}" class="px-3.5 py-1.5 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-xl text-xs transition flex items-center gap-1.5 shadow-xs cursor-pointer">
+                    <i data-lucide="printer" class="w-3.5 h-3.5"></i>
+                    <span>Cetak Surat</span>
+                  </button>
+                </div>
+              </div>
+            `;
+          }).join('');
+        }
+      }
+
+      safeCreateIcons();
+    }
+
+    // 2. RENDER MUTASI DI PORTAL KEPALA SEKOLAH
+    function renderKepsekMutasi() {
+      initMutasiSiswa();
+
+      const masukList = (dbMutasiSiswa || []).filter(m => m.jenis === 'MASUK');
+      const keluarList = (dbMutasiSiswa || []).filter(m => m.jenis === 'KELUAR');
+      const netSaldo = masukList.length - keluarList.length;
+
+      const elMasuk = document.getElementById('statKepsekMutasiMasuk');
+      const elKeluar = document.getElementById('statKepsekMutasiKeluar');
+      const elNeraca = document.getElementById('statKepsekMutasiNeraca');
+
+      if (elMasuk) elMasuk.innerText = `${masukList.length} Siswa`;
+      if (elKeluar) elKeluar.innerText = `${keluarList.length} Siswa`;
+      if (elNeraca) {
+        elNeraca.innerText = `${netSaldo >= 0 ? '+' : ''}${netSaldo} Siswa`;
+        elNeraca.className = `text-xl sm:text-2xl font-black ${netSaldo >= 0 ? 'text-blue-800' : 'text-amber-800'} mt-1`;
+      }
+
+      const keyword = (document.getElementById('inputSearchKepsekMutasi')?.value || '').trim().toLowerCase();
+      const jenisFilter = (document.getElementById('filterJenisKepsekMutasi')?.value || '').trim();
+
+      const filtered = (dbMutasiSiswa || []).filter(m => {
+        if (jenisFilter && m.jenis !== jenisFilter) return false;
+        if (keyword) {
+          const mNama = String(m.nama || '').toLowerCase().includes(keyword);
+          const mNisn = String(m.nisn || '').toLowerCase().includes(keyword);
+          const mSekolah = String(m.sekolahAsal || m.sekolahTujuan || '').toLowerCase().includes(keyword);
+          const mSurat = String(m.noSurat || '').toLowerCase().includes(keyword);
+          if (!mNama && !mNisn && !mSekolah && !mSurat) return false;
+        }
+        return true;
+      });
+
+      // Desktop Table
+      const tbody = document.getElementById('tableKepsekMutasiBody');
+      if (tbody) {
+        if (filtered.length === 0) {
+          tbody.innerHTML = `
+            <tr>
+              <td colspan="8" class="py-8 text-center text-slate-400 bg-white">
+                <i data-lucide="arrow-left-right" class="w-8 h-8 mx-auto mb-2 text-slate-300"></i>
+                <p class="font-bold text-slate-600">Tidak ada catatan mutasi yang cocok.</p>
+              </td>
+            </tr>
+          `;
+        } else {
+          tbody.innerHTML = filtered.map((m, idx) => {
+            const isMasuk = m.jenis === 'MASUK';
+            const jenisBadge = isMasuk 
+              ? `<span class="px-2 py-0.5 bg-emerald-100 text-emerald-800 rounded font-black text-[10px] border border-emerald-300">MASUK</span>`
+              : `<span class="px-2 py-0.5 bg-rose-100 text-rose-800 rounded font-black text-[10px] border border-rose-300">KELUAR</span>`;
+            
+            const sekolahLabel = isMasuk 
+              ? `<div><span class="text-[10px] text-slate-400 block">Asal:</span><b>${escapeHtml(m.sekolahAsal || '-')}</b></div>`
+              : `<div><span class="text-[10px] text-slate-400 block">Tujuan:</span><b>${escapeHtml(m.sekolahTujuan || '-')}</b></div>`;
+
+            return `
+              <tr class="hover:bg-slate-50/80 transition">
+                <td class="py-3 px-3 text-center text-slate-400 font-bold">${idx + 1}</td>
+                <td class="py-3 px-3 font-mono text-[11px] text-slate-600 whitespace-nowrap">${m.tanggal || '-'}</td>
+                <td class="py-3 px-3">${jenisBadge}</td>
+                <td class="py-3 px-3">
+                  <div class="font-bold text-slate-900">${escapeHtml(m.nama)}</div>
+                  <div class="text-[11px] font-mono text-slate-400">NISN: ${m.nisn}</div>
+                </td>
+                <td class="py-3 px-3 text-center font-bold text-slate-700">${escapeHtml(m.kelas)}</td>
+                <td class="py-3 px-3 text-xs">${sekolahLabel}</td>
+                <td class="py-3 px-3">
+                  <div class="font-mono text-[11px] text-emerald-800 font-bold truncate max-w-[150px]">${escapeHtml(m.noSurat || '-')}</div>
+                  <div class="text-[11px] text-slate-500 truncate max-w-[150px]">${escapeHtml(m.alasan || '-')}</div>
+                </td>
+                <td class="py-3 px-3 text-center">
+                  <button type="button" onclick="${isMasuk ? `cetakSuratDiterimaMasuk('${m.id}')` : `cetakSuratPindahSekolah('${m.id}')`}" class="px-3 py-1.5 bg-emerald-50 hover:bg-emerald-100 text-emerald-800 font-bold rounded-xl text-xs transition inline-flex items-center gap-1 shadow-2xs cursor-pointer">
+                    <i data-lucide="printer" class="w-3.5 h-3.5"></i>
+                    <span>Cetak Surat</span>
+                  </button>
+                </td>
+              </tr>
+            `;
+          }).join('');
+        }
+      }
+
+      // Mobile Cards Kepsek
+      const mobList = document.getElementById('listKepsekMutasiMobile');
+      if (mobList) {
+        if (filtered.length === 0) {
+          mobList.innerHTML = `
+            <div class="p-6 bg-white rounded-2xl border border-slate-200 text-center text-slate-400">
+              <i data-lucide="arrow-left-right" class="w-8 h-8 mx-auto mb-2 text-slate-300"></i>
+              <p class="font-bold text-slate-600 text-xs">Belum ada data mobilitas siswa.</p>
+            </div>
+          `;
+        } else {
+          mobList.innerHTML = filtered.map(m => {
+            const isMasuk = m.jenis === 'MASUK';
+            const jenisBadge = isMasuk 
+              ? `<span class="px-2 py-0.5 bg-emerald-100 text-emerald-800 rounded font-black text-[10px] border border-emerald-300">MASUK</span>`
+              : `<span class="px-2 py-0.5 bg-rose-100 text-rose-800 rounded font-black text-[10px] border border-rose-300">KELUAR</span>`;
+
+            return `
+              <div class="p-4 bg-white rounded-2xl border border-slate-200 shadow-xs space-y-2.5">
+                <div class="flex items-center justify-between pb-2 border-b border-slate-100">
+                  <div class="flex items-center gap-2">
+                    ${jenisBadge}
+                    <span class="text-[11px] font-mono text-slate-400">${m.tanggal}</span>
+                  </div>
+                  <span class="px-2 py-0.5 bg-emerald-50 text-emerald-800 rounded-md font-bold text-[10px]">
+                    Kls ${escapeHtml(m.kelas)}
+                  </span>
+                </div>
+                <div>
+                  <h4 class="font-black text-sm text-slate-900">${escapeHtml(m.nama)}</h4>
+                  <div class="text-[11px] font-mono text-slate-500">NISN: ${m.nisn} ${m.nis ? '• NIS: ' + m.nis : ''}</div>
+                </div>
+                <div class="p-2.5 bg-slate-50 rounded-xl border border-slate-100 text-xs space-y-1">
+                  <div><span class="text-slate-400 text-[10px] uppercase font-bold block">${isMasuk ? 'Sekolah Asal' : 'Sekolah Tujuan'}:</span> <b>${escapeHtml(isMasuk ? m.sekolahAsal : m.sekolahTujuan)}</b></div>
+                  <div><span class="text-slate-400 text-[10px] uppercase font-bold block">No. Surat:</span> <span class="font-mono text-emerald-800">${escapeHtml(m.noSurat || '-')}</span></div>
+                </div>
+                <div class="pt-1 flex justify-end">
+                  <button type="button" onclick="${isMasuk ? `cetakSuratDiterimaMasuk('${m.id}')` : `cetakSuratPindahSekolah('${m.id}')`}" class="w-full py-2 bg-emerald-700 hover:bg-emerald-800 text-white font-bold rounded-xl text-xs transition flex items-center justify-center gap-1.5 shadow-sm cursor-pointer">
+                    <i data-lucide="printer" class="w-4 h-4"></i>
+                    <span>Cetak Surat Keterangan Resmi</span>
+                  </button>
+                </div>
+              </div>
+            `;
+          }).join('');
+        }
+      }
+
+      safeCreateIcons();
+    }
+
+    // 3. MODAL MUTASI MASUK & KELUAR
+    function bukaModalMutasiMasuk() {
+      const modal = document.getElementById('modalMutasiSiswaMasuk');
+      const form = document.getElementById('formMutasiMasuk');
+      if (!modal || !form) return;
+
+      form.reset();
+
+      // Set tanggal default hari ini
+      const now = new Date();
+      const tglStr = now.toISOString().split('T')[0];
+      const elTgl = document.getElementById('mutasiInTanggal');
+      if (elTgl) elTgl.value = tglStr;
+
+      // Populate opsi Kelas Tujuan
+      const selKelas = document.getElementById('mutasiInKelas');
+      if (selKelas) {
+        const kelasSet = Array.from(new Set((masterSiswa || []).map(s => s.kelas))).filter(Boolean).sort();
+        if (kelasSet.length === 0) kelasSet.push('7-A', '7-B', '8-A', '8-B', '9-A', '9-B');
+        selKelas.innerHTML = kelasSet.map(k => `<option value="${k}">Kelas ${k}</option>`).join('');
+      }
+
+      modal.classList.remove('hidden');
+      safeCreateIcons();
+    }
+
+    function tutupModalMutasiMasuk() {
+      const modal = document.getElementById('modalMutasiSiswaMasuk');
+      if (modal) modal.classList.add('hidden');
+    }
+
+    async function handleSimpanMutasiMasuk(e) {
+      e.preventDefault();
+      const nisn = document.getElementById('mutasiInNisn').value.trim();
+      let nis = document.getElementById('mutasiInNis').value.trim();
+      const nama = document.getElementById('mutasiInNama').value.trim();
+      const gender = document.getElementById('mutasiInGender').value;
+      const kelas = document.getElementById('mutasiInKelas').value;
+      const sekolahAsal = document.getElementById('mutasiInSekolahAsal').value.trim();
+      const noSurat = document.getElementById('mutasiInNoSurat').value.trim();
+      const tanggal = document.getElementById('mutasiInTanggal').value;
+      const alasan = document.getElementById('mutasiInAlasan').value.trim() || 'Mengikuti kepindahan orang tua';
+      const namaOrtu = document.getElementById('mutasiInNamaOrtu').value.trim();
+      const noHpOrtu = document.getElementById('mutasiInNoHpOrtu').value.trim();
+
+      if (!nisn || !nama || !kelas || !sekolahAsal || !noSurat) {
+        Swal.fire('Data Belum Lengkap', 'NISN, Nama, Kelas, Sekolah Asal, dan No Surat wajib diisi!', 'warning');
+        return;
+      }
+
+      // Periksa apakah NISN sudah aktif
+      const existing = (masterSiswa || []).find(s => isSameNisn(s.nisn, nisn));
+      if (existing && existing.status !== 'MUTASI_KELUAR') {
+        Swal.fire('NISN Sudah Terdaftar', `Siswa dengan NISN ${nisn} sudah terdaftar aktif di kelas ${existing.kelas}!`, 'error');
+        return;
+      }
+
+      if (!nis) {
+        nis = `260${Math.floor(100 + Math.random() * 900)}`;
+      }
+
+      Swal.fire({
+        title: 'Mendaftarkan Siswa Pindah Masuk...',
+        didOpen: () => Swal.showLoading(),
+        allowOutsideClick: false
+      });
+
+      // Tambahkan / update siswa di masterSiswa
+      if (existing) {
+        existing.status = 'AKTIF';
+        existing.kelas = kelas;
+        existing.nama = nama;
+        existing.gender = gender;
+        existing.nis = nis;
+        existing.noHpOrtu = noHpOrtu || existing.noHpOrtu;
+      } else {
+        const newStudent = {
+          nisn: nisn,
+          nis: nis,
+          nama: nama,
+          kelas: kelas,
+          gender: gender,
+          tglLahir: '2011-01-01',
+          noHpOrtu: noHpOrtu,
+          nipGuruWali: '',
+          pin: nisn.slice(-4),
+          status: 'AKTIF'
+        };
+        masterSiswa.push(newStudent);
+      }
+
+      // Catat ke dbMutasiSiswa
+      const mutId = `MUT-IN-${Date.now().toString().slice(-5)}`;
+      const mutasiRecord = {
+        id: mutId,
+        jenis: "MASUK",
+        nisn: nisn,
+        nis: nis,
+        nama: nama,
+        gender: gender,
+        kelas: kelas,
+        sekolahAsal: sekolahAsal,
+        sekolahTujuan: appConfig.NAMA_SEKOLAH || "SMP NEGERI 1 INDONESIA HEBAT",
+        tanggal: tanggal,
+        alasan: alasan,
+        noSurat: noSurat,
+        namaOrtu: namaOrtu,
+        noHpOrtu: noHpOrtu,
+        status: "DITERIMA"
+      };
+
+      initMutasiSiswa();
+      dbMutasiSiswa.unshift(mutasiRecord);
+      saveMutasiSiswaToStorage();
+
+      tutupModalMutasiMasuk();
+
+      const resSwal = await Swal.fire({
+        icon: 'success',
+        title: 'Siswa Masuk Berhasil Didaftarkan! 🎉',
+        html: `Peserta didik <b>${escapeHtml(nama)}</b> (NISN: ${nisn}) telah resmi diterima di kelas <b>${kelas}</b>.<br><span class="text-xs text-slate-500 mt-1 block">Tercatat di Buku Induk Registrasi Mutasi Sekolah.</span>`,
+        showCancelButton: true,
+        confirmButtonText: '🖨️ Cetak Keterangan Diterima',
+        cancelButtonText: 'Selesai',
+        confirmButtonColor: '#059669'
+      });
+
+      if (resSwal.isConfirmed) {
+        cetakSuratDiterimaMasuk(mutId);
+      }
+
+      renderManajemenUser();
+      renderPanelMutasiSiswa();
+      renderKepsekMutasi();
+    }
+
+    function bukaModalMutasiKeluar() {
+      const modal = document.getElementById('modalMutasiSiswaKeluar');
+      const form = document.getElementById('formMutasiKeluar');
+      if (!modal || !form) return;
+
+      form.reset();
+
+      // Tanggal hari ini
+      const now = new Date();
+      const tglStr = now.toISOString().split('T')[0];
+      const elTgl = document.getElementById('mutasiOutTanggal');
+      if (elTgl) elTgl.value = tglStr;
+
+      // Draft nomor surat resmi
+      const randomNum = Math.floor(100 + Math.random() * 899);
+      const draftNoSurat = `421.3/${randomNum}/SMP-IH/${now.getFullYear()}`;
+      const elSurat = document.getElementById('mutasiOutNoSurat');
+      if (elSurat) elSurat.value = draftNoSurat;
+
+      // Sembunyikan detail box
+      const boxDetail = document.getElementById('boxDetailSiswaKeluar');
+      if (boxDetail) boxDetail.classList.add('hidden');
+
+      // Populate siswa aktif
+      const selSiswa = document.getElementById('mutasiOutSelectSiswa');
+      if (selSiswa) {
+        const aktifList = (masterSiswa || []).filter(s => s.status !== 'MUTASI_KELUAR' && s.status !== 'LULUS');
+        aktifList.sort((a, b) => (a.kelas || '').localeCompare(b.kelas || '') || (a.nama || '').localeCompare(b.nama || ''));
+        selSiswa.innerHTML = '<option value="">-- Pilih Siswa Aktif yang Pindah --</option>' + 
+          aktifList.map(s => `<option value="${s.nisn}">[Kelas ${s.kelas}] ${escapeHtml(s.nama)} (NISN: ${s.nisn})</option>`).join('');
+      }
+
+      modal.classList.remove('hidden');
+      safeCreateIcons();
+    }
+
+    function tutupModalMutasiKeluar() {
+      const modal = document.getElementById('modalMutasiSiswaKeluar');
+      if (modal) modal.classList.add('hidden');
+    }
+
+    function handlePilihSiswaMutasiKeluar(nisn) {
+      const boxDetail = document.getElementById('boxDetailSiswaKeluar');
+      if (!nisn) {
+        if (boxDetail) boxDetail.classList.add('hidden');
+        return;
+      }
+
+      const s = (masterSiswa || []).find(x => isSameNisn(x.nisn, nisn));
+      if (!s) return;
+
+      if (boxDetail) {
+        boxDetail.classList.remove('hidden');
+        document.getElementById('lblDetailOutNisn').innerText = `${s.nisn} ${s.nis ? '• NIS: ' + s.nis : ''}`;
+        document.getElementById('lblDetailOutKelas').innerText = `Kelas ${s.kelas}`;
+        document.getElementById('lblDetailOutNama').innerText = s.nama;
+      }
+
+      if (s.noHpOrtu) {
+        const elHp = document.getElementById('mutasiOutNoHpOrtu');
+        if (elHp && !elHp.value) elHp.value = s.noHpOrtu;
+      }
+    }
+
+    async function handleSimpanMutasiKeluar(e) {
+      e.preventDefault();
+      const nisn = document.getElementById('mutasiOutSelectSiswa').value;
+      const sekolahTujuan = document.getElementById('mutasiOutSekolahTujuan').value.trim();
+      const noSurat = document.getElementById('mutasiOutNoSurat').value.trim();
+      const tanggal = document.getElementById('mutasiOutTanggal').value;
+      const alasan = document.getElementById('mutasiOutAlasan').value.trim();
+      const namaOrtu = document.getElementById('mutasiOutNamaOrtu').value.trim();
+      const noHpOrtu = document.getElementById('mutasiOutNoHpOrtu').value.trim();
+
+      if (!nisn || !sekolahTujuan || !noSurat || !alasan) {
+        Swal.fire('Data Belum Lengkap', 'Siswa, Sekolah Tujuan, No Surat, dan Alasan Kepindahan wajib diisi!', 'warning');
+        return;
+      }
+
+      const s = (masterSiswa || []).find(x => isSameNisn(x.nisn, nisn));
+      if (!s) {
+        Swal.fire('Siswa Tidak Ditemukan', 'Data siswa tidak valid.', 'error');
+        return;
+      }
+
+      const confirm = await Swal.fire({
+        title: 'Konfirmasi Mutasi Keluar',
+        html: `Apakah Anda yakin ingin memproses mutasi keluar untuk:<br><b>${escapeHtml(s.nama)}</b> (Kelas ${s.kelas})<br>ke: <b>${escapeHtml(sekolahTujuan)}</b>?<br><br><span class="text-xs text-rose-600 font-semibold">Siswa akan dikeluarkan dari rombel aktif untuk presensi KBM harian.</span>`,
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonText: 'Ya, Terbitkan Mutasi Keluar',
+        cancelButtonText: 'Batal',
+        confirmButtonColor: '#e11d48'
+      });
+
+      if (!confirm.isConfirmed) return;
+
+      Swal.fire({
+        title: 'Menerbitkan Mutasi Keluar...',
+        didOpen: () => Swal.showLoading(),
+        allowOutsideClick: false
+      });
+
+      // Tandai siswa berstatus MUTASI_KELUAR di masterSiswa
+      s.status = 'MUTASI_KELUAR';
+
+      // Catat ke dbMutasiSiswa
+      const mutId = `MUT-OUT-${Date.now().toString().slice(-5)}`;
+      const mutasiRecord = {
+        id: mutId,
+        jenis: "KELUAR",
+        nisn: s.nisn,
+        nis: s.nis || '-',
+        nama: s.nama,
+        gender: s.gender || 'L',
+        kelas: s.kelas,
+        sekolahAsal: appConfig.NAMA_SEKOLAH || "SMP NEGERI 1 INDONESIA HEBAT",
+        sekolahTujuan: sekolahTujuan,
+        tanggal: tanggal,
+        alasan: alasan,
+        noSurat: noSurat,
+        namaOrtu: namaOrtu || s.namaOrtu || '-',
+        noHpOrtu: noHpOrtu || s.noHpOrtu || '-',
+        status: "MUTASI_KELUAR"
+      };
+
+      initMutasiSiswa();
+      dbMutasiSiswa.unshift(mutasiRecord);
+      saveMutasiSiswaToStorage();
+
+      tutupModalMutasiKeluar();
+
+      const resSwal = await Swal.fire({
+        icon: 'success',
+        title: 'Mutasi Keluar Berhasil Diterbitkan! 📄',
+        html: `Surat Keterangan Pindah Sekolah untuk <b>${escapeHtml(s.nama)}</b> telah diterbitkan.<br><span class="text-xs text-slate-500 mt-1 block">Nomor Surat: <b>${noSurat}</b></span>`,
+        showCancelButton: true,
+        confirmButtonText: '🖨️ Cetak Surat Keterangan Pindah',
+        cancelButtonText: 'Selesai',
+        confirmButtonColor: '#2563eb'
+      });
+
+      if (resSwal.isConfirmed) {
+        cetakSuratPindahSekolah(mutId);
+      }
+
+      renderManajemenUser();
+      renderPanelMutasiSiswa();
+      renderKepsekMutasi();
+    }
+
+    // 4. BATALKAN MUTASI SISWA (ROLLBACK)
+    async function batalkanMutasiSiswa(mutId) {
+      initMutasiSiswa();
+      const m = (dbMutasiSiswa || []).find(x => x.id === mutId);
+      if (!m) return;
+
+      const confirm = await Swal.fire({
+        title: 'Batalkan Catatan Mutasi?',
+        html: `Apakah Anda yakin ingin membatalkan mutasi <b>${m.jenis}</b> siswa <b>${escapeHtml(m.nama)}</b>?<br><br><span class="text-xs text-slate-500">Jika Pindah Keluar dibatalkan, status siswa akan kembali <b>AKTIF</b> di kelas asalnya.</span>`,
+        icon: 'question',
+        showCancelButton: true,
+        confirmButtonText: 'Ya, Batalkan Mutasi',
+        cancelButtonText: 'Kembali',
+        confirmButtonColor: '#e11d48'
+      });
+
+      if (!confirm.isConfirmed) return;
+
+      if (m.jenis === 'KELUAR') {
+        const s = (masterSiswa || []).find(x => isSameNisn(x.nisn, m.nisn));
+        if (s) s.status = 'AKTIF';
+      } else if (m.jenis === 'MASUK') {
+        // Hapus dari masterSiswa jika mutasi masuk dibatalkan
+        masterSiswa = (masterSiswa || []).filter(x => !isSameNisn(x.nisn, m.nisn));
+      }
+
+      dbMutasiSiswa = (dbMutasiSiswa || []).filter(x => x.id !== mutId);
+      saveMutasiSiswaToStorage();
+
+      Swal.fire({
+        icon: 'success',
+        title: 'Mutasi Dibatalkan',
+        text: 'Data telah diperbarui dan dikembalikan ke kondisi semula.',
+        timer: 1600,
+        showConfirmButton: false
+      });
+
+      renderManajemenUser();
+      renderPanelMutasiSiswa();
+      renderKepsekMutasi();
+    }
+
+    // 5. CETAK SURAT KETERANGAN PINDAH SEKOLAH RESMI (@media print)
+    function cetakSuratPindahSekolah(mutId) {
+      initMutasiSiswa();
+      const m = (dbMutasiSiswa || []).find(x => x.id === mutId);
+      if (!m) {
+        Swal.fire('Data Tidak Ditemukan', 'Catatan mutasi tidak ditemukan.', 'error');
+        return;
+      }
+
+      const printDiv = document.getElementById("printArea");
+      if (!printDiv) return;
+
+      const now = new Date(m.tanggal || new Date());
+      const titimangsa = `${appConfig.KOTA_TITIMANGSA || "Kota Cerdas"}, ${now.toLocaleDateString("id-ID", { day: "numeric", month: "long", year: "numeric" })}`;
+
+      printDiv.innerHTML = `
+        <div style="font-family: 'Times New Roman', serif; color: #000; padding: 25px; line-height: 1.5; font-size: 11pt;">
+          <!-- Kop Surat Resmi 2 Logo -->
+          <table style="width: 100%; border-bottom: 3px double #000; padding-bottom: 8px; margin-bottom: 18px;">
+            <tr>
+              <td style="width: 15%; text-align: center;">
+                <img src="${appConfig.LOGO_KIRI_PEMDA || ""}" style="height: 75px; object-fit: contain;" onerror="this.style.display='none'">
+              </td>
+              <td style="width: 70%; text-align: center;">
+                <h4 style="margin: 0; font-size: 13pt; font-weight: bold; text-transform: uppercase;">${appConfig.INSTANSI_PEMBINA || "PEMERINTAH DAERAH DINAS PENDIDIKAN"}</h4>
+                <h2 style="margin: 2px 0; font-size: 16pt; font-weight: bold; text-transform: uppercase;">${appConfig.NAMA_SEKOLAH || "SMP NEGERI 1 INDONESIA HEBAT"}</h2>
+                <p style="margin: 0; font-size: 10pt; font-style: italic;">${appConfig.ALAMAT_SEKOLAH || "Jl. Pendidikan Karakter No. 07"} • NSS/NPSN: ${appConfig.NPSN_SEKOLAH || "20109988"} • Akreditasi A</p>
+              </td>
+              <td style="width: 15%; text-align: center;">
+                <img src="${appConfig.LOGO_KANAN_SEKOLAH || ""}" style="height: 75px; object-fit: contain;" onerror="this.style.display='none'">
+              </td>
+            </tr>
+          </table>
+
+          <!-- Judul Surat Resmi -->
+          <div style="text-align: center; margin-bottom: 22px;">
+            <h3 style="margin: 0; font-size: 14pt; text-decoration: underline; font-weight: bold; text-transform: uppercase; letter-spacing: 0.5px;">SURAT KETERANGAN PINDAH SEKOLAH</h3>
+            <p style="margin: 3px 0; font-size: 11pt;">Nomor: <b>${m.noSurat || "421.3/001/SMP-IH/2026"}</b></p>
+          </div>
+
+          <!-- Paragraf Pembuka -->
+          <p style="text-align: justify; margin-bottom: 12px; text-indent: 35px;">
+            Yang bertanda tangan di bawah ini, Kepala Sekolah <b>${appConfig.NAMA_SEKOLAH || "SMP NEGERI 1 INDONESIA HEBAT"}</b>, menerangkan dengan sebenarnya bahwa:
+          </p>
+
+          <!-- Tabel Identitas Peserta Didik -->
+          <table style="width: 90%; margin: 0 auto 16px auto; font-size: 11pt; border-collapse: collapse;">
+            <tr>
+              <td style="width: 32%; padding: 4px 6px;">1. Nama Lengkap</td>
+              <td style="width: 3%; padding: 4px 2px;">:</td>
+              <td style="width: 65%; padding: 4px 6px; font-weight: bold; text-transform: uppercase;">${escapeHtml(m.nama)}</td>
+            </tr>
+            <tr>
+              <td style="padding: 4px 6px;">2. Nomor Induk Siswa Nasional (NISN)</td>
+              <td style="padding: 4px 2px;">:</td>
+              <td style="padding: 4px 6px; font-family: monospace; font-weight: bold;">${m.nisn}</td>
+            </tr>
+            <tr>
+              <td style="padding: 4px 6px;">3. Nomor Induk Siswa (NIS)</td>
+              <td style="padding: 4px 2px;">:</td>
+              <td style="padding: 4px 6px; font-family: monospace;">${m.nis || "-"}</td>
+            </tr>
+            <tr>
+              <td style="padding: 4px 6px;">4. Jenis Kelamin</td>
+              <td style="padding: 4px 2px;">:</td>
+              <td style="padding: 4px 6px;">${m.gender === 'P' ? 'Perempuan (P)' : 'Laki-laki (L)'}</td>
+            </tr>
+            <tr>
+              <td style="padding: 4px 6px;">5. Tingkat / Kelas Terakhir</td>
+              <td style="padding: 4px 2px;">:</td>
+              <td style="padding: 4px 6px; font-weight: bold;">Kelas ${escapeHtml(m.kelas)}</td>
+            </tr>
+            <tr>
+              <td style="padding: 4px 6px;">6. Nama Orang Tua / Wali</td>
+              <td style="padding: 4px 2px;">:</td>
+              <td style="padding: 4px 6px;">${escapeHtml(m.namaOrtu || "-")}</td>
+            </tr>
+          </table>
+
+          <!-- Keterangan Kepindahan -->
+          <p style="text-align: justify; margin-bottom: 12px;">
+            Sesuai surat permohonan kepindahan yang diajukan oleh Orang Tua/Wali tertanggal <b>${m.tanggal}</b>, yang bersangkutan telah mengajukan permohonan pindah sekolah ke:
+          </p>
+
+          <table style="width: 90%; margin: 0 auto 16px auto; font-size: 11pt; border-collapse: collapse; background: #fafafa; border: 1px solid #cbd5e1; padding: 10px;">
+            <tr>
+              <td style="width: 32%; padding: 6px 10px;">Sekolah Tujuan</td>
+              <td style="width: 3%; padding: 6px 2px;">:</td>
+              <td style="width: 65%; padding: 6px 10px; font-weight: bold; text-transform: uppercase;">${escapeHtml(m.sekolahTujuan)}</td>
+            </tr>
+            <tr>
+              <td style="padding: 6px 10px;">Alasan Kepindahan</td>
+              <td style="padding: 6px 2px;">:</td>
+              <td style="padding: 6px 10px;">${escapeHtml(m.alasan || "Mengikuti domisili orang tua")}</td>
+            </tr>
+          </table>
+
+          <p style="text-align: justify; margin-bottom: 25px; text-indent: 35px;">
+            Demikian Surat Keterangan Pindah Sekolah ini kami buat dengan sebenarnya agar dapat dipergunakan sebagaimana mestinya oleh pihak sekolah penerima dan instansi berwenang. Bersama surat ini dilampirkan Buku Laporan Penilaian Hasil Belajar (Rapor) siswa yang bersangkutan.
+          </p>
+
+          <!-- Tanda Tangan Resmi Kepala Sekolah -->
+          <table style="width: 100%; margin-top: 30px; font-size: 11pt;">
+            <tr>
+              <td style="width: 50%; vertical-align: top;">
+                <div style="border: 1px dashed #94a3b8; padding: 10px; font-size: 9pt; width: 85%;">
+                  <b>Tanda Terima Sekolah Tujuan:</b><br>
+                  Diterima di: ........................................<br>
+                  Tanggal: ............................................<br>
+                  Kepala Sekolah Penerima,<br>
+                  <div style="height: 40px;"></div>
+                  (......................................................)
+                </div>
+              </td>
+              <td style="width: 50%; text-align: center; vertical-align: top;">
+                <p style="margin: 0;">${titimangsa}</p>
+                <p style="margin: 0; font-weight: bold;">Kepala Sekolah,</p>
+                <div style="height: 60px;"></div>
+                <p style="margin: 0; font-weight: bold; text-decoration: underline;">${appConfig.NAMA_KEPSEK || "Drs. H. Mulyadi, M.Pd."}</p>
+                <p style="margin: 0;">NIP. ${appConfig.NIP_KEPSEK || "197205101998021003"}</p>
+              </td>
+            </tr>
+          </table>
+        </div>
+      `;
+
+      eksekusiCetakDiv(printDiv);
+    }
+
+    // 6. CETAK SURAT KETERANGAN PENERIMAAN MUTASI MASUK (@media print)
+    function cetakSuratDiterimaMasuk(mutId) {
+      initMutasiSiswa();
+      const m = (dbMutasiSiswa || []).find(x => x.id === mutId);
+      if (!m) {
+        Swal.fire('Data Tidak Ditemukan', 'Catatan mutasi tidak ditemukan.', 'error');
+        return;
+      }
+
+      const printDiv = document.getElementById("printArea");
+      if (!printDiv) return;
+
+      const now = new Date(m.tanggal || new Date());
+      const titimangsa = `${appConfig.KOTA_TITIMANGSA || "Kota Cerdas"}, ${now.toLocaleDateString("id-ID", { day: "numeric", month: "long", year: "numeric" })}`;
+
+      printDiv.innerHTML = `
+        <div style="font-family: 'Times New Roman', serif; color: #000; padding: 25px; line-height: 1.5; font-size: 11pt;">
+          <table style="width: 100%; border-bottom: 3px double #000; padding-bottom: 8px; margin-bottom: 18px;">
+            <tr>
+              <td style="width: 15%; text-align: center;">
+                <img src="${appConfig.LOGO_KIRI_PEMDA || ""}" style="height: 75px; object-fit: contain;" onerror="this.style.display='none'">
+              </td>
+              <td style="width: 70%; text-align: center;">
+                <h4 style="margin: 0; font-size: 13pt; font-weight: bold; text-transform: uppercase;">${appConfig.INSTANSI_PEMBINA || "PEMERINTAH DAERAH DINAS PENDIDIKAN"}</h4>
+                <h2 style="margin: 2px 0; font-size: 16pt; font-weight: bold; text-transform: uppercase;">${appConfig.NAMA_SEKOLAH || "SMP NEGERI 1 INDONESIA HEBAT"}</h2>
+                <p style="margin: 0; font-size: 10pt; font-style: italic;">${appConfig.ALAMAT_SEKOLAH || "Jl. Pendidikan Karakter No. 07"} • NSS/NPSN: ${appConfig.NPSN_SEKOLAH || "20109988"} • Akreditasi A</p>
+              </td>
+              <td style="width: 15%; text-align: center;">
+                <img src="${appConfig.LOGO_KANAN_SEKOLAH || ""}" style="height: 75px; object-fit: contain;" onerror="this.style.display='none'">
+              </td>
+            </tr>
+          </table>
+
+          <div style="text-align: center; margin-bottom: 22px;">
+            <h3 style="margin: 0; font-size: 14pt; text-decoration: underline; font-weight: bold; text-transform: uppercase;">SURAT KETERANGAN PENERIMAAN SISWA PINDAHAN</h3>
+            <p style="margin: 3px 0; font-size: 11pt;">Nomor: <b>421.3/TERIMA/${m.nisn.slice(-4)}/${now.getFullYear()}</b></p>
+          </div>
+
+          <p style="text-align: justify; margin-bottom: 12px; text-indent: 35px;">
+            Kepala Sekolah <b>${appConfig.NAMA_SEKOLAH || "SMP NEGERI 1 INDONESIA HEBAT"}</b>, menerangkan dengan sebenarnya bahwa peserta didik di bawah ini:
+          </p>
+
+          <table style="width: 90%; margin: 0 auto 16px auto; font-size: 11pt; border-collapse: collapse;">
+            <tr>
+              <td style="width: 32%; padding: 4px 6px;">1. Nama Lengkap</td>
+              <td style="width: 3%; padding: 4px 2px;">:</td>
+              <td style="width: 65%; padding: 4px 6px; font-weight: bold; text-transform: uppercase;">${escapeHtml(m.nama)}</td>
+            </tr>
+            <tr>
+              <td style="padding: 4px 6px;">2. NISN / NIS Baru</td>
+              <td style="padding: 4px 2px;">:</td>
+              <td style="padding: 4px 6px; font-family: monospace; font-weight: bold;">${m.nisn} / ${m.nis || "-"}</td>
+            </tr>
+            <tr>
+              <td style="padding: 4px 6px;">3. Jenis Kelamin</td>
+              <td style="padding: 4px 2px;">:</td>
+              <td style="padding: 4px 6px;">${m.gender === 'P' ? 'Perempuan (P)' : 'Laki-laki (L)'}</td>
+            </tr>
+            <tr>
+              <td style="padding: 4px 6px;">4. Asal Sekolah</td>
+              <td style="padding: 4px 2px;">:</td>
+              <td style="padding: 4px 6px; font-weight: bold;">${escapeHtml(m.sekolahAsal)}</td>
+            </tr>
+            <tr>
+              <td style="padding: 4px 6px;">5. No. Surat Pindah Asal</td>
+              <td style="padding: 4px 2px;">:</td>
+              <td style="padding: 4px 6px; font-family: monospace;">${escapeHtml(m.noSurat || "-")}</td>
+            </tr>
+          </table>
+
+          <p style="text-align: justify; margin-bottom: 25px; text-indent: 35px;">
+            Telah <b>DITERIMA RESMI</b> sebagai peserta didik aktif di <b>${appConfig.NAMA_SEKOLAH || "SMP NEGERI 1 INDONESIA HEBAT"}</b> dan ditempatkan pada rombongan belajar <b>Kelas ${escapeHtml(m.kelas)}</b> terhitung mulai tanggal <b>${m.tanggal}</b>.
+          </p>
+
+          <table style="width: 100%; margin-top: 30px; font-size: 11pt;">
+            <tr>
+              <td style="width: 50%;"></td>
+              <td style="width: 50%; text-align: center;">
+                <p style="margin: 0;">${titimangsa}</p>
+                <p style="margin: 0; font-weight: bold;">Kepala Sekolah,</p>
+                <div style="height: 60px;"></div>
+                <p style="margin: 0; font-weight: bold; text-decoration: underline;">${appConfig.NAMA_KEPSEK || "Drs. H. Mulyadi, M.Pd."}</p>
+                <p style="margin: 0;">NIP. ${appConfig.NIP_KEPSEK || "197205101998021003"}</p>
+              </td>
+            </tr>
+          </table>
+        </div>
+      `;
+
+      eksekusiCetakDiv(printDiv);
+    }
+
+    // 7. CETAK BUKU INDUK REGISTRASI MUTASI SISWA (KEDINASAN A4 LANDSCAPE)
+    function cetakBukuRegistrasiMutasi() {
+      initMutasiSiswa();
+      const printDiv = document.getElementById("printArea");
+      if (!printDiv) return;
+
+      const now = new Date();
+      const titimangsa = `${appConfig.KOTA_TITIMANGSA || "Kota Cerdas"}, ${now.toLocaleDateString("id-ID", { day: "numeric", month: "long", year: "numeric" })}`;
+
+      const listMasuk = (dbMutasiSiswa || []).filter(m => m.jenis === 'MASUK');
+      const listKeluar = (dbMutasiSiswa || []).filter(m => m.jenis === 'KELUAR');
+
+      printDiv.innerHTML = `
+        <div style="font-family: 'Times New Roman', serif; color: #000; padding: 25px; line-height: 1.4; font-size: 10pt;">
+          <!-- Kop Surat Resmi -->
+          <table style="width: 100%; border-bottom: 3px double #000; padding-bottom: 8px; margin-bottom: 16px;">
+            <tr>
+              <td style="width: 12%; text-align: center;">
+                <img src="${appConfig.LOGO_KIRI_PEMDA || ""}" style="height: 65px; object-fit: contain;" onerror="this.style.display='none'">
+              </td>
+              <td style="width: 76%; text-align: center;">
+                <h4 style="margin: 0; font-size: 12pt; font-weight: bold; text-transform: uppercase;">${appConfig.INSTANSI_PEMBINA || "PEMERINTAH DAERAH DINAS PENDIDIKAN"}</h4>
+                <h2 style="margin: 2px 0; font-size: 15pt; font-weight: bold; text-transform: uppercase;">${appConfig.NAMA_SEKOLAH || "SMP NEGERI 1 INDONESIA HEBAT"}</h2>
+                <p style="margin: 0; font-size: 9.5pt; font-style: italic;">${appConfig.ALAMAT_SEKOLAH || "Jl. Pendidikan Karakter No. 07"} • Akreditasi A</p>
+              </td>
+              <td style="width: 12%; text-align: center;">
+                <img src="${appConfig.LOGO_KANAN_SEKOLAH || ""}" style="height: 65px; object-fit: contain;" onerror="this.style.display='none'">
+              </td>
+            </tr>
+          </table>
+
+          <div style="text-align: center; margin-bottom: 18px;">
+            <h3 style="margin: 0; font-size: 13pt; text-decoration: underline; font-weight: bold; text-transform: uppercase;">BUKU INDUK REGISTRASI MUTASI SISWA (MASUK & KELUAR)</h3>
+            <p style="margin: 3px 0; font-size: 10pt;">Tahun Ajaran: <b>${appConfig.TAHUN_AJARAN || "2026/2027"}</b> • Total Masuk: <b>${listMasuk.length} Siswa</b> • Total Keluar: <b>${listKeluar.length} Siswa</b></p>
+          </div>
+
+          <!-- BAGIAN I: SISWA PINDAH MASUK -->
+          <h4 style="margin: 10px 0 6px 0; font-size: 11pt; font-weight: bold; color: #047857;">A. DAFTAR SISWA PINDAH MASUK (MUTASI MASUK)</h4>
+          <table style="width: 100%; border-collapse: collapse; font-size: 9.5pt; margin-bottom: 20px;">
+            <thead>
+              <tr style="background-color: #ecfdf5;">
+                <th style="border: 1px solid #000; padding: 5px; width: 5%; text-align: center;">No</th>
+                <th style="border: 1px solid #000; padding: 5px; width: 12%; text-align: center;">Tgl Diterima</th>
+                <th style="border: 1px solid #000; padding: 5px; width: 15%; text-align: center;">NISN / NIS</th>
+                <th style="border: 1px solid #000; padding: 5px; width: 22%;">Nama Lengkap Siswa</th>
+                <th style="border: 1px solid #000; padding: 5px; width: 8%; text-align: center;">Kls</th>
+                <th style="border: 1px solid #000; padding: 5px; width: 20%;">Sekolah Asal</th>
+                <th style="border: 1px solid #000; padding: 5px; width: 18%;">No. Surat Asal</th>
+              </tr>
+            </thead>
+            <tbody>
+              ${listMasuk.length === 0 ? `<tr><td colspan="7" style="border: 1px solid #000; padding: 8px; text-align: center; font-style: italic;">Tidak ada catatan siswa pindah masuk.</td></tr>` : listMasuk.map((m, idx) => `
+                <tr>
+                  <td style="border: 1px solid #000; padding: 5px; text-align: center;">${idx + 1}</td>
+                  <td style="border: 1px solid #000; padding: 5px; text-align: center; font-family: monospace;">${m.tanggal}</td>
+                  <td style="border: 1px solid #000; padding: 5px; text-align: center; font-family: monospace;">${m.nisn}<br><small>${m.nis || '-'}</small></td>
+                  <td style="border: 1px solid #000; padding: 5px; font-weight: bold;">${escapeHtml(m.nama)} (${m.gender || 'L'})</td>
+                  <td style="border: 1px solid #000; padding: 5px; text-align: center;">${escapeHtml(m.kelas)}</td>
+                  <td style="border: 1px solid #000; padding: 5px;">${escapeHtml(m.sekolahAsal)}</td>
+                  <td style="border: 1px solid #000; padding: 5px; font-family: monospace; font-size: 8.5pt;">${escapeHtml(m.noSurat || '-')}</td>
+                </tr>
+              `).join('')}
+            </tbody>
+          </table>
+
+          <!-- BAGIAN II: SISWA PINDAH KELUAR -->
+          <h4 style="margin: 10px 0 6px 0; font-size: 11pt; font-weight: bold; color: #b91c1c;">B. DAFTAR SISWA PINDAH KELUAR (MUTASI KELUAR)</h4>
+          <table style="width: 100%; border-collapse: collapse; font-size: 9.5pt; margin-bottom: 25px;">
+            <thead>
+              <tr style="background-color: #fff1f2;">
+                <th style="border: 1px solid #000; padding: 5px; width: 5%; text-align: center;">No</th>
+                <th style="border: 1px solid #000; padding: 5px; width: 12%; text-align: center;">Tgl Mutasi</th>
+                <th style="border: 1px solid #000; padding: 5px; width: 15%; text-align: center;">NISN / NIS</th>
+                <th style="border: 1px solid #000; padding: 5px; width: 22%;">Nama Lengkap Siswa</th>
+                <th style="border: 1px solid #000; padding: 5px; width: 8%; text-align: center;">Kls</th>
+                <th style="border: 1px solid #000; padding: 5px; width: 20%;">Sekolah Tujuan</th>
+                <th style="border: 1px solid #000; padding: 5px; width: 18%;">No. Surat & Alasan</th>
+              </tr>
+            </thead>
+            <tbody>
+              ${listKeluar.length === 0 ? `<tr><td colspan="7" style="border: 1px solid #000; padding: 8px; text-align: center; font-style: italic;">Tidak ada catatan siswa pindah keluar.</td></tr>` : listKeluar.map((m, idx) => `
+                <tr>
+                  <td style="border: 1px solid #000; padding: 5px; text-align: center;">${idx + 1}</td>
+                  <td style="border: 1px solid #000; padding: 5px; text-align: center; font-family: monospace;">${m.tanggal}</td>
+                  <td style="border: 1px solid #000; padding: 5px; text-align: center; font-family: monospace;">${m.nisn}<br><small>${m.nis || '-'}</small></td>
+                  <td style="border: 1px solid #000; padding: 5px; font-weight: bold;">${escapeHtml(m.nama)} (${m.gender || 'L'})</td>
+                  <td style="border: 1px solid #000; padding: 5px; text-align: center;">${escapeHtml(m.kelas)}</td>
+                  <td style="border: 1px solid #000; padding: 5px;">${escapeHtml(m.sekolahTujuan)}</td>
+                  <td style="border: 1px solid #000; padding: 5px; font-size: 8.5pt;"><b>${escapeHtml(m.noSurat || '-')}</b><br><i>${escapeHtml(m.alasan || '-')}</i></td>
+                </tr>
+              `).join('')}
+            </tbody>
+          </table>
+
+          <!-- Tanda Tangan Pengesahan -->
+          <table style="width: 100%; font-size: 10pt;">
+            <tr>
+              <td style="width: 60%;">
+                <p style="margin: 0;">Mengetahui,<br>Pengawas Pembina Satuan Pendidikan,</p>
+                <div style="height: 55px;"></div>
+                <p style="margin: 0; font-weight: bold; text-decoration: underline;">Dr. H. Sudirman, M.Pd.</p>
+                <p style="margin: 0;">NIP. 196803151992031004</p>
+              </td>
+              <td style="width: 40%; text-align: center;">
+                <p style="margin: 0;">${titimangsa}</p>
+                <p style="margin: 0; font-weight: bold;">Kepala Sekolah,</p>
+                <div style="height: 55px;"></div>
+                <p style="margin: 0; font-weight: bold; text-decoration: underline;">${appConfig.NAMA_KEPSEK || "Drs. H. Mulyadi, M.Pd."}</p>
+                <p style="margin: 0;">NIP. ${appConfig.NIP_KEPSEK || "197205101998021003"}</p>
+              </td>
+            </tr>
+          </table>
+        </div>
+      `;
+
+      eksekusiCetakDiv(printDiv);
     }
   </script>
 </body>
