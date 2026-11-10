@@ -2438,41 +2438,7 @@
           </div>
         </div>
 
-                <!-- 0. PENETAPAN GURU PETUGAS TATA TERTIB & MANAJEMEN PELANGGARAN -->
-        <div class="bg-white p-6 rounded-3xl border border-slate-200 shadow-xs space-y-4">
-          <div class="flex flex-col sm:flex-row sm:items-center justify-between pb-3 border-b border-slate-100 gap-2">
-            <div>
-              <div class="inline-flex items-center gap-1.5 px-2.5 py-0.5 bg-rose-100 text-rose-800 rounded-full text-[10px] font-black uppercase mb-1">
-                <span>HAK AKSES KHUSUS PORTAL GURU</span>
-              </div>
-              <h4 class="font-black text-sm sm:text-base text-slate-900 flex items-center gap-2">
-                <i data-lucide="user-check" class="w-4 h-4 text-rose-600"></i>
-                <span>Penetapan Guru Petugas Manajemen Pelanggaran</span>
-              </h4>
-              <p class="text-xs text-slate-500">Tentukan guru-guru yang diberikan kewenangan khusus untuk mengelola tata tertib, master jenis pelanggaran, bank tugas pembinaan, dan aturan eskalasi berulang di portal akun guru masing-masing.</p>
-            </div>
-            <div class="flex items-center gap-2">
-              <span id="badgeJumlahPetugasPelanggaranAdmin" class="px-2.5 py-1 bg-slate-100 text-slate-700 rounded-xl text-xs font-bold">0 Petugas Ditunjuk</span>
-              <button type="button" onclick="simpanPetugasPelanggaranAdmin()" class="px-4 py-2 bg-rose-600 hover:bg-rose-700 text-white font-bold rounded-xl text-xs transition flex items-center gap-1.5 shadow-xs cursor-pointer">
-                <i data-lucide="save" class="w-4 h-4"></i>
-                <span>Simpan Petugas Ditunjuk</span>
-              </button>
-            </div>
-          </div>
-
-          <div class="space-y-2">
-            <div class="flex items-center justify-between text-xs font-semibold text-slate-600 pb-1">
-              <span>Centang guru yang ditugaskan sebagai pengelola tata tertib sekolah:</span>
-              <span class="text-[11px] text-slate-400">Guru BK otomatis mendapatkan hak akses konseling & disiplin</span>
-            </div>
-            <div id="containerListGuruPetugasPelanggaranAdmin" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-2.5 max-h-64 overflow-y-auto p-1 custom-scrollbar">
-              <!-- Item Guru dirender otomatis via renderPengaturanPetugasPelanggaranAdmin() -->
-            </div>
-          </div>
-        </div>
-
-
-        <!-- 1. PENGATURAN MATRIKS KONSEKUENSI PELANGGARAN BERULANG (ESKALASI BERTINGKAT) -->
+                <!-- 1. PENGATURAN MATRIKS KONSEKUENSI PELANGGARAN BERULANG (ESKALASI BERTINGKAT) -->
         <div class="bg-white p-6 rounded-3xl border border-slate-200 shadow-xs space-y-5">
           <div class="flex flex-col sm:flex-row sm:items-center justify-between pb-3 border-b border-slate-100 gap-2">
             <div>
@@ -3764,7 +3730,7 @@
           <div class="space-y-2">
             <div class="flex items-center justify-between text-xs font-semibold text-slate-600 pb-1">
               <span>Centang guru yang ditugaskan sebagai pengelola tata tertib sekolah:</span>
-              <span class="text-[11px] text-slate-400">Guru BK otomatis mendapatkan hak akses konseling & disiplin</span>
+              <span class="text-[11px] text-slate-400">Hanya guru yang dicentang yang dapat mengakses menu Manajemen Pelanggaran</span>
             </div>
             <div id="containerListGuruPetugasPelanggaranAdmin" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-2.5 max-h-64 overflow-y-auto p-1 custom-scrollbar">
               <!-- Item Guru dirender otomatis via renderPengaturanPetugasPelanggaranAdmin() -->
@@ -6458,6 +6424,7 @@ function renderBadgeStatusBk(statusBK) {
       POIN_SP1: 30,
       POIN_SP2: 60,
       POIN_SP3: 90,
+      GURU_PETUGAS_PELANGGARAN: [],
       TAHUN_AJARAN: "2026/2027",
       SEMESTER_AKTIF: "1",
       FITUR_REFLEKSI_4F: "NONAKTIF",
@@ -21870,6 +21837,11 @@ function cetakBeritaAcaraKonselingBk(idLog) {
 function renderAdminManajemenPelanggaran() {
   ensureDisiplinConfig();
 
+  // 0. Render Penunjukan Petugas Manajemen Pelanggaran oleh Admin
+  if (typeof renderPengaturanPetugasPelanggaranAdmin === 'function') {
+    renderPengaturanPetugasPelanggaranAdmin();
+  }
+
   // 1. Render Tabel Master Pelanggaran
   const tbody = document.getElementById('tbodyMasterPelanggaranAdmin');
   if (tbody) {
@@ -21995,6 +21967,7 @@ async function handleSimpanPelanggaranAdmin(e) {
   saveLocalCache();
   tutupModalFormPelanggaranAdmin();
   renderAdminManajemenPelanggaran();
+  if (typeof renderGuruManajemenPelanggaran === 'function') renderGuruManajemenPelanggaran();
   renderCheckboxMasterTibum();
 
   Swal.fire({
@@ -22031,24 +22004,50 @@ async function hapusPelanggaranAdmin(kode) {
 // Pengaturan Matriks Eskalasi Berulang
 function simpanAturanKonsekuensiBerulang() {
   ensureDisiplinConfig();
-  const tambahPoin2 = Number(document.getElementById('cfgEscTambahPoin2').value) || 5;
-  const sanksi1 = document.getElementById('cfgEscSanksi1').value.trim();
-  const sanksi2 = document.getElementById('cfgEscSanksi2').value.trim();
-  const sanksi3 = document.getElementById('cfgEscSanksi3').value.trim();
-  const sanksi4 = document.getElementById('cfgEscSanksi4').value.trim();
-  const statusBk1 = document.getElementById('cfgEscStatusBk1').value;
-  const statusBk2 = document.getElementById('cfgEscStatusBk2').value;
-  const statusBk3 = document.getElementById('cfgEscStatusBk3').value;
-  const statusBk4 = document.getElementById('cfgEscStatusBk4').value;
+  const isGuruTab = document.getElementById('tabContentGuru_manajemenPelanggaran') && 
+                    !document.getElementById('tabContentGuru_manajemenPelanggaran').classList.contains('hidden');
+
+  let sanksi1, sanksi2, sanksi3, sanksi4;
+  let tambahPoin2, mult3, mult4;
+  let statusBk1, statusBk2, statusBk3, statusBk4;
+
+  if (isGuruTab) {
+    sanksi1 = document.getElementById('eskalasiSanksi1_guru') ? document.getElementById('eskalasiSanksi1_guru').value.trim() : 'Peringatan Lisan & Bimbingan Walas';
+    tambahPoin2 = Number(document.getElementById('eskalasiTambahPoin2_guru') ? document.getElementById('eskalasiTambahPoin2_guru').value : 5) || 5;
+    sanksi2 = document.getElementById('eskalasiSanksi2_guru') ? document.getElementById('eskalasiSanksi2_guru').value.trim() : 'Teguran Tertulis & Wajib Tugas Edukatif';
+    mult3 = Number(document.getElementById('eskalasiMultiplier3_guru') ? document.getElementById('eskalasiMultiplier3_guru').value : 2) || 2;
+    sanksi3 = document.getElementById('eskalasiSanksi3_guru') ? document.getElementById('eskalasiSanksi3_guru').value.trim() : 'Panggilan Orang Tua & Pembinaan Khusus BK';
+    mult4 = Number(document.getElementById('eskalasiMultiplier4_guru') ? document.getElementById('eskalasiMultiplier4_guru').value : 3) || 3;
+    sanksi4 = document.getElementById('eskalasiSanksi4_guru') ? document.getElementById('eskalasiSanksi4_guru').value.trim() : 'Konferensi Kasus Terpadu & SP Tertulis';
+    statusBk1 = 'PENDING';
+    statusBk2 = 'PERLU_TUGAS';
+    statusBk3 = 'RUJUK_BK';
+    statusBk4 = 'PANGGIL_ORTU';
+  } else {
+    tambahPoin2 = Number(document.getElementById('cfgEscTambahPoin2') ? document.getElementById('cfgEscTambahPoin2').value : 5) || 5;
+    sanksi1 = document.getElementById('cfgEscSanksi1') ? document.getElementById('cfgEscSanksi1').value.trim() : 'Peringatan Lisan & Pencatatan Sikap';
+    sanksi2 = document.getElementById('cfgEscSanksi2') ? document.getElementById('cfgEscSanksi2').value.trim() : 'Teguran Tertulis Walas & Tugas Edukatif';
+    sanksi3 = document.getElementById('cfgEscSanksi3') ? document.getElementById('cfgEscSanksi3').value.trim() : 'Panggilan Orang Tua, Bimbingan Intensif BK & Skorsing Edukatif';
+    sanksi4 = document.getElementById('cfgEscSanksi4') ? document.getElementById('cfgEscSanksi4').value.trim() : 'Konferensi Kasus Kepsek, Surat Peringatan (SP3) / Sidang Pleno';
+    statusBk1 = document.getElementById('cfgEscStatusBk1') ? document.getElementById('cfgEscStatusBk1').value : 'PENDING';
+    statusBk2 = document.getElementById('cfgEscStatusBk2') ? document.getElementById('cfgEscStatusBk2').value : 'PERLU_TUGAS';
+    statusBk3 = document.getElementById('cfgEscStatusBk3') ? document.getElementById('cfgEscStatusBk3').value : 'RUJUK_BK';
+    statusBk4 = document.getElementById('cfgEscStatusBk4') ? document.getElementById('cfgEscStatusBk4').value : 'PANGGIL_ORTU';
+    mult3 = 2;
+    mult4 = 2.5;
+  }
 
   appConfig.ESKALASI_BERULANG = {
     tingkat1: { sanksi: sanksi1, statusBK: statusBk1, multiplier: 1, tambahPoin: 0 },
     tingkat2: { sanksi: sanksi2, statusBK: statusBk2, multiplier: 1, tambahPoin: tambahPoin2 },
-    tingkat3: { sanksi: sanksi3, statusBK: statusBk3, multiplier: 2, tambahPoin: 10 },
-    tingkat4: { sanksi: sanksi4, statusBK: statusBk4, multiplier: 2.5, tambahPoin: 20 }
+    tingkat3: { sanksi: sanksi3, statusBK: statusBk3, multiplier: mult3, tambahPoin: 10 },
+    tingkat4: { sanksi: sanksi4, statusBK: statusBk4, multiplier: mult4, tambahPoin: 20 }
   };
 
   saveAppConfigToLocalStorage();
+  if (typeof renderAdminManajemenPelanggaran === 'function') renderAdminManajemenPelanggaran();
+  if (typeof renderGuruManajemenPelanggaran === 'function') renderGuruManajemenPelanggaran();
+
   Swal.fire({
     icon: 'success',
     title: 'Pengaturan Disimpan',
@@ -22125,21 +22124,11 @@ function isCurrentUserGuruBk() {
 
 // Cek apakah user saat ini ditunjuk sebagai Petugas Manajemen Pelanggaran
 function isCurrentUserPetugasPelanggaran() {
-  if (typeof currentUser === 'undefined' || !currentUser) return false;
-  
-  // Jika ditunjuk di appConfig.GURU_PETUGAS_PELANGGARAN
-  if (typeof appConfig !== 'undefined' && Array.isArray(appConfig.GURU_PETUGAS_PELANGGARAN)) {
-    if (appConfig.GURU_PETUGAS_PELANGGARAN.includes(currentUser.nip)) return true;
-  }
-  
-  // Guru BK otomatis memiliki hak akses manajemen pelanggaran & tata tertib
-  if (isCurrentUserGuruBk()) return true;
-
-  // Tim Disiplin / Tibum / Kesiswaan
-  const role = String(currentUser.role || currentUser.peran || '').toUpperCase();
-  if (role.includes('TIBUM') || role.includes('DISIPLIN') || role.includes('KESISWAAN')) return true;
-
-  return false;
+  if (typeof currentUser === 'undefined' || !currentUser || !currentUser.nip) return false;
+  if (typeof appConfig === 'undefined' || !appConfig) return false;
+  const list = Array.isArray(appConfig.GURU_PETUGAS_PELANGGARAN) ? appConfig.GURU_PETUGAS_PELANGGARAN : [];
+  const curNip = String(currentUser.nip).trim();
+  return list.some(nip => String(nip).trim() === curNip);
 }
 
 // -------------------------------------------------------------------------
@@ -22152,19 +22141,14 @@ function renderPengaturanPetugasPelanggaranAdmin() {
   const listGuru = Array.isArray(masterGuru) ? masterGuru : [];
   if (typeof appConfig === 'undefined') window.appConfig = {};
   if (!Array.isArray(appConfig.GURU_PETUGAS_PELANGGARAN)) {
-    // Default: masukkan Guru BK jika ada
     appConfig.GURU_PETUGAS_PELANGGARAN = [];
-    listGuru.forEach(g => {
-      const isBk = (g.peran === 'GURU_BK' || (g.mapel && g.mapel.includes('Bimbingan')) || (g.nama && g.nama.includes('S.Psi')));
-      if (isBk && !appConfig.GURU_PETUGAS_PELANGGARAN.includes(g.nip)) {
-        appConfig.GURU_PETUGAS_PELANGGARAN.push(g.nip);
-      }
-    });
   }
+
+  const selectedNips = appConfig.GURU_PETUGAS_PELANGGARAN.map(n => String(n).trim());
 
   const badgeCount = document.getElementById('badgeJumlahPetugasPelanggaranAdmin');
   if (badgeCount) {
-    badgeCount.innerText = `${appConfig.GURU_PETUGAS_PELANGGARAN.length} Petugas Ditunjuk`;
+    badgeCount.innerText = `${selectedNips.length} Petugas Ditunjuk`;
   }
 
   if (listGuru.length === 0) {
@@ -22173,17 +22157,19 @@ function renderPengaturanPetugasPelanggaranAdmin() {
   }
 
   container.innerHTML = listGuru.map(g => {
-    // Abaikan akun non-guru jika ada
+    // Abaikan akun Kepala Sekolah atau jika tidak punya nama/nip
     if (g.peran === 'KEPALA_SEKOLAH') return '';
-    const isChecked = appConfig.GURU_PETUGAS_PELANGGARAN.includes(g.nip);
+    const gNip = String(g.nip || '').trim();
+    if (!gNip) return '';
+    const isChecked = selectedNips.includes(gNip);
     const isBk = (g.peran === 'GURU_BK' || (g.mapel && g.mapel.includes('Bimbingan')) || (g.nama && g.nama.includes('S.Psi')));
 
     return `
-      <label class="flex items-start gap-2.5 p-3 rounded-2xl border transition cursor-pointer ${isChecked ? 'bg-rose-50/80 border-rose-300 text-rose-950' : 'bg-slate-50 hover:bg-slate-100 border-slate-200 text-slate-700'}">
-        <input type="checkbox" name="chkPetugasPelanggaranAdmin" value="${escapeHtml(g.nip)}" ${isChecked ? 'checked' : ''} class="mt-0.5 rounded text-rose-600 focus:ring-rose-500">
+      <label class="flex items-start gap-2.5 p-3 rounded-2xl border transition cursor-pointer ${isChecked ? 'bg-rose-50/80 border-rose-300 text-rose-950 font-bold' : 'bg-slate-50 hover:bg-slate-100 border-slate-200 text-slate-700'}">
+        <input type="checkbox" name="chkPetugasPelanggaranAdmin" value="${escapeHtml(gNip)}" ${isChecked ? 'checked' : ''} onchange="onChkPetugasPelanggaranChange(this)" class="mt-0.5 rounded text-rose-600 focus:ring-rose-500">
         <div class="text-xs">
           <p class="font-extrabold leading-tight">${escapeHtml(g.nama)}</p>
-          <p class="text-[10px] text-slate-500 font-mono">NIP: ${escapeHtml(g.nip || '-')}</p>
+          <p class="text-[10px] text-slate-500 font-mono">NIP: ${escapeHtml(gNip)}</p>
           <div class="flex items-center gap-1 mt-1">
             <span class="px-1.5 py-0.2 bg-white/80 border rounded text-[9px] font-bold ${isBk ? 'text-emerald-700 border-emerald-300' : 'text-slate-600 border-slate-200'}">
               ${escapeHtml(g.mapel || g.peran || 'Guru')}
@@ -22198,21 +22184,36 @@ function renderPengaturanPetugasPelanggaranAdmin() {
   if (typeof safeCreateIcons === 'function') safeCreateIcons();
 }
 
+function onChkPetugasPelanggaranChange(chk) {
+  const lbl = chk.closest('label');
+  if (lbl) {
+    if (chk.checked) {
+      lbl.className = 'flex items-start gap-2.5 p-3 rounded-2xl border transition cursor-pointer bg-rose-50/80 border-rose-300 text-rose-950 font-bold';
+    } else {
+      lbl.className = 'flex items-start gap-2.5 p-3 rounded-2xl border transition cursor-pointer bg-slate-50 hover:bg-slate-100 border-slate-200 text-slate-700';
+    }
+  }
+}
+
 async function simpanPetugasPelanggaranAdmin() {
   const checkboxes = document.querySelectorAll('input[name="chkPetugasPelanggaranAdmin"]:checked');
-  const selectedNips = Array.from(checkboxes).map(c => c.value);
+  const selectedNips = Array.from(checkboxes).map(c => String(c.value).trim()).filter(Boolean);
 
   if (typeof appConfig === 'undefined') window.appConfig = {};
   appConfig.GURU_PETUGAS_PELANGGARAN = selectedNips;
 
-  try {
-    localStorage.setItem('SUPERAPP_CONFIG', JSON.stringify(appConfig));
-  } catch (err) {
-    console.warn("Gagal simpan config lokal:", err);
+  if (typeof saveAppConfigToLocalStorage === 'function') {
+    saveAppConfigToLocalStorage();
+  } else {
+    try {
+      localStorage.setItem('SUPERAPP_CONFIG', JSON.stringify(appConfig));
+    } catch (err) {
+      console.warn("Gagal simpan config lokal:", err);
+    }
   }
 
   // Sinkronisasi ke server jika online
-  if (typeof callBackendPost === 'function' && (typeof BACKEND_URL !== 'undefined' && BACKEND_URL || typeof isGas === 'function' && isGas())) {
+  if (typeof callBackendPost === 'function' && ((typeof BACKEND_URL !== 'undefined' && BACKEND_URL) || (typeof isGas === 'function' && isGas()))) {
     try {
       await callBackendPost({
         action: 'simpanConfig',
@@ -22229,10 +22230,15 @@ async function simpanPetugasPelanggaranAdmin() {
     badgeCount.innerText = `${selectedNips.length} Petugas Ditunjuk`;
   }
 
+  // Refresh UI jika akun guru yang sedang login ikut terpengaruh
+  if (typeof currentUser !== 'undefined' && currentUser && currentUser.nip) {
+    if (typeof setupGuruUi === 'function') setupGuruUi();
+  }
+
   Swal.fire({
     icon: 'success',
     title: 'Petugas Ditunjuk Berhasil Disimpan',
-    html: `Terdapat <b>${selectedNips.length} orang guru</b> yang kini memiliki hak akses ke menu <b>Manajemen Pelanggaran</b> di portal guru masing-masing.`,
+    html: `Terdapat <b>${selectedNips.length} orang guru</b> yang resmi ditugaskan oleh Admin sebagai petugas <b>Manajemen Pelanggaran</b>. Fitur ini hanya akan muncul di akun guru yang telah ditunjuk.`,
     confirmButtonColor: '#e11d48'
   });
 }
@@ -22385,9 +22391,11 @@ function tambahTugasEdukatifBankGuru() {
   appConfig.DAFTAR_TUGAS_KHUSUS.push(val);
   inp.value = '';
 
-  try {
-    localStorage.setItem('SUPERAPP_CONFIG', JSON.stringify(appConfig));
-  } catch (e) {}
+  if (typeof saveAppConfigToLocalStorage === 'function') {
+    saveAppConfigToLocalStorage();
+  } else {
+    try { localStorage.setItem('SUPERAPP_CONFIG', JSON.stringify(appConfig)); } catch (e) {}
+  }
 
   renderGuruManajemenPelanggaran();
   if (typeof renderAdminManajemenPelanggaran === 'function') renderAdminManajemenPelanggaran();
