@@ -1502,14 +1502,17 @@
           <div id="containerPresensiKbmRefleksi4F" class="mt-6 p-5 bg-gradient-to-br from-indigo-50/70 via-white to-purple-50/50 rounded-3xl border border-indigo-200/80 shadow-xs space-y-4">
             <div class="flex flex-col sm:flex-row sm:items-center justify-between pb-3 border-b border-indigo-100 gap-3">
               <div class="flex items-center gap-2">
-                <span class="w-8 h-8 rounded-xl bg-indigo-600 text-white flex items-center justify-center font-bold text-sm"></span>
+                <span class="w-8 h-8 rounded-xl bg-indigo-600 text-white flex items-center justify-center font-bold text-sm">4F</span>
                 <div>
-                  <h4 class="font-extrabold text-sm text-slate-900">Catatan Jurnal & Refleksi Guru (Metode 4F Kurikulum Merdeka)</h4>
-                  <p class="text-xs text-slate-400">Generate otomatis refleksi Facts, Feelings, Findings, Future (Ringkas &lt; 40 kata)</p>
+                  <div class="flex items-center gap-2">
+                    <h4 class="font-extrabold text-sm text-slate-900">Catatan Jurnal &amp; Refleksi Guru (Metode 4F)</h4>
+                    <span id="badgeStatusMode4FGuru"></span>
+                  </div>
+                  <p id="descRefleksi4FMode" class="text-xs text-slate-400">Generate otomatis refleksi Facts, Feelings, Findings, Future (&lt; 40 kata)</p>
                 </div>
               </div>
-              <button type="button" onclick="generateRefleksi4F()" class="px-4 py-2 bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white font-black rounded-xl text-xs shadow-md shadow-indigo-200 transition flex items-center gap-1.5 cursor-pointer">
-                <span> Generate Refleksi 4F Otomatis</span>
+              <button id="btnGenerateRefleksi4FOtomatis" type="button" onclick="generateRefleksi4F()" class="px-4 py-2 bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white font-black rounded-xl text-xs shadow-md shadow-indigo-200 transition flex items-center gap-1.5 cursor-pointer">
+                <span>+ Generate Refleksi 4F Otomatis</span>
               </button>
             </div>
 
@@ -2328,6 +2331,10 @@
                 <i data-lucide="plus-circle" class="w-4 h-4"></i>
                 <span>+ Catat Sesi Konseling Baru</span>
               </button>
+              <button type="button" onclick="cetakLaporanRekapitulasiBk()" class="px-4 py-2.5 bg-white/20 hover:bg-white/30 text-white font-bold rounded-xl text-xs transition flex items-center gap-1.5 shadow-md cursor-pointer border border-white/25 backdrop-blur-sm">
+                <i data-lucide="printer" class="w-4 h-4"></i>
+                <span>Cetak Rekap Kasus BK</span>
+              </button>
             </div>
           </div>
         </div>
@@ -2381,8 +2388,12 @@
               <input type="text" id="searchSiswaBkGuru" oninput="renderTabelKasusBkGuru()" placeholder="Ketik nama atau NISN..." class="w-full px-3 py-2 bg-slate-50 border border-slate-300 rounded-xl text-xs font-semibold focus:bg-white focus:border-emerald-500">
             </div>
           </div>
-          <div class="text-right">
+          <div class="flex items-center gap-2 self-end md:self-center">
             <span id="badgeTotalKasusBkTerfilter" class="px-3 py-1.5 bg-emerald-50 text-emerald-800 font-bold rounded-xl text-xs border border-emerald-200">0 Kasus Ditampilkan</span>
+            <button type="button" onclick="cetakLaporanRekapitulasiBk()" class="px-3.5 py-1.5 bg-emerald-600 hover:bg-emerald-700 text-white font-bold rounded-xl text-xs transition flex items-center gap-1.5 shadow-xs cursor-pointer" title="Cetak Rekapitulasi Kasus BK Sesuai Filter">
+              <i data-lucide="printer" class="w-3.5 h-3.5"></i>
+              <span>Cetak Laporan</span>
+            </button>
           </div>
         </div>
 
@@ -5149,8 +5160,8 @@
               <span> Refleksi Guru Metode 4F</span>
               <span class="text-[10px] font-normal text-slate-500">(&lt; 40 kata/bagian)</span>
             </h4>
-            <button type="button" onclick="regenerateRefleksi4FModalEdit()" class="px-3 py-1 bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white rounded-lg text-[11px] font-bold shadow-xs transition flex items-center gap-1 cursor-pointer">
-              <span> Re-Generate AI</span>
+            <button id="btnRegenerateRefleksiModal" type="button" onclick="regenerateRefleksi4FModalEdit()" class="px-3 py-1 bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white rounded-lg text-[11px] font-bold shadow-xs transition flex items-center gap-1 cursor-pointer">
+              <span>+ Re-Generate AI</span>
             </button>
           </div>
 
@@ -7480,6 +7491,82 @@ function renderBadgeStatusBk(statusBK) {
         { id: "NL-002", nisn: "0081234567", kelas: "8-A", mapel: "IPA", jenis: "Penilaian Akhir Semester (PAS)", nilai: 90, huruf: "A", catatan: "Aktif praktikum" },
         { id: "NL-003", nisn: "0081234567", kelas: "8-A", mapel: "Bahasa Indonesia", jenis: "Penilaian Akhir Semester (PAS)", nilai: 85, huruf: "B", catatan: "Literasi sangat baik" }
       ];
+
+      if (!Array.isArray(logTibum) || logTibum.length === 0) {
+        const todayStr = new Date().toISOString().split('T')[0];
+        const yesterdayStr = new Date(Date.now() - 86400000).toISOString().split('T')[0];
+        logTibum = [
+          {
+            idLog: 'TB-100001',
+            tanggal: todayStr,
+            waktu: '07:15 WIB',
+            nisn: '0081234567',
+            nama: 'Ahmad Fauzan Pratama',
+            kelas: '8-A',
+            kodePelanggaran: 'DIS-01',
+            namaPelanggaran: 'Terlambat masuk sekolah (> 07.00 WIB)',
+            poin: 10,
+            frekuensiKe: 2,
+            guruPelapor: 'Bpk. Ahmad Hidayat, S.Pd.',
+            statusBK: 'Panggilan BK',
+            tugasKhusus: 'Menghafal Teks Pembukaan UUD 1945 & Butir Pancasila',
+            sanksi: 'Teguran Tertulis & Wajib Tugas Edukatif',
+            tugasSelesai: false,
+            tglKonselingBk: todayStr,
+            jenisLayananBk: 'Bimbingan Kedisiplinan Belajar',
+            catatanKonselingBk: 'Siswa sering begadang bermain game online hingga larut malam. Telah disepakati pembatasan gadget dan jadwal tidur teratur.',
+            komitmenSiswa: 'Saya berjanji akan bangun lebih awal dan tidur tepat waktu agar tidak terlambat lagi ke sekolah.',
+            konselorNama: 'Ibu Dewi Lestari, S.Psi.',
+            konselorNip: '198304042009012005'
+          },
+          {
+            idLog: 'TB-100002',
+            tanggal: todayStr,
+            waktu: '09:30 WIB',
+            nisn: '0083456789',
+            nama: 'Muhammad Rizky Kurniawan',
+            kelas: '8-B',
+            kodePelanggaran: 'ETK-01',
+            namaPelanggaran: 'Bermain HP / Game saat jam pelajaran tanpa izin',
+            poin: 10,
+            frekuensiKe: 1,
+            guruPelapor: 'Ibu Siti Nurhaliza, S.Pd.',
+            statusBK: 'Dalam Bimbingan BK',
+            tugasKhusus: 'Merangkum Buku Pendidikan Karakter di Perpustakaan (Min. 2 Lembar)',
+            sanksi: 'Peringatan Lisan & Bimbingan Walas',
+            tugasSelesai: false,
+            tglKonselingBk: todayStr,
+            jenisLayananBk: 'Bimbingan Pribadi & Karakter',
+            catatanKonselingBk: 'Siswa mengakui membuka game online saat guru sedang menerangkan. Telah diberikan pembinaan etika dan kedisiplinan belajar.',
+            komitmenSiswa: 'Saya berkomitmen menitipkan HP di loker kelas sebelum KBM dimulai dan fokus belajar.',
+            konselorNama: 'Ibu Dewi Lestari, S.Psi.',
+            konselorNip: '198304042009012005'
+          },
+          {
+            idLog: 'TB-100003',
+            tanggal: yesterdayStr,
+            waktu: '07:10 WIB',
+            nisn: '0085678901',
+            nama: 'Dimas Arya Wicaksana',
+            kelas: '9-A',
+            kodePelanggaran: 'ATR-01',
+            namaPelanggaran: 'Tidak memakai dasi sekolah saat upacara',
+            poin: 5,
+            frekuensiKe: 1,
+            guruPelapor: 'Coach Hendra Wijaya',
+            statusBK: 'Tuntas & Terbina',
+            tugasKhusus: 'Piket Merawat Taman & Kebersihan Lingkungan Sekolah 30 Menit',
+            sanksi: 'Peringatan Lisan',
+            tugasSelesai: true,
+            tglKonselingBk: yesterdayStr,
+            jenisLayananBk: 'Bimbingan Kedisiplinan Belajar',
+            catatanKonselingBk: 'Siswa lupa membawa dasi dari rumah. Tugas pembinaan piket kebersihan telah diselesaikan dengan sangat baik.',
+            komitmenSiswa: 'Saya sudah menyiapkan seluruh kelengkapan seragam sejak malam hari sebelum tidur.',
+            konselorNama: 'Ibu Dewi Lestari, S.Psi.',
+            konselorNip: '198304042009012005'
+          }
+        ];
+      }
 
       if (logPengumuman.length === 0) {
         logPengumuman = [
@@ -9856,45 +9943,34 @@ function renderBadgeStatusBk(statusBK) {
         return;
       }
 
-      if (!facts) {
+      const isGenAktif = (typeof isRefleksi4FActive === 'function') && isRefleksi4FActive();
+
+      // Validasi Refleksi: jika mode manual belum diisi sama sekali
+      if (!facts && !feelings && !findings && !future) {
         Swal.fire({
           icon: 'warning',
-          title: 'Refleksi 4F (Facts) Wajib Diisi',
-          text: 'Guru wajib mengisi Peristiwa / Fakta Pembelajaran (Facts) sebelum menyimpan presensi.'
+          title: 'Refleksi 4F Wajib Diisi',
+          text: isGenAktif
+            ? 'Silakan klik tombol "Generate Refleksi 4F Otomatis" atau ketik refleksi secara manual sebelum menyimpan.'
+            : 'Silakan isi catatan refleksi 4F secara manual pada kolom yang tersedia sebelum menyimpan presensi.'
         });
         if (factsInp) { factsInp.focus(); factsInp.scrollIntoView({ behavior: 'smooth', block: 'center' }); }
         return;
       }
 
-      if (!feelings) {
-        Swal.fire({
-          icon: 'warning',
-          title: 'Refleksi 4F (Feelings) Wajib Diisi',
-          text: 'Guru wajib mengisi Perasaan Saat Mengajar (Feelings) sebelum menyimpan presensi.'
-        });
-        if (feelingsInp) { feelingsInp.focus(); feelingsInp.scrollIntoView({ behavior: 'smooth', block: 'center' }); }
-        return;
-      }
+      // Default jika pengisian manual hanya mengisi sebagian:
+      let fFacts = facts || 'KBM terlaksana tuntas membahas materi pembelajaran.';
+      let fFeelings = feelings || 'Suasana kelas kondusif dan peserta didik menunjukkan antusiasme belajar.';
+      let fFindings = findings || 'Pemahaman konsep siswa berkembang baik melalui aktivitas terbimbing.';
+      let fFuture = future || 'Melanjutkan penguatan dan asesmen formatif pada pertemuan berikutnya.';
 
-      if (!findings) {
-        Swal.fire({
-          icon: 'warning',
-          title: 'Refleksi 4F (Findings) Wajib Diisi',
-          text: 'Guru wajib mengisi Pembelajaran & Insight (Findings) sebelum menyimpan presensi.'
-        });
-        if (findingsInp) { findingsInp.focus(); findingsInp.scrollIntoView({ behavior: 'smooth', block: 'center' }); }
-        return;
-      }
+      fFacts = limitWords(fFacts, 38);
+      fFeelings = limitWords(fFeelings, 38);
+      fFindings = limitWords(fFindings, 38);
+      fFuture = limitWords(fFuture, 38);
 
-      if (!future) {
-        Swal.fire({
-          icon: 'warning',
-          title: 'Refleksi 4F (Future) Wajib Diisi',
-          text: 'Guru wajib mengisi Penerapan & Tindak Lanjut (Future) sebelum menyimpan presensi.'
-        });
-        if (futureInp) { futureInp.focus(); futureInp.scrollIntoView({ behavior: 'smooth', block: 'center' }); }
-        return;
-      }
+      // Satukan seluruh komponen 4F menjadi 1 paragraf utuh
+      const paragraf4F = gabungRefleksi4FKeParagraf(fFacts, fFeelings, fFindings, fFuture);
 
       // Kumpulkan data presensi siswa sekelas
       const dataAbsen = [];
@@ -9944,11 +10020,12 @@ function renderBadgeStatusBk(statusBK) {
           tidakHadir: dataAbsen.length - hadirCount
         },
         refleksi4F: {
-          facts: facts,
-          feelings: feelings,
-          findings: findings,
-          future: future
+          facts: fFacts,
+          feelings: fFeelings,
+          findings: fFindings,
+          future: fFuture
         },
+        refleksiParagraf: paragraf4F,
         tglDibuat: new Date().toISOString()
       };
 
@@ -10039,11 +10116,81 @@ function renderBadgeStatusBk(statusBK) {
       saveAppConfigToLocalStorage();
     }
 
+    function gabungRefleksi4FKeParagraf(facts, feelings, findings, future) {
+      const parts = [];
+      const f1 = (facts || '').trim().replace(/^\[?Facts\]?:?\s*/i, '').trim();
+      const f2 = (feelings || '').trim().replace(/^\[?Feelings\]?:?\s*/i, '').trim();
+      const f3 = (findings || '').trim().replace(/^\[?Findings\]?:?\s*/i, '').trim();
+      const f4 = (future || '').trim().replace(/^\[?Future\]?:?\s*/i, '').trim();
+
+      if (f1) parts.push(`[Facts] ${f1}`);
+      if (f2) parts.push(`[Feelings] ${f2}`);
+      if (f3) parts.push(`[Findings] ${f3}`);
+      if (f4) parts.push(`[Future] ${f4}`);
+
+      return parts.join(' ');
+    }
+
+    function parseParagrafKeRefleksi4F(text) {
+      const result = { facts: '', feelings: '', findings: '', future: '' };
+      if (!text || typeof text !== 'string') return result;
+
+      const raw = text.trim();
+
+      // 1. Pola Standar Tag [Facts] ... [Feelings] ... [Findings] ... [Future] ...
+      const mFacts = raw.match(/(?:\[Facts\]|Facts:|\(1\)\s*Facts?:?)\s*([\s\S]*?)(?=(?:\[Feelings\]|Feelings:|\(2\)\s*Feelings?:?|$))/i);
+      const mFeelings = raw.match(/(?:\[Feelings\]|Feelings:|\(2\)\s*Feelings?:?)\s*([\s\S]*?)(?=(?:\[Findings\]|Findings:|\(3\)\s*Findings?:?|$))/i);
+      const mFindings = raw.match(/(?:\[Findings\]|Findings:|\(3\)\s*Findings?:?)\s*([\s\S]*?)(?=(?:\[Future\]|Future:|\(4\)\s*Future?:?|$))/i);
+      const mFuture = raw.match(/(?:\[Future\]|Future:|\(4\)\s*Future?:?)\s*([\s\S]*?)$/i);
+
+      if (mFacts && mFacts[1]) result.facts = mFacts[1].trim();
+      if (mFeelings && mFeelings[1]) result.feelings = mFeelings[1].trim();
+      if (mFindings && mFindings[1]) result.findings = mFindings[1].trim();
+      if (mFuture && mFuture[1]) result.future = mFuture[1].trim();
+
+      // 2. Pola Bahasa Indonesia: [Fakta] ... [Perasaan] ... [Pembelajaran] ... [Penerapan]
+      if (!result.facts && !result.feelings && !result.findings && !result.future) {
+        const miFakta = raw.match(/(?:\[?Fakta\]?:?|1\.\s*Fakta:?)\s*([\s\S]*?)(?=(?:\[?Perasaan\]?:?|2\.\s*Perasaan:?|$))/i);
+        const miPerasaan = raw.match(/(?:\[?Perasaan\]?:?|2\.\s*Perasaan:?)\s*([\s\S]*?)(?=(?:\[?Pembelajaran\]?:?|\[?Temuan\]?:?|3\.\s*Pembelajaran:?|$))/i);
+        const miTemuan = raw.match(/(?:\[?Pembelajaran\]?:?|\[?Temuan\]?:?|3\.\s*Pembelajaran:?)\s*([\s\S]*?)(?=(?:\[?Penerapan\]?:?|\[?Tindak\s*Lanjut\]?:?|4\.\s*Penerapan:?|$))/i);
+        const miPenerapan = raw.match(/(?:\[?Penerapan\]?:?|\[?Tindak\s*Lanjut\]?:?|4\.\s*Penerapan:?)\s*([\s\S]*?)$/i);
+
+        if (miFakta && miFakta[1]) result.facts = miFakta[1].trim();
+        if (miPerasaan && miPerasaan[1]) result.feelings = miPerasaan[1].trim();
+        if (miTemuan && miTemuan[1]) result.findings = miTemuan[1].trim();
+        if (miPenerapan && miPenerapan[1]) result.future = miPenerapan[1].trim();
+      }
+
+      // 3. Fallback jika teks polos tanpa penanda
+      if (!result.facts && !result.feelings && !result.findings && !result.future && raw) {
+        const sentences = raw.split(/(?<=[.!?])\s+/).filter(Boolean);
+        if (sentences.length >= 4) {
+          result.facts = sentences[0];
+          result.feelings = sentences[1];
+          result.findings = sentences[2];
+          result.future = sentences.slice(3).join(' ');
+        } else {
+          result.facts = raw;
+        }
+      }
+
+      return result;
+    }
+
     function isRefleksi4FActive(user = currentUser) {
       if (!user) return false;
-      // Siswa tidak memiliki akses ke fitur refleksi guru
       if (user.role === 'SISWA') return false;
-      return true;
+
+      const mode = String((appConfig && appConfig.FITUR_REFLEKSI_4F) || 'NONAKTIF').toUpperCase();
+      if (mode === 'SEMUA' || mode === 'AKTIF') {
+        return true;
+      }
+      if (mode === 'PILIH_GURU') {
+        const activeNips = getActiveRefleksiNips();
+        const myNip = String(user.nip || '').trim();
+        return activeNips.includes(myNip);
+      }
+      return false;
     }
 
     function handleModeRefleksi4FChange(newMode) {
@@ -10220,16 +10367,48 @@ function renderBadgeStatusBk(statusBK) {
     }
 
     function applyRefleksiVisibility() {
-      // Guru wajib mengisi Topik & Refleksi 4F sebelum simpan presensi
+      const isGenActive = (typeof isRefleksi4FActive === 'function') && isRefleksi4FActive();
       const elTopik = document.getElementById('containerPresensiKbmTopikGarisBesar');
       const elRefleksi = document.getElementById('containerPresensiKbmRefleksi4F');
       const elJurnal = document.getElementById('containerPresensiKbmRiwayatJurnal');
       const elBtnStandar = document.getElementById('containerBtnSimpanKbmStandar');
+      const btnGen = document.getElementById('btnGenerateRefleksi4FOtomatis');
+      const btnRegenModal = document.getElementById('btnRegenerateRefleksiModal');
+      const descMode = document.getElementById('descRefleksi4FMode');
+      const badgeMode = document.getElementById('badgeStatusMode4FGuru');
 
       if (elTopik) elTopik.classList.remove('hidden');
       if (elRefleksi) elRefleksi.classList.remove('hidden');
       if (elJurnal) elJurnal.classList.remove('hidden');
       if (elBtnStandar) elBtnStandar.classList.add('hidden');
+
+      if (btnGen) {
+        if (isGenActive) {
+          btnGen.classList.remove('hidden');
+        } else {
+          btnGen.classList.add('hidden');
+        }
+      }
+
+      if (btnRegenModal) {
+        if (isGenActive) {
+          btnRegenModal.classList.remove('hidden');
+        } else {
+          btnRegenModal.classList.add('hidden');
+        }
+      }
+
+      if (descMode) {
+        descMode.textContent = isGenActive 
+          ? 'Generate otomatis atau sesuaikan manual refleksi Facts, Feelings, Findings, Future (< 40 kata).'
+          : 'Mode Pengisian Manual: Ketik catatan refleksi Facts, Feelings, Findings, Future secara mandiri (Fitur Generate Otomatis dinonaktifkan Admin).';
+      }
+
+      if (badgeMode) {
+        badgeMode.innerHTML = isGenActive
+          ? '<span class="px-2 py-0.5 bg-emerald-100 text-emerald-800 rounded font-bold text-[10px]">Generate Otomatis Aktif</span>'
+          : '<span class="px-2 py-0.5 bg-amber-100 text-amber-800 rounded font-bold text-[10px]">Mode Isi Manual</span>';
+      }
     }
 
     function countWords(str) {
@@ -10484,23 +10663,15 @@ ATURAN KETAT:
             <h5 class="font-extrabold text-xs sm:text-sm text-slate-900">Topik: ${escapeHtml(j.topik)}</h5>
             <p class="text-[11px] text-slate-500 mt-0.5"><b class="text-slate-700">Aktivitas:</b> ${escapeHtml(j.garisBesar)}</p>
           </div>
-          <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 text-[11px]">
-            <div class="p-2.5 bg-slate-50 rounded-xl border border-slate-100">
-              <span class="font-bold text-indigo-900 block mb-0.5">1. Facts (Peristiwa):</span>
-              <p class="text-slate-600 line-clamp-3">${escapeHtml(j.refleksi4F ? j.refleksi4F.facts : '-')}</p>
+          <div class="p-3.5 bg-gradient-to-r from-indigo-50/50 via-purple-50/30 to-slate-50 rounded-2xl border border-indigo-100/90 text-xs space-y-1.5">
+            <div class="flex items-center justify-between">
+              <div class="flex items-center gap-1.5 font-bold text-indigo-900 text-[11px]">
+                <i data-lucide="book-open-check" class="w-3.5 h-3.5 text-indigo-600"></i>
+                <span>Catatan Refleksi 4F (1 Paragraf Terpadu):</span>
+              </div>
+              <span class="px-2 py-0.5 bg-indigo-100 text-indigo-800 rounded font-mono font-bold text-[10px]">1 Paragraf</span>
             </div>
-            <div class="p-2.5 bg-slate-50 rounded-xl border border-slate-100">
-              <span class="font-bold text-purple-900 block mb-0.5">2. Feelings (Perasaan):</span>
-              <p class="text-slate-600 line-clamp-3">${escapeHtml(j.refleksi4F ? j.refleksi4F.feelings : '-')}</p>
-            </div>
-            <div class="p-2.5 bg-slate-50 rounded-xl border border-slate-100">
-              <span class="font-bold text-teal-900 block mb-0.5">3. Findings (Pembelajaran):</span>
-              <p class="text-slate-600 line-clamp-3">${escapeHtml(j.refleksi4F ? j.refleksi4F.findings : '-')}</p>
-            </div>
-            <div class="p-2.5 bg-slate-50 rounded-xl border border-slate-100">
-              <span class="font-bold text-amber-900 block mb-0.5">4. Future (Penerapan):</span>
-              <p class="text-slate-600 line-clamp-3">${escapeHtml(j.refleksi4F ? j.refleksi4F.future : '-')}</p>
-            </div>
+            <p class="text-slate-700 text-xs leading-relaxed text-justify">${escapeHtml(j.refleksiParagraf || (typeof gabungRefleksi4FKeParagraf === 'function' ? gabungRefleksi4FKeParagraf(j.refleksi4F?.facts, j.refleksi4F?.feelings, j.refleksi4F?.findings, j.refleksi4F?.future) : '') || (j.catatanRefleksi || '-'))}</p>
           </div>
         </div>
       `).join('');
@@ -10543,11 +10714,31 @@ ATURAN KETAT:
       document.getElementById('editJurnalTopik').value = j.topik || '';
       document.getElementById('editJurnalGarisBesar').value = j.garisBesar || '';
 
-      const r = j.refleksi4F || {};
+      // Mengurai kembali 1 paragraf menjadi 4 komponen terpisah saat diedit
+      let r = j.refleksi4F || {};
+      if ((!r.facts || !r.feelings || !r.findings || !r.future) && (j.refleksiParagraf || j.catatanRefleksi)) {
+        const parsed = parseParagrafKeRefleksi4F(j.refleksiParagraf || j.catatanRefleksi);
+        r = {
+          facts: r.facts || parsed.facts || '',
+          feelings: r.feelings || parsed.feelings || '',
+          findings: r.findings || parsed.findings || '',
+          future: r.future || parsed.future || ''
+        };
+      }
+
       document.getElementById('editJurnalFacts').value = r.facts || '';
       document.getElementById('editJurnalFeelings').value = r.feelings || '';
       document.getElementById('editJurnalFindings').value = r.findings || '';
       document.getElementById('editJurnalFuture').value = r.future || '';
+
+      const btnRegen = document.getElementById('btnRegenerateRefleksiModal');
+      if (btnRegen) {
+        if (typeof isRefleksi4FActive === 'function' && isRefleksi4FActive()) {
+          btnRegen.classList.remove('hidden');
+        } else {
+          btnRegen.classList.add('hidden');
+        }
+      }
 
       document.getElementById('modalEditJurnalGuru').classList.remove('hidden');
     }
@@ -10609,9 +10800,12 @@ ATURAN KETAT:
       const findings = limitWords(document.getElementById('editJurnalFindings').value.trim(), 38);
       const future = limitWords(document.getElementById('editJurnalFuture').value.trim(), 38);
 
+      const updatedParagraf = gabungRefleksi4FKeParagraf(facts, feelings, findings, future);
+
       logJurnalGuru[idx].topik = topik;
       logJurnalGuru[idx].garisBesar = garisBesar;
       logJurnalGuru[idx].refleksi4F = { facts, feelings, findings, future };
+      logJurnalGuru[idx].refleksiParagraf = updatedParagraf;
 
       try {
         localStorage.setItem('SUPERAPP_JURNAL_GURU', JSON.stringify(logJurnalGuru));
@@ -20035,12 +20229,14 @@ ATURAN KETAT:
     }
 
     function eksekusiCetakDiv(printDiv) {
-      printDiv.classList.remove("hidden");
+      if (!printDiv) printDiv = document.getElementById('printArea');
+      if (!printDiv) return;
+      printDiv.classList.remove('hidden');
       const cleanup = () => {
-        printDiv.classList.add("hidden");
-        window.removeEventListener("afterprint", cleanup);
+        printDiv.classList.add('hidden');
+        window.removeEventListener('afterprint', cleanup);
       };
-      window.addEventListener("afterprint", cleanup);
+      window.addEventListener('afterprint', cleanup);
       setTimeout(() => {
         window.print();
         setTimeout(cleanup, 2000);
@@ -21466,6 +21662,7 @@ function renderTabelKasusBkGuru() {
             </button>
             <button type="button" onclick="cetakBeritaAcaraKonselingBk('${escapeHtml(t.idLog || t.id || '')}')" class="px-2 py-1.5 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold rounded-lg text-[11px] border border-slate-300 transition flex items-center gap-1 cursor-pointer" title="Cetak Berita Acara Konseling">
               <i data-lucide="file-text" class="w-3.5 h-3.5"></i>
+              <span>Berita Acara</span>
             </button>
           </div>
         </td>
@@ -21611,60 +21808,163 @@ async function handleSimpanKonselingBk(e) {
   });
 }
 
+function syncDataKasusDariFormModal(item) {
+  if (!item) return;
+  const tgl = document.getElementById('modalBkTglKonseling') ? document.getElementById('modalBkTglKonseling').value : '';
+  if (tgl) item.tglKonselingBk = tgl;
+  const layanan = document.getElementById('modalBkJenisLayanan') ? document.getElementById('modalBkJenisLayanan').value : '';
+  if (layanan) item.jenisLayananBk = layanan;
+  const resume = document.getElementById('modalBkResumeKonseling') ? document.getElementById('modalBkResumeKonseling').value.trim() : '';
+  if (resume) item.catatanKonselingBk = resume;
+  const komitmen = document.getElementById('modalBkKomitmenSiswa') ? document.getElementById('modalBkKomitmenSiswa').value.trim() : '';
+  if (komitmen) item.komitmenSiswa = komitmen;
+  const chkTugas = document.getElementById('chkModalBkTugasSelesai');
+  if (chkTugas) item.tugasSelesai = chkTugas.checked;
+
+  const radios = document.getElementsByName('radioStatusBkBaru');
+  radios.forEach(r => {
+    if (r.checked) item.statusBK = r.value;
+  });
+}
+
 function cetakSuratPanggilanBkDariModal() {
   if (!currentKasusBkSelected) return;
+  syncDataKasusDariFormModal(currentKasusBkSelected);
   cetakSuratPanggilanBk(currentKasusBkSelected.idLog || currentKasusBkSelected.id);
 }
 
 function cetakBeritaAcaraKonselingDariModal() {
   if (!currentKasusBkSelected) return;
+  syncDataKasusDariFormModal(currentKasusBkSelected);
   cetakBeritaAcaraKonselingBk(currentKasusBkSelected.idLog || currentKasusBkSelected.id);
 }
 
 // -------------------------------------------------------------------------
-// 4. GENERATOR CETAK DOKUMEN RESMI BK (SURAT PANGGILAN & BERITA ACARA)
+// 4. GENERATOR CETAK DOKUMEN RESMI BK (SURAT PANGGILAN, BERITA ACARA & REKAPITULASI)
 // -------------------------------------------------------------------------
 
+function getPejabatBkPrint(item) {
+  const namaSekolah = (appConfig && appConfig.NAMA_SEKOLAH) ? appConfig.NAMA_SEKOLAH : 'SMP NEGERI 1 INDONESIA HEBAT';
+  const instansiPembina = (appConfig && appConfig.INSTANSI_PEMBINA) ? appConfig.INSTANSI_PEMBINA : 'PEMERINTAH KOTA / KABUPATEN - DINAS PENDIDIKAN';
+  const alamatSekolah = (appConfig && appConfig.ALAMAT_SEKOLAH) ? appConfig.ALAMAT_SEKOLAH : 'Jl. Pendidikan Karakter No. 07, Kota Cerdas';
+  const titimangsa = (appConfig && appConfig.KOTA_TITIMANGSA) ? appConfig.KOTA_TITIMANGSA : 'Kota Cerdas';
+  const logoKiri = (appConfig && appConfig.LOGO_KIRI_PEMDA) ? appConfig.LOGO_KIRI_PEMDA : '';
+  const logoKanan = (appConfig && appConfig.LOGO_KANAN_SEKOLAH) ? appConfig.LOGO_KANAN_SEKOLAH : '';
+  const namaKepsek = (appConfig && appConfig.NAMA_KEPSEK) ? appConfig.NAMA_KEPSEK : 'Drs. H. Mulyadi, M.Pd.';
+  const nipKepsek = (appConfig && appConfig.NIP_KEPSEK) ? appConfig.NIP_KEPSEK : '197205101998021003';
+
+  // Guru BK / Konselor
+  const guruBkDefault = (Array.isArray(masterGuru) ? masterGuru : []).find(g => g.peran === 'GURU_BK' || (g.mapel && g.mapel.toLowerCase().includes('bimbingan')) || (g.nama && g.nama.toLowerCase().includes('s.psi'))) || { nama: 'Ibu Dewi Lestari, S.Psi.', nip: '198304042009012005' };
+  let namaBk = guruBkDefault.nama;
+  let nipBk = guruBkDefault.nip || '-';
+
+  if (typeof currentUser !== 'undefined' && currentUser && isCurrentUserGuruBk()) {
+    namaBk = currentUser.nama;
+    nipBk = currentUser.nip || '-';
+  } else if (item && item.konselorNama && item.konselorNama !== 'Guru BK') {
+    namaBk = item.konselorNama;
+    nipBk = item.konselorNip || nipBk;
+  }
+
+  // Wali Kelas
+  let namaWalas = 'Wali Kelas ' + (item && item.kelas ? item.kelas : '-');
+  let nipWalas = 'Pendidik Satuan Pendidikan';
+  if (item && item.kelas) {
+    const rombelClean = String(item.kelas).replace(/kelas/i, '').trim().toLowerCase();
+    const w = (Array.isArray(masterGuru) ? masterGuru : []).find(g => g.rombelWali && String(g.rombelWali).trim().toLowerCase() === rombelClean);
+    if (w) {
+      namaWalas = w.nama;
+      nipWalas = w.nip ? ('NIP. ' + w.nip) : nipWalas;
+    }
+  }
+
+  // NIS Siswa
+  let nisSiswa = '-';
+  if (item && item.nisn) {
+    const s = (Array.isArray(masterSiswa) ? masterSiswa : []).find(x => isSameNisn(x.nisn, item.nisn));
+    if (s && s.nis) nisSiswa = s.nis;
+  }
+
+  return {
+    namaSekolah,
+    instansiPembina,
+    alamatSekolah,
+    titimangsa,
+    logoKiri,
+    logoKanan,
+    namaKepsek,
+    nipKepsek,
+    namaBk,
+    nipBk,
+    namaWalas,
+    nipWalas,
+    nisSiswa
+  };
+}
+
 function cetakSuratPanggilanBk(idLog) {
-  const item = (Array.isArray(logTibum) ? logTibum : []).find(t => (t.idLog && t.idLog === idLog) || (t.id && t.id === idLog));
-  if (!item) return;
+  const sId = String(idLog || '').trim();
+  const list = Array.isArray(logTibum) ? logTibum : [];
+  let item = list.find(t => String(t.idLog || '').trim() === sId || String(t.id || '').trim() === sId);
+  if (!item && currentKasusBkSelected && (String(currentKasusBkSelected.idLog || '').trim() === sId || String(currentKasusBkSelected.id || '').trim() === sId)) {
+    item = currentKasusBkSelected;
+  }
 
-  const todayStr = new Date().toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' });
-  const namaSekolah = (appConfig && appConfig.NAMA_SEKOLAH) ? appConfig.NAMA_SEKOLAH : "SMP NEGERI 1 INDONESIA HEBAT";
-  const alamat = (appConfig && appConfig.ALAMAT_SEKOLAH) ? appConfig.ALAMAT_SEKOLAH : "Jl. Pendidikan Karakter No. 07, Kota Cerdas";
-  const titimangsa = (appConfig && appConfig.KOTA_TITIMANGSA) ? appConfig.KOTA_TITIMANGSA : "Kota Cerdas";
-  const logoKiri = (appConfig && appConfig.LOGO_KIRI_PEMDA) ? appConfig.LOGO_KIRI_PEMDA : "";
-  const logoKanan = (appConfig && appConfig.LOGO_KANAN_SEKOLAH) ? appConfig.LOGO_KANAN_SEKOLAH : "";
-  const namaKepsek = (appConfig && appConfig.NAMA_KEPSEK) ? appConfig.NAMA_KEPSEK : "Drs. H. Mulyadi, M.Pd.";
-  const nipKepsek = (appConfig && appConfig.NIP_KEPSEK) ? appConfig.NIP_KEPSEK : "197205101998021003";
+  if (!item) {
+    Swal.fire('Data Tidak Ditemukan', 'Catatan kasus siswa tidak ditemukan dalam basis data.', 'warning');
+    return;
+  }
 
-  const printDiv = document.createElement('div');
-  printDiv.id = 'printAreaSuratPanggilanBk';
+  const printDiv = document.getElementById('printArea');
+  if (!printDiv) {
+    console.error('Elemen #printArea tidak ditemukan.');
+    return;
+  }
+
+  const p = getPejabatBkPrint(item);
+  const now = new Date();
+  const todayStr = now.toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' });
+  const tahunSurat = now.getFullYear();
+  const waktuStr = formatWaktuDisiplin(item.waktu, item.tanggal);
+
+  // Hitung jadwal undangan pemanggilan
+  let tglUndanganDate;
+  if (item.tglKonselingBk) {
+    tglUndanganDate = new Date(item.tglKonselingBk);
+  } else {
+    tglUndanganDate = new Date();
+    tglUndanganDate.setDate(tglUndanganDate.getDate() + 1);
+    if (tglUndanganDate.getDay() === 0) {
+      tglUndanganDate.setDate(tglUndanganDate.getDate() + 1);
+    }
+  }
+  const hariTanggalUndangan = tglUndanganDate.toLocaleDateString('id-ID', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' });
+
   printDiv.innerHTML = `
-    <div style="font-family: 'Times New Roman', serif; color: #000; padding: 25px 35px; line-height: 1.45; font-size: 11pt;">
-      <!-- Kop Surat Resmi Dua Logo -->
-      <table style="width: 100%; border-bottom: 3px double #000; padding-bottom: 10px; margin-bottom: 20px;">
+    <div style="font-family: 'Times New Roman', serif; color: #000; padding: 20px 30px; line-height: 1.45; font-size: 11pt;">
+      <!-- Kop Surat Resmi 2 Logo -->
+      <table style="width: 100%; border-bottom: 3px double #000; padding-bottom: 8px; margin-bottom: 16px;">
         <tr>
           <td style="width: 15%; text-align: center; vertical-align: middle;">
-            ${logoKiri ? `<img src="${logoKiri}" style="height: 75px; object-fit: contain;">` : ''}
+            ${p.logoKiri ? `<img src="${p.logoKiri}" style="height: 75px; object-fit: contain;" onerror="this.style.display='none'">` : ''}
           </td>
           <td style="width: 70%; text-align: center; vertical-align: middle;">
-            <p style="margin: 0; font-size: 11pt; text-transform: uppercase;">PEMERINTAH KOTA / KABUPATEN - DINAS PENDIDIKAN</p>
-            <h2 style="margin: 2px 0; font-size: 15pt; font-weight: bold; text-transform: uppercase;">${namaSekolah}</h2>
-            <p style="margin: 0; font-size: 9pt; font-style: italic;">${alamat}</p>
+            <h4 style="margin: 0; font-size: 11pt; text-transform: uppercase; font-weight: bold;">${p.instansiPembina}</h4>
+            <h2 style="margin: 2px 0; font-size: 15pt; font-weight: bold; text-transform: uppercase;">${p.namaSekolah}</h2>
+            <p style="margin: 0; font-size: 9.5pt; font-style: italic;">${p.alamatSekolah}</p>
           </td>
           <td style="width: 15%; text-align: center; vertical-align: middle;">
-            ${logoKanan ? `<img src="${logoKanan}" style="height: 75px; object-fit: contain;">` : ''}
+            ${p.logoKanan ? `<img src="${p.logoKanan}" style="height: 75px; object-fit: contain;" onerror="this.style.display='none'">` : ''}
           </td>
         </tr>
       </table>
 
-      <!-- Nomor & Lampiran -->
-      <table style="width: 100%; margin-bottom: 15px; font-size: 11pt;">
+      <!-- Nomor & Tanggal -->
+      <table style="width: 100%; margin-bottom: 14px; font-size: 11pt;">
         <tr>
           <td style="width: 15%;">Nomor</td>
-          <td style="width: 50%;">: 421.3 / BK-${item.idLog || '001'} / ${new Date().getFullYear()}</td>
-          <td style="width: 35%; text-align: right;">${titimangsa}, ${todayStr}</td>
+          <td style="width: 50%;">: 421.3 / BK-${escapeHtml(item.idLog || '001')} / ${tahunSurat}</td>
+          <td style="width: 35%; text-align: right;">${p.titimangsa}, ${todayStr}</td>
         </tr>
         <tr>
           <td>Lampiran</td>
@@ -21673,66 +21973,81 @@ function cetakSuratPanggilanBk(idLog) {
         </tr>
         <tr>
           <td>Perihal</td>
-          <td>: <b>SURAT PANGGILAN KONSELING &amp; DISIPLIN SISWA</b></td>
+          <td>: <b>SURAT PANGGILAN ORANG TUA / WALI SISWA</b></td>
           <td></td>
         </tr>
       </table>
 
-      <p style="margin-top: 15px;">Kepada Yth.<br><b>Bapak / Ibu Orang Tua / Wali dari Ananda:</b><br>
-        <b>${escapeHtml(item.nama)}</b> (Kelas ${escapeHtml(item.kelas || '-')})<br>
-        di Tempat
+      <!-- Tujuan Surat -->
+      <div style="margin-top: 10px; margin-bottom: 12px;">
+        <p style="margin: 0;">Kepada Yth.</p>
+        <p style="margin: 0; font-weight: bold;">Bapak / Ibu Orang Tua / Wali dari Ananda:</p>
+        <table style="margin-left: 15px; margin-top: 4px; font-size: 11pt;">
+          <tr><td style="width: 120px;">Nama Siswa</td><td>: <b>${escapeHtml(item.nama)}</b></td></tr>
+          <tr><td>NIS / NISN</td><td>: ${escapeHtml(p.nisSiswa)} / ${escapeHtml(item.nisn)}</td></tr>
+          <tr><td>Kelas / Rombel</td><td>: Kelas ${escapeHtml(item.kelas || '-')} (Wali Kelas: ${escapeHtml(p.namaWalas)})</td></tr>
+        </table>
+        <p style="margin: 4px 0 0 0;">di Tempat</p>
+      </div>
+
+      <p style="text-align: justify; margin: 10px 0; text-indent: 30px;">
+        Dengan hormat, sehubungan dengan program pembinaan tata tertib kedisiplinan dan pembentukan karakter peserta didik di ${p.namaSekolah}, bersama surat ini kami mengharap kehadiran Bapak/Ibu Orang Tua/Wali ke sekolah pada:
       </p>
 
-      <p style="text-align: justify; margin-top: 15px;">Dengan hormat,<br>
-        Sehubungan dengan dilaksanakannya program pembinaan tata tertib kedisiplinan dan pembentukan karakter peserta didik di ${namaSekolah}, bersama surat ini kami mengharap kehadiran Bapak/Ibu Orang Tua/Wali murid ke sekolah untuk berdiskusi dan berkoordinasi dengan Tim Bimbingan &amp; Konseling (BK), terkait catatan perilaku ananda sebagai berikut:
-      </p>
+      <!-- Detail Jadwal Kehadiran -->
+      <table style="width: 92%; margin: 8px auto 14px auto; border-collapse: collapse; font-size: 11pt;">
+        <tr><td style="width: 25%; padding: 3px 0; font-weight: bold;">Hari, Tanggal</td><td style="width: 3%;">:</td><td style="padding: 3px 0;"><b>${hariTanggalUndangan}</b></td></tr>
+        <tr><td style="padding: 3px 0; font-weight: bold;">Waktu / Pukul</td><td>:</td><td style="padding: 3px 0;"><b>08.30 WIB s.d. Selesai</b></td></tr>
+        <tr><td style="padding: 3px 0; font-weight: bold;">Tempat</td><td>:</td><td style="padding: 3px 0;"><b>Ruang Bimbingan &amp; Konseling (BK) ${p.namaSekolah}</b></td></tr>
+        <tr><td style="padding: 3px 0; font-weight: bold;">Keperluan</td><td>:</td><td style="padding: 3px 0;"><b>Koordinasi Pembinaan Kedisiplinan &amp; Bimbingan Karakter Ananda</b></td></tr>
+        <tr><td style="padding: 3px 0; font-weight: bold;">Menemui</td><td>:</td><td style="padding: 3px 0;"><b>${escapeHtml(p.namaBk)} (Guru BK / Konselor)</b></td></tr>
+      </table>
 
-      <!-- Rincian Kasus -->
-      <table style="width: 100%; margin: 15px 0; border: 1px solid #000; border-collapse: collapse; font-size: 10pt;">
+      <!-- Ringkasan Catatan Kasus -->
+      <p style="margin: 8px 0 4px 0; font-weight: bold; font-size: 10.5pt;">Catatan Pelanggaran yang Menjadi Dasar Pembinaan:</p>
+      <table style="width: 100%; border: 1px solid #000; border-collapse: collapse; font-size: 10pt; margin-bottom: 12px;">
         <tr style="background: #f1f5f9;">
-          <th style="border: 1px solid #000; padding: 6px; width: 30%;">Uraian</th>
-          <th style="border: 1px solid #000; padding: 6px;">Keterangan Resmi</th>
+          <th style="border: 1px solid #000; padding: 5px; width: 28%; text-align: left;">Indikator</th>
+          <th style="border: 1px solid #000; padding: 5px; text-align: left;">Keterangan Resmi Sekolah</th>
         </tr>
         <tr>
-          <td style="border: 1px solid #000; padding: 6px; font-weight: bold;">Nama Peserta Didik</td>
-          <td style="border: 1px solid #000; padding: 6px;"><b>${escapeHtml(item.nama)}</b> (NISN: ${escapeHtml(item.nisn)})</td>
+          <td style="border: 1px solid #000; padding: 5px; font-weight: bold;">Jenis Pelanggaran</td>
+          <td style="border: 1px solid #000; padding: 5px; color: #b91c1c;"><b>${escapeHtml(item.namaPelanggaran)}</b> (+${item.poin || 0} Poin)</td>
         </tr>
         <tr>
-          <td style="border: 1px solid #000; padding: 6px; font-weight: bold;">Kelas / Rombel</td>
-          <td style="border: 1px solid #000; padding: 6px;">Kelas ${escapeHtml(item.kelas || '-')}</td>
+          <td style="border: 1px solid #000; padding: 5px; font-weight: bold;">Waktu Kejadian</td>
+          <td style="border: 1px solid #000; padding: 5px;">${escapeHtml(item.tanggal || '-')} | ${waktuStr}</td>
         </tr>
         <tr>
-          <td style="border: 1px solid #000; padding: 6px; font-weight: bold;">Jenis Pelanggaran</td>
-          <td style="border: 1px solid #000; padding: 6px; color: #b91c1c;"><b>${escapeHtml(item.namaPelanggaran)}</b></td>
+          <td style="border: 1px solid #000; padding: 5px; font-weight: bold;">Frekuensi Tercatat</td>
+          <td style="border: 1px solid #000; padding: 5px;">Pelanggaran ke-<b>${item.frekuensiKe || 1}</b> (Status: <b>${escapeHtml(item.statusBK || 'Panggilan BK')}</b>)</td>
         </tr>
         <tr>
-          <td style="border: 1px solid #000; padding: 6px; font-weight: bold;">Frekuensi Pelanggaran</td>
-          <td style="border: 1px solid #000; padding: 6px;">Pelanggaran ke-<b>${item.frekuensiKe || 1}</b> (Tercatat Akumulasi +${item.poin || 0} Poin)</td>
-        </tr>
-        <tr>
-          <td style="border: 1px solid #000; padding: 6px; font-weight: bold;">Tugas Edukatif Karakter</td>
-          <td style="border: 1px solid #000; padding: 6px;">${escapeHtml(item.tugasKhusus || item.sanksi || 'Tugas Khusus Pembinaan Karakter')}</td>
+          <td style="border: 1px solid #000; padding: 5px; font-weight: bold;">Tugas Edukatif Karakter</td>
+          <td style="border: 1px solid #000; padding: 5px;">${escapeHtml(item.tugasKhusus || item.sanksi || 'Tugas Khusus Pembinaan Karakter')}</td>
         </tr>
       </table>
 
-      <p style="text-align: justify;">Kehadiran Bapak/Ibu sangat kami harapkan guna menyelaraskan pembinaan kedisiplinan dan budi pekerti ananda demi masa depan yang lebih baik.</p>
+      <p style="text-align: justify; margin: 8px 0;">
+        Mengingat pentingnya pertemuan ini demi kebaikan dan masa depan ananda, kami sangat mengharapkan kehadiran Bapak/Ibu tepat pada waktu yang telah ditentukan. Jika berhalangan hadir, mohon mengonfirmasi terlebih dahulu ke pihak sekolah.
+      </p>
 
-      <p style="margin-top: 10px;">Demikian surat panggilan ini kami sampaikan, atas perhatian dan kerjasama Bapak/Ibu, kami ucapkan terima kasih.</p>
+      <p style="margin: 8px 0;">Demikian surat panggilan ini kami sampaikan, atas perhatian dan kerja sama yang baik kami ucapkan terima kasih.</p>
 
-      <!-- Tanda Tangan -->
-      <table style="width: 100%; margin-top: 35px; font-size: 11pt;">
+      <!-- Kolom Tanda Tangan -->
+      <table style="width: 100%; margin-top: 30px; font-size: 11pt;">
         <tr>
           <td style="width: 50%; text-align: center;">
             <p style="margin: 0;">Mengetahui,<br>Kepala Sekolah,</p>
-            <div style="height: 60px;"></div>
-            <p style="margin: 0; font-weight: bold; text-decoration: underline;">${namaKepsek}</p>
-            <p style="margin: 0;">NIP. ${nipKepsek}</p>
+            <div style="height: 55px;"></div>
+            <p style="margin: 0; font-weight: bold; text-decoration: underline;">${p.namaKepsek}</p>
+            <p style="margin: 0;">NIP. ${p.nipKepsek}</p>
           </td>
           <td style="width: 50%; text-align: center;">
             <p style="margin: 0;">Guru Bimbingan &amp; Konseling (BK),</p>
-            <div style="height: 60px;"></div>
-            <p style="margin: 0; font-weight: bold; text-decoration: underline;">${currentUser ? currentUser.nama : "Ibu Dewi Lestari, S.Psi."}</p>
-            <p style="margin: 0;">NIP. ${currentUser ? currentUser.nip : "198304042009012005"}</p>
+            <div style="height: 55px;"></div>
+            <p style="margin: 0; font-weight: bold; text-decoration: underline;">${escapeHtml(p.namaBk)}</p>
+            <p style="margin: 0;">NIP. ${escapeHtml(p.nipBk)}</p>
           </td>
         </tr>
       </table>
@@ -21743,84 +22058,282 @@ function cetakSuratPanggilanBk(idLog) {
 }
 
 function cetakBeritaAcaraKonselingBk(idLog) {
-  const item = (Array.isArray(logTibum) ? logTibum : []).find(t => (t.idLog && t.idLog === idLog) || (t.id && t.id === idLog));
-  if (!item) return;
+  const sId = String(idLog || '').trim();
+  const list = Array.isArray(logTibum) ? logTibum : [];
+  let item = list.find(t => String(t.idLog || '').trim() === sId || String(t.id || '').trim() === sId);
+  if (!item && currentKasusBkSelected && (String(currentKasusBkSelected.idLog || '').trim() === sId || String(currentKasusBkSelected.id || '').trim() === sId)) {
+    item = currentKasusBkSelected;
+  }
 
-  const todayStr = new Date().toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' });
-  const namaSekolah = (appConfig && appConfig.NAMA_SEKOLAH) ? appConfig.NAMA_SEKOLAH : "SMP NEGERI 1 INDONESIA HEBAT";
-  const alamat = (appConfig && appConfig.ALAMAT_SEKOLAH) ? appConfig.ALAMAT_SEKOLAH : "Jl. Pendidikan Karakter No. 07, Kota Cerdas";
-  const titimangsa = (appConfig && appConfig.KOTA_TITIMANGSA) ? appConfig.KOTA_TITIMANGSA : "Kota Cerdas";
-  const logoKiri = (appConfig && appConfig.LOGO_KIRI_PEMDA) ? appConfig.LOGO_KIRI_PEMDA : "";
-  const logoKanan = (appConfig && appConfig.LOGO_KANAN_SEKOLAH) ? appConfig.LOGO_KANAN_SEKOLAH : "";
+  if (!item) {
+    Swal.fire('Data Tidak Ditemukan', 'Catatan kasus siswa tidak ditemukan dalam basis data.', 'warning');
+    return;
+  }
 
-  const printDiv = document.createElement('div');
-  printDiv.id = 'printAreaBeritaAcaraBk';
+  const printDiv = document.getElementById('printArea');
+  if (!printDiv) {
+    console.error('Elemen #printArea tidak ditemukan.');
+    return;
+  }
+
+  const p = getPejabatBkPrint(item);
+  const now = new Date();
+  const todayStr = now.toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' });
+  const tahunSurat = now.getFullYear();
+  const waktuStr = formatWaktuDisiplin(item.waktu, item.tanggal);
+
+  const tglKonselingDate = item.tglKonselingBk ? new Date(item.tglKonselingBk) : now;
+  const hariTanggalPelaksanaan = tglKonselingDate.toLocaleDateString('id-ID', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' });
+
   printDiv.innerHTML = `
-    <div style="font-family: 'Times New Roman', serif; color: #000; padding: 25px 35px; line-height: 1.45; font-size: 11pt;">
-      <!-- Kop Surat -->
-      <table style="width: 100%; border-bottom: 3px double #000; padding-bottom: 10px; margin-bottom: 15px;">
+    <div style="font-family: 'Times New Roman', serif; color: #000; padding: 20px 30px; line-height: 1.45; font-size: 11pt;">
+      <!-- Kop Surat Resmi 2 Logo -->
+      <table style="width: 100%; border-bottom: 3px double #000; padding-bottom: 8px; margin-bottom: 14px;">
         <tr>
           <td style="width: 15%; text-align: center; vertical-align: middle;">
-            ${logoKiri ? `<img src="${logoKiri}" style="height: 75px; object-fit: contain;">` : ''}
+            ${p.logoKiri ? `<img src="${p.logoKiri}" style="height: 75px; object-fit: contain;" onerror="this.style.display='none'">` : ''}
           </td>
           <td style="width: 70%; text-align: center; vertical-align: middle;">
-            <p style="margin: 0; font-size: 11pt; text-transform: uppercase;">PEMERINTAH KOTA / KABUPATEN - DINAS PENDIDIKAN</p>
-            <h2 style="margin: 2px 0; font-size: 15pt; font-weight: bold; text-transform: uppercase;">${namaSekolah}</h2>
-            <p style="margin: 0; font-size: 9pt; font-style: italic;">${alamat}</p>
+            <h4 style="margin: 0; font-size: 11pt; text-transform: uppercase; font-weight: bold;">${p.instansiPembina}</h4>
+            <h2 style="margin: 2px 0; font-size: 15pt; font-weight: bold; text-transform: uppercase;">${p.namaSekolah}</h2>
+            <p style="margin: 0; font-size: 9.5pt; font-style: italic;">${p.alamatSekolah}</p>
           </td>
           <td style="width: 15%; text-align: center; vertical-align: middle;">
-            ${logoKanan ? `<img src="${logoKanan}" style="height: 75px; object-fit: contain;">` : ''}
+            ${p.logoKanan ? `<img src="${p.logoKanan}" style="height: 75px; object-fit: contain;" onerror="this.style.display='none'">` : ''}
           </td>
         </tr>
       </table>
 
-      <h3 style="text-align: center; margin: 10px 0; font-size: 13pt; text-decoration: underline; text-transform: uppercase;">
-        BERITA ACARA LAYANAN BIMBINGAN &amp; KONSELING (BK)
-      </h3>
-      <p style="text-align: center; margin-top: -5px; font-size: 10pt; color: #475569;">Nomor: 421.3 / BA-BK / ${item.idLog || '001'} / ${new Date().getFullYear()}</p>
+      <!-- Judul Berita Acara -->
+      <div style="text-align: center; margin-bottom: 14px;">
+        <h3 style="margin: 0; font-size: 13pt; text-decoration: underline; font-weight: bold; text-transform: uppercase;">
+          BERITA ACARA LAYANAN BIMBINGAN &amp; KONSELING (BK)
+        </h3>
+        <p style="margin: 3px 0 0 0; font-size: 10pt; color: #334155;">Nomor: 421.3 / BA-BK / ${escapeHtml(item.idLog || '001')} / ${tahunSurat}</p>
+      </div>
 
-      <p style="margin-top: 20px;">Pada hari ini, tanggal <b>${item.tglKonselingBk || todayStr}</b>, bertempat di Ruang Bimbingan &amp; Konseling (BK) ${namaSekolah}, telah dilaksanakan sesi layanan konseling individual terhadap peserta didik:</p>
+      <p style="text-align: justify; margin: 10px 0; text-indent: 30px;">
+        Pada hari ini, <b>${hariTanggalPelaksanaan}</b>, bertempat di Ruang Bimbingan &amp; Konseling (BK) ${p.namaSekolah}, telah dilaksanakan sesi layanan bimbingan dan konseling serta pembinaan karakter secara individual terhadap peserta didik:
+      </p>
 
-      <table style="width: 100%; margin: 10px 0; font-size: 11pt;">
-        <tr><td style="width: 30%;">Nama Peserta Didik</td><td>: <b>${escapeHtml(item.nama)}</b></td></tr>
-        <tr><td>Nomor Induk Siswa (NISN)</td><td>: <span style="font-family: monospace;">${escapeHtml(item.nisn)}</span></td></tr>
-        <tr><td>Kelas / Rombel</td><td>: Kelas ${escapeHtml(item.kelas || '-')}</td></tr>
-        <tr><td>Pelanggaran yang Terjadi</td><td>: ${escapeHtml(item.namaPelanggaran)} (+${item.poin} Poin | Frekuensi ke-${item.frekuensiKe || 1})</td></tr>
-        <tr><td>Tugas Khusus Pembinaan</td><td>: ${escapeHtml(item.tugasKhusus || item.sanksi || '-')}</td></tr>
+      <!-- Tabel Identitas & Kasus -->
+      <table style="width: 95%; margin: 8px auto 12px auto; font-size: 10.5pt; border-collapse: collapse;">
+        <tr><td style="width: 30%; padding: 2px 0;">1. Nama Peserta Didik</td><td style="width: 3%;">:</td><td style="padding: 2px 0;"><b>${escapeHtml(item.nama)}</b></td></tr>
+        <tr><td style="padding: 2px 0;">2. NIS / NISN</td><td>:</td><td style="padding: 2px 0; font-family: monospace;">${escapeHtml(p.nisSiswa)} / ${escapeHtml(item.nisn)}</td></tr>
+        <tr><td style="padding: 2px 0;">3. Kelas / Rombel</td><td>:</td><td style="padding: 2px 0;">Kelas ${escapeHtml(item.kelas || '-')} (Wali Kelas: ${escapeHtml(p.namaWalas)})</td></tr>
+        <tr><td style="padding: 2px 0;">4. Tanggal &amp; Waktu Kasus</td><td>:</td><td style="padding: 2px 0;">${escapeHtml(item.tanggal || '-')} | ${waktuStr}</td></tr>
+        <tr><td style="padding: 2px 0;">5. Pelanggaran yang Terjadi</td><td>:</td><td style="padding: 2px 0; color: #b91c1c;"><b>${escapeHtml(item.namaPelanggaran)}</b> (+${item.poin || 0} Poin | Pelanggaran ke-${item.frekuensiKe || 1})</td></tr>
+        <tr><td style="padding: 2px 0;">6. Jenis Layanan Bimbingan</td><td>:</td><td style="padding: 2px 0;"><b>${escapeHtml(item.jenisLayananBk || 'Bimbingan Pribadi & Karakter')}</b></td></tr>
+        <tr><td style="padding: 2px 0;">7. Tugas Edukatif Diberikan</td><td>:</td><td style="padding: 2px 0;">${escapeHtml(item.tugasKhusus || item.sanksi || '-')}</td></tr>
+        <tr><td style="padding: 2px 0;">8. Status Penyelesaian Tugas</td><td>:</td><td style="padding: 2px 0; font-weight: bold; color: ${item.tugasSelesai ? '#047857' : '#b45309'};">${item.tugasSelesai ? '[v] Tugas Edukatif Telah Diselesaikan dengan Baik' : '[...] Dalam Proses Pelaksanaan'}</td></tr>
       </table>
 
-      <div style="margin-top: 15px; padding: 10px; border: 1px solid #cbd5e1; border-radius: 6px;">
-        <p style="margin: 0 0 5px 0; font-weight: bold; font-size: 10.5pt;">Resume Hasil Dialog &amp; Catatan Konseling:</p>
-        <p style="margin: 0; text-align: justify; font-size: 10pt;">${escapeHtml(item.catatanKonselingBk || 'Siswa telah diberikan bimbingan konseling pribadi mengenai pentingnya kepatuhan tata tertib sekolah, manajemen waktu, dan pengembangan budi pekerti luhur.')}</p>
+      <!-- Resume Dialog & Catatan Konseling -->
+      <div style="margin: 8px 0; padding: 8px 12px; border: 1px solid #94a3b8; border-radius: 6px;">
+        <p style="margin: 0 0 3px 0; font-weight: bold; font-size: 10pt; color: #0f172a;">A. Resume Hasil Dialog, Wawancara &amp; Diagnosis Masalah:</p>
+        <p style="margin: 0; text-align: justify; font-size: 9.5pt;">${escapeHtml(item.catatanKonselingBk || 'Siswa telah diberikan konseling mendalam mengenai pentingnya disiplin diri, manajemen waktu, dan kepatuhan norma sekolah.')}</p>
       </div>
 
-      <div style="margin-top: 15px; padding: 10px; border: 1px solid #cbd5e1; border-radius: 6px; background: #fafafa;">
-        <p style="margin: 0 0 5px 0; font-weight: bold; font-size: 10.5pt;">Ikrar &amp; Komitmen Peserta Didik:</p>
-        <p style="margin: 0; text-align: justify; font-size: 10pt; font-style: italic;">"${escapeHtml(item.komitmenSiswa || 'Saya berjanji dengan sungguh-sungguh tidak akan mengulangi perbuatan tersebut dan bersedia menaati seluruh tata tertib sekolah dengan penuh rasa tanggung jawab.')}"</p>
+      <!-- Komitmen Siswa -->
+      <div style="margin: 8px 0; padding: 8px 12px; border: 1px solid #94a3b8; border-radius: 6px; background: #f8fafc;">
+        <p style="margin: 0 0 3px 0; font-weight: bold; font-size: 10pt; color: #0f172a;">B. Ikrar &amp; Pernyataan Komitmen Peserta Didik:</p>
+        <p style="margin: 0; text-align: justify; font-size: 9.5pt; font-style: italic;">"${escapeHtml(item.komitmenSiswa || 'Saya berjanji dengan sungguh-sungguh tidak akan mengulangi pelanggaran tersebut dan bersedia mematuhi seluruh tata tertib sekolah.')}"</p>
       </div>
 
-      <p style="margin-top: 20px;">Demikian Berita Acara ini dibuat dengan sebenarnya untuk dapat dipergunakan sebagaimana mestinya.</p>
+      <p style="margin: 6px 0; font-size: 10pt;">
+        <b>Status Tindak Lanjut:</b> <span style="padding: 2px 8px; border: 1px solid #059669; background: #ecfdf5; color: #065f46; font-weight: bold; border-radius: 4px;">${escapeHtml(item.statusBK || 'Dalam Bimbingan BK')}</span>
+      </p>
 
-      <!-- 3 Kolom Tanda Tangan -->
-      <table style="width: 100%; margin-top: 35px; font-size: 11pt;">
+      <p style="margin: 10px 0 0 0; text-align: justify; font-size: 10pt;">
+        Demikian Berita Acara ini dibuat dengan sebenarnya dan ditandatangani oleh pihak-pihak terkait untuk dapat dipergunakan sebagaimana mestinya.
+      </p>
+
+      <!-- Kolom Tanda Tangan Tripartit -->
+      <table style="width: 100%; margin-top: 22px; font-size: 10.5pt;">
         <tr>
           <td style="width: 33%; text-align: center;">
             <p style="margin: 0;">Peserta Didik,</p>
-            <div style="height: 55px;"></div>
+            <div style="height: 48px;"></div>
             <p style="margin: 0; font-weight: bold; text-decoration: underline;">${escapeHtml(item.nama)}</p>
             <p style="margin: 0; font-size: 9pt;">NISN. ${escapeHtml(item.nisn)}</p>
           </td>
           <td style="width: 34%; text-align: center;">
             <p style="margin: 0;">Wali Kelas,</p>
-            <div style="height: 55px;"></div>
-            <p style="margin: 0; font-weight: bold; text-decoration: underline;">Wali Kelas ${escapeHtml(item.kelas || '-')}</p>
-            <p style="margin: 0; font-size: 9pt;">Pendidik Satuan Pendidikan</p>
+            <div style="height: 48px;"></div>
+            <p style="margin: 0; font-weight: bold; text-decoration: underline;">${escapeHtml(p.namaWalas)}</p>
+            <p style="margin: 0; font-size: 9pt;">${escapeHtml(p.nipWalas)}</p>
           </td>
           <td style="width: 33%; text-align: center;">
-            <p style="margin: 0;">Guru Konselor (BK),</p>
-            <div style="height: 55px;"></div>
-            <p style="margin: 0; font-weight: bold; text-decoration: underline;">${currentUser ? currentUser.nama : "Ibu Dewi Lestari, S.Psi."}</p>
-            <p style="margin: 0; font-size: 9pt;">NIP. ${currentUser ? currentUser.nip : "198304042009012005"}</p>
+            <p style="margin: 0;">Guru Bimbingan Konseling,</p>
+            <div style="height: 48px;"></div>
+            <p style="margin: 0; font-weight: bold; text-decoration: underline;">${escapeHtml(p.namaBk)}</p>
+            <p style="margin: 0; font-size: 9pt;">NIP. ${escapeHtml(p.nipBk)}</p>
+          </td>
+        </tr>
+        <tr>
+          <td colspan="3" style="text-align: center; padding-top: 14px;">
+            <p style="margin: 0;">Mengetahui,<br><b>Kepala Sekolah,</b></p>
+            <div style="height: 48px;"></div>
+            <p style="margin: 0; font-weight: bold; text-decoration: underline;">${p.namaKepsek}</p>
+            <p style="margin: 0; font-size: 9pt;">NIP. ${p.nipKepsek}</p>
+          </td>
+        </tr>
+      </table>
+    </div>
+  `;
+
+  eksekusiCetakDiv(printDiv);
+}
+
+function cetakLaporanRekapitulasiBk() {
+  const filterStatus = (document.getElementById('filterStatusBkGuru') ? document.getElementById('filterStatusBkGuru').value : 'ALL') || 'ALL';
+  const filterKelas = (document.getElementById('filterKelasBkGuru') ? document.getElementById('filterKelasBkGuru').value : 'ALL') || 'ALL';
+  const query = (document.getElementById('searchSiswaBkGuru') ? document.getElementById('searchSiswaBkGuru').value.trim().toLowerCase() : '') || '';
+
+  const allTibum = Array.isArray(logTibum) ? logTibum : [];
+
+  const filtered = allTibum.filter(t => {
+    const st = String(t.statusBK || 'Pending').toUpperCase();
+    if (filterStatus === 'PENDING' && !(st.includes('PENDING') || st.includes('MENUNGGU'))) return false;
+    if (filterStatus === 'PROSES' && !(st.includes('PROSES') || st.includes('KONSELING') || st.includes('BIMBINGAN'))) return false;
+    if (filterStatus === 'TUGAS' && !st.includes('TUGAS')) return false;
+    if (filterStatus === 'PANGGILAN' && !(st.includes('PANGGILAN') || st.includes('ORTU'))) return false;
+    if (filterStatus === 'TUNTAS' && !(st.includes('TUNTAS') || st.includes('SELESAI'))) return false;
+
+    if (filterKelas !== 'ALL' && t.kelas !== filterKelas) return false;
+
+    if (query) {
+      const matchNama = (t.nama || '').toLowerCase().includes(query);
+      const matchNisn = (t.nisn || '').toLowerCase().includes(query);
+      const matchPel = (t.namaPelanggaran || '').toLowerCase().includes(query);
+      if (!matchNama && !matchNisn && !matchPel) return false;
+    }
+    return true;
+  });
+
+  if (filtered.length === 0) {
+    Swal.fire({
+      icon: 'info',
+      title: 'Tidak Ada Data Kasus',
+      text: 'Tidak ditemukan data kasus bimbingan konseling yang sesuai dengan kriteria filter saat ini.',
+      confirmButtonColor: '#059669'
+    });
+    return;
+  }
+
+  const printDiv = document.getElementById('printArea');
+  if (!printDiv) return;
+
+  const p = getPejabatBkPrint(null);
+  const now = new Date();
+  const todayStr = now.toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' });
+
+  let butuhCount = 0;
+  let tugasCount = 0;
+  let tuntasCount = 0;
+
+  filtered.forEach(t => {
+    const st = String(t.statusBK || 'Pending').toUpperCase();
+    if (st.includes('TUNTAS') || st.includes('SELESAI')) {
+      tuntasCount++;
+    } else if (st.includes('TUGAS')) {
+      tugasCount++;
+    } else if (st.includes('PANGGILAN') || Number(t.poin || 0) >= 20 || Number(t.frekuensiKe || 1) >= 2) {
+      butuhCount++;
+    }
+  });
+
+  const filterKelasText = filterKelas === 'ALL' ? 'Semua Kelas' : ('Kelas ' + filterKelas);
+  let filterStatusText = 'Semua Status Penanganan';
+  if (filterStatus === 'PENDING') filterStatusText = 'Menunggu Respon BK';
+  else if (filterStatus === 'PROSES') filterStatusText = 'Dalam Bimbingan BK';
+  else if (filterStatus === 'TUGAS') filterStatusText = 'Menjalani Tugas Edukatif';
+  else if (filterStatus === 'PANGGILAN') filterStatusText = 'Panggilan BK / Ortu';
+  else if (filterStatus === 'TUNTAS') filterStatusText = 'Tuntas & Terbina';
+
+  printDiv.innerHTML = `
+    <div style="font-family: 'Times New Roman', serif; color: #000; padding: 20px 25px; line-height: 1.35; font-size: 10pt;">
+      <!-- Kop Surat Resmi -->
+      <table style="width: 100%; border-bottom: 3px double #000; padding-bottom: 8px; margin-bottom: 14px;">
+        <tr>
+          <td style="width: 12%; text-align: center; vertical-align: middle;">
+            ${p.logoKiri ? `<img src="${p.logoKiri}" style="height: 65px; object-fit: contain;" onerror="this.style.display='none'">` : ''}
+          </td>
+          <td style="width: 76%; text-align: center; vertical-align: middle;">
+            <h4 style="margin: 0; font-size: 11pt; text-transform: uppercase; font-weight: bold;">${p.instansiPembina}</h4>
+            <h2 style="margin: 2px 0; font-size: 14pt; font-weight: bold; text-transform: uppercase;">${p.namaSekolah}</h2>
+            <p style="margin: 0; font-size: 9pt; font-style: italic;">${p.alamatSekolah}</p>
+          </td>
+          <td style="width: 12%; text-align: center; vertical-align: middle;">
+            ${p.logoKanan ? `<img src="${p.logoKanan}" style="height: 65px; object-fit: contain;" onerror="this.style.display='none'">` : ''}
+          </td>
+        </tr>
+      </table>
+
+      <!-- Judul Laporan -->
+      <div style="text-align: center; margin-bottom: 14px;">
+        <h3 style="margin: 0; font-size: 13pt; text-decoration: underline; font-weight: bold; text-transform: uppercase;">
+          LAPORAN REKAPITULASI LAYANAN BIMBINGAN &amp; KONSELING (BK)
+        </h3>
+        <p style="margin: 3px 0 0 0; font-size: 9.5pt;">
+          Tahun Ajaran: <b>${appConfig.TAHUN_AJARAN || '2026/2027'}</b> | Semester: <b>${appConfig.SEMESTER_AKTIF || '1'}</b> | Rombel: <b>${escapeHtml(filterKelasText)}</b> | Status: <b>${escapeHtml(filterStatusText)}</b>
+        </p>
+      </div>
+
+      <!-- Ringkasan Statistik -->
+      <table style="width: 100%; margin-bottom: 12px; font-size: 9.5pt; border: 1px solid #cbd5e1; border-collapse: collapse; text-align: center;">
+        <tr style="background: #f8fafc;">
+          <td style="border: 1px solid #cbd5e1; padding: 6px;">Total Kasus: <b>${filtered.length} Kasus</b></td>
+          <td style="border: 1px solid #cbd5e1; padding: 6px; color: #b91c1c;">Perlu Panggilan: <b>${butuhCount} Siswa</b></td>
+          <td style="border: 1px solid #cbd5e1; padding: 6px; color: #7e22ce;">Menjalani Tugas: <b>${tugasCount} Siswa</b></td>
+          <td style="border: 1px solid #cbd5e1; padding: 6px; color: #047857;">Kasus Tuntas: <b>${tuntasCount} Selesai</b></td>
+        </tr>
+      </table>
+
+      <!-- Tabel Rinci Kasus -->
+      <table style="width: 100%; border: 1px solid #000; border-collapse: collapse; font-size: 9pt;">
+        <thead>
+          <tr style="background: #f1f5f9; text-align: center;">
+            <th style="border: 1px solid #000; padding: 5px; width: 4%;">No</th>
+            <th style="border: 1px solid #000; padding: 5px; width: 14%;">Tanggal &amp; Waktu</th>
+            <th style="border: 1px solid #000; padding: 5px; width: 18%;">Nama Siswa (NISN)</th>
+            <th style="border: 1px solid #000; padding: 5px; width: 8%;">Kelas</th>
+            <th style="border: 1px solid #000; padding: 5px; width: 20%;">Pelanggaran &amp; Poin</th>
+            <th style="border: 1px solid #000; padding: 5px; width: 6%;">Frek</th>
+            <th style="border: 1px solid #000; padding: 5px; width: 14%;">Status BK</th>
+            <th style="border: 1px solid #000; padding: 5px; width: 16%;">Tindak Lanjut / Tugas</th>
+          </tr>
+        </thead>
+        <tbody>
+          ${filtered.map((t, idx) => `
+            <tr>
+              <td style="border: 1px solid #000; padding: 4px; text-align: center;">${idx + 1}</td>
+              <td style="border: 1px solid #000; padding: 4px;">${escapeHtml(t.tanggal || '-')}<br><small style="color: #64748b;">${formatWaktuDisiplin(t.waktu, t.tanggal)}</small></td>
+              <td style="border: 1px solid #000; padding: 4px;"><b>${escapeHtml(t.nama)}</b><br><small style="font-family: monospace;">${escapeHtml(t.nisn)}</small></td>
+              <td style="border: 1px solid #000; padding: 4px; text-align: center;">${escapeHtml(t.kelas || '-')}</td>
+              <td style="border: 1px solid #000; padding: 4px;">${escapeHtml(t.namaPelanggaran || '-')}<br><b style="color: #b91c1c;">+${t.poin || 0} Poin</b></td>
+              <td style="border: 1px solid #000; padding: 4px; text-align: center;">ke-${t.frekuensiKe || 1}</td>
+              <td style="border: 1px solid #000; padding: 4px; text-align: center; font-weight: bold;">${escapeHtml(t.statusBK || 'Pending')}</td>
+              <td style="border: 1px solid #000; padding: 4px; font-size: 8.5pt;">${escapeHtml(t.tugasKhusus || t.catatanKonselingBk || t.sanksi || '-')}</td>
+            </tr>
+          `).join('')}
+        </tbody>
+      </table>
+
+      <!-- Tanda Tangan -->
+      <table style="width: 100%; margin-top: 24px; font-size: 10pt;">
+        <tr>
+          <td style="width: 50%; text-align: center;">
+            <p style="margin: 0;">Mengetahui,<br><b>Kepala Sekolah,</b></p>
+            <div style="height: 50px;"></div>
+            <p style="margin: 0; font-weight: bold; text-decoration: underline;">${p.namaKepsek}</p>
+            <p style="margin: 0;">NIP. ${p.nipKepsek}</p>
+          </td>
+          <td style="width: 50%; text-align: center;">
+            <p style="margin: 0;">${p.titimangsa}, ${todayStr}<br><b>Guru Bimbingan Konseling (BK),</b></p>
+            <div style="height: 50px;"></div>
+            <p style="margin: 0; font-weight: bold; text-decoration: underline;">${escapeHtml(p.namaBk)}</p>
+            <p style="margin: 0;">NIP. ${escapeHtml(p.nipBk)}</p>
           </td>
         </tr>
       </table>
