@@ -1286,6 +1286,11 @@
         <button onclick="switchTabGuru('nilaiUlangan')" id="tabBtnGuru_nilaiUlangan" class="tab-guru-btn px-4 py-2 bg-white text-slate-600 hover:bg-slate-100 font-semibold rounded-xl text-xs whitespace-nowrap border border-slate-200">Paste Leger Nilai</button>
         <button onclick="switchTabGuru('penilaianTopik')" id="tabBtnGuru_penilaianTopik" class="tab-guru-btn px-4 py-2 bg-white text-slate-600 hover:bg-slate-100 font-semibold rounded-xl text-xs whitespace-nowrap border border-slate-200"> Nilai Topik & Rubrik</button>
         <button onclick="switchTabGuru('guruWali')" id="tabBtnGuru_guruWali" class="tab-guru-btn px-4 py-2 bg-white text-slate-600 hover:bg-slate-100 font-semibold rounded-xl text-xs whitespace-nowrap border border-slate-200">Guru Wali (7 Kebiasaan & WA)</button>
+        <button onclick="switchTabGuru('koordinatorEkskul')" id="tabBtnGuru_koordinatorEkskul" class="tab-guru-btn hidden px-4 py-2 bg-white text-slate-600 hover:bg-slate-100 font-semibold rounded-xl text-xs whitespace-nowrap border border-slate-200 flex items-center gap-1.5 cursor-pointer">
+          <i data-lucide="award" class="w-4 h-4 text-purple-600"></i>
+          <span>Koordinator Ekstra</span>
+          <span id="badgeGuruKoordAlert" class="px-1.5 py-0.2 bg-purple-100 text-purple-800 rounded-full text-[10px] font-bold">Koordinator</span>
+        </button>
         <button onclick="switchTabGuru('tibum')" id="tabBtnGuru_tibum" class="tab-guru-btn px-4 py-2 bg-white text-slate-600 hover:bg-slate-100 font-semibold rounded-xl text-xs whitespace-nowrap border border-slate-200"> Catat Pelanggaran / Scan QR</button>
         <button onclick="switchTabGuru('layananBk')" id="tabBtnGuru_layananBk" class="tab-guru-btn hidden px-4 py-2 bg-white text-slate-600 hover:bg-slate-100 font-semibold rounded-xl text-xs whitespace-nowrap border border-slate-200 flex items-center gap-1.5 cursor-pointer">
           <i data-lucide="heart-handshake" class="w-4 h-4 text-emerald-600"></i>
@@ -1340,6 +1345,47 @@
     <div class="bg-emerald-950/60 p-3 rounded-2xl border border-emerald-800/50 text-center">
       <p class="text-[10px] text-teal-300 uppercase font-bold tracking-wider">Kasus Tuntas</p>
       <p id="widgetBkStatTuntas" class="text-xl font-black text-teal-300 mt-0.5">0</p>
+    </div>
+  </div>
+</div>
+
+<!-- WIDGET KHUSUS KOORDINATOR EKSTRAKURIKULER YANG DITUNJUK -->
+<div id="widgetGuruKoordinatorBeranda" class="hidden p-5 rounded-3xl bg-gradient-to-r from-purple-950 via-indigo-950 to-slate-900 text-white shadow-lg border-2 border-purple-500/40 space-y-4">
+  <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-purple-800/60">
+    <div class="flex items-center gap-3">
+      <div class="w-12 h-12 rounded-2xl bg-purple-500/20 text-purple-300 flex items-center justify-center flex-shrink-0 border border-purple-500/30 shadow-inner">
+        <i data-lucide="award" class="w-6 h-6 text-amber-300"></i>
+      </div>
+      <div>
+        <div class="inline-flex items-center gap-1.5 px-2.5 py-0.5 bg-purple-500/20 text-purple-300 rounded-full text-[10px] font-bold tracking-wider">
+          <span class="w-1.5 h-1.5 rounded-full bg-amber-400 animate-ping"></span>
+          <span>KOORDINATOR EKSTRAKURIKULER SEKOLAH</span>
+        </div>
+        <h4 class="text-base sm:text-lg font-black text-white">Pusat Pengawasan Ekstrakurikuler & Pelatih</h4>
+        <p class="text-xs text-purple-200">Anda ditunjuk oleh Administrator untuk memantau ketertiban mingguan pelatih, menyetujui usulan siswa, dan manajemen presensi.</p>
+      </div>
+    </div>
+    <button type="button" onclick="switchTabGuru('koordinatorEkskul')" class="px-4 py-2.5 bg-purple-600 hover:bg-purple-500 text-white font-black rounded-xl text-xs transition flex items-center gap-2 shadow-md cursor-pointer self-start sm:self-auto">
+      <span>Buka Portal Koordinator</span>
+      <i data-lucide="arrow-right" class="w-4 h-4"></i>
+    </button>
+  </div>
+  <div class="grid grid-cols-2 sm:grid-cols-4 gap-2.5">
+    <div class="bg-purple-950/60 p-3 rounded-2xl border border-purple-800/50 text-center">
+      <p class="text-[10px] text-purple-300 uppercase font-bold tracking-wider">Total Cabang</p>
+      <p id="widgetKoordStatCabang" class="text-xl font-black text-white mt-0.5">0</p>
+    </div>
+    <div class="bg-purple-950/60 p-3 rounded-2xl border border-purple-800/50 text-center">
+      <p class="text-[10px] text-emerald-300 uppercase font-bold tracking-wider">Pelatih Tertib</p>
+      <p id="widgetKoordStatTertib" class="text-xl font-black text-emerald-400 mt-0.5">0</p>
+    </div>
+    <div class="bg-purple-950/60 p-3 rounded-2xl border border-purple-800/50 text-center">
+      <p class="text-[10px] text-rose-300 uppercase font-bold tracking-wider">Belum Presensi</p>
+      <p id="widgetKoordStatBelum" class="text-xl font-black text-rose-400 mt-0.5">0</p>
+    </div>
+    <div class="bg-purple-950/60 p-3 rounded-2xl border border-purple-800/50 text-center">
+      <p class="text-[10px] text-amber-300 uppercase font-bold tracking-wider">Usulan Siswa</p>
+      <p id="widgetKoordStatUsulan" class="text-xl font-black text-amber-400 mt-0.5">0</p>
     </div>
   </div>
 </div>
@@ -2735,6 +2781,539 @@
         </div>
       </div>
 
+
+      <!-- KONTEN TAB KHUSUS GURU: PORTAL KOORDINATOR EKSTRAKURIKULER -->
+      <div id="tabContentGuru_koordinatorEkskul" class="tab-guru-content hidden space-y-6">
+        <!-- Hero Card Koordinator Ekstrakurikuler -->
+        <div class="bg-gradient-to-r from-purple-950 via-indigo-900 to-slate-900 rounded-3xl p-6 text-white shadow-md">
+          <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
+            <div>
+              <div class="inline-flex items-center gap-1.5 px-3 py-1 bg-white/20 backdrop-blur-md rounded-full text-xs font-bold mb-2">
+                <i data-lucide="award" class="w-3.5 h-3.5 text-amber-300"></i>
+                <span>PORTAL KOORDINATOR EKSTRAKURIKULER</span>
+              </div>
+              <h3 class="text-xl sm:text-2xl font-black">Pusat Kendali & Pengawasan Ekstrakurikuler</h3>
+              <p class="text-xs sm:text-sm text-purple-200 mt-1 max-w-2xl leading-relaxed">
+                Pantau seluruh rekapitulasi cabang ekstrakurikuler, evaluasi ketertiban mingguan pelatih (1x/minggu), setujui usulan siswa latihan, dan cetak presensi manual resmi A4.
+              </p>
+            </div>
+            <div class="flex items-center gap-2 flex-wrap">
+              <span class="px-3.5 py-1.5 bg-purple-500/30 border border-purple-400/40 rounded-xl text-xs font-bold text-purple-200 flex items-center gap-1.5">
+                <i data-lucide="user-check" class="w-4 h-4 text-emerald-400"></i>
+                <span id="labelKoordGuruNama">Koordinator Ekstra</span>
+              </span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Sub-Navigasi 4 Modul Koordinator Ekstra -->
+        <div class="flex items-center gap-2 border-b border-slate-200 pb-3 flex-wrap">
+          <button type="button" id="btnSubTabKoord_rekap" onclick="switchSubTabKoordinator('rekap')" class="px-4 py-2.5 rounded-xl text-xs font-black transition flex items-center gap-2 bg-purple-700 text-white shadow-xs cursor-pointer">
+            <i data-lucide="bar-chart-3" class="w-4 h-4"></i>
+            <span>Rekap Semua Ekstra</span>
+            <span id="badgeKoordTotalCabang" class="px-2 py-0.5 rounded-full text-[10px] bg-white/20 text-white font-mono">0</span>
+          </button>
+          <button type="button" id="btnSubTabKoord_progres" onclick="switchSubTabKoordinator('progres')" class="px-4 py-2.5 rounded-xl text-xs font-bold transition flex items-center gap-2 bg-slate-100 hover:bg-slate-200 text-slate-700 cursor-pointer">
+            <i data-lucide="trending-up" class="w-4 h-4 text-blue-600"></i>
+            <span>Progres Kehadiran Pertemuan</span>
+            <span id="badgeKoordTotalSesiProgres" class="px-2 py-0.5 rounded-full text-[10px] bg-blue-100 text-blue-800 font-bold">Semua Ekstra</span>
+          </button>
+          <button type="button" id="btnSubTabKoord_ketertiban" onclick="switchSubTabKoordinator('ketertiban')" class="px-4 py-2.5 rounded-xl text-xs font-bold transition flex items-center gap-2 bg-slate-100 hover:bg-slate-200 text-slate-700 cursor-pointer">
+            <i data-lucide="calendar-clock" class="w-4 h-4 text-rose-600"></i>
+            <span>Laporan Ketertiban Pelatih (1x/Minggu)</span>
+            <span id="badgeKoordPelatihTidakTertib" class="px-2.5 py-0.5 rounded-full text-[10px] bg-rose-600 text-white font-black animate-pulse">0 Belum Presensi</span>
+          </button>
+          <button type="button" id="btnSubTabKoord_manajemen" onclick="switchSubTabKoordinator('manajemen')" class="px-4 py-2.5 rounded-xl text-xs font-bold transition flex items-center gap-2 bg-slate-100 hover:bg-slate-200 text-slate-700 cursor-pointer">
+            <i data-lucide="settings-2" class="w-4 h-4 text-indigo-600"></i>
+            <span>Manajemen Ekstra & Usulan Anggota</span>
+            <span id="badgeKoordUsulanPending" class="px-2 py-0.5 rounded-full text-[10px] bg-amber-500 text-white font-bold">0 Usulan</span>
+          </button>
+          <button type="button" id="btnSubTabKoord_cetak" onclick="switchSubTabKoordinator('cetak')" class="px-4 py-2.5 rounded-xl text-xs font-bold transition flex items-center gap-2 bg-slate-100 hover:bg-slate-200 text-slate-700 cursor-pointer">
+            <i data-lucide="printer" class="w-4 h-4 text-emerald-600"></i>
+            <span>Cetak Presensi Manual (A4)</span>
+          </button>
+        </div>
+
+        <!-- SUB-MODUL 1: REKAP SEMUA EKSTRAKURIKULER -->
+        <div id="subViewKoord_rekap" class="space-y-5">
+          <!-- 4 Kartu Metrik Ringkasan -->
+          <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4">
+            <div class="p-4 bg-white rounded-2xl border border-slate-200 shadow-xs flex items-center gap-3">
+              <div class="w-10 h-10 rounded-xl bg-purple-50 text-purple-700 flex items-center justify-center font-bold flex-shrink-0">
+                <i data-lucide="award" class="w-5 h-5"></i>
+              </div>
+              <div class="min-w-0">
+                <span class="text-[11px] font-bold text-slate-400 block truncate">Total Cabang</span>
+                <span id="statKoordTotalCabang" class="text-base sm:text-lg font-black text-slate-800">0 Cabang</span>
+              </div>
+            </div>
+            <div class="p-4 bg-white rounded-2xl border border-slate-200 shadow-xs flex items-center gap-3">
+              <div class="w-10 h-10 rounded-xl bg-indigo-50 text-indigo-700 flex items-center justify-center font-bold flex-shrink-0">
+                <i data-lucide="users" class="w-5 h-5"></i>
+              </div>
+              <div class="min-w-0">
+                <span class="text-[11px] font-bold text-slate-400 block truncate">Total Anggota</span>
+                <span id="statKoordTotalAnggota" class="text-base sm:text-lg font-black text-indigo-700">0 Siswa</span>
+              </div>
+            </div>
+            <div class="p-4 bg-white rounded-2xl border border-slate-200 shadow-xs flex items-center gap-3">
+              <div class="w-10 h-10 rounded-xl bg-emerald-50 text-emerald-700 flex items-center justify-center font-bold flex-shrink-0">
+                <i data-lucide="book-check" class="w-5 h-5"></i>
+              </div>
+              <div class="min-w-0">
+                <span class="text-[11px] font-bold text-slate-400 block truncate">Sesi Latihan Terlaksana</span>
+                <span id="statKoordTotalSesi" class="text-base sm:text-lg font-black text-emerald-700">0 Sesi</span>
+              </div>
+            </div>
+            <div class="p-4 bg-white rounded-2xl border border-slate-200 shadow-xs flex items-center gap-3">
+              <div class="w-10 h-10 rounded-xl bg-amber-50 text-amber-700 flex items-center justify-center font-bold flex-shrink-0">
+                <i data-lucide="percent" class="w-5 h-5"></i>
+              </div>
+              <div class="min-w-0">
+                <span class="text-[11px] font-bold text-slate-400 block truncate">Rata-rata Kehadiran</span>
+                <span id="statKoordRataKehadiran" class="text-base sm:text-lg font-black text-amber-700">0%</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Filter & Pencarian Cabang -->
+          <div class="bg-white p-4 rounded-2xl border border-slate-200 shadow-xs flex flex-col md:flex-row items-stretch md:items-center justify-between gap-3">
+            <div class="relative flex-1">
+              <i data-lucide="search" class="w-4 h-4 text-slate-400 absolute left-3.5 top-3"></i>
+              <input type="text" id="searchKoordCabang" oninput="renderKoordRekapSemua()" placeholder="Cari nama cabang, pelatih, atau jadwal latihan..." class="w-full pl-9 pr-4 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs focus:outline-none focus:border-purple-500 focus:bg-white transition">
+            </div>
+            <div class="flex items-center gap-2">
+              <select id="filterKoordKategori" onchange="renderKoordRekapSemua()" class="px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs font-semibold text-slate-700 focus:outline-none focus:border-purple-500">
+                <option value="">Semua Kategori</option>
+                <option value="Olahraga">Olahraga</option>
+                <option value="Seni & Budaya">Seni & Budaya</option>
+                <option value="Kepanduan">Kepanduan</option>
+                <option value="Sains & Teknologi">Sains & Teknologi</option>
+                <option value="Kemanusiaan">Kemanusiaan</option>
+                <option value="Keagamaan">Keagamaan</option>
+                <option value="Bahasa">Bahasa</option>
+                <option value="Umum">Umum</option>
+              </select>
+            </div>
+          </div>
+
+          <!-- Container Grid Cabang Ekstra -->
+          <div id="containerKoordRekapCards" class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
+            <!-- Diisi otomatis oleh renderKoordRekapSemua() -->
+          </div>
+        </div>
+
+        <!-- SUB-MODUL 1B: PROGRES KEHADIRAN TIAP PERTEMUAN DI SEMUA EKSTRAKURIKULER -->
+        <div id="subViewKoord_progres" class="hidden space-y-5">
+          <!-- Hero Card Progres Kehadiran -->
+          <div class="p-5 sm:p-6 bg-gradient-to-r from-blue-950 via-indigo-900 to-slate-900 rounded-3xl text-white shadow-md">
+            <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+              <div class="space-y-1.5">
+                <div class="inline-flex items-center gap-1.5 px-3 py-1 bg-white/20 backdrop-blur-md rounded-full text-xs font-bold mb-1">
+                  <i data-lucide="trending-up" class="w-3.5 h-3.5 text-blue-300"></i>
+                  <span>MONITORING PROGRES PERTEMUAN</span>
+                </div>
+                <h3 class="text-lg sm:text-xl font-black">Progres & Tren Kehadiran Tiap Pertemuan di Semua Ekstra</h3>
+                <p class="text-xs sm:text-sm text-blue-200 max-w-2xl leading-relaxed">
+                  Evaluasi perkembangan keaktifan peserta didik pertemuan demi pertemuan (P1, P2, P3, dst.) di seluruh cabang ekstrakurikuler. Analisis matriks perbandingan, grafik tren persentase kehadiran, dan rincian siswa tidak masuk.
+                </p>
+              </div>
+              <div class="flex items-center gap-2 flex-wrap flex-shrink-0">
+                <button type="button" onclick="cetakLaporanProgresKehadiranKoord()" class="px-3.5 py-2.5 bg-emerald-600 hover:bg-emerald-500 text-white font-bold rounded-xl text-xs transition flex items-center gap-1.5 shadow-sm cursor-pointer" title="Cetak Dokumen Rekap Progres Kehadiran A4">
+                  <i data-lucide="printer" class="w-4 h-4"></i>
+                  <span>Cetak Matriks A4</span>
+                </button>
+                <button type="button" onclick="eksporCsvProgresKehadiranKoord()" class="px-3.5 py-2.5 bg-indigo-600 hover:bg-indigo-500 text-white font-bold rounded-xl text-xs transition flex items-center gap-1.5 shadow-sm cursor-pointer" title="Unduh Rekap Format CSV">
+                  <i data-lucide="download" class="w-4 h-4"></i>
+                  <span>Ekspor CSV</span>
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- 4 Ringkasan Metrik Progres Kehadiran -->
+          <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4">
+            <div class="p-4 bg-white rounded-2xl border border-slate-200 shadow-xs flex items-center gap-3">
+              <div class="w-10 h-10 rounded-xl bg-blue-50 text-blue-700 flex items-center justify-center font-bold flex-shrink-0">
+                <i data-lucide="calendar-check" class="w-5 h-5"></i>
+              </div>
+              <div class="min-w-0">
+                <span class="text-[11px] font-bold text-slate-400 block truncate">Total Pertemuan</span>
+                <span id="statProgresTotalSesi" class="text-base sm:text-lg font-black text-slate-800">0 Sesi</span>
+              </div>
+            </div>
+            <div class="p-4 bg-white rounded-2xl border border-slate-200 shadow-xs flex items-center gap-3">
+              <div class="w-10 h-10 rounded-xl bg-emerald-50 text-emerald-700 flex items-center justify-center font-bold flex-shrink-0">
+                <i data-lucide="percent" class="w-5 h-5"></i>
+              </div>
+              <div class="min-w-0">
+                <span class="text-[11px] font-bold text-slate-400 block truncate">Rata-rata Hadir Global</span>
+                <span id="statProgresRataGlobal" class="text-base sm:text-lg font-black text-emerald-700">0%</span>
+              </div>
+            </div>
+            <div class="p-4 bg-white rounded-2xl border border-slate-200 shadow-xs flex items-center gap-3">
+              <div class="w-10 h-10 rounded-xl bg-purple-50 text-purple-700 flex items-center justify-center font-bold flex-shrink-0">
+                <i data-lucide="trophy" class="w-5 h-5"></i>
+              </div>
+              <div class="min-w-0">
+                <span class="text-[11px] font-bold text-slate-400 block truncate">Cabang Paling Disiplin</span>
+                <span id="statProgresEkstraTerbaik" class="text-xs sm:text-sm font-black text-purple-700 truncate block">-</span>
+              </div>
+            </div>
+            <div class="p-4 bg-white rounded-2xl border border-slate-200 shadow-xs flex items-center gap-3">
+              <div class="w-10 h-10 rounded-xl bg-amber-50 text-amber-700 flex items-center justify-center font-bold flex-shrink-0">
+                <i data-lucide="alert-circle" class="w-5 h-5"></i>
+              </div>
+              <div class="min-w-0">
+                <span class="text-[11px] font-bold text-slate-400 block truncate">Perlu Perhatian</span>
+                <span id="statProgresEkstraPerhatian" class="text-xs sm:text-sm font-black text-amber-700 truncate block">-</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Filter & Kontrol Tampilan Progres -->
+          <div class="bg-white p-4 rounded-2xl border border-slate-200 shadow-xs flex flex-col md:flex-row items-stretch md:items-center justify-between gap-3">
+            <div class="flex items-center gap-2 flex-1 flex-wrap sm:flex-nowrap">
+              <div class="relative flex-1 min-w-[200px]">
+                <i data-lucide="search" class="w-4 h-4 text-slate-400 absolute left-3.5 top-3"></i>
+                <input type="text" id="searchKoordProgres" oninput="renderKoordProgresKehadiran()" placeholder="Cari cabang, materi latihan, atau pelatih..." class="w-full pl-9 pr-4 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs focus:outline-none focus:border-blue-500 focus:bg-white transition">
+              </div>
+              <select id="filterKoordProgresCabang" onchange="renderKoordProgresKehadiran()" class="px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs font-bold text-slate-700 focus:outline-none focus:border-blue-500">
+                <option value="">Semua Cabang Ekstrakurikuler</option>
+                <!-- Diisi dinamis oleh renderKoordProgresKehadiran() -->
+              </select>
+            </div>
+            <div class="flex items-center gap-2">
+              <div class="inline-flex p-1 bg-slate-100 rounded-xl text-xs font-bold">
+                <button type="button" id="btnViewModeProgres_matriks" onclick="switchViewModeProgres('matriks')" class="px-3 py-1.5 rounded-lg transition bg-white text-blue-700 shadow-xs cursor-pointer flex items-center gap-1.5">
+                  <i data-lucide="grid" class="w-3.5 h-3.5"></i>
+                  <span>Matriks P1-P8</span>
+                </button>
+                <button type="button" id="btnViewModeProgres_timeline" onclick="switchViewModeProgres('timeline')" class="px-3 py-1.5 rounded-lg transition text-slate-600 hover:text-slate-900 cursor-pointer flex items-center gap-1.5">
+                  <i data-lucide="list" class="w-3.5 h-3.5"></i>
+                  <span>Timeline Sesi</span>
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- TAMPILAN 1: MATRIKS KOMPARATIF PROGRES KEHADIRAN (P1 - P8) -->
+          <div id="containerViewProgresMatriks" class="bg-white rounded-3xl border border-slate-200 shadow-xs overflow-hidden">
+            <div class="p-4 sm:p-5 border-b border-slate-100 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+              <div class="flex items-center gap-2">
+                <div class="w-8 h-8 rounded-xl bg-blue-100 text-blue-700 flex items-center justify-center font-bold">
+                  <i data-lucide="table" class="w-4 h-4"></i>
+                </div>
+                <div>
+                  <h4 class="font-black text-sm text-slate-800">Matriks Progres Kehadiran Tiap Pertemuan (P1 s/d P8+)</h4>
+                  <p class="text-[11px] text-slate-400">Perbandingan persentase kehadiran peserta didik di seluruh cabang ekstra dari sesi ke sesi</p>
+                </div>
+              </div>
+              <div class="flex items-center gap-2 text-[10px] text-slate-500 font-semibold">
+                <span class="flex items-center gap-1"><span class="w-2.5 h-2.5 rounded-full bg-emerald-500 inline-block"></span> &ge;85% (Tinggi)</span>
+                <span class="flex items-center gap-1"><span class="w-2.5 h-2.5 rounded-full bg-blue-500 inline-block"></span> 75-84% (Baik)</span>
+                <span class="flex items-center gap-1"><span class="w-2.5 h-2.5 rounded-full bg-amber-500 inline-block"></span> 60-74% (Cukup)</span>
+                <span class="flex items-center gap-1"><span class="w-2.5 h-2.5 rounded-full bg-rose-500 inline-block"></span> &lt;60% (Rendah)</span>
+              </div>
+            </div>
+
+            <div class="overflow-x-auto">
+              <table class="w-full text-left text-xs">
+                <thead class="bg-slate-50 text-slate-700 font-bold border-b border-slate-200">
+                  <tr>
+                    <th class="py-3 px-3 w-10 text-center">No</th>
+                    <th class="py-3 px-3 min-w-[170px]">Cabang Ekstrakurikuler</th>
+                    <th class="py-3 px-3 min-w-[130px]">Pelatih</th>
+                    <th class="py-3 px-2 text-center w-14">P1</th>
+                    <th class="py-3 px-2 text-center w-14">P2</th>
+                    <th class="py-3 px-2 text-center w-14">P3</th>
+                    <th class="py-3 px-2 text-center w-14">P4</th>
+                    <th class="py-3 px-2 text-center w-14">P5</th>
+                    <th class="py-3 px-2 text-center w-14">P6</th>
+                    <th class="py-3 px-2 text-center w-14">P7</th>
+                    <th class="py-3 px-2 text-center w-14">P8</th>
+                    <th class="py-3 px-3 text-center min-w-[90px]">Rata-rata</th>
+                    <th class="py-3 px-3 text-center min-w-[90px]">Tren Progres</th>
+                  </tr>
+                </thead>
+                <tbody id="tableKoordProgresMatriksBody" class="divide-y divide-slate-100 font-medium">
+                  <!-- Diisi dinamis oleh renderKoordProgresKehadiran() -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <!-- TAMPILAN 2: TIMELINE RINCIAN SESI PERTEMUAN -->
+          <div id="containerViewProgresTimeline" class="hidden space-y-4">
+            <div id="listKoordProgresTimeline" class="space-y-3">
+              <!-- Diisi dinamis oleh renderKoordProgresKehadiran() -->
+            </div>
+          </div>
+        </div>
+
+        <!-- MODAL DETAIL SISWA SESI PERTEMUAN (KOORDINATOR) -->
+        <div id="modalDetailSesiProgresKoord" class="fixed inset-0 z-50 bg-slate-950/60 backdrop-blur-xs hidden flex items-center justify-center p-4">
+          <div class="bg-white rounded-3xl max-w-2xl w-full p-6 shadow-2xl border border-slate-200 flex flex-col max-h-[90vh]">
+            <div class="flex items-center justify-between pb-3 border-b border-slate-100 flex-shrink-0">
+              <div class="flex items-center gap-2.5">
+                <div class="w-8 h-8 rounded-xl bg-blue-100 text-blue-700 flex items-center justify-center font-bold">
+                  <i data-lucide="users" class="w-4 h-4"></i>
+                </div>
+                <div>
+                  <h4 id="modalTitleSesiProgres" class="font-black text-sm text-slate-900 leading-snug">Rincian Siswa Sesi Pertemuan</h4>
+                  <p id="modalSubtitleSesiProgres" class="text-[11px] text-slate-400">Cabang Ekstra | Tanggal Latihan</p>
+                </div>
+              </div>
+              <button type="button" onclick="tutupModalDetailSesiProgresKoord()" class="text-slate-400 hover:text-slate-600 p-1.5 rounded-lg transition cursor-pointer">
+                <i data-lucide="x" class="w-5 h-5"></i>
+              </button>
+            </div>
+
+            <div id="modalBodySesiProgres" class="py-4 overflow-y-auto custom-scrollbar flex-1 space-y-4 pr-1">
+              <!-- Diisi JS -->
+            </div>
+
+            <div class="pt-3 border-t border-slate-100 flex items-center justify-between flex-shrink-0">
+              <div id="modalFooterRekapSesi" class="text-xs text-slate-600 font-bold"></div>
+              <button type="button" onclick="tutupModalDetailSesiProgresKoord()" class="px-4 py-2 bg-slate-800 hover:bg-slate-900 text-white rounded-xl text-xs font-bold transition cursor-pointer">
+                Tutup
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- SUB-MODUL 2: LAPORAN KETERTIBAN PELATIH (1X/MINGGU) -->
+        <div id="subViewKoord_ketertiban" class="hidden space-y-5">
+          <!-- Banner Penjelasan Aturan Mingguan -->
+          <div class="p-5 bg-gradient-to-r from-rose-500/10 via-amber-500/10 to-purple-500/10 border border-rose-200 rounded-3xl flex flex-col md:flex-row md:items-center justify-between gap-4">
+            <div class="flex items-start gap-3.5">
+              <div class="w-10 h-10 rounded-2xl bg-rose-600 text-white flex items-center justify-center flex-shrink-0 mt-0.5 shadow-sm">
+                <i data-lucide="calendar-clock" class="w-5 h-5"></i>
+              </div>
+              <div class="text-xs text-slate-700 space-y-1">
+                <h4 class="font-black text-sm text-slate-900">Audit Kepatuhan & Ketertiban Pelatih Mingguan</h4>
+                <p class="text-slate-600 leading-relaxed text-[11px]">
+                  Pertemuan kegiatan ekstrakurikuler diselenggarakan <b>1 kali seminggu</b>. Pelatih diwajibkan mencatat presensi kehadiran peserta dan mengisi jurnal materi latihan setiap pertemuan. Sistem otomatis mendeteksi pelatih yang belum mengisi presensi pada minggu berjalan.
+                </p>
+                <div class="pt-1 text-[11px] font-bold text-indigo-900 flex items-center gap-1.5">
+                  <i data-lucide="calendar" class="w-3.5 h-3.5 text-indigo-600"></i>
+                  <span>Periode Minggu Berjalan: <span id="labelKoordPeriodeMinggu" class="font-mono text-indigo-700">-</span></span>
+                </div>
+              </div>
+            </div>
+            <div class="flex items-center gap-2 flex-shrink-0">
+              <button type="button" onclick="kirimWaSemuaPelatihBelumPresensi()" class="px-3.5 py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white font-bold rounded-xl text-xs transition flex items-center gap-1.5 shadow-xs cursor-pointer" title="Kirim notifikasi WA ke pelatih yang belum mengisi">
+                <i data-lucide="message-circle" class="w-4 h-4"></i>
+                <span>Tegur Via WhatsApp</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- 3 Mini Metrik Ketertiban -->
+          <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4">
+            <div class="p-4 bg-white rounded-2xl border border-emerald-200 shadow-xs flex items-center gap-3">
+              <div class="w-10 h-10 rounded-xl bg-emerald-50 text-emerald-700 flex items-center justify-center font-bold flex-shrink-0">
+                <i data-lucide="check-circle" class="w-5 h-5"></i>
+              </div>
+              <div class="min-w-0">
+                <span class="text-[11px] font-bold text-slate-400 block truncate">Pelatih Tertib (Sudah Presensi)</span>
+                <span id="statKoordPelatihTertib" class="text-base sm:text-lg font-black text-emerald-700">0 Pelatih</span>
+              </div>
+            </div>
+            <div class="p-4 bg-white rounded-2xl border border-rose-200 shadow-xs flex items-center gap-3">
+              <div class="w-10 h-10 rounded-xl bg-rose-50 text-rose-700 flex items-center justify-center font-bold flex-shrink-0">
+                <i data-lucide="alert-triangle" class="w-5 h-5"></i>
+              </div>
+              <div class="min-w-0">
+                <span class="text-[11px] font-bold text-slate-400 block truncate">Belum Presensi / Jadwal Lewat</span>
+                <span id="statKoordPelatihBelum" class="text-base sm:text-lg font-black text-rose-700">0 Pelatih</span>
+              </div>
+            </div>
+            <div class="p-4 bg-white rounded-2xl border border-indigo-200 shadow-xs flex items-center gap-3">
+              <div class="w-10 h-10 rounded-xl bg-indigo-50 text-indigo-700 flex items-center justify-center font-bold flex-shrink-0">
+                <i data-lucide="percent" class="w-5 h-5"></i>
+              </div>
+              <div class="min-w-0">
+                <span class="text-[11px] font-bold text-slate-400 block truncate">Kepatuhan Minggu Ini</span>
+                <span id="statKoordPersenKepatuhan" class="text-base sm:text-lg font-black text-indigo-700">0%</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Filter & Tabel Ketertiban Pelatih -->
+          <div class="bg-white rounded-3xl border border-slate-200 shadow-xs overflow-hidden">
+            <div class="p-4 sm:p-5 border-b border-slate-100 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+              <div class="flex items-center gap-2">
+                <div class="w-7 h-7 rounded-lg bg-rose-100 text-rose-700 flex items-center justify-center font-bold text-xs">
+                  <i data-lucide="list-checks" class="w-4 h-4"></i>
+                </div>
+                <h4 class="font-black text-sm text-slate-800">Daftar Audit Kepatuhan Pelatih Mingguan</h4>
+              </div>
+              <div class="flex items-center gap-2">
+                <select id="filterStatusKetertibanPelatih" onchange="renderKoordKetertibanPelatih()" class="px-3 py-1.5 bg-slate-50 border border-slate-200 rounded-xl text-xs font-bold text-slate-700 focus:outline-none">
+                  <option value="">Semua Status Pelatih</option>
+                  <option value="TIDAK_TERTIB">Hanya Yang Belum Presensi (Lewat Jadwal)</option>
+                  <option value="TERTIB">Sudah Tertib Mengisi</option>
+                  <option value="MENUNGGU">Menunggu Hari Jadwal</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="overflow-x-auto">
+              <table class="w-full text-left text-xs">
+                <thead class="bg-slate-50 text-slate-600 font-bold border-b border-slate-200">
+                  <tr>
+                    <th class="py-3 px-3 w-10 text-center">No</th>
+                    <th class="py-3 px-3">Cabang Ekstrakurikuler</th>
+                    <th class="py-3 px-3">Nama Pelatih & Kontak</th>
+                    <th class="py-3 px-3">Jadwal Mingguan</th>
+                    <th class="py-3 px-3">Presensi Terakhir</th>
+                    <th class="py-3 px-3 text-center">Status Minggu Ini</th>
+                    <th class="py-3 px-3 text-center w-36">Aksi / Peringatan</th>
+                  </tr>
+                </thead>
+                <tbody id="tableKoordKetertibanPelatihBody" class="divide-y divide-slate-100 font-medium">
+                  <!-- Diisi dinamis oleh renderKoordKetertibanPelatih() -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <!-- SUB-MODUL 3: MANAJEMEN EKSTRA & USULAN ANGGOTA -->
+        <div id="subViewKoord_manajemen" class="hidden space-y-6">
+          <!-- Bagian 1: Usulan Anggota Latihan dari Pelatih -->
+          <div class="bg-white rounded-3xl border border-slate-200 shadow-xs overflow-hidden">
+            <div class="p-5 bg-gradient-to-r from-amber-500/10 via-purple-500/10 to-indigo-500/10 border-b border-amber-200 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+              <div class="flex items-start gap-3">
+                <div class="w-9 h-9 rounded-xl bg-amber-500 text-white flex items-center justify-center font-bold flex-shrink-0 mt-0.5">
+                  <i data-lucide="user-plus" class="w-5 h-5"></i>
+                </div>
+                <div>
+                  <h4 class="font-black text-sm text-slate-900">Usulan Peserta Ekstra dari Pelatih</h4>
+                  <p class="text-[11px] text-slate-500">Akomodasi siswa yang hadir langsung saat sesi latihan namun belum terdaftar resmi di database.</p>
+                </div>
+              </div>
+              <span id="badgeKoordJumlahUsulan" class="px-3 py-1 bg-amber-100 text-amber-800 rounded-full text-xs font-black self-start sm:self-center">0 Menunggu</span>
+            </div>
+
+            <div class="overflow-x-auto">
+              <table class="w-full text-left text-xs">
+                <thead class="bg-slate-50 text-slate-600 font-bold border-b border-slate-200">
+                  <tr>
+                    <th class="py-3 px-3 w-10 text-center">No</th>
+                    <th class="py-3 px-3">Siswa (Nama & NISN)</th>
+                    <th class="py-3 px-2 text-center">Kelas</th>
+                    <th class="py-3 px-3">Cabang Ekstra</th>
+                    <th class="py-3 px-3">Tanggal Kehadiran & Catatan</th>
+                    <th class="py-3 px-3">Diusulkan Oleh</th>
+                    <th class="py-3 px-3 text-center w-36">Persetujuan</th>
+                  </tr>
+                </thead>
+                <tbody id="tableKoordUsulanAnggotaBody" class="divide-y divide-slate-100 font-medium">
+                  <!-- Diisi dinamis oleh renderKoordManajemenEkstra() -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <!-- Bagian 2: Manajemen Cabang Ekstrakurikuler -->
+          <div class="bg-white rounded-3xl border border-slate-200 shadow-xs p-5 sm:p-6 space-y-4">
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-slate-100">
+              <div class="flex items-center gap-2">
+                <div class="w-8 h-8 rounded-xl bg-purple-100 text-purple-700 flex items-center justify-center font-bold">
+                  <i data-lucide="award" class="w-4 h-4"></i>
+                </div>
+                <div>
+                  <h4 class="font-black text-sm text-slate-800">Manajemen Cabang Ekstrakurikuler</h4>
+                  <p class="text-[11px] text-slate-400">Tambah cabang baru, ubah data pembina/jadwal, atau atur status pendaftaran</p>
+                </div>
+              </div>
+              <div class="flex items-center gap-2 flex-wrap">
+                <button type="button" onclick="bukaModalTambahAnggotaKoord()" class="px-3.5 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl text-xs font-bold transition flex items-center gap-1.5 shadow-xs cursor-pointer">
+                  <i data-lucide="user-plus" class="w-4 h-4"></i>
+                  <span>+ Tambah Peserta Ekstra</span>
+                </button>
+                <button type="button" onclick="bukaModalFormEkskulAdmin()" class="px-3.5 py-2 bg-amber-400 hover:bg-amber-300 text-slate-950 rounded-xl text-xs font-black transition flex items-center gap-1.5 shadow-xs cursor-pointer">
+                  <i data-lucide="plus-circle" class="w-4 h-4"></i>
+                  <span>+ Tambah Cabang Baru</span>
+                </button>
+              </div>
+            </div>
+
+            <div class="overflow-x-auto">
+              <table class="w-full text-left text-xs">
+                <thead class="bg-slate-50 text-slate-600 font-bold border-b border-slate-200">
+                  <tr>
+                    <th class="py-3 px-3 w-10 text-center">No</th>
+                    <th class="py-3 px-3">ID & Nama Cabang</th>
+                    <th class="py-3 px-3">Kategori & Lokasi</th>
+                    <th class="py-3 px-3">Jadwal Latihan</th>
+                    <th class="py-3 px-3">Pembina / Pelatih</th>
+                    <th class="py-3 px-3 text-center">Kuota Peserta</th>
+                    <th class="py-3 px-3 text-center">Status</th>
+                    <th class="py-3 px-3 text-center w-36">Aksi</th>
+                  </tr>
+                </thead>
+                <tbody id="tableKoordManajemenCabangBody" class="divide-y divide-slate-100 font-medium">
+                  <!-- Diisi dinamis oleh renderKoordManajemenEkstra() -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <!-- SUB-MODUL 4: CETAK PRESENSI MANUAL PESERTA EKSTRA (A4) -->
+        <div id="subViewKoord_cetak" class="hidden space-y-5">
+          <!-- Pengaturan Cetak Lembar Presensi -->
+          <div class="bg-white rounded-3xl border border-slate-200 shadow-xs p-5 sm:p-6 space-y-4">
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-slate-100">
+              <div class="flex items-center gap-2">
+                <div class="w-8 h-8 rounded-xl bg-emerald-100 text-emerald-700 flex items-center justify-center font-bold">
+                  <i data-lucide="printer" class="w-4 h-4"></i>
+                </div>
+                <div>
+                  <h4 class="font-black text-sm text-slate-800">Cetak Lembar Presensi Manual Peserta (Format Fisik A4)</h4>
+                  <p class="text-[11px] text-slate-400">Dokumen resmi daftar hadir kegiatan mingguan siap dicetak dengan kop sekolah dan tanda tangan</p>
+                </div>
+              </div>
+              <button type="button" onclick="cetakLembarPresensiManualEkskul()" class="px-4 py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white font-black rounded-xl text-xs transition flex items-center gap-2 shadow-sm cursor-pointer">
+                <i data-lucide="printer" class="w-4 h-4"></i>
+                <span>Cetak Lembar Presensi Sekarang</span>
+              </button>
+            </div>
+
+            <!-- Kontrol Pilihan Cabang & Opsi Cetak -->
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+              <div>
+                <label class="block text-xs font-bold text-slate-700 mb-1">Pilih Cabang Ekstrakurikuler</label>
+                <select id="selectCetakKoordCabang" onchange="renderKoordCetakManual()" class="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs font-bold text-slate-800 focus:outline-none focus:ring-2 focus:ring-emerald-500">
+                  <!-- Diisi dinamis oleh renderKoordCetakManual() -->
+                </select>
+              </div>
+              <div>
+                <label class="block text-xs font-bold text-slate-700 mb-1">Bulan / Periode Pelaksanaan</label>
+                <input type="text" id="inputCetakKoordPeriode" oninput="renderKoordCetakManual()" value="November 2026" class="w-full px-3 py-2 bg-white border border-slate-200 rounded-xl text-xs font-medium focus:ring-2 focus:ring-emerald-500 focus:outline-none">
+              </div>
+              <div>
+                <label class="block text-xs font-bold text-slate-700 mb-1">Jumlah Kolom Pertemuan</label>
+                <select id="selectCetakKoordKolom" onchange="renderKoordCetakManual()" class="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs font-bold text-slate-800 focus:outline-none focus:ring-2 focus:ring-emerald-500">
+                  <option value="8">8 Pertemuan (P1 - P8 / 2 Bulan)</option>
+                  <option value="12">12 Pertemuan (P1 - P12 / 1 Triwulan)</option>
+                  <option value="4">4 Pertemuan (P1 - P4 / 1 Bulan)</option>
+                </select>
+              </div>
+            </div>
+          </div>
+
+          <!-- Live Preview Dokumen Presensi Manual (Tampilan Kertas A4) -->
+          <div class="bg-slate-100 p-4 sm:p-8 rounded-3xl border border-slate-200 flex justify-center overflow-x-auto">
+            <div id="previewLembarPresensiManual" class="bg-white p-6 sm:p-8 shadow-xl border border-slate-300 rounded-xl max-w-4xl w-full text-slate-900">
+              <!-- Diisi otomatis oleh renderKoordCetakManual() -->
+            </div>
+          </div>
+        </div>
+      </div>
 
       <!-- KONTEN TAB KHUSUS GURU: PENGUMUMAN & EDARAN SEKOLAH -->
       <div id="tabContentGuru_pengumuman" class="tab-guru-content hidden space-y-6">
@@ -4238,6 +4817,11 @@
             <span>Audit & Kepatuhan Siswa (Wajib & Pilihan)</span>
             <span id="badgeSubTabKepatuhanEkskul" class="px-2.5 py-0.5 rounded-full text-[10px] bg-rose-600 text-white font-black animate-pulse">0 Kurang</span>
           </button>
+          <button type="button" id="btnSubTabAdminEkskul_koordinator" onclick="switchSubTabAdminEkskul('koordinator')" class="px-4 py-2.5 rounded-xl text-xs font-bold transition flex items-center gap-2 bg-slate-100 hover:bg-slate-200 text-slate-700 cursor-pointer">
+            <i data-lucide="user-check" class="w-4 h-4 text-purple-600"></i>
+            <span>Penunjukan Koordinator Ekstra</span>
+            <span id="badgeSubTabKoordAdmin" class="px-2 py-0.5 rounded-full text-[10px] bg-purple-100 text-purple-800 font-bold">Pengaturan</span>
+          </button>
         </div>
 
         <!-- SUB-VIEW 1: MASTER CABANG EKSTRAKURIKULER -->
@@ -4415,6 +4999,145 @@
                   <!-- Diisi dinamis oleh renderMonitoringKepatuhanEkskul() -->
                 </tbody>
               </table>
+            </div>
+          </div>
+        </div>
+
+        <!-- SUB-VIEW 3: PENUNJUKAN & PENGATURAN KOORDINATOR EKSTRAKURIKULER (ADMIN) -->
+        <div id="subViewAdminEkskul_koordinator" class="hidden space-y-6">
+          <!-- Hero Card Penunjukan Koordinator -->
+          <div class="p-5 sm:p-6 bg-gradient-to-r from-purple-900 via-indigo-900 to-slate-900 rounded-3xl text-white shadow-md">
+            <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+              <div class="space-y-1.5">
+                <div class="inline-flex items-center gap-1.5 px-3 py-1 bg-white/20 backdrop-blur-md rounded-full text-xs font-bold mb-1">
+                  <i data-lucide="user-check" class="w-3.5 h-3.5 text-amber-300"></i>
+                  <span>HAK AKSES KHUSUS KOORDINATOR</span>
+                </div>
+                <h3 class="text-lg sm:text-xl font-black">Penunjukan Koordinator Ekstrakurikuler Sekolah</h3>
+                <p class="text-xs sm:text-sm text-purple-200 max-w-2xl leading-relaxed">
+                  Pilih salah satu guru resmi sekolah untuk ditugaskan sebagai Koordinator Ekstrakurikuler. Guru yang ditunjuk secara otomatis memperoleh wewenang penuh untuk memantau rekap, mengawasi ketertiban mingguan pelatih, mengelola cabang & usulan anggota, serta mencetak lembar presensi manual.
+                </p>
+              </div>
+              <div class="flex-shrink-0">
+                <span id="badgeStatusPenunjukanAdmin" class="px-3.5 py-1.5 rounded-full text-xs font-black bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 flex items-center gap-1.5">
+                  <i data-lucide="check-circle" class="w-4 h-4"></i>
+                  <span id="textStatusPenunjukanAdmin">Koordinator Terdaftar</span>
+                </span>
+              </div>
+            </div>
+          </div>
+
+          <!-- 2 Kolom: Status Koordinator & Form Penunjukan -->
+          <div class="grid grid-cols-1 lg:grid-cols-2 gap-5">
+            <!-- Kolom Kiri: Profil Koordinator Aktif Saat Ini -->
+            <div class="bg-white rounded-3xl p-5 sm:p-6 border border-slate-200 shadow-xs flex flex-col justify-between">
+              <div>
+                <div class="flex items-center justify-between pb-3 border-b border-slate-100 mb-4">
+                  <div class="flex items-center gap-2">
+                    <div class="w-8 h-8 rounded-xl bg-purple-100 text-purple-700 flex items-center justify-center font-bold">
+                      <i data-lucide="award" class="w-4 h-4"></i>
+                    </div>
+                    <div>
+                      <h4 class="font-black text-sm text-slate-800">Koordinator Ekstra Aktif</h4>
+                      <p class="text-[11px] text-slate-400">Identitas guru yang memegang SK penunjukan</p>
+                    </div>
+                  </div>
+                  <span class="px-2.5 py-1 bg-purple-50 text-purple-700 border border-purple-200 rounded-lg text-[10px] font-black uppercase">Aktif Berlaku</span>
+                </div>
+
+                <div id="cardAdminKoordProfilContainer" class="p-4 bg-slate-50 rounded-2xl border border-slate-200 space-y-3">
+                  <!-- Diisi dinamis oleh renderPengaturanKoordinatorAdmin() -->
+                </div>
+              </div>
+
+              <!-- Peringatan / Info -->
+              <div class="mt-4 p-3 bg-amber-50 rounded-2xl border border-amber-200 flex items-start gap-2.5 text-xs text-amber-800">
+                <i data-lucide="info" class="w-4 h-4 text-amber-600 flex-shrink-0 mt-0.5"></i>
+                <span class="text-[11px] leading-relaxed">
+                  Hanya <b>1 Guru Resmi</b> yang dapat ditunjuk sebagai Koordinator Ekstrakurikuler dalam satu waktu. Mengganti koordinator akan memindahkan hak akses portal koordinator ke guru yang baru dipilih.
+                </span>
+              </div>
+            </div>
+
+            <!-- Kolom Kanan: Form Penunjukan Guru Baru -->
+            <div class="bg-white rounded-3xl p-5 sm:p-6 border border-slate-200 shadow-xs space-y-4">
+              <div class="pb-3 border-b border-slate-100 flex items-center gap-2">
+                <div class="w-8 h-8 rounded-xl bg-indigo-100 text-indigo-700 flex items-center justify-center font-bold">
+                  <i data-lucide="user-plus" class="w-4 h-4"></i>
+                </div>
+                <div>
+                  <h4 class="font-black text-sm text-slate-800">Formulir Penunjukan Guru</h4>
+                  <p class="text-[11px] text-slate-400">Pilih guru pengajar dari master data sekolah</p>
+                </div>
+              </div>
+
+              <div class="space-y-3">
+                <div>
+                  <label class="block text-xs font-bold text-slate-700 mb-1">Pilih Guru sebagai Koordinator <span class="text-rose-500">*</span></label>
+                  <select id="selectGuruKoordinatorAdmin" onchange="onPilihGuruKoordinatorAdmin()" class="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs font-bold text-slate-800 focus:outline-none focus:ring-2 focus:ring-purple-500">
+                    <!-- Diisi dinamis oleh renderPengaturanKoordinatorAdmin() -->
+                  </select>
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                  <div>
+                    <label class="block text-[11px] font-bold text-slate-600 mb-1">NIP Guru Terpilih</label>
+                    <input type="text" id="nipGuruKoordinatorAdmin" readonly class="w-full px-3 py-2 bg-slate-100 border border-slate-200 rounded-xl text-xs font-mono font-bold text-slate-600 focus:outline-none" placeholder="Otomatis terisi...">
+                  </div>
+                  <div>
+                    <label class="block text-[11px] font-bold text-slate-600 mb-1">Mata Pelajaran / Tugas</label>
+                    <input type="text" id="mapelGuruKoordinatorAdmin" readonly class="w-full px-3 py-2 bg-slate-100 border border-slate-200 rounded-xl text-xs font-semibold text-slate-600 focus:outline-none" placeholder="Otomatis terisi...">
+                  </div>
+                </div>
+
+                <div>
+                  <label class="block text-[11px] font-bold text-slate-600 mb-1">Catatan SK / Keterangan Penunjukan</label>
+                  <input type="text" id="catatanPenunjukanKoordinatorAdmin" placeholder="Contoh: SK Kepala Sekolah No. 421/08/SMP-35/2026" class="w-full px-3 py-2 bg-white border border-slate-200 rounded-xl text-xs font-medium focus:ring-2 focus:ring-purple-500 focus:outline-none">
+                </div>
+
+                <div class="pt-2 flex flex-wrap items-center gap-2.5">
+                  <button type="button" onclick="simpanPenunjukanKoordinatorAdmin()" class="flex-1 py-2.5 px-4 bg-purple-700 hover:bg-purple-800 text-white font-black rounded-xl text-xs transition flex items-center justify-center gap-2 shadow-sm cursor-pointer">
+                    <i data-lucide="check-circle-2" class="w-4 h-4"></i>
+                    <span>Tetapkan Koordinator Ekstra</span>
+                  </button>
+                  <button type="button" onclick="lepasJabatanKoordinatorAdmin()" class="py-2.5 px-3.5 bg-rose-50 hover:bg-rose-100 text-rose-700 border border-rose-200 font-bold rounded-xl text-xs transition flex items-center justify-center gap-1.5 cursor-pointer" title="Cabut penunjukan koordinator">
+                    <i data-lucide="user-x" class="w-4 h-4"></i>
+                    <span>Lepas Jabatan</span>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- 4 Ringkasan Wewenang Koordinator -->
+          <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 pt-1">
+            <div class="p-4 bg-white rounded-2xl border border-slate-200 shadow-xs space-y-1.5">
+              <div class="w-8 h-8 rounded-xl bg-purple-50 text-purple-700 flex items-center justify-center font-bold">
+                <i data-lucide="bar-chart-3" class="w-4 h-4"></i>
+              </div>
+              <h5 class="font-black text-xs text-slate-800">1. Rekap Semua Ekstra</h5>
+              <p class="text-[11px] text-slate-500 leading-relaxed">Melihat dashboard statistik seluruh cabang, jumlah anggota, kuota, dan rasio kehadiran peserta.</p>
+            </div>
+            <div class="p-4 bg-white rounded-2xl border border-slate-200 shadow-xs space-y-1.5">
+              <div class="w-8 h-8 rounded-xl bg-rose-50 text-rose-700 flex items-center justify-center font-bold">
+                <i data-lucide="alert-triangle" class="w-4 h-4"></i>
+              </div>
+              <h5 class="font-black text-xs text-slate-800">2. Laporan Ketertiban Pelatih</h5>
+              <p class="text-[11px] text-slate-500 leading-relaxed">Memantau pengisian presensi mingguan (1x/minggu) & tombol otomatis teguran via WhatsApp.</p>
+            </div>
+            <div class="p-4 bg-white rounded-2xl border border-slate-200 shadow-xs space-y-1.5">
+              <div class="w-8 h-8 rounded-xl bg-indigo-50 text-indigo-700 flex items-center justify-center font-bold">
+                <i data-lucide="settings-2" class="w-4 h-4"></i>
+              </div>
+              <h5 class="font-black text-xs text-slate-800">3. Manajemen Ekstra</h5>
+              <p class="text-[11px] text-slate-500 leading-relaxed">Kelola cabang ekskul, status pendaftaran, verifikasi usulan anggota latihan, dan mutasi peserta.</p>
+            </div>
+            <div class="p-4 bg-white rounded-2xl border border-slate-200 shadow-xs space-y-1.5">
+              <div class="w-8 h-8 rounded-xl bg-emerald-50 text-emerald-700 flex items-center justify-center font-bold">
+                <i data-lucide="printer" class="w-4 h-4"></i>
+              </div>
+              <h5 class="font-black text-xs text-slate-800">4. Presensi Manual A4</h5>
+              <p class="text-[11px] text-slate-500 leading-relaxed">Mencetak format daftar hadir fisik mingguan resmi lengkap dengan kop dan tanda tangan koordinator.</p>
             </div>
           </div>
         </div>
@@ -6435,6 +7158,10 @@
         <i data-lucide="star" class="w-4 h-4 mb-0.5"></i>
         <span class="text-[10px] leading-tight">Guru Wali</span>
       </button>
+      <button type="button" onclick="switchTabGuru('koordinatorEkskul')" id="mobileNavGuru_koordinatorEkskul" class="mobile-nav-btn hidden flex flex-col items-center justify-center py-1 px-2.5 rounded-xl transition text-slate-500 hover:text-purple-600 font-medium min-w-[56px] flex-shrink-0">
+        <i data-lucide="award" class="w-5 h-5"></i>
+        <span class="text-[10px] mt-0.5">Koord Ekstra</span>
+      </button>
       <button type="button" onclick="switchTabGuru('tibum')" id="mobileNavGuru_tibum" class="mobile-nav-btn flex flex-col items-center justify-center py-1 px-2.5 rounded-xl transition text-slate-500 hover:text-indigo-600 font-medium min-w-[56px] flex-shrink-0">
         <i data-lucide="scale" class="w-4 h-4 mb-0.5"></i>
         <span class="text-[10px] leading-tight">Tata Tertib</span>
@@ -6723,6 +7450,8 @@ function renderBadgeStatusBk(statusBK) {
       NAMA_KEPSEK: "Drs. H. Mulyadi, M.Pd.",
       NIP_KEPSEK: "197205101998021003",
       PIN_ADMIN: "123456",
+      KOORDINATOR_EKSKUL_NIP: "",
+      KOORDINATOR_EKSKUL_NAMA: "",
       TGL_RILIS_KELULUSAN: "2026-06-10 10:00",
       STATUS_RILIS_KELULUSAN: "TERKUNCI",
       STATUS_PENDAFTARAN_EKSKUL: "BUKA",
@@ -7752,6 +8481,7 @@ function renderBadgeStatusBk(statusBK) {
       syncDataFromGoogleSheets(true, true);
     }
 
+    window.loadDefaultLocalData = loadDefaultLocalData;
     function loadDefaultLocalData() {
       masterSiswa = [
         { nisn: "0081234567", nis: "1001", nama: "Ahmad Fauzan Pratama", kelas: "8-A", gender: "L", tglLahir: "2010-05-15", noHpOrtu: "081234567890", nipGuruWali: "198001012005011001" },
@@ -7881,18 +8611,41 @@ function renderBadgeStatusBk(statusBK) {
       }
 
       if (!Array.isArray(logJurnalPelatih) || logJurnalPelatih.length === 0) {
-        const yesterday = new Date(Date.now() - 86400000).toISOString().split('T')[0];
+        const dNow = Date.now();
+        const tglP3 = new Date(dNow - 86400000 * 2).toISOString().split('T')[0]; // 2 hari lalu
+        const tglP2 = new Date(dNow - 86400000 * 9).toISOString().split('T')[0]; // 9 hari lalu
+        const tglP1 = new Date(dNow - 86400000 * 16).toISOString().split('T')[0]; // 16 hari lalu
+
         logJurnalPelatih = [
           {
-            id: "JRN-PLT-1001",
+            id: "JRN-PLT-1003",
             pelatihNip: "PELATIH-FUTSAL",
             pelatihNama: "Coach Hendra Wijaya",
-            tanggal: yesterday,
+            tanggal: tglP3,
             idEkskul: "EKS-FUTSAL",
-            namaEkskul: "Futsal",
+            namaEkskul: "Futsal & Sepak Bola",
+            materiLatihan: "Simulasi game taktik menyerang & counter-attack",
+            tempatLatihan: "Lapangan Utama",
+            catatan: "Kerjasama tim solid, penyelesaian akhir meningkat.",
+            totalPeserta: 2,
+            hadirCount: 2,
+            tidakMasukCount: 0,
+            sakitCount: 0,
+            izinCount: 0,
+            alphaCount: 0,
+            daftarTidakMasuk: [],
+            tglDibuat: tglP3 + " 16:30"
+          },
+          {
+            id: "JRN-PLT-1002",
+            pelatihNip: "PELATIH-FUTSAL",
+            pelatihNama: "Coach Hendra Wijaya",
+            tanggal: tglP2,
+            idEkskul: "EKS-FUTSAL",
+            namaEkskul: "Futsal & Sepak Bola",
             materiLatihan: "Pemanasan fisik, drill passing berpasangan & formasi 1-2-1",
             tempatLatihan: "Lapangan Futsal Sekolah",
-            catatan: "Kondisi stamina anak-anak cukup baik, perlu peningkatan transisi bertahan.",
+            catatan: "Kondisi stamina baik, perlu peningkatan transisi bertahan.",
             totalPeserta: 2,
             hadirCount: 1,
             tidakMasukCount: 1,
@@ -7900,9 +8653,104 @@ function renderBadgeStatusBk(statusBK) {
             izinCount: 0,
             alphaCount: 0,
             daftarTidakMasuk: [
-              { nisn: "0082345678", nama: "Siti Aisyah Rahmawati", kelas: "8-A", status: "SAKIT", keterangan: "Cedera pergelangan kaki" }
+              { nisn: "0082345678", nama: "Siti Aisyah Rahmawati", kelas: "8-A", status: "SAKIT", keterangan: "Cedera ringan" }
             ],
-            tglDibuat: yesterday + " 16:30"
+            tglDibuat: tglP2 + " 16:30"
+          },
+          {
+            id: "JRN-PLT-1001",
+            pelatihNip: "PELATIH-FUTSAL",
+            pelatihNama: "Coach Hendra Wijaya",
+            tanggal: tglP1,
+            idEkskul: "EKS-FUTSAL",
+            namaEkskul: "Futsal & Sepak Bola",
+            materiLatihan: "Pengenalan dasar kontrol bola & kelincahan footwork",
+            tempatLatihan: "Lapangan Utama",
+            catatan: "Sesi perdana pengenalan aturan dan pemanasan otot.",
+            totalPeserta: 2,
+            hadirCount: 2,
+            tidakMasukCount: 0,
+            sakitCount: 0,
+            izinCount: 0,
+            alphaCount: 0,
+            daftarTidakMasuk: [],
+            tglDibuat: tglP1 + " 16:30"
+          },
+          {
+            id: "JRN-PLT-2002",
+            pelatihNip: "PELATIH-PRAMUKA",
+            pelatihNama: "Kak Rahmat Pratama",
+            tanggal: tglP2,
+            idEkskul: "EKS-PRAMUKA",
+            namaEkskul: "Pramuka Inti (Dewan Galang)",
+            materiLatihan: "Pionering tali temali & pembuatan tandu darurat",
+            tempatLatihan: "Aula Terbuka",
+            catatan: "Seluruh dewan galang antusias dan kompak.",
+            totalPeserta: 1,
+            hadirCount: 1,
+            tidakMasukCount: 0,
+            sakitCount: 0,
+            izinCount: 0,
+            alphaCount: 0,
+            daftarTidakMasuk: [],
+            tglDibuat: tglP2 + " 16:00"
+          },
+          {
+            id: "JRN-PLT-2001",
+            pelatihNip: "PELATIH-PRAMUKA",
+            pelatihNama: "Kak Rahmat Pratama",
+            tanggal: tglP1,
+            idEkskul: "EKS-PRAMUKA",
+            namaEkskul: "Pramuka Inti (Dewan Galang)",
+            materiLatihan: "Peraturan Baris Berbaris (PBB) Tongkat & Morse",
+            tempatLatihan: "Lapangan Utama",
+            catatan: "Kedisiplinan barisan sangat rapi.",
+            totalPeserta: 1,
+            hadirCount: 1,
+            tidakMasukCount: 0,
+            sakitCount: 0,
+            izinCount: 0,
+            alphaCount: 0,
+            daftarTidakMasuk: [],
+            tglDibuat: tglP1 + " 16:00"
+          },
+          {
+            id: "JRN-PLT-3001",
+            pelatihNip: "PEMBINA-PMR",
+            pelatihNama: "Ibu Nurul Aini, S.Pd.",
+            tanggal: tglP2,
+            idEkskul: "EKS-PMR",
+            namaEkskul: "Palang Merah Remaja (PMR)",
+            materiLatihan: "Pertolongan Pertama Pada Kecelakaan (P3K) & Balut Bidai",
+            tempatLatihan: "Ruang UKS",
+            catatan: "Praktik penanganan luka lecet dan pingsan.",
+            totalPeserta: 1,
+            hadirCount: 1,
+            tidakMasukCount: 0,
+            sakitCount: 0,
+            izinCount: 0,
+            alphaCount: 0,
+            daftarTidakMasuk: [],
+            tglDibuat: tglP2 + " 09:30"
+          },
+          {
+            id: "JRN-PLT-4001",
+            pelatihNip: "PEMBINA-SENI",
+            pelatihNama: "Ibu Dewi Sartika, S.Pd.",
+            tanggal: tglP3,
+            idEkskul: "EKS-SENI",
+            namaEkskul: "Seni Tari & Musik Tradisional",
+            materiLatihan: "Dasar gerak tari tradisional & ritme gendang",
+            tempatLatihan: "Ruang Kesenian",
+            catatan: "Keluwesan gerak dasar peserta sudah terbentuk.",
+            totalPeserta: 1,
+            hadirCount: 1,
+            tidakMasukCount: 0,
+            sakitCount: 0,
+            izinCount: 0,
+            alphaCount: 0,
+            daftarTidakMasuk: [],
+            tglDibuat: tglP3 + " 15:30"
           }
         ];
       }
@@ -8399,7 +9247,10 @@ function renderBadgeStatusBk(statusBK) {
         document.getElementById('userRoleBadge').innerText = 'Guru BK / Konselor';
         document.getElementById('badgeGuruRolePrimary').innerText = 'GURU BIMBINGAN KONSELING';
         document.getElementById('badgeGuruTugasKhusus').innerText = 'LAYANAN KONSELING & DISIPLIN';
-        const btnBk = document.getElementById('tabBtnGuru_layananBk');
+        const btnKoord = document.getElementById('tabBtnGuru_koordinatorEkskul');
+      const mobKoord = document.getElementById('mobileNavGuru_koordinatorEkskul');
+      const isKoordEkskul = isCurrentUserKoordinatorEkskul();
+      const btnBk = document.getElementById('tabBtnGuru_layananBk');
         if (btnBk) {
           btnBk.classList.add('bg-emerald-700', 'text-white', 'border-emerald-700');
           btnBk.classList.remove('bg-white', 'text-slate-600');
@@ -9757,6 +10608,9 @@ function renderBadgeStatusBk(statusBK) {
         'tabBtnGuru_profil'
       ];
       const btnAbsenEkskul = document.getElementById('tabBtnGuru_absenEkskul');
+      const btnKoord = document.getElementById('tabBtnGuru_koordinatorEkskul');
+      const mobKoord = document.getElementById('mobileNavGuru_koordinatorEkskul');
+      const isKoordEkskul = isCurrentUserKoordinatorEkskul();
       const btnBk = document.getElementById('tabBtnGuru_layananBk');
       const mobBk = document.getElementById('mobileNavGuru_layananBk');
       const btnManPel = document.getElementById('tabBtnGuru_manajemenPelanggaran');
@@ -9773,6 +10627,8 @@ function renderBadgeStatusBk(statusBK) {
         });
         if (btnAbsenEkskul) btnAbsenEkskul.classList.add('hidden');
         if (btnBk) btnBk.classList.remove('hidden');
+      if (btnKoord) { if (isKoordEkskul) btnKoord.classList.remove('hidden'); else btnKoord.classList.add('hidden'); }
+      if (mobKoord) { if (isKoordEkskul) mobKoord.classList.remove('hidden'); else mobKoord.classList.add('hidden'); }
         if (mobBk) mobBk.classList.remove('hidden');
       } else if (isCoach) {
         // BERANDA PELATIH: TAB ABSENSI EKSKUL & PROFIL GURU TETAP AKTIF
@@ -9788,6 +10644,8 @@ function renderBadgeStatusBk(statusBK) {
           btnAbsenEkskul.innerText = " Absensi Latihan Ekskul";
         }
         if (btnBk) btnBk.classList.add('hidden');
+      if (btnKoord) { if (isKoordEkskul) btnKoord.classList.remove('hidden'); else btnKoord.classList.add('hidden'); }
+      if (mobKoord) { if (isKoordEkskul) mobKoord.classList.remove('hidden'); else mobKoord.classList.add('hidden'); }
         if (mobBk) mobBk.classList.add('hidden');
         document.getElementById('userRoleBadge').innerText = "Pelatih " + (currentUser.cabangEkskul || "Ekskul");
         document.getElementById('badgeGuruRolePrimary').innerText = "PELATIH EKSTRAKURIKULER";
@@ -9800,6 +10658,8 @@ function renderBadgeStatusBk(statusBK) {
         });
         if (btnAbsenEkskul) btnAbsenEkskul.classList.add('hidden');
         if (btnBk) btnBk.classList.add('hidden');
+      if (btnKoord) { if (isKoordEkskul) btnKoord.classList.remove('hidden'); else btnKoord.classList.add('hidden'); }
+      if (mobKoord) { if (isKoordEkskul) mobKoord.classList.remove('hidden'); else mobKoord.classList.add('hidden'); }
         if (mobBk) mobBk.classList.add('hidden');
         document.getElementById('userRoleBadge').innerText = currentUser.role || (currentUser.peran || "Guru Pengajar");
         document.getElementById('badgeGuruRolePrimary').innerText = currentUser.role || currentUser.peran || "GURU";
@@ -9986,7 +10846,9 @@ function renderBadgeStatusBk(statusBK) {
       if (!activeBtn && tabName === 'guruWali') activeBtn = document.getElementById('tabBtnGuru_validasi7K');
       if (activeBtn) {
         activeBtn.classList.remove('bg-white', 'text-slate-600', 'border-slate-200');
-        if (tabName === 'layananBk') {
+        if (tabName === 'koordinatorEkskul') {
+          activeBtn.classList.add('bg-purple-700', 'text-white', 'border-purple-700', 'shadow-xs');
+        } else if (tabName === 'layananBk') {
           activeBtn.classList.add('bg-emerald-700', 'text-white', 'border-emerald-700', 'shadow-xs');
         } else if (tabName === 'manajemenPelanggaran') {
           activeBtn.classList.add('bg-rose-700', 'text-white', 'border-rose-700', 'shadow-xs');
@@ -10008,7 +10870,9 @@ function renderBadgeStatusBk(statusBK) {
       const activeMobGuru = document.getElementById(`mobileNavGuru_${tabName}`);
       if (activeMobGuru) {
         activeMobGuru.classList.remove('text-slate-500', 'font-medium');
-        if (tabName === 'layananBk') {
+        if (tabName === 'koordinatorEkskul') {
+          activeMobGuru.classList.add('text-purple-700', 'font-bold', 'bg-purple-50/80');
+        } else if (tabName === 'layananBk') {
           activeMobGuru.classList.add('text-emerald-700', 'font-bold', 'bg-emerald-50/80');
         } else if (tabName === 'manajemenPelanggaran') {
           activeMobGuru.classList.add('text-rose-700', 'font-bold', 'bg-rose-50/80');
@@ -10022,6 +10886,13 @@ function renderBadgeStatusBk(statusBK) {
         if (typeof renderBannerPeringatanAlpaGuru === 'function') renderBannerPeringatanAlpaGuru();
         if (typeof renderPengumumanGuru === 'function') renderPengumumanGuru();
         if (typeof renderWidgetKhususGuruBeranda === 'function') renderWidgetKhususGuruBeranda();
+      } else if (tabName === 'koordinatorEkskul') {
+        if (!isCurrentUserKoordinatorEkskul()) {
+          Swal.fire('Akses Dibatasi', 'Menu ini hanya dapat diakses oleh Guru yang ditunjuk sebagai Koordinator Ekstrakurikuler oleh Administrator.', 'warning');
+          switchTabGuru('beranda');
+          return;
+        }
+        if (typeof renderKoordinatorEkskulDashboard === 'function') renderKoordinatorEkskulDashboard();
       } else if (tabName === 'layananBk') {
         if (typeof renderLayananBkGuru === 'function') renderLayananBkGuru();
       } else if (tabName === 'manajemenPelanggaran') {
@@ -16689,8 +17560,36 @@ ATURAN KETAT:
       currentSubTabAdminEkskul = subTab;
       const viewMaster = document.getElementById('subViewAdminEkskul_master');
       const viewKepatuhan = document.getElementById('subViewAdminEkskul_kepatuhan');
+      const viewKoord = document.getElementById('subViewAdminEkskul_koordinator');
       const btnMaster = document.getElementById('btnSubTabAdminEkskul_master');
       const btnKepatuhan = document.getElementById('btnSubTabAdminEkskul_kepatuhan');
+      const btnKoord = document.getElementById('btnSubTabAdminEkskul_koordinator');
+
+      if (viewMaster) viewMaster.classList.add('hidden');
+      if (viewKepatuhan) viewKepatuhan.classList.add('hidden');
+      if (viewKoord) viewKoord.classList.add('hidden');
+
+      if (btnMaster) btnMaster.className = 'px-4 py-2.5 rounded-xl text-xs font-bold transition flex items-center gap-2 bg-slate-100 hover:bg-slate-200 text-slate-700 cursor-pointer';
+      if (btnKepatuhan) btnKepatuhan.className = 'px-4 py-2.5 rounded-xl text-xs font-bold transition flex items-center gap-2 bg-slate-100 hover:bg-slate-200 text-slate-700 cursor-pointer';
+      if (btnKoord) btnKoord.className = 'px-4 py-2.5 rounded-xl text-xs font-bold transition flex items-center gap-2 bg-slate-100 hover:bg-slate-200 text-slate-700 cursor-pointer';
+
+      if (subTab === 'kepatuhan') {
+        if (viewKepatuhan) viewKepatuhan.classList.remove('hidden');
+        if (btnKepatuhan) btnKepatuhan.className = 'px-4 py-2.5 rounded-xl text-xs font-black transition flex items-center gap-2 bg-purple-600 text-white shadow-xs cursor-pointer';
+        renderMonitoringKepatuhanEkskul();
+      } else if (subTab === 'koordinator') {
+        if (viewKoord) viewKoord.classList.remove('hidden');
+        if (btnKoord) btnKoord.className = 'px-4 py-2.5 rounded-xl text-xs font-black transition flex items-center gap-2 bg-purple-600 text-white shadow-xs cursor-pointer';
+        renderPengaturanKoordinatorAdmin();
+      } else {
+        if (viewMaster) viewMaster.classList.remove('hidden');
+        if (btnMaster) btnMaster.className = 'px-4 py-2.5 rounded-xl text-xs font-black transition flex items-center gap-2 bg-purple-600 text-white shadow-xs cursor-pointer';
+        renderAdminEkskul();
+      }
+      safeCreateIcons();
+      return;
+    }
+    function _legacySwitchSubTabAdminEkskul_old(subTab) {
 
       if (subTab === 'kepatuhan') {
         if (viewMaster) viewMaster.classList.add('hidden');
@@ -24370,6 +25269,44 @@ async function simpanPetugasPelanggaranAdmin() {
 function renderWidgetKhususGuruBeranda() {
   const isBk = isCurrentUserGuruBk();
   const isPetugas = isCurrentUserPetugasPelanggaran();
+  const isKoord = isCurrentUserKoordinatorEkskul();
+
+  const widgetKoord = document.getElementById('widgetGuruKoordinatorBeranda');
+  if (widgetKoord) {
+    if (isKoord) {
+      widgetKoord.classList.remove('hidden');
+      const totalCabang = (masterEkskul || []).length;
+      const week = typeof getRentangMingguBerjalan === 'function' ? getRentangMingguBerjalan() : null;
+      let countTertib = 0;
+      let countBelum = 0;
+      if (week) {
+        const dayMap = { 'SENIN': 1, 'SELASA': 2, 'RABU': 3, 'KAMIS': 4, 'JUMAT': 5, 'SABTU': 6, 'MINGGU': 7 };
+        (masterEkskul || []).forEach(e => {
+          const jWeek = (logJurnalPelatih || []).filter(j => j.idEkskul === e.id && j.tanggal >= week.monStr && j.tanggal <= week.sunStr);
+          const pWeek = (logPresensiEkskul || []).filter(p => p.idEkskul === e.id && p.tanggal >= week.monStr && p.tanggal <= week.sunStr);
+          if (jWeek.length > 0 || pWeek.length > 0) countTertib++;
+          else {
+            const rawHari = String(e.hari || '').toUpperCase();
+            let tIdx = 5;
+            for (const k in dayMap) { if (rawHari.includes(k)) { tIdx = dayMap[k]; break; } }
+            if (week.currentDayIndex >= tIdx) countBelum++;
+          }
+        });
+      }
+      const countUsulan = (anggotaEkskul || []).filter(a => a.status === 'USULAN').length;
+
+      const elCabang = document.getElementById('widgetKoordStatCabang');
+      if (elCabang) elCabang.innerText = totalCabang;
+      const elTertib = document.getElementById('widgetKoordStatTertib');
+      if (elTertib) elTertib.innerText = countTertib;
+      const elBelum = document.getElementById('widgetKoordStatBelum');
+      if (elBelum) elBelum.innerText = countBelum;
+      const elUsulan = document.getElementById('widgetKoordStatUsulan');
+      if (elUsulan) elUsulan.innerText = countUsulan;
+    } else {
+      widgetKoord.classList.add('hidden');
+    }
+  }
 
   const widgetBk = document.getElementById('widgetGuruBkBeranda');
   if (widgetBk) {
@@ -24550,6 +25487,1899 @@ function hapusTugasEdukatifBankGuru(idx) {
     }
   });
 }
+
+    // INJEKSI SCRIPT FITUR KOORDINATOR EKSTRAKURIKULER
+
+    // =========================================================================
+    // INJEKSI SCRIPT FITUR KOORDINATOR EKSTRAKURIKULER
+    // =========================================================================
+    let currentSubTabKoordinator = 'rekap';
+
+    function updateGuruTabVisibility() {
+      if (!currentUser) return;
+      const isKoordEkskul = isCurrentUserKoordinatorEkskul();
+      const btnKoord = document.getElementById('tabBtnGuru_koordinatorEkskul');
+      const mobKoord = document.getElementById('mobileNavGuru_koordinatorEkskul');
+      if (btnKoord) {
+        if (isKoordEkskul) btnKoord.classList.remove('hidden');
+        else btnKoord.classList.add('hidden');
+      }
+      if (mobKoord) {
+        if (isKoordEkskul) mobKoord.classList.remove('hidden');
+        else mobKoord.classList.add('hidden');
+      }
+      const badgeTugas = document.getElementById('badgeGuruTugasKhusus');
+      if (badgeTugas && isKoordEkskul) {
+        badgeTugas.innerText = 'KOORDINATOR EKSTRAKURIKULER';
+      }
+    }
+
+    // --- SUB-MODUL 1B: PROGRES KEHADIRAN TIAP PERTEMUAN (SEMUA EKSTRA) ---
+    let currentViewModeProgres = 'matriks';
+
+    function switchViewModeProgres(mode) {
+      currentViewModeProgres = mode;
+      const vMatriks = document.getElementById('containerViewProgresMatriks');
+      const vTimeline = document.getElementById('containerViewProgresTimeline');
+      const bMatriks = document.getElementById('btnViewModeProgres_matriks');
+      const bTimeline = document.getElementById('btnViewModeProgres_timeline');
+
+      if (mode === 'timeline') {
+        if (vMatriks) vMatriks.classList.add('hidden');
+        if (vTimeline) vTimeline.classList.remove('hidden');
+        if (bTimeline) {
+          bTimeline.className = 'px-3 py-1.5 rounded-lg transition bg-white text-blue-700 shadow-xs cursor-pointer flex items-center gap-1.5 font-black';
+        }
+        if (bMatriks) {
+          bMatriks.className = 'px-3 py-1.5 rounded-lg transition text-slate-600 hover:text-slate-900 cursor-pointer flex items-center gap-1.5 font-bold';
+        }
+      } else {
+        if (vMatriks) vMatriks.classList.remove('hidden');
+        if (vTimeline) vTimeline.classList.add('hidden');
+        if (bMatriks) {
+          bMatriks.className = 'px-3 py-1.5 rounded-lg transition bg-white text-blue-700 shadow-xs cursor-pointer flex items-center gap-1.5 font-black';
+        }
+        if (bTimeline) {
+          bTimeline.className = 'px-3 py-1.5 rounded-lg transition text-slate-600 hover:text-slate-900 cursor-pointer flex items-center gap-1.5 font-bold';
+        }
+      }
+      renderKoordProgresKehadiran();
+      safeCreateIcons();
+    }
+
+    // Mengumpulkan dan mengurutkan seluruh sesi pertemuan per cabang ekskul
+    function getAgregatProgresPertemuanSemuaEkstra() {
+      const dataEkskulList = (masterEkskul || []).map(e => {
+        const jurnals = (logJurnalPelatih || []).filter(j => j.idEkskul === e.id);
+        const presensi = (logPresensiEkskul || []).filter(p => p.idEkskul === e.id);
+        const anggotaList = (anggotaEkskul || []).filter(a => a.idEkskul === e.id && a.status === 'AKTIF');
+
+        // Kumpulkan tanggal unik dan urutkan secara kronologis (P1, P2, P3, ...)
+        const dateSet = new Set();
+        jurnals.forEach(j => { if (j.tanggal) dateSet.add(j.tanggal); });
+        presensi.forEach(p => { if (p.tanggal) dateSet.add(p.tanggal); });
+        const sortedDates = Array.from(dateSet).sort(); // ascending date
+
+        let totalHadirSemuaSesi = 0;
+        let totalPesertaSemuaSesi = 0;
+
+        const pertemuanList = sortedDates.map((tgl, idx) => {
+          const jrn = jurnals.find(j => j.tanggal === tgl);
+          const presLogs = presensi.filter(p => p.tanggal === tgl);
+
+          let hadir = 0, sakit = 0, izin = 0, alpha = 0;
+          let daftarSiswa = [];
+
+          if (presLogs.length > 0) {
+            presLogs.forEach(p => {
+              const st = String(p.status || 'HADIR').toUpperCase();
+              if (st === 'HADIR') hadir++;
+              else if (st === 'SAKIT') sakit++;
+              else if (st === 'IZIN') izin++;
+              else if (st.includes('ALP')) alpha++;
+              daftarSiswa.push({
+                nisn: p.nisn,
+                nama: p.nama,
+                kelas: p.kelas || '-',
+                status: st,
+                keterangan: p.keterangan || '-'
+              });
+            });
+          } else if (jrn) {
+            hadir = Number(jrn.hadirCount) || 0;
+            sakit = Number(jrn.sakitCount) || 0;
+            izin = Number(jrn.izinCount) || 0;
+            alpha = Number(jrn.alphaCount) || 0;
+            if (Array.isArray(jrn.daftarTidakMasuk)) {
+              jrn.daftarTidakMasuk.forEach(tm => {
+                daftarSiswa.push({
+                  nisn: tm.nisn,
+                  nama: tm.nama,
+                  kelas: tm.kelas || '-',
+                  status: tm.status || 'TIDAK_MASUK',
+                  keterangan: tm.keterangan || '-'
+                });
+              });
+            }
+          }
+
+          const totalDicatat = hadir + sakit + izin + alpha;
+          const basisTotal = totalDicatat > 0 ? totalDicatat : (anggotaList.length > 0 ? anggotaList.length : 1);
+          const pctHadir = Math.min(100, Math.round((hadir / basisTotal) * 100));
+
+          totalHadirSemuaSesi += hadir;
+          totalPesertaSemuaSesi += basisTotal;
+
+          return {
+            pertemuanKe: idx + 1,
+            labelP: 'P' + (idx + 1),
+            tanggal: tgl,
+            materi: jrn ? (jrn.materiLatihan || 'Sesi Latihan Terjadwal') : 'Sesi Latihan Terjadwal',
+            tempat: jrn ? (jrn.tempatLatihan || e.tempat || 'Area Sekolah') : (e.tempat || 'Area Sekolah'),
+            pelatih: jrn ? (jrn.pelatihNama || e.pembina || 'Pelatih Ekskul') : (e.pembina || 'Pelatih Ekskul'),
+            catatan: jrn ? (jrn.catatan || '') : '',
+            hadir: hadir,
+            sakit: sakit,
+            izin: izin,
+            alpha: alpha,
+            totalPeserta: basisTotal,
+            pctHadir: pctHadir,
+            daftarSiswa: daftarSiswa
+          };
+        });
+
+        // Hitung progres trend vs pertemuan sebelumnya
+        for (let i = 0; i < pertemuanList.length; i++) {
+          if (i === 0) {
+            pertemuanList[i].trend = 'AWAL';
+            pertemuanList[i].selisihPct = 0;
+          } else {
+            const diff = pertemuanList[i].pctHadir - pertemuanList[i - 1].pctHadir;
+            pertemuanList[i].selisihPct = diff;
+            if (diff > 0) pertemuanList[i].trend = 'NAIK';
+            else if (diff < 0) pertemuanList[i].trend = 'TURUN';
+            else pertemuanList[i].trend = 'STABIL';
+          }
+        }
+
+        // Hitung rata-rata kehadiran cabang
+        let rataCabang = 0;
+        if (pertemuanList.length > 0) {
+          const sumPct = pertemuanList.reduce((acc, cur) => acc + cur.pctHadir, 0);
+          rataCabang = Math.round(sumPct / pertemuanList.length);
+        }
+
+        // Tren keseluruhan cabang
+        let trenCabang = 'STABIL';
+        if (pertemuanList.length >= 2) {
+          const lastIdx = pertemuanList.length - 1;
+          const diffLast = pertemuanList[lastIdx].pctHadir - pertemuanList[lastIdx - 1].pctHadir;
+          if (diffLast > 0) trenCabang = 'NAIK';
+          else if (diffLast < 0) trenCabang = 'TURUN';
+          else trenCabang = 'STABIL';
+        }
+
+        const guruPelatih = (masterGuru || []).find(g => String(g.nip).trim() === String(e.pembina).trim() || String(g.nama).trim() === String(e.pembina).trim());
+        const namaPelatih = guruPelatih ? guruPelatih.nama : (e.pembina || 'Belum Ada Pelatih');
+
+        return {
+          ekskul: e,
+          namaPelatih: namaPelatih,
+          anggotaAktifCount: anggotaList.length,
+          pertemuanList: pertemuanList,
+          totalSesi: pertemuanList.length,
+          rataCabang: rataCabang,
+          trenCabang: trenCabang
+        };
+      });
+
+      return dataEkskulList;
+    }
+
+    function renderKoordProgresKehadiran() {
+      const dataEkstra = getAgregatProgresPertemuanSemuaEkstra();
+      const filterCabang = (document.getElementById('filterKoordProgresCabang')?.value || '').trim();
+      const searchKw = (document.getElementById('searchKoordProgres')?.value || '').trim().toLowerCase();
+
+      // 1. Populate Dropdown Pilihan Cabang jika belum lengkap
+      const selCabang = document.getElementById('filterKoordProgresCabang');
+      if (selCabang && selCabang.options.length <= 1) {
+        let opts = '<option value="">Semua Cabang Ekstrakurikuler</option>';
+        (masterEkskul || []).forEach(e => {
+          opts += `<option value="${escapeHtml(e.id)}">${escapeHtml(e.nama)}</option>`;
+        });
+        selCabang.innerHTML = opts;
+      }
+
+      // 2. Hitung Metrik Ringkasan Progres
+      let totalSemuaSesi = 0;
+      let totalPctSum = 0;
+      let countCabangWithSesi = 0;
+      let bestCabang = null;
+      let lowCabang = null;
+
+      dataEkstra.forEach(item => {
+        totalSemuaSesi += item.totalSesi;
+        if (item.totalSesi > 0) {
+          totalPctSum += item.rataCabang;
+          countCabangWithSesi++;
+          if (!bestCabang || item.rataCabang > bestCabang.rataCabang) bestCabang = item;
+          if (!lowCabang || item.rataCabang < lowCabang.rataCabang) lowCabang = item;
+        }
+      });
+
+      const rataGlobal = countCabangWithSesi > 0 ? Math.round(totalPctSum / countCabangWithSesi) : 0;
+
+      const elTotalSesi = document.getElementById('statProgresTotalSesi');
+      if (elTotalSesi) elTotalSesi.innerText = `${totalSemuaSesi} Pertemuan`;
+      const elRataGlobal = document.getElementById('statProgresRataGlobal');
+      if (elRataGlobal) elRataGlobal.innerText = `${rataGlobal}%`;
+      const elBadgeNav = document.getElementById('badgeKoordTotalSesiProgres');
+      if (elBadgeNav) elBadgeNav.innerText = `${totalSemuaSesi} Sesi Terlaksana`;
+
+      const elBest = document.getElementById('statProgresEkstraTerbaik');
+      if (elBest) {
+        elBest.innerText = bestCabang ? `${bestCabang.ekskul.nama} (${bestCabang.rataCabang}%)` : 'Belum ada data';
+      }
+      const elLow = document.getElementById('statProgresEkstraPerhatian');
+      if (elLow) {
+        elLow.innerText = lowCabang ? `${lowCabang.ekskul.nama} (${lowCabang.rataCabang}%)` : 'Semua tertib';
+      }
+
+      // Filter Data
+      const filtered = dataEkstra.filter(item => {
+        if (filterCabang && item.ekskul.id !== filterCabang) return false;
+        if (searchKw) {
+          const mNama = String(item.ekskul.nama || '').toLowerCase().includes(searchKw);
+          const mPelatih = String(item.namaPelatih || '').toLowerCase().includes(searchKw);
+          const mMateri = item.pertemuanList.some(p => String(p.materi || '').toLowerCase().includes(searchKw));
+          if (!mNama && !mPelatih && !mMateri) return false;
+        }
+        return true;
+      });
+
+      // 3. Render Matriks Komparatif (P1 s/d P8)
+      const tbodyMatriks = document.getElementById('tableKoordProgresMatriksBody');
+      if (tbodyMatriks) {
+        if (filtered.length === 0) {
+          tbodyMatriks.innerHTML = `
+            <tr>
+              <td colspan="13" class="text-center py-8 text-slate-400 font-medium">
+                <i data-lucide="search-x" class="w-8 h-8 mx-auto text-slate-300 mb-2"></i>
+                Tidak ada data progres kehadiran cabang yang cocok dengan pencarian.
+              </td>
+            </tr>
+          `;
+        } else {
+          tbodyMatriks.innerHTML = filtered.map((item, idx) => {
+            const e = item.ekskul;
+
+            // Render kolom P1 s/d P8
+            let cellsP = '';
+            for (let pNum = 1; pNum <= 8; pNum++) {
+              const pData = item.pertemuanList.find(p => p.pertemuanKe === pNum);
+              if (pData) {
+                let badgeColor = 'bg-emerald-500 text-white';
+                if (pData.pctHadir < 60) badgeColor = 'bg-rose-500 text-white';
+                else if (pData.pctHadir < 75) badgeColor = 'bg-amber-500 text-white';
+                else if (pData.pctHadir < 85) badgeColor = 'bg-blue-600 text-white';
+
+                const shortDate = pData.tanggal ? pData.tanggal.split('-').slice(1).join('/') : '';
+
+                cellsP += `
+                  <td class="py-2.5 px-1.5 text-center">
+                    <button type="button" onclick="bukaModalDetailSesiProgresKoord('${escapeHtml(e.id)}', ${pNum})" class="w-full py-1.5 px-1 rounded-xl text-xs font-black shadow-2xs transition hover:scale-105 cursor-pointer ${badgeColor}" title="Pertemuan ${pNum} (${pData.tanggal}): ${pData.hadir}/${pData.totalPeserta} Siswa Hadir (${pData.pctHadir}%) - ${escapeHtml(pData.materi)}">
+                      <span>${pData.pctHadir}%</span>
+                      <span class="block text-[9px] font-normal opacity-90 font-mono">${shortDate}</span>
+                    </button>
+                  </td>
+                `;
+              } else {
+                cellsP += `
+                  <td class="py-2.5 px-1.5 text-center">
+                    <div class="w-full py-2 bg-slate-100 rounded-xl text-slate-400 font-bold text-xs">-</div>
+                  </td>
+                `;
+              }
+            }
+
+            // Tren Badge
+            let badgeTren = '';
+            if (item.trenCabang === 'NAIK') {
+              badgeTren = `<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-black bg-emerald-100 text-emerald-800"><i data-lucide="arrow-up-right" class="w-3 h-3"></i> Naik</span>`;
+            } else if (item.trenCabang === 'TURUN') {
+              badgeTren = `<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-black bg-rose-100 text-rose-800"><i data-lucide="arrow-down-right" class="w-3 h-3"></i> Turun</span>`;
+            } else {
+              badgeTren = `<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-black bg-blue-100 text-blue-800"><i data-lucide="minus" class="w-3 h-3"></i> Stabil</span>`;
+            }
+
+            return `
+              <tr class="hover:bg-slate-50/80 transition">
+                <td class="py-3 px-3 text-center text-slate-400 font-bold">${idx + 1}</td>
+                <td class="py-3 px-3">
+                  <span class="font-black text-slate-900 block text-xs">${escapeHtml(e.nama)}</span>
+                  <div class="flex items-center gap-1.5 mt-0.5">
+                    <span class="px-1.5 py-0.2 rounded text-[10px] font-bold bg-purple-50 text-purple-700">${escapeHtml(e.kategori || 'Umum')}</span>
+                    <span class="text-[10px] text-slate-400">${item.totalSesi} Sesi</span>
+                  </div>
+                </td>
+                <td class="py-3 px-3 text-xs font-semibold text-slate-700">
+                  ${escapeHtml(item.namaPelatih)}
+                </td>
+                ${cellsP}
+                <td class="py-3 px-3 text-center">
+                  <span class="font-black text-xs ${item.rataCabang >= 80 ? 'text-emerald-700' : 'text-slate-800'}">
+                    ${item.rataCabang > 0 ? item.rataCabang + '%' : '-'}
+                  </span>
+                </td>
+                <td class="py-3 px-3 text-center">
+                  ${badgeTren}
+                </td>
+              </tr>
+            `;
+          }).join('');
+        }
+      }
+
+      // 4. Render Timeline Rincian Sesi Latihan
+      const containerTimeline = document.getElementById('listKoordProgresTimeline');
+      if (containerTimeline) {
+        // Gabungkan semua sesi dari cabang yang terfilter
+        const allSessions = [];
+        filtered.forEach(item => {
+          item.pertemuanList.forEach(p => {
+            allSessions.push({
+              ekskul: item.ekskul,
+              namaPelatih: item.namaPelatih,
+              pertemuan: p
+            });
+          });
+        });
+
+        // Urutkan dari tanggal terbaru ke terlama
+        allSessions.sort((a, b) => (b.pertemuan.tanggal || '').localeCompare(a.pertemuan.tanggal || ''));
+
+        if (allSessions.length === 0) {
+          containerTimeline.innerHTML = `
+            <div class="p-8 bg-white rounded-3xl border border-slate-200 text-center text-slate-400 font-medium">
+              <i data-lucide="calendar-x" class="w-8 h-8 mx-auto text-slate-300 mb-2"></i>
+              Belum ada riwayat sesi pertemuan yang tercatat.
+            </div>
+          `;
+        } else {
+          containerTimeline.innerHTML = allSessions.map(sess => {
+            const e = sess.ekskul;
+            const p = sess.pertemuan;
+
+            let badgeTrenSesi = '';
+            if (p.trend === 'NAIK') {
+              badgeTrenSesi = `<span class="px-2 py-0.5 rounded-full text-[10px] font-black bg-emerald-100 text-emerald-800 flex items-center gap-1"><i data-lucide="trending-up" class="w-3 h-3"></i> +${p.selisihPct}% vs Sesi Lalu</span>`;
+            } else if (p.trend === 'TURUN') {
+              badgeTrenSesi = `<span class="px-2 py-0.5 rounded-full text-[10px] font-black bg-rose-100 text-rose-800 flex items-center gap-1"><i data-lucide="trending-down" class="w-3 h-3"></i> ${p.selisihPct}% vs Sesi Lalu</span>`;
+            } else if (p.trend === 'STABIL') {
+              badgeTrenSesi = `<span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-blue-100 text-blue-800">Stabil (0%)</span>`;
+            } else {
+              badgeTrenSesi = `<span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-slate-100 text-slate-600">Sesi Perdana</span>`;
+            }
+
+            return `
+              <div class="p-5 bg-white rounded-3xl border border-slate-200 shadow-xs hover:shadow-md transition flex flex-col md:flex-row md:items-center justify-between gap-4">
+                <div class="space-y-2 flex-1">
+                  <div class="flex items-center gap-2 flex-wrap">
+                    <span class="px-2.5 py-1 rounded-xl text-xs font-black bg-purple-700 text-white shadow-2xs">
+                      Pertemuan ${p.pertemuanKe} (${p.labelP})
+                    </span>
+                    <span class="font-black text-sm text-slate-900">${escapeHtml(e.nama)}</span>
+                    <span class="px-2 py-0.5 rounded-md text-[10px] font-bold bg-purple-50 text-purple-700">${escapeHtml(e.kategori || 'Umum')}</span>
+                    <span class="text-xs text-slate-400 font-mono">&bull; ${escapeHtml(p.tanggal)}</span>
+                    ${badgeTrenSesi}
+                  </div>
+
+                  <div class="p-3 bg-slate-50 rounded-2xl border border-slate-100 text-xs space-y-1">
+                    <div class="flex items-start gap-2">
+                      <i data-lucide="book-open" class="w-4 h-4 text-emerald-600 flex-shrink-0 mt-0.5"></i>
+                      <div>
+                        <span class="font-bold text-slate-800">Agenda & Materi:</span>
+                        <span class="text-slate-600 ml-1">${escapeHtml(p.materi)}</span>
+                      </div>
+                    </div>
+                    <div class="flex items-center gap-3 text-[11px] text-slate-500 pt-1">
+                      <span><i data-lucide="user" class="w-3 h-3 inline mr-1 text-slate-400"></i>Pelatih: <b>${escapeHtml(sess.namaPelatih)}</b></span>
+                      <span><i data-lucide="map-pin" class="w-3 h-3 inline mr-1 text-slate-400"></i>Lokasi: <b>${escapeHtml(p.tempat)}</b></span>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Bagian Kanan: Visual Progress & Aksi -->
+                <div class="flex flex-col sm:flex-row sm:items-center gap-4 flex-shrink-0 md:min-w-[280px]">
+                  <div class="space-y-1.5 flex-1">
+                    <div class="flex justify-between text-xs font-bold">
+                      <span class="text-slate-500">Tingkat Hadir</span>
+                      <span class="text-blue-700 font-mono text-sm">${p.pctHadir}%</span>
+                    </div>
+                    <div class="w-full bg-slate-100 h-2.5 rounded-full overflow-hidden flex">
+                      <div class="bg-emerald-500 h-full" style="width: ${p.pctHadir}%" title="Hadir: ${p.hadir}"></div>
+                      <div class="bg-amber-400 h-full" style="width: ${Math.round(((p.sakit + p.izin) / (p.totalPeserta || 1)) * 100)}%" title="Izin/Sakit: ${p.sakit + p.izin}"></div>
+                      <div class="bg-rose-500 h-full" style="width: ${Math.round((p.alpha / (p.totalPeserta || 1)) * 100)}%" title="Alpa: ${p.alpha}"></div>
+                    </div>
+                    <div class="flex items-center justify-between text-[10px] text-slate-500 font-mono">
+                      <span>H: <b class="text-emerald-700">${p.hadir}</b></span>
+                      <span>S: <b class="text-amber-700">${p.sakit}</b></span>
+                      <span>I: <b class="text-blue-700">${p.izin}</b></span>
+                      <span>A: <b class="text-rose-700">${p.alpha}</b></span>
+                      <span>Tot: <b>${p.totalPeserta}</b></span>
+                    </div>
+                  </div>
+
+                  <button type="button" onclick="bukaModalDetailSesiProgresKoord('${escapeHtml(e.id)}', ${p.pertemuanKe})" class="px-3 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-xl text-xs font-bold transition flex items-center justify-center gap-1.5 cursor-pointer flex-shrink-0">
+                    <i data-lucide="users" class="w-3.5 h-3.5"></i>
+                    <span>Daftar Siswa</span>
+                  </button>
+                </div>
+              </div>
+            `;
+          }).join('');
+        }
+      }
+
+      safeCreateIcons();
+    }
+
+    // Modal Rincian Siswa Sesi Pertemuan
+    function bukaModalDetailSesiProgresKoord(idEkskul, pertemuanKe) {
+      const dataEkstra = getAgregatProgresPertemuanSemuaEkstra();
+      const item = dataEkstra.find(d => d.ekskul.id === idEkskul);
+      if (!item) return;
+
+      const p = item.pertemuanList.find(x => x.pertemuanKe === pertemuanKe);
+      if (!p) return;
+
+      const modal = document.getElementById('modalDetailSesiProgresKoord');
+      const title = document.getElementById('modalTitleSesiProgres');
+      const subtitle = document.getElementById('modalSubtitleSesiProgres');
+      const body = document.getElementById('modalBodySesiProgres');
+      const footer = document.getElementById('modalFooterRekapSesi');
+
+      if (title) title.innerText = `Rincian Kehadiran Sesi Pertemuan ${p.pertemuanKe} (${p.labelP})`;
+      if (subtitle) subtitle.innerText = `${item.ekskul.nama} &bull; Tanggal: ${p.tanggal} &bull; Pelatih: ${item.namaPelatih}`;
+
+      let daftarHtml = '';
+      if (p.daftarSiswa.length === 0) {
+        daftarHtml = `
+          <div class="text-center py-6 text-slate-400 font-medium">
+            <i data-lucide="info" class="w-8 h-8 mx-auto text-slate-300 mb-1"></i>
+            Data presensi individual untuk sesi ini dicatat dalam jumlah agregat (${p.hadir} Hadir dari ${p.totalPeserta} Peserta).
+          </div>
+        `;
+      } else {
+        daftarHtml = `
+          <div class="overflow-x-auto">
+            <table class="w-full text-left text-xs">
+              <thead class="bg-slate-50 text-slate-600 font-bold border-b border-slate-200">
+                <tr>
+                  <th class="py-2.5 px-3 w-10 text-center">No</th>
+                  <th class="py-2.5 px-3">Nama Siswa & NISN</th>
+                  <th class="py-2.5 px-2 text-center w-16">Kelas</th>
+                  <th class="py-2.5 px-3 text-center w-24">Status</th>
+                  <th class="py-2.5 px-3">Keterangan</th>
+                </tr>
+              </thead>
+              <tbody class="divide-y divide-slate-100 font-medium">
+                ${p.daftarSiswa.map((s, i) => {
+                  let stBadge = '<span class="px-2 py-0.5 rounded-full text-[10px] font-black bg-emerald-100 text-emerald-800">HADIR</span>';
+                  if (s.status === 'SAKIT') stBadge = '<span class="px-2 py-0.5 rounded-full text-[10px] font-black bg-amber-100 text-amber-800">SAKIT</span>';
+                  else if (s.status === 'IZIN') stBadge = '<span class="px-2 py-0.5 rounded-full text-[10px] font-black bg-blue-100 text-blue-800">IZIN</span>';
+                  else if (s.status.includes('ALP')) stBadge = '<span class="px-2 py-0.5 rounded-full text-[10px] font-black bg-rose-100 text-rose-800">ALPA</span>';
+
+                  return `
+                    <tr class="hover:bg-slate-50/80 transition">
+                      <td class="py-2 px-3 text-center text-slate-400 font-bold">${i + 1}</td>
+                      <td class="py-2 px-3">
+                        <span class="font-black text-slate-900 block">${escapeHtml(s.nama)}</span>
+                        <span class="text-[10px] text-slate-400 font-mono">${escapeHtml(s.nisn)}</span>
+                      </td>
+                      <td class="py-2 px-2 text-center font-bold text-slate-700">${escapeHtml(s.kelas)}</td>
+                      <td class="py-2 px-3 text-center">${stBadge}</td>
+                      <td class="py-2 px-3 text-slate-600 text-[11px]">${escapeHtml(s.keterangan || '-')}</td>
+                    </tr>
+                  `;
+                }).join('')}
+              </tbody>
+            </table>
+          </div>
+        `;
+      }
+
+      if (body) {
+        body.innerHTML = `
+          <div class="p-3.5 bg-blue-50/70 rounded-2xl border border-blue-100 text-xs space-y-1.5">
+            <div><b>Materi Latihan:</b> ${escapeHtml(p.materi)}</div>
+            <div><b>Lokasi:</b> ${escapeHtml(p.tempat)}</div>
+            ${p.catatan ? `<div><b>Catatan Pelatih:</b> <i>${escapeHtml(p.catatan)}</i></div>` : ''}
+          </div>
+          <div>
+            <h5 class="font-black text-xs text-slate-800 mb-2">Daftar Kehadiran Siswa:</h5>
+            ${daftarHtml}
+          </div>
+        `;
+      }
+
+      if (footer) {
+        footer.innerHTML = `Kehadiran: <b class="text-emerald-700">${p.hadir} Hadir</b> &bull; <b class="text-amber-700">${p.sakit} Sakit</b> &bull; <b class="text-blue-700">${p.izin} Izin</b> &bull; <b class="text-rose-700">${p.alpha} Alpa</b> (${p.pctHadir}%)`;
+      }
+
+      if (modal) modal.classList.remove('hidden');
+      safeCreateIcons();
+    }
+
+    function tutupModalDetailSesiProgresKoord() {
+      const modal = document.getElementById('modalDetailSesiProgresKoord');
+      if (modal) modal.classList.add('hidden');
+    }
+
+    // Fungsi Cetak Matriks Progres Kehadiran Format A4
+    function cetakLaporanProgresKehadiranKoord() {
+      const dataEkstra = getAgregatProgresPertemuanSemuaEkstra();
+      const printArea = document.getElementById('printArea');
+      if (!printArea) {
+        window.print();
+        return;
+      }
+
+      const namaKoord = (currentUser && currentUser.nama) ? currentUser.nama : (appConfig.KOORDINATOR_EKSKUL_NAMA || 'Koordinator Ekstra');
+      const nipKoord = (currentUser && currentUser.nip) ? currentUser.nip : (appConfig.KOORDINATOR_EKSKUL_NIP || '-');
+      const namaKepsek = appConfig.NAMA_KEPSEK || 'Drs. H. Mulyadi, M.Pd.';
+      const nipKepsek = appConfig.NIP_KEPSEK || '197205101998021003';
+      const kotaTitimangsa = appConfig.KOTA_TITIMANGSA || 'Kota Cerdas';
+
+      let rowsHtml = dataEkstra.map((item, idx) => {
+        const e = item.ekskul;
+        let pCells = '';
+        for (let pNum = 1; pNum <= 8; pNum++) {
+          const p = item.pertemuanList.find(x => x.pertemuanKe === pNum);
+          if (p) {
+            pCells += `<td style="border: 1px solid black; padding: 4px; text-align: center; font-weight: bold;">${p.pctHadir}%</td>`;
+          } else {
+            pCells += `<td style="border: 1px solid black; padding: 4px; text-align: center; color: #888;">-</td>`;
+          }
+        }
+
+        return `
+          <tr>
+            <td style="border: 1px solid black; padding: 4px; text-align: center;">${idx + 1}</td>
+            <td style="border: 1px solid black; padding: 4px 6px; font-weight: bold;">${escapeHtml(e.nama)}</td>
+            <td style="border: 1px solid black; padding: 4px 6px;">${escapeHtml(item.namaPelatih)}</td>
+            ${pCells}
+            <td style="border: 1px solid black; padding: 4px; text-align: center; font-weight: bold;">${item.rataCabang > 0 ? item.rataCabang + '%' : '-'}</td>
+            <td style="border: 1px solid black; padding: 4px; text-align: center;">${item.trenCabang}</td>
+          </tr>
+        `;
+      }).join('');
+
+      printArea.innerHTML = `
+        <div style="font-family: Arial, sans-serif; padding: 15px; color: black; background: white; font-size: 11px;">
+          <!-- Kop Resmi Sekolah -->
+          <div style="border-bottom: 2px solid black; padding-bottom: 8px; margin-bottom: 12px; display: flex; align-items: center; justify-content: space-between;">
+            <div style="width: 60px; text-align: center;">
+              <img src="${escapeHtml(appConfig.LOGO_KIRI_PEMDA || '')}" alt="Logo Pemda" style="max-height: 55px; object-fit: contain;" onerror="this.style.display='none'">
+            </div>
+            <div style="text-align: center; flex: 1; padding: 0 10px;">
+              <div style="font-weight: bold; font-size: 11px; text-transform: uppercase;">${escapeHtml(appConfig.INSTANSI_PEMBINA || 'DINAS PENDIDIKAN')}</div>
+              <div style="font-weight: 900; font-size: 15px; text-transform: uppercase;">${escapeHtml(appConfig.NAMA_SEKOLAH || 'SMP NEGERI 1 INDONESIA HEBAT')}</div>
+              <div style="font-size: 10px; color: #333;">${escapeHtml(appConfig.ALAMAT_SEKOLAH || 'Jl. Pendidikan Karakter No. 07')}</div>
+            </div>
+            <div style="width: 60px; text-align: center;">
+              <img src="${escapeHtml(appConfig.LOGO_KANAN_SEKOLAH || '')}" alt="Logo Sekolah" style="max-height: 55px; object-fit: contain;" onerror="this.style.display='none'">
+            </div>
+          </div>
+
+          <!-- Judul Dokumen -->
+          <div style="text-align: center; margin-bottom: 14px;">
+            <h3 style="margin: 0; font-size: 13px; font-weight: 900; text-transform: uppercase; text-decoration: underline;">REKAPITULASI PROGRES KEHADIRAN PER PERTEMUAN SELURUH EKSTRAKURIKULER</h3>
+            <div style="font-size: 10px; margin-top: 3px; font-weight: bold; color: #444;">Tahun Ajaran ${escapeHtml(appConfig.TAHUN_AJARAN || '2026/2027')} - Semester ${escapeHtml(appConfig.SEMESTER_AKTIF || '1')}</div>
+          </div>
+
+          <!-- Tabel Matriks -->
+          <table style="width: 100%; border-collapse: collapse; font-size: 10px; margin-bottom: 20px;">
+            <thead>
+              <tr style="background: #f1f5f9;">
+                <th rowspan="2" style="border: 1px solid black; padding: 4px; text-align: center; width: 25px;">No</th>
+                <th rowspan="2" style="border: 1px solid black; padding: 4px; text-align: left;">Cabang Ekstrakurikuler</th>
+                <th rowspan="2" style="border: 1px solid black; padding: 4px; text-align: left; width: 130px;">Pembina / Pelatih</th>
+                <th colspan="8" style="border: 1px solid black; padding: 4px; text-align: center;">Persentase Kehadiran Tiap Pertemuan</th>
+                <th rowspan="2" style="border: 1px solid black; padding: 4px; text-align: center; width: 55px;">Rata-rata</th>
+                <th rowspan="2" style="border: 1px solid black; padding: 4px; text-align: center; width: 50px;">Tren</th>
+              </tr>
+              <tr style="background: #f8fafc;">
+                <th style="border: 1px solid black; padding: 3px; text-align: center; width: 35px;">P1</th>
+                <th style="border: 1px solid black; padding: 3px; text-align: center; width: 35px;">P2</th>
+                <th style="border: 1px solid black; padding: 3px; text-align: center; width: 35px;">P3</th>
+                <th style="border: 1px solid black; padding: 3px; text-align: center; width: 35px;">P4</th>
+                <th style="border: 1px solid black; padding: 3px; text-align: center; width: 35px;">P5</th>
+                <th style="border: 1px solid black; padding: 3px; text-align: center; width: 35px;">P6</th>
+                <th style="border: 1px solid black; padding: 3px; text-align: center; width: 35px;">P7</th>
+                <th style="border: 1px solid black; padding: 3px; text-align: center; width: 35px;">P8</th>
+              </tr>
+            </thead>
+            <tbody>
+              ${rowsHtml}
+            </tbody>
+          </table>
+
+          <!-- Tanda Tangan -->
+          <div style="display: flex; justify-content: space-between; margin-top: 30px; font-size: 11px;">
+            <div style="text-align: center; width: 220px;">
+              <div>Mengetahui,</div>
+              <div style="font-weight: bold;">Kepala Sekolah</div>
+              <div style="height: 45px;"></div>
+              <div style="font-weight: bold; text-decoration: underline;">${escapeHtml(namaKepsek)}</div>
+              <div style="font-size: 10px; font-family: monospace;">NIP. ${escapeHtml(nipKepsek)}</div>
+            </div>
+            <div style="text-align: center; width: 220px;">
+              <div>${escapeHtml(kotaTitimangsa)}, ${new Date().toLocaleDateString('id-ID', {day: 'numeric', month: 'long', year: 'numeric'})}</div>
+              <div style="font-weight: bold;">Koordinator Ekstrakurikuler</div>
+              <div style="height: 45px;"></div>
+              <div style="font-weight: bold; text-decoration: underline;">${escapeHtml(namaKoord)}</div>
+              <div style="font-size: 10px; font-family: monospace;">NIP. ${escapeHtml(nipKoord)}</div>
+            </div>
+          </div>
+        </div>
+      `;
+
+      window.print();
+    }
+
+    // Ekspor CSV Progres Kehadiran
+    function eksporCsvProgresKehadiranKoord() {
+      const dataEkstra = getAgregatProgresPertemuanSemuaEkstra();
+      let csv = 'No,Cabang Ekstrakurikuler,Kategori,Pelatih,P1 (%),P2 (%),P3 (%),P4 (%),P5 (%),P6 (%),P7 (%),P8 (%),Rata-rata (%),Tren Progres\r\n';
+
+      dataEkstra.forEach((item, idx) => {
+        const e = item.ekskul;
+        const pArr = [];
+        for (let i = 1; i <= 8; i++) {
+          const p = item.pertemuanList.find(x => x.pertemuanKe === i);
+          pArr.push(p ? p.pctHadir + '%' : '-');
+        }
+        csv += `"${idx + 1}","${(e.nama || '').replace(/"/g, '""')}","${e.kategori || ''}","${(item.namaPelatih || '').replace(/"/g, '""')}","${pArr.join('","')}","${item.rataCabang}%","${item.trenCabang}"\r\n`;
+      });
+
+      const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `Rekap_Progres_Kehadiran_Ekskul_${new Date().toISOString().split('T')[0]}.csv`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+    }
+    
+    function isCurrentUserKoordinatorEkskul() {
+      if (!currentUser || !currentUser.nip) return false;
+      const koordNip = String(appConfig.KOORDINATOR_EKSKUL_NIP || '').trim().toUpperCase();
+      if (!koordNip) return false;
+      return String(currentUser.nip).trim().toUpperCase() === koordNip;
+    }
+
+    // --- ADMIN PANEL: PENGATURAN PENUNJUKAN KOORDINATOR ---
+    function renderPengaturanKoordinatorAdmin() {
+      const sel = document.getElementById('selectGuruKoordinatorAdmin');
+      const nipInput = document.getElementById('nipGuruKoordinatorAdmin');
+      const mapelInput = document.getElementById('mapelGuruKoordinatorAdmin');
+      const containerProfil = document.getElementById('cardAdminKoordProfilContainer');
+      const badgeStatus = document.getElementById('badgeStatusPenunjukanAdmin');
+      const textStatus = document.getElementById('textStatusPenunjukanAdmin');
+
+      const currentNip = String(appConfig.KOORDINATOR_EKSKUL_NIP || '').trim();
+      const guruKoord = (masterGuru || []).find(g => String(g.nip || '').trim().toUpperCase() === currentNip.toUpperCase());
+
+      // Render Dropdown Guru (hanya guru resmi, bukan pelatih luar murni)
+      if (sel) {
+        let opts = '<option value="">-- Pilih Salah Satu Guru Resmi --</option>';
+        (masterGuru || []).forEach(g => {
+          const isPelatihMurni = String(g.peran || '').toUpperCase().includes('PELATIH') && !g.mapel;
+          if (!isPelatihMurni) {
+            const isSel = (guruKoord && String(g.nip).trim() === String(guruKoord.nip).trim()) ? 'selected' : '';
+            opts += `<option value="${escapeHtml(g.nip)}" ${isSel}>${escapeHtml(g.nama)} (NIP: ${escapeHtml(g.nip)}) - ${escapeHtml(g.mapel || g.peran || 'Guru')}</option>`;
+          }
+        });
+        sel.innerHTML = opts;
+      }
+
+      if (guruKoord) {
+        if (nipInput) nipInput.value = guruKoord.nip || '';
+        if (mapelInput) mapelInput.value = guruKoord.mapel || guruKoord.peran || 'Guru Pengajar';
+
+        if (containerProfil) {
+          containerProfil.innerHTML = `
+            <div class="flex items-center gap-3.5">
+              <div class="w-12 h-12 rounded-2xl bg-purple-600 text-white font-black text-lg flex items-center justify-center flex-shrink-0 shadow-sm">
+                ${escapeHtml((guruKoord.nama || 'K').charAt(0))}
+              </div>
+              <div class="min-w-0">
+                <h5 class="font-black text-sm text-slate-900 truncate">${escapeHtml(guruKoord.nama)}</h5>
+                <p class="text-xs text-slate-500 font-mono">NIP. ${escapeHtml(guruKoord.nip)}</p>
+                <div class="flex items-center gap-2 mt-1 flex-wrap">
+                  <span class="px-2 py-0.5 rounded-md text-[10px] font-bold bg-purple-100 text-purple-800">${escapeHtml(guruKoord.mapel || 'Guru Pengajar')}</span>
+                  <span class="px-2 py-0.5 rounded-md text-[10px] font-bold bg-slate-200 text-slate-700 font-mono">WA: ${escapeHtml(guruKoord.noHp || '-')}</span>
+                </div>
+              </div>
+            </div>
+            <div class="pt-2 border-t border-slate-200/80 flex items-center justify-between text-[11px]">
+              <span class="text-slate-500 font-medium">Hak Akses: Portal Koordinator Guru</span>
+              <span class="text-emerald-700 font-bold flex items-center gap-1">
+                <i data-lucide="shield-check" class="w-3.5 h-3.5"></i> Diberikan
+              </span>
+            </div>
+          `;
+        }
+        if (badgeStatus) {
+          badgeStatus.className = 'px-3.5 py-1.5 rounded-full text-xs font-black bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 flex items-center gap-1.5';
+        }
+        if (textStatus) textStatus.innerText = 'Koordinator Terdaftar: ' + guruKoord.nama;
+      } else {
+        if (nipInput) nipInput.value = '';
+        if (mapelInput) mapelInput.value = '';
+        if (containerProfil) {
+          containerProfil.innerHTML = `
+            <div class="text-center py-4 text-slate-400 space-y-1">
+              <i data-lucide="alert-circle" class="w-8 h-8 mx-auto text-slate-300"></i>
+              <p class="text-xs font-bold text-slate-600">Belum Ada Koordinator yang Ditunjuk</p>
+              <p class="text-[11px]">Silakan pilih guru dari formulir di samping untuk memberikan mandat.</p>
+            </div>
+          `;
+        }
+        if (badgeStatus) {
+          badgeStatus.className = 'px-3.5 py-1.5 rounded-full text-xs font-black bg-amber-500/20 text-amber-300 border border-amber-500/30 flex items-center gap-1.5';
+        }
+        if (textStatus) textStatus.innerText = 'Belum Ada Koordinator';
+      }
+
+      const badgeAdmin = document.getElementById('badgeSubTabKoordAdmin');
+      if (badgeAdmin) {
+        badgeAdmin.innerText = guruKoord ? '1 Ditunjuk' : 'Belum Ada';
+      }
+
+      safeCreateIcons();
+    }
+
+    function onPilihGuruKoordinatorAdmin() {
+      const sel = document.getElementById('selectGuruKoordinatorAdmin');
+      const nip = sel ? sel.value : '';
+      const guru = (masterGuru || []).find(g => String(g.nip).trim() === String(nip).trim());
+      const nipInput = document.getElementById('nipGuruKoordinatorAdmin');
+      const mapelInput = document.getElementById('mapelGuruKoordinatorAdmin');
+
+      if (guru) {
+        if (nipInput) nipInput.value = guru.nip || '';
+        if (mapelInput) mapelInput.value = guru.mapel || guru.peran || 'Guru Pengajar';
+      } else {
+        if (nipInput) nipInput.value = '';
+        if (mapelInput) mapelInput.value = '';
+      }
+    }
+
+    async function simpanPenunjukanKoordinatorAdmin() {
+      const sel = document.getElementById('selectGuruKoordinatorAdmin');
+      const nip = sel ? sel.value.trim() : '';
+      if (!nip) {
+        Swal.fire('Pilih Guru', 'Silakan pilih salah satu guru dari daftar master guru terlebih dahulu.', 'warning');
+        return;
+      }
+
+      const guru = (masterGuru || []).find(g => String(g.nip).trim() === String(nip).trim());
+      if (!guru) {
+        Swal.fire('Data Tidak Valid', 'Guru yang dipilih tidak ditemukan dalam master data.', 'error');
+        return;
+      }
+
+      const res = await Swal.fire({
+        title: 'Tetapkan Koordinator Ekstra?',
+        html: `Apakah Anda yakin ingin menunjuk <b>${escapeHtml(guru.nama)}</b> (NIP. ${escapeHtml(guru.nip)}) sebagai Koordinator Ekstrakurikuler Sekolah?`,
+        icon: 'question',
+        showCancelButton: true,
+        confirmButtonColor: '#7c3aed',
+        confirmButtonText: 'Ya, Tetapkan Sekarang',
+        cancelButtonText: 'Batal'
+      });
+
+      if (!res.isConfirmed) return;
+
+      appConfig.KOORDINATOR_EKSKUL_NIP = guru.nip;
+      appConfig.KOORDINATOR_EKSKUL_NAMA = guru.nama;
+
+      try {
+        const rawCache = localStorage.getItem('SUPERAPP_DATA_CACHE_V1');
+        if (rawCache) {
+          const parsed = JSON.parse(rawCache);
+          if (!parsed.config) parsed.config = {};
+          parsed.config.KOORDINATOR_EKSKUL_NIP = guru.nip;
+          parsed.config.KOORDINATOR_EKSKUL_NAMA = guru.nama;
+          localStorage.setItem('SUPERAPP_DATA_CACHE_V1', JSON.stringify(parsed));
+        }
+      } catch (e) {}
+
+      renderPengaturanKoordinatorAdmin();
+      updateGuruTabVisibility();
+      playBeepSuccess();
+
+      // Sinkronkan ke server Google Sheet via action simpanPengaturan
+      try {
+        if (typeof googleScriptRun === 'function') {
+          googleScriptRun('simpanPengaturan', {
+            config: {
+              KOORDINATOR_EKSKUL_NIP: guru.nip,
+              KOORDINATOR_EKSKUL_NAMA: guru.nama
+            },
+            pin: appConfig.PIN_ADMIN || '123456'
+          });
+        }
+      } catch (err) {}
+
+      Swal.fire({
+        icon: 'success',
+        title: 'Koordinator Berhasil Ditetapkan!',
+        html: `<b>${escapeHtml(guru.nama)}</b> kini memiliki hak akses penuh sebagai Koordinator Ekstrakurikuler di Portal Guru.`,
+        confirmButtonColor: '#7c3aed'
+      });
+    }
+
+    async function lepasJabatanKoordinatorAdmin() {
+      if (!appConfig.KOORDINATOR_EKSKUL_NIP) {
+        Swal.fire('Informasi', 'Saat ini belum ada guru yang ditunjuk sebagai koordinator.', 'info');
+        return;
+      }
+
+      const res = await Swal.fire({
+        title: 'Lepas Jabatan Koordinator?',
+        text: 'Penunjukan koordinator ekstra saat ini akan dicabut dan hak akses portal koordinator akan dinonaktifkan.',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#e11d48',
+        confirmButtonText: 'Ya, Lepas Jabatan',
+        cancelButtonText: 'Batal'
+      });
+
+      if (!res.isConfirmed) return;
+
+      appConfig.KOORDINATOR_EKSKUL_NIP = '';
+      appConfig.KOORDINATOR_EKSKUL_NAMA = '';
+
+      try {
+        const rawCache = localStorage.getItem('SUPERAPP_DATA_CACHE_V1');
+        if (rawCache) {
+          const parsed = JSON.parse(rawCache);
+          if (parsed.config) {
+            parsed.config.KOORDINATOR_EKSKUL_NIP = '';
+            parsed.config.KOORDINATOR_EKSKUL_NAMA = '';
+            localStorage.setItem('SUPERAPP_DATA_CACHE_V1', JSON.stringify(parsed));
+          }
+        }
+      } catch (e) {}
+
+      renderPengaturanKoordinatorAdmin();
+      updateGuruTabVisibility();
+      playBeepSuccess();
+
+      try {
+        if (typeof googleScriptRun === 'function') {
+          googleScriptRun('simpanPengaturan', {
+            config: {
+              KOORDINATOR_EKSKUL_NIP: '',
+              KOORDINATOR_EKSKUL_NAMA: ''
+            },
+            pin: appConfig.PIN_ADMIN || '123456'
+          });
+        }
+      } catch (err) {}
+
+      Swal.fire({
+        icon: 'success',
+        title: 'Jabatan Dilepas',
+        text: 'Status koordinator ekstrakurikuler telah dinonaktifkan.',
+        timer: 1500,
+        showConfirmButton: false
+      });
+    }
+
+    // --- PORTAL GURU: FITUR KOORDINATOR EKSTRAKURIKULER ---
+    function switchSubTabKoordinator(subTab) {
+      currentSubTabKoordinator = subTab;
+      const tabs = ['rekap', 'progres', 'ketertiban', 'manajemen', 'cetak'];
+      tabs.forEach(t => {
+        const v = document.getElementById(`subViewKoord_${t}`);
+        const b = document.getElementById(`btnSubTabKoord_${t}`);
+        if (v) {
+          if (t === subTab) v.classList.remove('hidden');
+          else v.classList.add('hidden');
+        }
+        if (b) {
+          if (t === subTab) {
+            b.className = 'px-4 py-2.5 rounded-xl text-xs font-black transition flex items-center gap-2 bg-purple-700 text-white shadow-xs cursor-pointer';
+          } else {
+            b.className = 'px-4 py-2.5 rounded-xl text-xs font-bold transition flex items-center gap-2 bg-slate-100 hover:bg-slate-200 text-slate-700 cursor-pointer';
+          }
+        }
+      });
+
+      if (subTab === 'rekap') renderKoordRekapSemua();
+      else if (subTab === 'progres') renderKoordProgresKehadiran();
+      else if (subTab === 'ketertiban') renderKoordKetertibanPelatih();
+      else if (subTab === 'manajemen') renderKoordManajemenEkstra();
+      else if (subTab === 'cetak') renderKoordCetakManual();
+      safeCreateIcons();
+    }
+
+    function renderKoordinatorEkskulDashboard() {
+      const lbl = document.getElementById('labelKoordGuruNama');
+      if (lbl && currentUser) {
+        lbl.innerText = `${currentUser.nama} (Koordinator)`;
+      }
+      switchSubTabKoordinator(currentSubTabKoordinator || 'rekap');
+    }
+
+    // --- SUB-MODUL 1: REKAP SEMUA EKSTRA ---
+    function renderKoordRekapSemua() {
+      const searchKw = (document.getElementById('searchKoordCabang')?.value || '').trim().toLowerCase();
+      const filterKat = (document.getElementById('filterKoordKategori')?.value || '').trim();
+      const container = document.getElementById('containerKoordRekapCards');
+
+      // Hitung metrik
+      const totalCabang = (masterEkskul || []).length;
+      const anggotaAktif = (anggotaEkskul || []).filter(a => a.status === 'AKTIF');
+      const totalSiswa = anggotaAktif.length;
+      const totalSesi = (logJurnalPelatih || []).length;
+
+      // Hitung rata-rata kehadiran
+      let sumHadir = 0;
+      let countJurnal = 0;
+      (logJurnalPelatih || []).forEach(j => {
+        if (j.totalPeserta && j.totalPeserta > 0) {
+          sumHadir += (j.hadirCount / j.totalPeserta) * 100;
+          countJurnal++;
+        }
+      });
+      const avgKehadiran = countJurnal > 0 ? Math.round(sumHadir / countJurnal) : 85;
+
+      const elTotalCabang = document.getElementById('statKoordTotalCabang');
+      if (elTotalCabang) elTotalCabang.innerText = `${totalCabang} Cabang`;
+      const elBadgeCabang = document.getElementById('badgeKoordTotalCabang');
+      if (elBadgeCabang) elBadgeCabang.innerText = `${totalCabang}`;
+      const elTotalAnggota = document.getElementById('statKoordTotalAnggota');
+      if (elTotalAnggota) elTotalAnggota.innerText = `${totalSiswa} Siswa`;
+      const elTotalSesi = document.getElementById('statKoordTotalSesi');
+      if (elTotalSesi) elTotalSesi.innerText = `${totalSesi} Sesi`;
+      const elAvgKehadiran = document.getElementById('statKoordRataKehadiran');
+      if (elAvgKehadiran) elAvgKehadiran.innerText = `${avgKehadiran}%`;
+
+      if (!container) return;
+
+      const filtered = (masterEkskul || []).filter(e => {
+        if (filterKat && e.kategori !== filterKat) return false;
+        if (searchKw) {
+          const mNama = String(e.nama || '').toLowerCase().includes(searchKw);
+          const mPembina = String(e.pembina || '').toLowerCase().includes(searchKw);
+          const mHari = String(e.hari || '').toLowerCase().includes(searchKw);
+          const mId = String(e.id || '').toLowerCase().includes(searchKw);
+          if (!mNama && !mPembina && !mHari && !mId) return false;
+        }
+        return true;
+      });
+
+      if (filtered.length === 0) {
+        container.innerHTML = `
+          <div class="col-span-full bg-white p-8 rounded-3xl border border-slate-200 text-center text-slate-400 space-y-2">
+            <i data-lucide="search-x" class="w-10 h-10 mx-auto text-slate-300"></i>
+            <p class="text-sm font-bold text-slate-600">Tidak ada cabang ekskul yang cocok dengan pencarian.</p>
+          </div>
+        `;
+        safeCreateIcons();
+        return;
+      }
+
+      container.innerHTML = filtered.map(e => {
+        const enrolled = (anggotaEkskul || []).filter(a => a.idEkskul === e.id && a.status === 'AKTIF').length;
+        const kuota = Number(e.kuota) || 30;
+        const pct = Math.min(100, Math.round((enrolled / kuota) * 100));
+
+        // Data pelatih
+        const guruPelatih = (masterGuru || []).find(g => String(g.nip).trim() === String(e.pembina).trim() || String(g.nama).trim() === String(e.pembina).trim());
+        const namaPelatih = guruPelatih ? guruPelatih.nama : (e.pembina || 'Belum Ditentukan');
+        const waPelatih = guruPelatih ? (guruPelatih.noHp || '') : '';
+
+        // Sesi cabang ini
+        const sesiCabang = (logJurnalPelatih || []).filter(j => j.idEkskul === e.id);
+        const jumlahSesi = sesiCabang.length;
+
+        // Kehadiran rata-rata cabang ini
+        let subPctHadir = 0;
+        let cCab = 0;
+        sesiCabang.forEach(j => {
+          if (j.totalPeserta > 0) {
+            subPctHadir += (j.hadirCount / j.totalPeserta) * 100;
+            cCab++;
+          }
+        });
+        const persentaseHadirCabang = cCab > 0 ? Math.round(subPctHadir / cCab) : 90;
+
+        return `
+          <div class="bg-white rounded-3xl p-5 border border-slate-200 shadow-xs hover:shadow-md transition flex flex-col justify-between space-y-4">
+            <div class="space-y-3">
+              <div class="flex items-start justify-between gap-2">
+                <div>
+                  <span class="px-2.5 py-0.5 rounded-full text-[10px] font-black uppercase tracking-wider bg-purple-50 text-purple-700 border border-purple-200">
+                    ${escapeHtml(e.kategori || 'Umum')}
+                  </span>
+                  <h4 class="font-black text-base text-slate-900 mt-1.5 leading-snug">${escapeHtml(e.nama)}</h4>
+                  <p class="text-[11px] text-slate-400 font-mono">ID: ${escapeHtml(e.id)}</p>
+                </div>
+                <span class="px-2 py-0.5 rounded-lg text-[10px] font-black ${e.status === 'BUKA' ? 'bg-emerald-100 text-emerald-800' : 'bg-slate-100 text-slate-600'}">
+                  ${escapeHtml(e.status || 'BUKA')}
+                </span>
+              </div>
+
+              <!-- Info Jadwal & Pelatih -->
+              <div class="p-3 bg-slate-50 rounded-2xl border border-slate-100 space-y-2 text-xs">
+                <div class="flex items-center gap-2 text-slate-700">
+                  <i data-lucide="calendar" class="w-4 h-4 text-purple-600 flex-shrink-0"></i>
+                  <span class="font-semibold">${escapeHtml(e.hari || 'Jadwal Fleksibel')}, ${escapeHtml(e.jam || '15:30')}</span>
+                </div>
+                <div class="flex items-center gap-2 text-slate-700">
+                  <i data-lucide="map-pin" class="w-4 h-4 text-rose-500 flex-shrink-0"></i>
+                  <span class="truncate">${escapeHtml(e.tempat || 'Area Sekolah')}</span>
+                </div>
+                <div class="flex items-center justify-between gap-2 text-slate-700 pt-1 border-t border-slate-200/60">
+                  <div class="flex items-center gap-2 truncate">
+                    <i data-lucide="user" class="w-4 h-4 text-indigo-600 flex-shrink-0"></i>
+                    <span class="font-bold truncate text-[11px]">${escapeHtml(namaPelatih)}</span>
+                  </div>
+                  ${waPelatih ? `
+                    <a href="https://wa.me/${escapeHtml(waPelatih.replace(/[^0-9]/g, ''))}" target="_blank" class="text-emerald-600 hover:text-emerald-700 p-1 rounded-lg hover:bg-emerald-50 transition" title="Chat Pelatih via WhatsApp">
+                      <i data-lucide="message-circle" class="w-3.5 h-3.5"></i>
+                    </a>
+                  ` : ''}
+                </div>
+              </div>
+
+              <!-- Bar Kuota & Peserta -->
+              <div class="space-y-1.5">
+                <div class="flex justify-between text-xs font-bold">
+                  <span class="text-slate-500">Kapasitas Anggota</span>
+                  <span class="text-purple-700 font-mono">${enrolled} / ${kuota} (${pct}%)</span>
+                </div>
+                <div class="w-full bg-slate-100 h-2 rounded-full overflow-hidden">
+                  <div class="bg-purple-600 h-full rounded-full transition-all duration-300" style="width: ${pct}%"></div>
+                </div>
+              </div>
+
+              <!-- Mini Metrik Sesi & Kehadiran -->
+              <div class="grid grid-cols-2 gap-2 pt-1">
+                <div class="p-2 bg-indigo-50/70 rounded-xl border border-indigo-100 text-center">
+                  <span class="text-[10px] text-indigo-700 font-bold block">Total Sesi</span>
+                  <span class="text-xs font-black text-indigo-900">${jumlahSesi} Pertemuan</span>
+                </div>
+                <div class="p-2 bg-emerald-50/70 rounded-xl border border-emerald-100 text-center">
+                  <span class="text-[10px] text-emerald-700 font-bold block">Kehadiran</span>
+                  <span class="text-xs font-black text-emerald-900">${persentaseHadirCabang}% Rata-rata</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Tombol Aksi Detail & Presensi Manual -->
+            <div class="pt-2 border-t border-slate-100 flex items-center gap-2">
+              <button type="button" onclick="bukaDetailCabangKoord('${escapeHtml(e.id)}')" class="flex-1 py-2 px-3 bg-purple-50 hover:bg-purple-100 text-purple-700 font-bold rounded-xl text-xs transition flex items-center justify-center gap-1.5 cursor-pointer">
+                <i data-lucide="users" class="w-3.5 h-3.5"></i>
+                <span>Lihat Anggota (${enrolled})</span>
+              </button>
+              <button type="button" onclick="siapkanCetakCabangKoord('${escapeHtml(e.id)}')" class="py-2 px-3 bg-emerald-50 hover:bg-emerald-100 text-emerald-700 font-bold rounded-xl text-xs border border-emerald-200 transition flex items-center justify-center gap-1 cursor-pointer" title="Cetak lembar presensi manual cabang ini">
+                <i data-lucide="printer" class="w-3.5 h-3.5"></i>
+                <span>Cetak A4</span>
+              </button>
+            </div>
+          </div>
+        `;
+      }).join('');
+
+      safeCreateIcons();
+    }
+
+    function bukaDetailCabangKoord(idEkskul) {
+      const ekskul = (masterEkskul || []).find(e => e.id === idEkskul);
+      if (!ekskul) return;
+
+      const anggotaList = (anggotaEkskul || []).filter(a => a.idEkskul === idEkskul && a.status === 'AKTIF');
+      const sesiList = (logJurnalPelatih || []).filter(j => j.idEkskul === idEkskul);
+
+      let anggotaHtml = anggotaList.length === 0 ? 
+        '<p class="text-xs text-slate-400 py-3 text-center">Belum ada peserta terdaftar pada cabang ini.</p>' :
+        `<div class="max-h-60 overflow-y-auto space-y-1.5 custom-scrollbar pr-1">
+          ${anggotaList.map((a, i) => `
+            <div class="flex items-center justify-between p-2.5 bg-slate-50 hover:bg-slate-100 rounded-xl text-xs border border-slate-100">
+              <div class="flex items-center gap-2.5">
+                <span class="w-6 h-6 rounded-lg bg-purple-100 text-purple-700 font-bold flex items-center justify-center text-[10px]">${i + 1}</span>
+                <div>
+                  <span class="font-black text-slate-800">${escapeHtml(a.nama)}</span>
+                  <span class="text-[10px] text-slate-400 font-mono block">NISN: ${escapeHtml(a.nisn)} | Kelas: ${escapeHtml(a.kelas || '-')}</span>
+                </div>
+              </div>
+              <button type="button" onclick="keluarkanAnggotaKoord('${escapeHtml(a.idDaftar || a.idRef || '')}', '${escapeHtml(idEkskul)}', '${escapeHtml(a.nisn)}', '${escapeHtml(a.nama)}')" class="text-rose-600 hover:text-rose-800 text-[11px] font-bold p-1 hover:bg-rose-50 rounded-lg cursor-pointer" title="Keluarkan dari cabang">
+                Keluarkan
+              </button>
+            </div>
+          `).join('')}
+        </div>`;
+
+      Swal.fire({
+        title: `<div class="text-left font-black text-base text-slate-900">${escapeHtml(ekskul.nama)}</div>`,
+        html: `
+          <div class="text-left space-y-4 pt-1">
+            <div class="p-3 bg-purple-50 rounded-2xl border border-purple-100 text-xs space-y-1 text-purple-900">
+              <div><b>Jadwal:</b> ${escapeHtml(ekskul.hari || '-')}, ${escapeHtml(ekskul.jam || '-')}</div>
+              <div><b>Lokasi:</b> ${escapeHtml(ekskul.tempat || '-')}</div>
+              <div><b>Total Peserta Aktif:</b> ${anggotaList.length} Siswa | <b>Sesi Latihan:</b> ${sesiList.length} Pertemuan</div>
+            </div>
+            <div>
+              <h5 class="font-bold text-xs text-slate-800 mb-2">Daftar Peserta Terdaftar (${anggotaList.length} Siswa):</h5>
+              ${anggotaHtml}
+            </div>
+          </div>
+        `,
+        confirmButtonColor: '#7c3aed',
+        confirmButtonText: 'Tutup',
+        width: 580
+      });
+    }
+
+    // --- SUB-MODUL 2: LAPORAN KETERTIBAN PELATIH (1X/MINGGU) ---
+    function getRentangMingguBerjalan() {
+      const now = new Date();
+      const day = now.getDay(); // 0 is Sunday, 1 Monday, ... 6 Saturday
+      const diffToMon = day === 0 ? -6 : 1 - day;
+      const mon = new Date(now);
+      mon.setDate(now.getDate() + diffToMon);
+      mon.setHours(0, 0, 0, 0);
+
+      const sun = new Date(mon);
+      sun.setDate(mon.getDate() + 6);
+      sun.setHours(23, 59, 59, 999);
+
+      const monStr = mon.toISOString().split('T')[0];
+      const sunStr = sun.toISOString().split('T')[0];
+
+      const formatTgl = (d) => {
+        const bln = ['Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun', 'Jul', 'Agu', 'Sep', 'Okt', 'Nov', 'Des'];
+        return `${d.getDate()} ${bln[d.getMonth()]} ${d.getFullYear()}`;
+      };
+
+      return {
+        mon, sun, monStr, sunStr,
+        labelMinggu: `${formatTgl(mon)} s/d ${formatTgl(sun)}`,
+        currentDayIndex: day === 0 ? 7 : day // 1:Senin ... 7:Minggu
+      };
+    }
+
+    function renderKoordKetertibanPelatih() {
+      const week = getRentangMingguBerjalan();
+      const labelEl = document.getElementById('labelKoordPeriodeMinggu');
+      if (labelEl) labelEl.innerText = week.labelMinggu;
+
+      const filterStatus = (document.getElementById('filterStatusKetertibanPelatih')?.value || '').trim();
+      const tbody = document.getElementById('tableKoordKetertibanPelatihBody');
+
+      const dayMap = {
+        'SENIN': 1, 'SELASA': 2, 'RABU': 3, 'KAMIS': 4, 'JUMAT': 5, 'SABTU': 6, 'MINGGU': 7
+      };
+
+      let countTertib = 0;
+      let countTidakTertib = 0;
+      let countMenunggu = 0;
+      const pelatihAuditList = [];
+
+      (masterEkskul || []).forEach(e => {
+        const guru = (masterGuru || []).find(g => String(g.nip).trim() === String(e.pembina).trim() || String(g.nama).trim() === String(e.pembina).trim());
+        const namaPelatih = guru ? guru.nama : (e.pembina || 'Belum Ada Pelatih');
+        const noHp = guru ? (guru.noHp || '') : '';
+
+        // Cari log presensi atau jurnal minggu ini
+        const jurnalsWeek = (logJurnalPelatih || []).filter(j => 
+          j.idEkskul === e.id && j.tanggal >= week.monStr && j.tanggal <= week.sunStr
+        );
+        const presWeek = (logPresensiEkskul || []).filter(p => 
+          p.idEkskul === e.id && p.tanggal >= week.monStr && p.tanggal <= week.sunStr
+        );
+
+        const sudahPresensi = (jurnalsWeek.length > 0 || presWeek.length > 0);
+
+        // Cari presensi/jurnal terakhir sepanjang waktu
+        const allJurnals = (logJurnalPelatih || []).filter(j => j.idEkskul === e.id).sort((a,b) => (b.tanggal||'').localeCompare(a.tanggal||''));
+        const allPres = (logPresensiEkskul || []).filter(p => p.idEkskul === e.id).sort((a,b) => (b.tanggal||'').localeCompare(a.tanggal||''));
+        const lastTgl = (allJurnals[0]?.tanggal) || (allPres[0]?.tanggal) || null;
+
+        // Tentukan jadwal latihan hari apa
+        const rawHari = String(e.hari || '').toUpperCase();
+        let targetDayIdx = 5; // default Jumat jika tidak jelas
+        for (const k in dayMap) {
+          if (rawHari.includes(k)) {
+            targetDayIdx = dayMap[k];
+            break;
+          }
+        }
+
+        let statusKetertiban = 'TERTIB';
+        if (sudahPresensi) {
+          statusKetertiban = 'TERTIB';
+          countTertib++;
+        } else {
+          if (week.currentDayIndex >= targetDayIdx) {
+            statusKetertiban = 'TIDAK_TERTIB';
+            countTidakTertib++;
+          } else {
+            statusKetertiban = 'MENUNGGU';
+            countMenunggu++;
+          }
+        }
+
+        pelatihAuditList.push({
+          ekskul: e,
+          guru: guru,
+          namaPelatih: namaPelatih,
+          noHp: noHp,
+          sudahPresensi: sudahPresensi,
+          jurnalsWeek: jurnalsWeek,
+          lastTgl: lastTgl,
+          targetDayIdx: targetDayIdx,
+          statusKetertiban: statusKetertiban
+        });
+      });
+
+      // Update Mini Metrik
+      const totalPelatih = pelatihAuditList.length;
+      const elTertib = document.getElementById('statKoordPelatihTertib');
+      if (elTertib) elTertib.innerText = `${countTertib} Pelatih`;
+      const elBelum = document.getElementById('statKoordPelatihBelum');
+      if (elBelum) elBelum.innerText = `${countTidakTertib} Pelatih`;
+      const elBadgeBelum = document.getElementById('badgeKoordPelatihTidakTertib');
+      if (elBadgeBelum) elBadgeBelum.innerText = `${countTidakTertib} Belum Presensi`;
+      const elPct = document.getElementById('statKoordPersenKepatuhan');
+      if (elPct) {
+        const pct = totalPelatih > 0 ? Math.round((countTertib / totalPelatih) * 100) : 100;
+        elPct.innerText = `${pct}%`;
+      }
+
+      if (!tbody) return;
+
+      const filtered = pelatihAuditList.filter(item => {
+        if (filterStatus && item.statusKetertiban !== filterStatus) return false;
+        return true;
+      });
+
+      if (filtered.length === 0) {
+        tbody.innerHTML = `
+          <tr>
+            <td colspan="7" class="text-center py-8 text-slate-400 font-medium">
+              <i data-lucide="check-circle-2" class="w-8 h-8 mx-auto text-emerald-500 mb-2"></i>
+              Seluruh pelatih tertib memenuhi jadwal presensi mingguan atau tidak ada data yang cocok.
+            </td>
+          </tr>
+        `;
+        safeCreateIcons();
+        return;
+      }
+
+      tbody.innerHTML = filtered.map((item, idx) => {
+        const e = item.ekskul;
+        let badgeStatus = '';
+        if (item.statusKetertiban === 'TERTIB') {
+          const tglAda = item.jurnalsWeek[0]?.tanggal || 'Minggu Ini';
+          badgeStatus = `
+            <span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-[11px] font-black bg-emerald-100 text-emerald-800">
+              <i data-lucide="check-circle" class="w-3.5 h-3.5"></i>
+              <span>Tertib (${tglAda})</span>
+            </span>
+          `;
+        } else if (item.statusKetertiban === 'TIDAK_TERTIB') {
+          badgeStatus = `
+            <span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-[11px] font-black bg-rose-100 text-rose-800 animate-pulse">
+              <i data-lucide="alert-triangle" class="w-3.5 h-3.5"></i>
+              <span>Tidak Tertib (Lewat Jadwal)</span>
+            </span>
+          `;
+        } else {
+          badgeStatus = `
+            <span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-[11px] font-black bg-amber-100 text-amber-800">
+              <i data-lucide="clock" class="w-3.5 h-3.5"></i>
+              <span>Menunggu Jadwal Hari</span>
+            </span>
+          `;
+        }
+
+        const lastTglText = item.lastTgl ? 
+          `<span class="text-slate-700 font-bold">${escapeHtml(item.lastTgl)}</span>` : 
+          `<span class="text-rose-500 font-semibold">Belum pernah presensi</span>`;
+
+        return `
+          <tr class="hover:bg-slate-50/80 transition">
+            <td class="py-3.5 px-3 text-center text-slate-400 font-bold">${idx + 1}</td>
+            <td class="py-3.5 px-3">
+              <span class="font-black text-slate-900 block">${escapeHtml(e.nama)}</span>
+              <span class="text-[10px] text-purple-700 font-bold bg-purple-50 px-1.5 py-0.5 rounded">${escapeHtml(e.kategori || 'Umum')}</span>
+            </td>
+            <td class="py-3.5 px-3">
+              <span class="font-bold text-slate-800 block text-xs">${escapeHtml(item.namaPelatih)}</span>
+              <span class="text-[11px] text-slate-400 font-mono">${escapeHtml(item.noHp || 'No HP belum ada')}</span>
+            </td>
+            <td class="py-3.5 px-3">
+              <span class="font-bold text-indigo-900 block text-xs">${escapeHtml(e.hari || '1x Seminggu')}</span>
+              <span class="text-[10px] text-slate-500">${escapeHtml(e.jam || '15:30')} (${escapeHtml(e.tempat || 'Sekolah')})</span>
+            </td>
+            <td class="py-3.5 px-3 text-xs">
+              ${lastTglText}
+            </td>
+            <td class="py-3.5 px-3 text-center">
+              ${badgeStatus}
+            </td>
+            <td class="py-3.5 px-3 text-center">
+              <div class="flex items-center justify-center gap-1.5">
+                ${item.noHp ? `
+                  <button type="button" onclick="bukaWaPengingatPelatih('${escapeHtml(item.noHp)}', '${escapeHtml(item.namaPelatih)}', '${escapeHtml(e.nama)}', '${escapeHtml(e.hari || 'Mingguan')}')" class="px-2.5 py-1.5 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl text-xs font-bold transition flex items-center gap-1 shadow-xs cursor-pointer" title="Kirim Teguran / Peringatan WA">
+                    <i data-lucide="message-circle" class="w-3.5 h-3.5"></i>
+                    <span>Tegur WA</span>
+                  </button>
+                ` : `
+                  <span class="text-[10px] text-slate-400 font-medium">No WA (-)</span>
+                `}
+              </div>
+            </td>
+          </tr>
+        `;
+      }).join('');
+
+      safeCreateIcons();
+    }
+
+    function bukaWaPengingatPelatih(noHp, namaPelatih, namaEkskul, hariLatihan) {
+      if (!noHp) {
+        Swal.fire('No WhatsApp Tidak Ada', 'Nomor WhatsApp pelatih belum terdaftar pada master guru.', 'warning');
+        return;
+      }
+
+      const cleanPhone = noHp.replace(/[^0-9]/g, '').replace(/^0/, '62');
+      const namaKoord = (currentUser && currentUser.nama) ? currentUser.nama : (appConfig.KOORDINATOR_EKSKUL_NAMA || 'Koordinator Ekstra');
+      const namaSekolah = appConfig.NAMA_SEKOLAH || 'SMP NEGERI 1 INDONESIA HEBAT';
+
+      const pesan = `*Pemberitahuan Koordinator Ekstrakurikuler*\n*${namaSekolah}*\n\nYth. Coach/Kak ${namaPelatih},\nPembina Ekstrakurikuler *${namaEkskul}*\n\nBerdasarkan monitoring jadwal mingguan (*${hariLatihan}*), presensi kehadiran siswa serta jurnal materi sesi latihan minggu ini belum tercatat pada Super App Sekolah.\n\nMohon kesediaannya untuk segera mengisi presensi dan jurnal latihan di aplikasi demi ketertiban administrasi dan evaluasi kehadiran siswa binaan.\n\nTerima kasih atas dedikasi dan kerja samanya.\n\nSalam hangat,\n*${namaKoord}*\nKoordinator Ekstrakurikuler`;
+
+      const url = `https://wa.me/${cleanPhone}?text=${encodeURIComponent(pesan)}`;
+      window.open(url, '_blank');
+    }
+
+    function kirimWaSemuaPelatihBelumPresensi() {
+      const week = getRentangMingguBerjalan();
+      const belumList = [];
+      const dayMap = { 'SENIN': 1, 'SELASA': 2, 'RABU': 3, 'KAMIS': 4, 'JUMAT': 5, 'SABTU': 6, 'MINGGU': 7 };
+
+      (masterEkskul || []).forEach(e => {
+        const jurnalsWeek = (logJurnalPelatih || []).filter(j => j.idEkskul === e.id && j.tanggal >= week.monStr && j.tanggal <= week.sunStr);
+        const presWeek = (logPresensiEkskul || []).filter(p => p.idEkskul === e.id && p.tanggal >= week.monStr && p.tanggal <= week.sunStr);
+        if (jurnalsWeek.length === 0 && presWeek.length === 0) {
+          const guru = (masterGuru || []).find(g => String(g.nip).trim() === String(e.pembina).trim() || String(g.nama).trim() === String(e.pembina).trim());
+          if (guru && guru.noHp) {
+            belumList.push({ ekskul: e, guru: guru });
+          }
+        }
+      });
+
+      if (belumList.length === 0) {
+        Swal.fire('Luar Biasa!', 'Semua pelatih telah mengisi presensi minggu ini atau nomor WhatsApp belum terdata.', 'success');
+        return;
+      }
+
+      Swal.fire({
+        title: 'Kirim Peringatan WA Pelatih',
+        html: `Terdapat <b>${belumList.length} pelatih</b> yang belum mengisi presensi minggu ini dan memiliki nomor WhatsApp aktif.<br><p class="text-xs text-slate-500 mt-2">Klik nama pelatih di bawah untuk membuka WhatsApp langsung:</p><div class="mt-3 space-y-1.5 max-h-48 overflow-y-auto text-left">${belumList.map(item => `
+          <div class="flex items-center justify-between p-2 bg-slate-50 rounded-xl text-xs border border-slate-200">
+            <div>
+              <span class="font-bold text-slate-800">${escapeHtml(item.guru.nama)}</span>
+              <span class="text-[10px] text-slate-500 block">${escapeHtml(item.ekskul.nama)}</span>
+            </div>
+            <button type="button" onclick="bukaWaPengingatPelatih('${escapeHtml(item.guru.noHp)}', '${escapeHtml(item.guru.nama)}', '${escapeHtml(item.ekskul.nama)}', '${escapeHtml(item.ekskul.hari || 'Mingguan')}')" class="px-2.5 py-1 bg-emerald-600 text-white font-bold rounded-lg text-[11px] hover:bg-emerald-700 cursor-pointer">
+              Kirim WA
+            </button>
+          </div>
+        `).join('')}</div>`,
+        showCancelButton: true,
+        cancelButtonText: 'Tutup',
+        showConfirmButton: false
+      });
+    }
+
+    // --- SUB-MODUL 3: MANAJEMEN EKSTRA & USULAN ANGGOTA ---
+    function renderKoordManajemenEkstra() {
+      // 1. Render Usulan Anggota dari Pelatih (status 'USULAN')
+      const usulanList = (anggotaEkskul || []).filter(a => a.status === 'USULAN');
+      const tbodyUsulan = document.getElementById('tableKoordUsulanAnggotaBody');
+      const badgeUsulan = document.getElementById('badgeKoordJumlahUsulan');
+      const badgeTabUsulan = document.getElementById('badgeKoordUsulanPending');
+
+      if (badgeUsulan) badgeUsulan.innerText = `${usulanList.length} Menunggu Persetujuan`;
+      if (badgeTabUsulan) badgeTabUsulan.innerText = `${usulanList.length} Usulan`;
+
+      if (tbodyUsulan) {
+        if (usulanList.length === 0) {
+          tbodyUsulan.innerHTML = `
+            <tr>
+              <td colspan="7" class="text-center py-6 text-slate-400 font-medium">
+                <i data-lucide="check-circle" class="w-7 h-7 mx-auto text-emerald-500 mb-1"></i>
+                Tidak ada usulan siswa baru yang menunggu persetujuan.
+              </td>
+            </tr>
+          `;
+        } else {
+          tbodyUsulan.innerHTML = usulanList.map((u, i) => `
+            <tr class="hover:bg-slate-50/80 transition">
+              <td class="py-3 px-3 text-center text-slate-400 font-bold">${i + 1}</td>
+              <td class="py-3 px-3">
+                <span class="font-black text-slate-900 block">${escapeHtml(u.nama)}</span>
+                <span class="text-[10px] text-slate-400 font-mono">NISN: ${escapeHtml(u.nisn)}</span>
+              </td>
+              <td class="py-3 px-2 text-center font-bold text-slate-700">${escapeHtml(u.kelas || '-')}</td>
+              <td class="py-3 px-3 font-bold text-purple-700">${escapeHtml(u.namaEkskul || u.idEkskul)}</td>
+              <td class="py-3 px-3 text-xs">
+                <span class="font-semibold text-slate-700 block">${escapeHtml(u.tglDaftar || '-')}</span>
+                <span class="text-[10px] text-slate-500">${escapeHtml(u.catatan || 'Hadir sesi latihan')}</span>
+              </td>
+              <td class="py-3 px-3 text-xs text-slate-600 font-medium">${escapeHtml(u.diusulkanOleh || 'Pelatih Ekskul')}</td>
+              <td class="py-3 px-3 text-center">
+                <div class="flex items-center justify-center gap-1.5">
+                  <button type="button" onclick="setujuiUsulanAnggotaKoord('${escapeHtml(u.idRef || u.idDaftar || '')}', '${escapeHtml(u.idEkskul)}', '${escapeHtml(u.nisn)}')" class="px-2.5 py-1 bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg text-xs font-bold transition flex items-center gap-1 cursor-pointer" title="Setujui Masuk Anggota Aktif">
+                    <i data-lucide="check" class="w-3.5 h-3.5"></i>
+                    <span>Setujui</span>
+                  </button>
+                  <button type="button" onclick="tolakUsulanAnggotaKoord('${escapeHtml(u.idRef || u.idDaftar || '')}', '${escapeHtml(u.idEkskul)}', '${escapeHtml(u.nisn)}')" class="px-2 py-1 bg-rose-50 hover:bg-rose-100 text-rose-700 rounded-lg text-xs font-bold transition flex items-center gap-1 border border-rose-200 cursor-pointer" title="Tolak Usulan">
+                    <i data-lucide="x" class="w-3.5 h-3.5"></i>
+                  </button>
+                </div>
+              </td>
+            </tr>
+          `).join('');
+        }
+      }
+
+      // 2. Render Tabel Manajemen Cabang Ekstra
+      const tbodyCabang = document.getElementById('tableKoordManajemenCabangBody');
+      if (tbodyCabang) {
+        tbodyCabang.innerHTML = (masterEkskul || []).map((e, idx) => {
+          const countAnggota = (anggotaEkskul || []).filter(a => a.idEkskul === e.id && a.status === 'AKTIF').length;
+          const guru = (masterGuru || []).find(g => String(g.nip).trim() === String(e.pembina).trim() || String(g.nama).trim() === String(e.pembina).trim());
+          const namaPembina = guru ? guru.nama : (e.pembina || '-');
+
+          return `
+            <tr class="hover:bg-slate-50/80 transition">
+              <td class="py-3 px-3 text-center text-slate-400 font-bold">${idx + 1}</td>
+              <td class="py-3 px-3">
+                <span class="font-black text-slate-900 block">${escapeHtml(e.nama)}</span>
+                <span class="text-[10px] text-slate-400 font-mono">${escapeHtml(e.id)}</span>
+              </td>
+              <td class="py-3 px-3 text-xs">
+                <span class="font-bold text-slate-700 block">${escapeHtml(e.kategori || 'Umum')}</span>
+                <span class="text-[10px] text-slate-500">${escapeHtml(e.tempat || 'Sekolah')}</span>
+              </td>
+              <td class="py-3 px-3 text-xs">
+                <span class="font-bold text-slate-700 block">${escapeHtml(e.hari || '-')}</span>
+                <span class="text-[10px] text-slate-500 font-mono">${escapeHtml(e.jam || '15:30')}</span>
+              </td>
+              <td class="py-3 px-3 text-xs font-bold text-slate-800">${escapeHtml(namaPembina)}</td>
+              <td class="py-3 px-3 text-center font-bold text-purple-700 font-mono text-xs">
+                ${countAnggota} / ${e.kuota || 30}
+              </td>
+              <td class="py-3 px-3 text-center">
+                <button type="button" onclick="toggleStatusEkskulKoord('${escapeHtml(e.id)}')" class="px-2 py-0.5 rounded-full text-[10px] font-black cursor-pointer ${e.status === 'BUKA' ? 'bg-emerald-100 text-emerald-800 hover:bg-emerald-200' : 'bg-slate-100 text-slate-600 hover:bg-slate-200'}">
+                  ${escapeHtml(e.status || 'BUKA')}
+                </button>
+              </td>
+              <td class="py-3 px-3 text-center">
+                <div class="flex items-center justify-center gap-1.5">
+                  <button type="button" onclick="bukaModalFormEkskulAdmin('${escapeHtml(e.id)}')" class="px-2 py-1 bg-purple-50 hover:bg-purple-100 text-purple-700 font-bold rounded-lg text-xs transition flex items-center gap-1 border border-purple-200 cursor-pointer" title="Edit Cabang">
+                    <i data-lucide="edit-3" class="w-3.5 h-3.5"></i>
+                    <span>Edit</span>
+                  </button>
+                  <button type="button" onclick="hapusEkskulKoord('${escapeHtml(e.id)}')" class="px-2 py-1 bg-rose-50 hover:bg-rose-100 text-rose-700 font-bold rounded-lg text-xs transition flex items-center gap-1 border border-rose-200 cursor-pointer" title="Hapus Cabang">
+                    <i data-lucide="trash-2" class="w-3.5 h-3.5"></i>
+                  </button>
+                </div>
+              </td>
+            </tr>
+          `;
+        }).join('');
+      }
+
+      safeCreateIcons();
+    }
+
+    async function setujuiUsulanAnggotaKoord(idRef, idEkskul, nisn) {
+      const idx = (anggotaEkskul || []).findIndex(a => isSameNisn(a.nisn, nisn) && a.idEkskul === idEkskul && a.status === 'USULAN');
+      if (idx !== -1) {
+        anggotaEkskul[idx].status = 'AKTIF';
+        anggotaEkskul[idx].disetujuiOleh = currentUser ? currentUser.nama : 'Koordinator Ekstra';
+      }
+
+      try {
+        const rawCache = localStorage.getItem('SUPERAPP_DATA_CACHE_V1');
+        if (rawCache) {
+          const parsed = JSON.parse(rawCache);
+          parsed.anggotaEkskul = anggotaEkskul;
+          localStorage.setItem('SUPERAPP_DATA_CACHE_V1', JSON.stringify(parsed));
+        }
+      } catch (e) {}
+
+      renderKoordManajemenEkstra();
+      renderKoordRekapSemua();
+      playBeepSuccess();
+
+      // Kirim sinkronisasi ke Google Apps Script backend
+      try {
+        if (typeof googleScriptRun === 'function') {
+          googleScriptRun('setujuiUsulanAnggotaEkskul', {
+            idRef: idRef,
+            idEkskul: idEkskul,
+            nisn: nisn,
+            actorNip: currentUser ? currentUser.nip : ''
+          });
+        }
+      } catch (err) {}
+
+      Swal.fire({
+        icon: 'success',
+        title: 'Usulan Disetujui!',
+        text: 'Siswa berhasil diresmikan sebagai anggota aktif ekstrakurikuler.',
+        timer: 1500,
+        showConfirmButton: false
+      });
+    }
+
+    async function tolakUsulanAnggotaKoord(idRef, idEkskul, nisn) {
+      const res = await Swal.fire({
+        title: 'Tolak Usulan Anggota?',
+        text: 'Siswa yang diusulkan akan dibatalkan dari daftar cabang ekskul ini.',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#e11d48',
+        confirmButtonText: 'Ya, Tolak Usulan',
+        cancelButtonText: 'Batal'
+      });
+
+      if (!res.isConfirmed) return;
+
+      const idx = (anggotaEkskul || []).findIndex(a => isSameNisn(a.nisn, nisn) && a.idEkskul === idEkskul && a.status === 'USULAN');
+      if (idx !== -1) {
+        anggotaEkskul.splice(idx, 1);
+      }
+
+      try {
+        const rawCache = localStorage.getItem('SUPERAPP_DATA_CACHE_V1');
+        if (rawCache) {
+          const parsed = JSON.parse(rawCache);
+          parsed.anggotaEkskul = anggotaEkskul;
+          localStorage.setItem('SUPERAPP_DATA_CACHE_V1', JSON.stringify(parsed));
+        }
+      } catch (e) {}
+
+      renderKoordManajemenEkstra();
+      playBeepSuccess();
+
+      try {
+        if (typeof googleScriptRun === 'function') {
+          googleScriptRun('keluarkanAnggotaEkskul', {
+            idDaftar: idRef,
+            idEkskul: idEkskul,
+            nisn: nisn,
+            actorNip: currentUser ? currentUser.nip : ''
+          });
+        }
+      } catch (err) {}
+
+      Swal.fire({
+        icon: 'success',
+        title: 'Usulan Ditolak',
+        timer: 1200,
+        showConfirmButton: false
+      });
+    }
+
+    async function toggleStatusEkskulKoord(id) {
+      const e = (masterEkskul || []).find(x => x.id === id);
+      if (!e) return;
+      e.status = (e.status === 'BUKA') ? 'TUTUP' : 'BUKA';
+      renderKoordManajemenEkstra();
+      renderKoordRekapSemua();
+      playBeepSuccess();
+
+      if (typeof syncMasterEkskulOnline === 'function') {
+        await syncMasterEkskulOnline(false);
+      }
+    }
+
+    async function hapusEkskulKoord(id) {
+      if (typeof hapusEkskulAdmin === 'function') {
+        await hapusEkskulAdmin(id);
+        renderKoordManajemenEkstra();
+        renderKoordRekapSemua();
+      }
+    }
+
+    async function keluarkanAnggotaKoord(idDaftar, idEkskul, nisn, nama) {
+      const res = await Swal.fire({
+        title: 'Keluarkan Peserta?',
+        html: `Apakah Anda yakin ingin mengeluarkan <b>${escapeHtml(nama)}</b> dari cabang ekstrakurikuler ini?`,
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#e11d48',
+        confirmButtonText: 'Ya, Keluarkan',
+        cancelButtonText: 'Batal'
+      });
+
+      if (!res.isConfirmed) return;
+
+      const idx = (anggotaEkskul || []).findIndex(a => isSameNisn(a.nisn, nisn) && a.idEkskul === idEkskul);
+      if (idx !== -1) {
+        anggotaEkskul.splice(idx, 1);
+      }
+
+      try {
+        const rawCache = localStorage.getItem('SUPERAPP_DATA_CACHE_V1');
+        if (rawCache) {
+          const parsed = JSON.parse(rawCache);
+          parsed.anggotaEkskul = anggotaEkskul;
+          localStorage.setItem('SUPERAPP_DATA_CACHE_V1', JSON.stringify(parsed));
+        }
+      } catch (e) {}
+
+      renderKoordRekapSemua();
+      renderKoordManajemenEkstra();
+      playBeepSuccess();
+
+      try {
+        if (typeof googleScriptRun === 'function') {
+          googleScriptRun('keluarkanAnggotaEkskul', {
+            idDaftar: idDaftar,
+            idEkskul: idEkskul,
+            nisn: nisn,
+            actorNip: currentUser ? currentUser.nip : ''
+          });
+        }
+      } catch (err) {}
+
+      Swal.fire({
+        icon: 'success',
+        title: 'Peserta Berhasil Dikeluarkan',
+        timer: 1500,
+        showConfirmButton: false
+      });
+    }
+
+    function bukaModalTambahAnggotaKoord() {
+      // Buka modal bulk peserta admin atau modal dialog pilih siswa
+      if (typeof bukaModalBulkPesertaEkskulAdmin === 'function') {
+        bukaModalBulkPesertaEkskulAdmin();
+      }
+    }
+
+    // --- SUB-MODUL 4: CETAK PRESENSI MANUAL PESERTA EKSTRA (A4) ---
+    function siapkanCetakCabangKoord(idEkskul) {
+      switchSubTabKoordinator('cetak');
+      const sel = document.getElementById('selectCetakKoordCabang');
+      if (sel) {
+        sel.value = idEkskul;
+        renderKoordCetakManual();
+      }
+    }
+
+    function renderKoordCetakManual() {
+      const selCabang = document.getElementById('selectCetakKoordCabang');
+      const inputPeriode = document.getElementById('inputCetakKoordPeriode');
+      const selKolom = document.getElementById('selectCetakKoordKolom');
+      const preview = document.getElementById('previewLembarPresensiManual');
+
+      // Populate dropdown jika belum ada
+      if (selCabang && selCabang.options.length <= 1) {
+        selCabang.innerHTML = (masterEkskul || []).map(e => `
+          <option value="${escapeHtml(e.id)}">${escapeHtml(e.nama)} (${escapeHtml(e.kategori || 'Umum')})</option>
+        `).join('');
+      }
+
+      const idEkskul = selCabang ? selCabang.value : (masterEkskul[0]?.id || '');
+      const periode = inputPeriode ? inputPeriode.value.trim() : 'November 2026';
+      const numKolom = Number(selKolom ? selKolom.value : 8) || 8;
+
+      const ekskul = (masterEkskul || []).find(e => e.id === idEkskul) || masterEkskul[0] || {};
+      const anggotaList = (anggotaEkskul || []).filter(a => a.idEkskul === (ekskul.id || idEkskul) && a.status === 'AKTIF');
+
+      const guru = (masterGuru || []).find(g => String(g.nip).trim() === String(ekskul.pembina).trim() || String(g.nama).trim() === String(ekskul.pembina).trim());
+      const namaPembina = guru ? guru.nama : (ekskul.pembina || 'Pembina Ekstrakurikuler');
+
+      const namaKoord = (currentUser && currentUser.nama) ? currentUser.nama : (appConfig.KOORDINATOR_EKSKUL_NAMA || 'Nama Koordinator');
+      const nipKoord = (currentUser && currentUser.nip) ? currentUser.nip : (appConfig.KOORDINATOR_EKSKUL_NIP || '-');
+      const namaKepsek = appConfig.NAMA_KEPSEK || 'Drs. H. Mulyadi, M.Pd.';
+      const nipKepsek = appConfig.NIP_KEPSEK || '197205101998021003';
+      const kotaTitimangsa = appConfig.KOTA_TITIMANGSA || 'Kota Cerdas';
+
+      // Header Kolom Pertemuan P1..Pn
+      let pHeaderHtml = '';
+      for (let i = 1; i <= numKolom; i++) {
+        pHeaderHtml += `<th class="border border-slate-700 py-2 px-1 text-center w-8 text-[11px]">P${i}</th>`;
+      }
+
+      // Baris siswa aktif
+      let barisSiswaHtml = '';
+      if (anggotaList.length === 0) {
+        barisSiswaHtml = `<tr><td colspan="${numKolom + 8}" class="border border-slate-700 py-3 text-center text-slate-500 italic">Belum ada anggota terdaftar pada cabang ini.</td></tr>`;
+      } else {
+        barisSiswaHtml = anggotaList.map((s, idx) => {
+          let colsP = '';
+          for (let c = 1; c <= numKolom; c++) {
+            colsP += `<td class="border border-slate-700 py-1.5 px-1 text-center font-mono text-[11px]"></td>`;
+          }
+          const sGender = (masterSiswa || []).find(ms => isSameNisn(ms.nisn, s.nisn))?.jk || '-';
+          return `
+            <tr class="text-slate-900">
+              <td class="border border-slate-700 py-1.5 px-2 text-center text-[11px]">${idx + 1}</td>
+              <td class="border border-slate-700 py-1.5 px-2 font-mono text-[11px] whitespace-nowrap">${escapeHtml(s.nisn)}</td>
+              <td class="border border-slate-700 py-1.5 px-2.5 font-bold text-xs">${escapeHtml(s.nama)}</td>
+              <td class="border border-slate-700 py-1.5 px-1.5 text-center text-[11px]">${escapeHtml(sGender)}</td>
+              <td class="border border-slate-700 py-1.5 px-2 text-center font-bold text-[11px]">${escapeHtml(s.kelas || '-')}</td>
+              ${colsP}
+              <td class="border border-slate-700 py-1.5 px-1 text-center w-6 text-[10px]"></td>
+              <td class="border border-slate-700 py-1.5 px-1 text-center w-6 text-[10px]"></td>
+              <td class="border border-slate-700 py-1.5 px-1 text-center w-6 text-[10px]"></td>
+              <td class="border border-slate-700 py-1.5 px-1 text-center w-6 text-[10px]"></td>
+              <td class="border border-slate-700 py-1.5 px-2 text-[10px]"></td>
+            </tr>
+          `;
+        }).join('');
+      }
+
+      // Baris kosong tambahan untuk mengakomodasi siswa baru di lapangan
+      for (let extra = 1; extra <= 3; extra++) {
+        let colsP = '';
+        for (let c = 1; c <= numKolom; c++) {
+          colsP += `<td class="border border-slate-700 py-1.5 px-1 text-center"></td>`;
+        }
+        barisSiswaHtml += `
+          <tr class="text-slate-400">
+            <td class="border border-slate-700 py-1.5 px-2 text-center text-[11px]">${anggotaList.length + extra}</td>
+            <td class="border border-slate-700 py-1.5 px-2 font-mono text-[11px]"></td>
+            <td class="border border-slate-700 py-1.5 px-2.5 font-medium text-xs text-slate-300">................................................</td>
+            <td class="border border-slate-700 py-1.5 px-1.5 text-center text-[11px]"></td>
+            <td class="border border-slate-700 py-1.5 px-2 text-center text-[11px]"></td>
+            ${colsP}
+            <td class="border border-slate-700 py-1.5 px-1 text-center w-6"></td>
+            <td class="border border-slate-700 py-1.5 px-1 text-center w-6"></td>
+            <td class="border border-slate-700 py-1.5 px-1 text-center w-6"></td>
+            <td class="border border-slate-700 py-1.5 px-1 text-center w-6"></td>
+            <td class="border border-slate-700 py-1.5 px-2"></td>
+          </tr>
+        `;
+      }
+
+      if (!preview) return;
+
+      preview.innerHTML = `
+        <!-- Kop Resmi Sekolah -->
+        <div class="border-b-2 border-slate-900 pb-3 mb-4">
+          <div class="flex items-center justify-between gap-4">
+            <div class="w-16 h-16 flex items-center justify-center flex-shrink-0">
+              <img src="${escapeHtml(appConfig.LOGO_KIRI_PEMDA || '')}" alt="Logo Pemda" class="max-h-16 object-contain" onerror="this.style.display='none'">
+            </div>
+            <div class="text-center flex-1 space-y-0.5">
+              <h5 class="font-bold text-xs uppercase tracking-wider text-slate-700 leading-tight">${escapeHtml(appConfig.INSTANSI_PEMBINA || 'DINAS PENDIDIKAN')}</h5>
+              <h3 class="font-black text-base sm:text-lg uppercase text-slate-900 leading-tight">${escapeHtml(appConfig.NAMA_SEKOLAH || 'SMP NEGERI 1 INDONESIA HEBAT')}</h3>
+              <p class="text-[11px] text-slate-600 leading-tight">${escapeHtml(appConfig.ALAMAT_SEKOLAH || 'Jl. Pendidikan Karakter No. 07')}</p>
+            </div>
+            <div class="w-16 h-16 flex items-center justify-center flex-shrink-0">
+              <img src="${escapeHtml(appConfig.LOGO_KANAN_SEKOLAH || '')}" alt="Logo Sekolah" class="max-h-16 object-contain" onerror="this.style.display='none'">
+            </div>
+          </div>
+          <div class="border-t border-slate-900 mt-2"></div>
+        </div>
+
+        <!-- Judul Dokumen -->
+        <div class="text-center space-y-1 mb-4">
+          <h4 class="font-black text-sm sm:text-base uppercase tracking-wider text-slate-900 underline">DAFTAR HADIR MANUAL KEGIATAN EKSTRAKURIKULER</h4>
+          <p class="text-xs text-slate-600 font-semibold">Tahun Ajaran ${escapeHtml(appConfig.TAHUN_AJARAN || '2026/2027')} - Semester ${escapeHtml(appConfig.SEMESTER_AKTIF || '1')} (Ganjil)</p>
+        </div>
+
+        <!-- Identitas Kegiatan Ekstra -->
+        <div class="grid grid-cols-2 gap-x-4 gap-y-1 text-xs mb-3 text-slate-800">
+          <div><span class="font-bold w-32 inline-block">Ekstrakurikuler:</span> <b>${escapeHtml(ekskul.nama || '-')}</b></div>
+          <div><span class="font-bold w-32 inline-block">Jadwal Latihan:</span> ${escapeHtml(ekskul.hari || '-')}, ${escapeHtml(ekskul.jam || '-')}</div>
+          <div><span class="font-bold w-32 inline-block">Pembina / Pelatih:</span> ${escapeHtml(namaPembina)}</div>
+          <div><span class="font-bold w-32 inline-block">Lokasi Latihan:</span> ${escapeHtml(ekskul.tempat || '-')}</div>
+          <div><span class="font-bold w-32 inline-block">Periode / Bulan:</span> <b>${escapeHtml(periode)}</b></div>
+          <div><span class="font-bold w-32 inline-block">Jumlah Peserta:</span> ${anggotaList.length} Siswa Terdaftar</div>
+        </div>
+
+        <!-- Tabel Presensi -->
+        <div class="overflow-x-auto">
+          <table class="w-full border-collapse border border-slate-700 text-xs">
+            <thead class="bg-slate-100 text-slate-900 font-bold">
+              <tr>
+                <th rowspan="2" class="border border-slate-700 py-2 px-1 text-center w-8 text-[11px]">No</th>
+                <th rowspan="2" class="border border-slate-700 py-2 px-2 text-center text-[11px]">NISN</th>
+                <th rowspan="2" class="border border-slate-700 py-2 px-2.5 text-left text-xs">Nama Lengkap Peserta</th>
+                <th rowspan="2" class="border border-slate-700 py-2 px-1 text-center w-7 text-[11px]">L/P</th>
+                <th rowspan="2" class="border border-slate-700 py-2 px-1 text-center w-10 text-[11px]">Kls</th>
+                <th colspan="${numKolom}" class="border border-slate-700 py-1 px-1 text-center text-[11px]">Pertemuan Mingguan (Tanggal & Paraf)</th>
+                <th colspan="4" class="border border-slate-700 py-1 px-1 text-center text-[10px]">Rekap</th>
+                <th rowspan="2" class="border border-slate-700 py-2 px-2 text-center text-[11px]">Ket</th>
+              </tr>
+              <tr>
+                ${pHeaderHtml}
+                <th class="border border-slate-700 py-1 text-center w-6 text-[10px]">H</th>
+                <th class="border border-slate-700 py-1 text-center w-6 text-[10px]">S</th>
+                <th class="border border-slate-700 py-1 text-center w-6 text-[10px]">I</th>
+                <th class="border border-slate-700 py-1 text-center w-6 text-[10px]">A</th>
+              </tr>
+              <!-- Baris sub-header untuk menuliskan tanggal tiap pertemuan -->
+              <tr class="bg-white font-normal text-[10px] text-slate-500 italic">
+                <td colspan="5" class="border border-slate-700 py-1 px-2 text-right font-bold text-slate-700">Tanggal Pertemuan:</td>
+                ${Array.from({length: numKolom}).map(() => '<td class="border border-slate-700 py-1 text-center text-[9px]">.../...</td>').join('')}
+                <td colspan="5" class="border border-slate-700"></td>
+              </tr>
+            </thead>
+            <tbody>
+              ${barisSiswaHtml}
+            </tbody>
+          </table>
+        </div>
+
+        <!-- Kolom Pengesahan Tanda Tangan (3 Pihak: Pelatih, Kepsek, Koordinator Ekstra) -->
+        <div class="mt-6 pt-2 text-xs text-slate-800">
+          <div class="text-right mb-2">
+            <span>${escapeHtml(kotaTitimangsa)}, .................................... 2026</span>
+          </div>
+          <div class="grid grid-cols-3 gap-2 text-center">
+            <div>
+              <p class="font-semibold text-slate-700">Pembina / Pelatih,</p>
+              <div class="h-16"></div>
+              <p class="font-bold underline text-slate-900">${escapeHtml(namaPembina)}</p>
+              <p class="text-[11px] text-slate-500 font-mono">NIP / ID: ${escapeHtml(ekskul.pembina || '-')}</p>
+            </div>
+            <div>
+              <p class="font-semibold text-slate-700">Mengetahui,<br>Kepala Sekolah,</p>
+              <div class="h-12"></div>
+              <p class="font-bold underline text-slate-900">${escapeHtml(namaKepsek)}</p>
+              <p class="text-[11px] text-slate-500 font-mono">NIP. ${escapeHtml(nipKepsek)}</p>
+            </div>
+            <div>
+              <p class="font-semibold text-slate-700">Koordinator Ekstrakurikuler,</p>
+              <div class="h-16"></div>
+              <p class="font-bold underline text-slate-900">${escapeHtml(namaKoord)}</p>
+              <p class="text-[11px] text-slate-500 font-mono">NIP. ${escapeHtml(nipKoord)}</p>
+            </div>
+          </div>
+        </div>
+      `;
+    }
+
+    function cetakLembarPresensiManualEkskul() {
+      const preview = document.getElementById('previewLembarPresensiManual');
+      if (!preview) return;
+
+      const printArea = document.getElementById('printArea');
+      if (!printArea) {
+        window.print();
+        return;
+      }
+
+      printArea.innerHTML = `
+        <div style="font-family: Arial, sans-serif; padding: 10px; color: black; background: white;">
+          ${preview.innerHTML}
+        </div>
+      `;
+
+      window.print();
+    }
 
 </script>
   <!-- MODAL 1: CATAT SESI KONSELING & TINDAK LANJUT BK -->
