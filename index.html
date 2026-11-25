@@ -19,15 +19,67 @@
   <!-- Konfigurasi Global & Backend Google Apps Script -->
   <script src="config.js"></script>
 
-  <!-- Tailwind CSS & Google Fonts -->
+  <!-- Tailwind CSS & Akademika Terpadu Design System -->
   <script src="https://cdn.tailwindcss.com"></script>
+  <script id="tailwind-config">
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            'success': '#15803D',
+            'warning': '#B45309',
+            'info': '#0369A1',
+            'light-primary': '#00288E',
+            'light-primary-container': '#1E40AF',
+            'light-secondary': '#525C87',
+            'light-secondary-container': '#C3CCFE',
+            'light-background': '#FBF8FF',
+            'light-surface': '#FBF8FF',
+            'light-surface-container-low': '#F4F2FC',
+            'light-surface-container': '#EEEDF7',
+            'light-on-surface': '#1A1B22',
+            'light-on-surface-variant': '#444653',
+            'light-outline-variant': '#C4C5D5',
+            'dark-primary': '#B8C4FF',
+            'dark-on-primary': '#002584',
+            'dark-background': '#12131A',
+            'dark-surface': '#12131A',
+            'dark-surface-container-low': '#1A1B22',
+            'dark-surface-container': '#1E1F26',
+            'dark-surface-container-high': '#282A31',
+            'dark-on-surface': '#E3E1EB',
+            'dark-on-surface-variant': '#C4C5D5',
+            'dark-outline-variant': '#444653'
+          },
+          fontFamily: {
+            'sans': ['"Plus Jakarta Sans"', '"Instrument Sans"', 'sans-serif'],
+            'display': ['"Plus Jakarta Sans"', 'sans-serif'],
+            'body': ['"Instrument Sans"', '"Plus Jakarta Sans"', 'sans-serif'],
+            'mono': ['"Red Hat Mono"', 'monospace']
+          }
+        }
+      }
+    };
+  </script>
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500;600&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Red+Hat+Mono:wght@500&display=swap" rel="stylesheet">
   <!-- Lucide Icons -->
   <script src="https://unpkg.com/lucide@latest"></script>
   <!-- SweetAlert2 -->
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
   <!-- Html5-Qrcode untuk Scan QR Kartu Pelajar -->
   <script src="https://unpkg.com/html5-qrcode"></script>
-
+  <script>
+    // Inisialisasi Tema Light / Dark Mode Sebelum Render (Tanpa Flash)
+    (function initAkademikaTheme() {
+      try {
+        var savedTheme = localStorage.getItem('SUPERAPP_THEME');
+        if (savedTheme === 'dark') {
+          document.documentElement.classList.add('dark');
+        }
+      } catch (e) {}
+    })();
+  </script>
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap');
     body {
@@ -142,21 +194,108 @@
     .ticker-track.is-paused {
       animation-play-state: paused !important;
     }
-    /* Standar Skala Ukuran Huruf Aplikasi (Diperbesar 2 Level untuk Keterbacaan Optimal) */
-    html { font-size: 19px; }
-    body { font-size: 19px; }
-    html.font-size-small, html.font-size-small body { font-size: 17px !important; }
-    html.font-size-medium, html.font-size-medium body { font-size: 19px !important; }
-    html.font-size-big, html.font-size-big body { font-size: 22px !important; }
+    /* Standar Skala Ukuran Huruf Aplikasi Akademika Terpadu (16px Base) */
+    html { font-size: 16px; }
+    body { font-size: 16px; font-family: 'Instrument Sans', 'Plus Jakarta Sans', sans-serif; }
+    h1, h2, h3, h4, h5, h6, button { font-family: 'Plus Jakarta Sans', sans-serif; }
+    html.font-size-small, html.font-size-small body { font-size: 14px !important; }
+    html.font-size-medium, html.font-size-medium body { font-size: 16px !important; }
+    html.font-size-big, html.font-size-big body { font-size: 18px !important; }
 
     /* Mobile Viewport Bound & Prevent Horizontal Overflow */
     html, body {
       max-width: 100vw;
       overflow-x: hidden;
     }
+
+    /* Shadow & Blur Utilities Fallback untuk Tailwind CDN v3 */
+    .shadow-xs { box-shadow: 0 1px 2px 0 rgba(15, 23, 42, 0.05); }
+    .shadow-2xs { box-shadow: 0 1px 2px 0 rgba(15, 23, 42, 0.03); }
+    .backdrop-blur-xs { backdrop-filter: blur(4px); -webkit-backdrop-filter: blur(4px); }
+
+    /* ===================================================================== */
+    /* AKADEMIKA TERPADU: DARK MODE SURFACE & COMPONENT TOKENS               */
+    /* ===================================================================== */
+    html.dark body {
+      background-color: #12131A !important;
+      color: #E3E1EB !important;
+    }
+    html.dark header,
+    html.dark #mobileBottomNavSiswa,
+    html.dark #mobileBottomNavGuru,
+    html.dark #mobileBottomNavKepsek,
+    html.dark #mobileBottomNavAdmin {
+      background-color: rgba(26, 27, 34, 0.94) !important;
+      border-color: #2E313D !important;
+      color: #E3E1EB !important;
+    }
+    html.dark main .bg-white:not(#printArea):not(#printArea *),
+    html.dark .fixed .bg-white {
+      background-color: #1A1B22 !important;
+      color: #E3E1EB;
+      border-color: #2E313D !important;
+    }
+    html.dark main .bg-slate-50:not(#printArea):not(#printArea *),
+    html.dark .fixed .bg-slate-50,
+    html.dark main .bg-slate-50\/70:not(#printArea):not(#printArea *),
+    html.dark main .bg-slate-50\/50:not(#printArea):not(#printArea *) {
+      background-color: #1E1F26 !important;
+      border-color: #2E313D !important;
+    }
+    html.dark main .bg-slate-100:not(#printArea):not(#printArea *),
+    html.dark .fixed .bg-slate-100 {
+      background-color: #282A31 !important;
+      border-color: #363844 !important;
+    }
+    html.dark main .text-slate-900:not(#printArea):not(#printArea *),
+    html.dark .fixed .text-slate-900,
+    html.dark main .text-slate-800:not(#printArea):not(#printArea *),
+    html.dark .fixed .text-slate-800,
+    html.dark header .text-slate-900,
+    html.dark header .text-slate-800 {
+      color: #E3E1EB !important;
+    }
+    html.dark main .text-slate-700:not(#printArea):not(#printArea *),
+    html.dark .fixed .text-slate-700,
+    html.dark main .text-slate-600:not(#printArea):not(#printArea *),
+    html.dark .fixed .text-slate-600 {
+      color: #C4C5D5 !important;
+    }
+    html.dark main .text-slate-500:not(#printArea):not(#printArea *),
+    html.dark main .text-slate-400:not(#printArea):not(#printArea *),
+    html.dark header .text-slate-500 {
+      color: #9699AD !important;
+    }
+    html.dark main .border-slate-200:not(#printArea):not(#printArea *),
+    html.dark main .border-slate-100:not(#printArea):not(#printArea *),
+    html.dark .fixed .border-slate-200,
+    html.dark .fixed .border-slate-100 {
+      border-color: #2E313D !important;
+    }
+    html.dark input:not([type="checkbox"]):not([type="radio"]),
+    html.dark select,
+    html.dark textarea,
+    html.dark .modern-select {
+      background-color: #22242E !important;
+      color: #E3E1EB !important;
+      border-color: #3A3D4D !important;
+    }
+    html.dark input::placeholder,
+    html.dark textarea::placeholder {
+      color: #7D8094 !important;
+    }
+    html.dark .swal2-popup {
+      background-color: #1A1B22 !important;
+      color: #E3E1EB !important;
+      border: 1px solid #2E313D !important;
+    }
+    html.dark .swal2-title,
+    html.dark .swal2-html-container {
+      color: #E3E1EB !important;
+    }
   </style>
 </head>
-<body class="bg-slate-50 text-slate-800 min-h-screen flex flex-col antialiased selection:bg-blue-600 selection:text-white">
+<body class="bg-light-background text-light-on-background dark:bg-dark-background dark:text-dark-on-background min-h-screen flex flex-col antialiased transition-colors duration-150 selection:bg-light-primary selection:text-white">
 
   <!-- TOP BAR / HEADER UTAMA -->
   <header class="bg-white/95 backdrop-blur-md border-b border-slate-200/80 sticky top-0 z-40 shadow-xs transition-all">
@@ -169,7 +308,8 @@
             <i data-lucide="shield-check" class="w-4 h-4 sm:w-6 sm:h-6"></i>
           </div>
           <div class="min-w-0 flex-1">
-            <h1 id="navSchoolName" class="font-black text-xs sm:text-sm md:text-base text-slate-900 leading-tight tracking-tight truncate max-w-[110px] xs:max-w-[150px] sm:max-w-none group-hover:text-indigo-700 transition-colors">SMP NEGERI 1 INDONESIA HEBAT</h1>
+            <!-- [EDIT MANDIRI IDENTITAS SEKOLAH - HEADER ATAS] -->
+            <h1 id="navSchoolName" class="font-black text-xs sm:text-sm md:text-base text-slate-900 dark:text-slate-100 leading-tight tracking-tight truncate max-w-[120px] sm:max-w-none group-hover:text-light-primary dark:group-hover:text-dark-primary transition-colors">SMP NEGERI 1 INDONESIA HEBAT</h1>
             <div class="flex items-center gap-1.5 mt-0.5">
               <span class="text-[10px] sm:text-[11px] font-semibold text-slate-500 hidden sm:inline">SuperApp</span>
               <span class="text-slate-300 hidden sm:inline">-</span>
@@ -183,6 +323,12 @@
 
         <!-- Tombol Aksi Kanan, Font Scaler & Akun (Mobile-First & Responsif Tanpa Overflow) -->
         <div class="flex items-center gap-1 sm:gap-1.5 flex-shrink-0">
+          <!-- Dark Mode Toggle (Light / Dark Mode) -->
+          <button type="button" id="btnToggleDarkMode" onclick="toggleDarkMode()" title="Ganti Mode Tampilan (Terang / Gelap)" class="h-8 w-8 sm:h-9 sm:w-9 flex items-center justify-center rounded-xl bg-slate-100 dark:bg-dark-surface-container-high hover:bg-indigo-50 dark:hover:bg-slate-700 border border-slate-200 dark:border-dark-outline-variant text-slate-700 dark:text-amber-300 transition shadow-2xs cursor-pointer flex-shrink-0" aria-label="Toggle Dark Mode">
+            <i data-lucide="moon" id="iconDarkModeMoon" class="w-4 h-4 dark:hidden"></i>
+            <i data-lucide="sun" id="iconDarkModeSun" class="w-4 h-4 hidden dark:inline"></i>
+          </button>
+
           <!-- Font Scaler Kontrol (small, medium, big) -->
           <div id="fontSizeControlGroup" class="inline-flex items-center bg-slate-100 p-0.5 rounded-xl border border-slate-200 shadow-2xs flex-shrink-0" title="Pengatur Ukuran Huruf Aplikasi">
             <button type="button" onclick="setFontScale('small')" id="btnFontSmall" class="px-1.5 py-0.5 sm:py-1 text-[10px] font-bold rounded-lg text-slate-600 hover:text-indigo-700 hover:bg-white transition cursor-pointer" title="Ukuran Font Kecil (14px)">A-</button>
@@ -203,21 +349,21 @@
           </button>
 
           <!-- Tombol Pasang PWA (jika didukung) -->
-          <button id="btnInstallPwa" onclick="triggerPwaInstall()" class="hidden h-8 sm:h-9 px-2.5 bg-emerald-50 text-emerald-700 hover:bg-emerald-100 border border-emerald-200 rounded-xl text-xs font-bold items-center gap-1.5 transition shadow-2xs flex-shrink-0">
+          <button id="btnInstallPwa" onclick="triggerPwaInstall()" class="hidden items-center h-8 sm:h-9 px-2.5 bg-emerald-50 text-emerald-700 hover:bg-emerald-100 border border-emerald-200 rounded-xl text-xs font-bold gap-1.5 transition shadow-2xs flex-shrink-0">
             <i data-lucide="download" class="w-3.5 h-3.5"></i>
             <span class="hidden sm:inline">Pasang App</span>
           </button>
 
           <!-- Status Akun Aktif -->
-          <div id="userProfileArea" class="hidden items-center gap-1 sm:gap-1.5 h-8 sm:h-9 bg-slate-50 hover:bg-slate-100/80 pl-1.5 pr-1 sm:px-2 rounded-xl border border-slate-200 shadow-2xs transition flex-shrink-0">
+          <div id="userProfileArea" class="hidden flex items-center gap-2 h-9 sm:h-10 bg-slate-50 dark:bg-dark-surface-container-high hover:bg-slate-100/80 px-2 sm:px-2.5 rounded-xl border border-slate-200 dark:border-dark-outline-variant shadow-2xs transition flex-shrink-0">
             <div id="userAvatar" class="w-6 h-6 sm:w-7 sm:h-7 rounded-lg bg-gradient-to-tr from-blue-600 to-indigo-600 text-white flex items-center justify-center text-[11px] sm:text-xs font-black shadow-xs flex-shrink-0">
               U
             </div>
-            <div class="text-left hidden lg:block max-w-[120px]">
-              <div id="userName" class="text-xs font-extrabold text-slate-800 leading-tight truncate">Nama Pengguna</div>
-              <div id="userRoleBadge" class="text-[9px] text-indigo-600 font-bold truncate">Peran</div>
+            <div class="text-left hidden lg:flex lg:flex-col lg:justify-center max-w-[140px] xl:max-w-[180px] min-w-0">
+              <div id="userName" class="text-xs font-extrabold text-slate-800 dark:text-slate-100 leading-tight truncate">Nama Pengguna</div>
+              <div id="userRoleBadge" class="text-[10px] text-indigo-600 dark:text-dark-primary font-bold leading-tight truncate">Peran</div>
             </div>
-            <button onclick="logoutSession()" title="Keluar Akun" class="text-slate-400 hover:text-rose-600 hover:bg-rose-50 p-1 rounded-lg transition cursor-pointer">
+            <button onclick="logoutSession()" title="Keluar Akun" class="text-slate-400 hover:text-rose-600 hover:bg-rose-50 dark:hover:bg-rose-950/50 p-1 rounded-lg transition cursor-pointer flex-shrink-0">
               <i data-lucide="log-out" class="w-3.5 h-3.5"></i>
             </button>
           </div>
@@ -274,216 +420,238 @@
   <main class="flex-1 max-w-7xl w-full mx-auto p-4 sm:p-6 lg:p-8">
 
     <!-- ========================================================================= -->
-    <!-- VIEW 1: BERANDA PUBLIK / LANDING PAGE (SEBELUM LOGIN) -->
+    <!-- VIEW 1: BERANDA PUBLIK / LANDING PAGE (DESAIN STITCH AI: AKADEMIKA TERPADU) -->
     <!-- ========================================================================= -->
     <section id="viewLanding" class="space-y-6">
-      
-      <!-- Hero Banner Kop Resmi Sekolah Digital (Modern, Rata Tengah & Sejajar di Semua Mode Web/Browser) -->
-      <div class="relative overflow-hidden rounded-3xl bg-gradient-to-br from-slate-950 via-slate-900 to-indigo-950 p-5 sm:p-7 md:p-8 text-white shadow-2xl border border-white/10">
-        <!-- High-Tech Ambient Glow Mesh & Cyber Accent -->
-        <div class="absolute -top-24 -left-24 w-80 h-80 bg-blue-600/20 rounded-full blur-3xl pointer-events-none"></div>
-        <div class="absolute -bottom-24 -right-24 w-80 h-80 bg-indigo-600/20 rounded-full blur-3xl pointer-events-none"></div>
-        <div class="absolute inset-0 bg-[radial-gradient(#38bdf8_1px,transparent_1px)] [background-size:24px_24px] opacity-10 pointer-events-none"></div>
-        
-        <!-- Header Grid: Simetris, Rata Tengah & Sejajar Satu Sama Lain di Web Maupun Browser Mobile -->
-        <div class="relative z-10 flex items-center justify-between gap-3 sm:gap-6 w-full">
-          
-          <!-- Logo Kiri: Pemda / Tut Wuri Handayani -->
-          <div class="w-12 h-12 sm:w-16 sm:h-16 md:w-20 md:h-20 rounded-xl sm:rounded-2xl bg-white/10 backdrop-blur-md p-1.5 sm:p-2 flex items-center justify-center border border-white/20 shadow-xl shadow-black/20 flex-shrink-0 group hover:scale-105 transition">
-            <img id="landingLogoPemda" src="https://upload.wikimedia.org/wikipedia/commons/thumb/b/be/Coat_of_arms_of_Indonesia.svg/200px-Coat_of_arms_of_Indonesia.svg.png" alt="Logo Pemda" class="max-w-full max-h-full object-contain filter drop-shadow">
-          </div>
 
-          <!-- Teks Identitas Resmi Sekolah: Rata Tengah Penuh di Semua Mode & Tampil Maksimal -->
-          <div class="text-center flex-1 min-w-0 px-1 sm:px-4">
-            <div class="inline-flex items-center justify-center gap-1.5 px-2.5 py-0.5 sm:px-3 sm:py-1 rounded-full bg-cyan-500/10 border border-cyan-400/30 text-cyan-300 text-[9px] sm:text-xs font-extrabold tracking-wider uppercase mb-1 sm:mb-2 backdrop-blur-md mx-auto max-w-full">
-              <span class="w-1.5 h-1.5 sm:w-2 sm:h-2 rounded-full bg-cyan-400 animate-pulse flex-shrink-0"></span>
-              <span id="landingInstansi" class="break-words">PEMERINTAH KOTA / KABUPATEN - DINAS PENDIDIKAN</span>
-            </div>
-            <h2 id="landingSchoolTitle" class="text-base sm:text-2xl md:text-3xl lg:text-4xl font-black text-transparent bg-clip-text bg-gradient-to-r from-white via-slate-100 to-cyan-200 tracking-tight leading-snug sm:leading-tight text-center mx-auto break-words">
-              SMP NEGERI 1 INDONESIA HEBAT
-            </h2>
-            <div class="flex items-center justify-center gap-1.5 sm:gap-2 mt-1 sm:mt-2 text-[10px] sm:text-xs md:text-sm text-slate-300 text-center mx-auto max-w-2xl px-1">
-              <span class="w-4 h-4 sm:w-5 sm:h-5 rounded-md sm:rounded-lg bg-white/10 flex items-center justify-center text-cyan-400 flex-shrink-0">
-                <i data-lucide="map-pin" class="w-2.5 h-2.5 sm:w-3.5 sm:h-3.5"></i>
-              </span>
-              <span id="landingAlamat" class="break-words leading-relaxed text-slate-200">Jl. Pendidikan Karakter No. 07, Kota Cerdas</span>
-            </div>
-          </div>
+      <!-- Grid 2 Kolom Seimbang (Kiri: Identitas Sekolah & 4 Portal | Kanan: Pintu Masuk Terpadu) -->
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
 
-          <!-- Logo Kanan: Sekolah (Sejajar dan Simetris di Web Maupun Browser Mobile) -->
-          <div class="w-12 h-12 sm:w-16 sm:h-16 md:w-20 md:h-20 rounded-xl sm:rounded-2xl bg-white/10 backdrop-blur-md p-1.5 sm:p-2 flex items-center justify-center border border-white/20 shadow-xl shadow-black/20 flex-shrink-0 group hover:scale-105 transition">
-            <img id="landingLogoSekolah" src="https://upload.wikimedia.org/wikipedia/commons/thumb/9/9c/Logo_of_Ministry_of_Education_and_Culture_of_Republic_of_Indonesia.svg/200px-Logo_of_Ministry_of_Education_and_Culture_of_Republic_of_Indonesia.svg.png" alt="Logo Sekolah" class="max-w-full max-h-full object-contain filter drop-shadow">
-          </div>
+        <!-- KOLOM KIRI (7/12): IDENTITAS SEKOLAH EDIT MANDIRI + RINGKASAN EKOSISTEM -->
+        <div class="lg:col-span-7 space-y-5">
 
-        </div>
-
-        <!-- Widget Countdown Kelulusan (Kondisional jika aktif) -->
-        <div id="landingGraduationWidget" class="mt-6 pt-6 border-t border-white/10 hidden">
-          <div class="bg-white/10 backdrop-blur-md rounded-2xl p-4 sm:p-5 flex flex-col md:flex-row items-center justify-between gap-4 border border-white/10">
-            <div class="flex items-center gap-3.5 text-center md:text-left">
-              <div class="w-12 h-12 rounded-2xl bg-gradient-to-tr from-amber-500 to-amber-400 text-slate-950 flex items-center justify-center font-black shadow-lg shadow-amber-500/30 flex-shrink-0">
-                <i data-lucide="graduation-cap" class="w-6 h-6"></i>
+          <!-- =================================================================== -->
+          <!-- [EDIT MANDIRI IDENTITAS SEKOLAH - HALAMAN AWAL]                     -->
+          <!-- Ubah src Logo Pemda, Instansi, Nama Sekolah, Alamat, dan Logo       -->
+          <!-- Sekolah di bawah ini sesuai profil sekolah Anda.                    -->
+          <!-- PENTING: Jangan ubah atribut id="..." agar tetap sinkron.           -->
+          <!-- =================================================================== -->
+          <div class="bg-white dark:bg-dark-surface-container-low rounded-3xl p-5 sm:p-6 border border-light-outline-variant/60 dark:border-dark-outline-variant shadow-sm space-y-5">
+            <!-- Header Dual-Logo & Identitas Sekolah -->
+            <div class="flex items-center justify-between gap-3 sm:gap-4 pb-5 border-b border-slate-100 dark:border-dark-outline-variant">
+              <!-- Logo Kiri: Pemda / Tut Wuri Handayani -->
+              <div class="w-12 h-12 sm:w-16 sm:h-16 rounded-2xl bg-light-surface-container-low dark:bg-dark-surface-container-high p-2 flex items-center justify-center border border-light-outline-variant/60 dark:border-dark-outline-variant flex-shrink-0">
+                <img id="landingLogoPemda" src="https://upload.wikimedia.org/wikipedia/commons/thumb/b/be/Coat_of_arms_of_Indonesia.svg/200px-Coat_of_arms_of_Indonesia.svg.png" alt="Logo Pemda" class="max-w-full max-h-full object-contain">
               </div>
-              <div>
-                <h4 class="font-extrabold text-sm sm:text-base text-white">Hitung Mundur Pengumuman Kelulusan Kelas 9</h4>
-                <p class="text-xs text-blue-200 mt-0.5">Surat Keterangan Lulus (SKL) Resmi akan dibuka serentak:</p>
+
+              <!-- Teks Identitas Sekolah -->
+              <div class="flex-1 min-w-0">
+                <p id="landingInstansi" class="text-[10px] sm:text-xs font-bold tracking-wider uppercase text-light-primary dark:text-dark-primary break-words">
+                  PEMERINTAH KOTA / KABUPATEN - DINAS PENDIDIKAN
+                </p>
+                <h2 id="landingSchoolTitle" class="text-lg sm:text-2xl font-extrabold text-slate-900 dark:text-dark-on-surface tracking-tight leading-snug break-words mt-0.5">
+                  SMP NEGERI 1 INDONESIA HEBAT
+                </h2>
+                <div class="flex items-center gap-1.5 mt-1 text-xs text-slate-500 dark:text-dark-on-surface-variant">
+                  <i data-lucide="map-pin" class="w-3.5 h-3.5 text-light-primary dark:text-dark-primary flex-shrink-0"></i>
+                  <span id="landingAlamat" class="break-words">Jl. Pendidikan Karakter No. 07, Kota Cerdas</span>
+                </div>
+              </div>
+
+              <!-- Logo Kanan: Sekolah -->
+              <div class="w-12 h-12 sm:w-16 sm:h-16 rounded-2xl bg-light-surface-container-low dark:bg-dark-surface-container-high p-2 flex items-center justify-center border border-light-outline-variant/60 dark:border-dark-outline-variant flex-shrink-0">
+                <img id="landingLogoSekolah" src="https://upload.wikimedia.org/wikipedia/commons/thumb/9/9c/Logo_of_Ministry_of_Education_and_Culture_of_Republic_of_Indonesia.svg/200px-Logo_of_Ministry_of_Education_and_Culture_of_Republic_of_Indonesia.svg.png" alt="Logo Sekolah" class="max-w-full max-h-full object-contain">
               </div>
             </div>
-            <div id="countdownBox" class="flex items-center gap-2 font-mono text-center">
-              <div class="bg-slate-950/80 px-3.5 py-2 rounded-xl border border-white/15 shadow-inner"><span id="cdDays" class="text-lg sm:text-xl font-black text-amber-400">00</span><p class="text-[9px] font-bold text-slate-400 tracking-wider">HARI</p></div>
-              <div class="bg-slate-950/80 px-3.5 py-2 rounded-xl border border-white/15 shadow-inner"><span id="cdHours" class="text-lg sm:text-xl font-black text-amber-400">00</span><p class="text-[9px] font-bold text-slate-400 tracking-wider">JAM</p></div>
-              <div class="bg-slate-950/80 px-3.5 py-2 rounded-xl border border-white/15 shadow-inner"><span id="cdMins" class="text-lg sm:text-xl font-black text-amber-400">00</span><p class="text-[9px] font-bold text-slate-400 tracking-wider">MENIT</p></div>
-              <div class="bg-slate-950/80 px-3.5 py-2 rounded-xl border border-white/15 shadow-inner"><span id="cdSecs" class="text-lg sm:text-xl font-black text-amber-400">00</span><p class="text-[9px] font-bold text-slate-400 tracking-wider">DETIK</p></div>
+            <!-- =================================================================== -->
+            <!-- [AKHIR BLOK EDIT MANDIRI IDENTITAS SEKOLAH]                         -->
+            <!-- =================================================================== -->
+
+            <!-- Intro Satu Pintu -->
+            <div class="space-y-2">
+              <h3 class="text-base sm:text-lg font-extrabold text-slate-900 dark:text-dark-on-surface">
+                Satu Pintu untuk Seluruh Ekosistem Sekolah
+              </h3>
+              <p class="text-xs sm:text-sm text-slate-600 dark:text-dark-on-surface-variant leading-relaxed">
+                Masuk sekali menggunakan NISN, NIP, atau ID Admin untuk mengakses presensi KBM, jurnal mengajar 4F, nilai topik, bimbingan konseling, tata tertib, ekstrakurikuler, dan laporan kepala sekolah secara real-time.
+              </p>
             </div>
-          </div>
-        </div>
 
-      </div>
-
-      <!-- Status Koneksi Database Google Spreadsheet (High-Tech Bar) -->
-      <div id="landingEnvStatusBar" class="flex flex-col sm:flex-row items-center justify-between gap-3 bg-gradient-to-r from-slate-900 via-slate-800 to-indigo-950 rounded-2xl p-4 text-white shadow-lg border border-slate-700/60 backdrop-blur-md">
-        <div class="flex items-center gap-3">
-          <div id="landingStatusIconCircle" class="w-10 h-10 rounded-xl bg-emerald-500/20 text-emerald-400 flex items-center justify-center flex-shrink-0 border border-emerald-500/30">
-            <i data-lucide="database" class="w-5 h-5"></i>
-          </div>
-          <div>
-            <div class="flex items-center gap-2">
-              <span class="text-xs font-bold text-slate-200">Sistem Database Terintegrasi:</span>
-              <span id="landingEnvBadge"></span>
-            </div>
-            <p id="landingStatusDesc" class="text-[11px] text-slate-400 mt-0.5">Memuat status koneksi Google Spreadsheet...</p>
-          </div>
-        </div>
-        <button type="button" onclick="openModalSetelBackend(event)" class="w-full sm:w-auto px-4 py-2 bg-white/10 hover:bg-white/20 text-white font-bold rounded-xl text-xs transition flex items-center justify-center gap-1.5 border border-white/20 cursor-pointer backdrop-blur-sm">
-          <i data-lucide="lock" class="w-3.5 h-3.5 text-amber-400"></i>
-          <span>Kelola Koneksi (Khusus Admin)</span>
-        </button>
-      </div>
-
-      <!-- Banner Khusus Pasang di HP Android (Siswa & Ortu) -->
-      <div id="landingPwaInstallCard" class="relative overflow-hidden rounded-3xl bg-gradient-to-r from-slate-900 via-indigo-950 to-blue-950 p-5 sm:p-6 text-white shadow-xl border border-indigo-500/30 flex flex-col sm:flex-row items-center justify-between gap-5 group">
-        <!-- Tech glowing accents -->
-        <div class="absolute -top-12 -right-12 w-48 h-48 bg-indigo-500/15 rounded-full blur-2xl pointer-events-none group-hover:bg-indigo-500/25 transition-all"></div>
-        <div class="relative z-10 flex items-center gap-4 text-left w-full sm:w-auto">
-          <div class="w-14 h-14 rounded-2xl bg-white/10 backdrop-blur-md flex items-center justify-center flex-shrink-0 border border-white/20 shadow-inner group-hover:scale-105 transition duration-300">
-            <img src="icons/icon-192.png" alt="SuperApp" class="w-10 h-10 rounded-xl object-contain shadow-sm">
-          </div>
-          <div>
-            <div class="flex items-center gap-2">
-              <span class="px-2.5 py-0.5 bg-gradient-to-r from-amber-400 to-amber-300 text-slate-950 rounded-full text-[10px] font-black uppercase tracking-wider shadow-sm">Aplikasi Android Resmi</span>
-              <span class="text-xs text-indigo-200 font-semibold hidden sm:inline">- Bebas Kuota & Ringan</span>
-            </div>
-            <h3 class="text-base sm:text-lg font-black text-white mt-1 leading-tight tracking-tight">Pasang Super App di Layar Utama HP</h3>
-            <p class="text-xs text-slate-300 mt-0.5 leading-relaxed">Akses cepat satu klik langsung ke profil, jurnal harian, & presensi tanpa repot membuka browser.</p>
-          </div>
-        </div>
-        <button type="button" onclick="triggerPwaInstall()" class="relative z-10 w-full sm:w-auto px-6 py-3.5 bg-gradient-to-r from-white to-slate-100 hover:from-white hover:to-indigo-50 text-slate-950 font-black rounded-2xl text-xs shadow-xl shadow-black/20 hover:shadow-cyan-400/20 transition-all transform active:scale-95 flex items-center justify-center gap-2 cursor-pointer flex-shrink-0 border border-white">
-          <i data-lucide="download" class="w-4 h-4 text-indigo-700 stroke-[2.5]"></i>
-          <span>Pasang di HP Sekarang</span>
-        </button>
-      </div>
-
-      <!-- PINTU MASUK TERPADU OTOMATIS (1 FORM LOGIN DENGAN DETEKSI LEVEL PENGGUNA) -->
-      <div class="max-w-xl mx-auto w-full">
-        <div class="bg-white rounded-3xl border border-slate-200/90 shadow-2xl shadow-indigo-500/10 hover:shadow-indigo-500/15 transition-all duration-300 relative overflow-hidden group">
-          <!-- Cyber Top Glow Line -->
-          <div class="h-2 w-full bg-gradient-to-r from-cyan-500 via-indigo-600 to-amber-500"></div>
-          <!-- Ambient Glow Spot -->
-          <div class="absolute -top-12 -right-12 w-44 h-44 bg-indigo-500/10 rounded-full blur-3xl pointer-events-none"></div>
-
-          <div class="p-6 sm:p-8 relative z-10 space-y-6">
-            <!-- Header Single Door -->
-            <div class="flex items-center justify-between pb-3 border-b border-slate-100">
-              <div class="flex items-center gap-3">
-                <div class="w-12 h-12 rounded-2xl bg-gradient-to-tr from-indigo-600 via-blue-600 to-cyan-500 text-white flex items-center justify-center shadow-lg shadow-indigo-600/25">
-                  <i data-lucide="shield-check" class="w-6 h-6"></i>
+            <!-- Grid 2x2 Ringkasan 4 Portal -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              <div class="p-3.5 rounded-2xl bg-light-surface-container-low dark:bg-dark-surface-container border border-slate-200/80 dark:border-dark-outline-variant flex items-start gap-3">
+                <div class="w-9 h-9 rounded-xl bg-indigo-100 dark:bg-indigo-900/40 text-indigo-700 dark:text-indigo-300 flex items-center justify-center flex-shrink-0">
+                  <i data-lucide="briefcase" class="w-4 h-4"></i>
                 </div>
                 <div>
-                  <h3 class="text-xl sm:text-2xl font-black text-slate-900 tracking-tight">Pintu Masuk Terpadu</h3>
-                  <p class="text-xs text-slate-500">Satu gerbang masuk cerdas untuk seluruh civitas sekolah</p>
+                  <h4 class="font-bold text-xs text-slate-900 dark:text-dark-on-surface">Portal Guru, Pelatih &amp; BK</h4>
+                  <p class="text-[11px] text-slate-500 dark:text-dark-on-surface-variant mt-0.5 leading-snug">Presensi KBM, jurnal 4F, nilai topik, konseling, &amp; pembinaan.</p>
                 </div>
               </div>
-              <span id="badgeLoginStatusIndicator" class="inline-flex items-center gap-1.5 px-3 py-1 bg-emerald-50 text-emerald-700 border border-emerald-200/60 rounded-full text-[11px] font-bold">
-                <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
-                <span>Auto-Detect Level</span>
-              </span>
+
+              <div class="p-3.5 rounded-2xl bg-light-surface-container-low dark:bg-dark-surface-container border border-slate-200/80 dark:border-dark-outline-variant flex items-start gap-3">
+                <div class="w-9 h-9 rounded-xl bg-sky-100 dark:bg-sky-900/40 text-sky-700 dark:text-sky-300 flex items-center justify-center flex-shrink-0">
+                  <i data-lucide="graduation-cap" class="w-4 h-4"></i>
+                </div>
+                <div>
+                  <h4 class="font-bold text-xs text-slate-900 dark:text-dark-on-surface">Portal Siswa &amp; Orang Tua</h4>
+                  <p class="text-[11px] text-slate-500 dark:text-dark-on-surface-variant mt-0.5 leading-snug">Jurnal 7 kebiasaan, nilai ulangan, ekskul, &amp; buku saku.</p>
+                </div>
+              </div>
+
+              <div class="p-3.5 rounded-2xl bg-light-surface-container-low dark:bg-dark-surface-container border border-slate-200/80 dark:border-dark-outline-variant flex items-start gap-3">
+                <div class="w-9 h-9 rounded-xl bg-emerald-100 dark:bg-emerald-900/40 text-emerald-700 dark:text-emerald-300 flex items-center justify-center flex-shrink-0">
+                  <i data-lucide="landmark" class="w-4 h-4"></i>
+                </div>
+                <div>
+                  <h4 class="font-bold text-xs text-slate-900 dark:text-dark-on-surface">Kepala Sekolah</h4>
+                  <p class="text-[11px] text-slate-500 dark:text-dark-on-surface-variant mt-0.5 leading-snug">Ringkasan eksekutif, pengawasan mutu, &amp; kelulusan.</p>
+                </div>
+              </div>
+
+              <div class="p-3.5 rounded-2xl bg-light-surface-container-low dark:bg-dark-surface-container border border-slate-200/80 dark:border-dark-outline-variant flex items-start gap-3">
+                <div class="w-9 h-9 rounded-xl bg-purple-100 dark:bg-purple-900/40 text-purple-700 dark:text-purple-300 flex items-center justify-center flex-shrink-0">
+                  <i data-lucide="shield" class="w-4 h-4"></i>
+                </div>
+                <div>
+                  <h4 class="font-bold text-xs text-slate-900 dark:text-dark-on-surface">Administrator Sistem</h4>
+                  <p class="text-[11px] text-slate-500 dark:text-dark-on-surface-variant mt-0.5 leading-snug">Sinkronisasi data induk, penugasan peran, &amp; konfigurasi.</p>
+                </div>
+              </div>
             </div>
 
-            <!-- Single Form -->
-            <form id="formLoginUnified" onsubmit="handleLoginUnified(event)" class="space-y-4">
-              <!-- Field 1: User ID -->
-              <div>
-                <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5 flex items-center justify-between">
-                  <span>ID Pengguna / Akun</span>
-                  <span class="text-[10px] text-indigo-600 font-semibold lowercase">NISN / NIP / Username / ADMIN</span>
-                </label>
-                <div class="relative">
-                  <input type="text" id="inputLoginUnifiedId" oninput="detectUserLevelLive()" required placeholder="Masukkan NISN Siswa, NIP Guru/Kepsek, ID Pelatih, atau ADMIN" autocomplete="username" class="w-full pl-11 pr-4 py-3.5 bg-slate-50 border border-slate-200 rounded-2xl text-sm font-semibold text-slate-900 focus:bg-white focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/15 focus:outline-none transition">
-                  <i data-lucide="user" class="w-5 h-5 text-slate-400 absolute left-3.5 top-3.5 group-focus-within:text-indigo-600 transition"></i>
+            <!-- Widget Countdown Kelulusan (Kondisional jika aktif) -->
+            <div id="landingGraduationWidget" class="pt-4 border-t border-slate-100 dark:border-dark-outline-variant hidden">
+              <div class="bg-amber-50 dark:bg-amber-950/30 rounded-2xl p-4 flex flex-col sm:flex-row items-center justify-between gap-4 border border-amber-200 dark:border-amber-800/50">
+                <div class="flex items-center gap-3 text-center sm:text-left">
+                  <div class="w-10 h-10 rounded-xl bg-amber-500 text-slate-950 flex items-center justify-center font-black flex-shrink-0">
+                    <i data-lucide="graduation-cap" class="w-5 h-5"></i>
+                  </div>
+                  <div>
+                    <h4 class="font-extrabold text-xs sm:text-sm text-slate-900 dark:text-dark-on-surface">Hitung Mundur Pengumuman Kelulusan Kelas 9</h4>
+                    <p class="text-[11px] text-slate-600 dark:text-dark-on-surface-variant">Surat Keterangan Lulus (SKL) Resmi dibuka serentak:</p>
+                  </div>
                 </div>
-
-                <!-- Live Auto-Detection Pill -->
-                <div id="boxDetectedRole" class="mt-2 p-2.5 rounded-xl bg-slate-50 border border-slate-200 text-xs transition flex items-center gap-2">
-                  <i id="iconDetectedRole" data-lucide="sparkles" class="w-4 h-4 text-indigo-500 flex-shrink-0"></i>
-                  <span id="textDetectedRole" class="text-slate-500 font-medium">Ketik ID Pengguna di atas untuk deteksi level otomatis...</span>
-                </div>
-              </div>
-
-              <!-- Field 2: PIN / Kata Sandi -->
-              <div>
-                <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5 flex items-center justify-between">
-                  <span>PIN / Kata Sandi</span>
-                  <span class="text-[10px] text-slate-400 font-normal">Siswa: 4 digit akhir NISN | Guru: 1234</span>
-                </label>
-                <div class="relative">
-                  <input type="password" id="inputLoginUnifiedPin" placeholder="Masukkan PIN / Kata Sandi" autocomplete="current-password" class="w-full pl-11 pr-11 py-3.5 bg-slate-50 border border-slate-200 rounded-2xl text-sm font-semibold text-slate-900 focus:bg-white focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/15 focus:outline-none transition">
-                  <i data-lucide="lock" class="w-5 h-5 text-slate-400 absolute left-3.5 top-3.5 group-focus-within:text-indigo-600 transition"></i>
-                  <button type="button" onclick="togglePasswordVisibility('inputLoginUnifiedPin', this)" class="absolute right-3.5 top-3.5 text-slate-400 hover:text-slate-600 focus:outline-none cursor-pointer">
-                    <i data-lucide="eye" class="w-5 h-5"></i>
-                  </button>
+                <div id="countdownBox" class="flex items-center gap-1.5 font-mono text-center">
+                  <div class="bg-white dark:bg-dark-surface-container-high px-2.5 py-1.5 rounded-xl border border-amber-200 dark:border-dark-outline-variant"><span id="cdDays" class="text-sm sm:text-base font-black text-amber-600 dark:text-amber-400">00</span><p class="text-[9px] font-bold text-slate-400">HARI</p></div>
+                  <div class="bg-white dark:bg-dark-surface-container-high px-2.5 py-1.5 rounded-xl border border-amber-200 dark:border-dark-outline-variant"><span id="cdHours" class="text-sm sm:text-base font-black text-amber-600 dark:text-amber-400">00</span><p class="text-[9px] font-bold text-slate-400">JAM</p></div>
+                  <div class="bg-white dark:bg-dark-surface-container-high px-2.5 py-1.5 rounded-xl border border-amber-200 dark:border-dark-outline-variant"><span id="cdMins" class="text-sm sm:text-base font-black text-amber-600 dark:text-amber-400">00</span><p class="text-[9px] font-bold text-slate-400">MENIT</p></div>
+                  <div class="bg-white dark:bg-dark-surface-container-high px-2.5 py-1.5 rounded-xl border border-amber-200 dark:border-dark-outline-variant"><span id="cdSecs" class="text-sm sm:text-base font-black text-amber-600 dark:text-amber-400">00</span><p class="text-[9px] font-bold text-slate-400">DETIK</p></div>
                 </div>
               </div>
+            </div>
+          </div>
 
-              <!-- Submit Button -->
-              <button type="submit" id="btnSubmitLoginUnified" class="w-full py-4 bg-gradient-to-r from-indigo-600 via-blue-600 to-indigo-800 hover:from-indigo-500 hover:via-blue-500 hover:to-indigo-700 text-white font-extrabold rounded-2xl shadow-xl shadow-indigo-600/25 hover:shadow-indigo-600/35 transition-all transform active:scale-[0.99] flex items-center justify-center gap-2.5 cursor-pointer mt-3 text-sm">
-                <span>Masuk ke Aplikasi</span>
-                <i data-lucide="arrow-right" class="w-4 h-4"></i>
+          <!-- Status Koneksi Database & Banner PWA Ringkas -->
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div id="landingEnvStatusBar" class="flex items-center justify-between gap-3 bg-white dark:bg-dark-surface-container-low rounded-2xl p-4 border border-light-outline-variant/60 dark:border-dark-outline-variant shadow-2xs">
+              <div class="flex items-center gap-3 min-w-0">
+                <div id="landingStatusIconCircle" class="w-9 h-9 rounded-xl bg-emerald-50 dark:bg-emerald-950/40 text-emerald-600 dark:text-emerald-400 flex items-center justify-center flex-shrink-0 border border-emerald-200 dark:border-emerald-800/50">
+                  <i data-lucide="database" class="w-4 h-4"></i>
+                </div>
+                <div class="min-w-0">
+                  <div class="flex items-center gap-1.5 flex-wrap">
+                    <span class="text-xs font-bold text-slate-800 dark:text-dark-on-surface">Database:</span>
+                    <span id="landingEnvBadge"></span>
+                  </div>
+                  <p id="landingStatusDesc" class="text-[11px] text-slate-500 dark:text-dark-on-surface-variant truncate">Memuat status Google Sheets...</p>
+                </div>
+              </div>
+              <button type="button" onclick="openModalSetelBackend(event)" title="Kelola Koneksi (Khusus Admin)" class="p-2 bg-slate-100 dark:bg-dark-surface-container-high hover:bg-slate-200 rounded-xl text-xs font-bold transition cursor-pointer flex-shrink-0">
+                <i data-lucide="settings" class="w-4 h-4 text-slate-600 dark:text-slate-300"></i>
               </button>
-            </form>
-
-            <!-- Compatibility Hidden Inputs -->
-            <div class="hidden">
-              <input type="text" id="inputNisnSiswa">
-              <input type="password" id="inputPinSiswa">
-              <input type="text" id="inputNipGuru">
-              <input type="password" id="inputPinGuru">
-              <input type="text" id="inputNipKepsek">
-              <input type="password" id="inputPinKepsek">
             </div>
 
-            <!-- Ringkasan Hak Akses Otomatis -->
-            <div class="pt-2 border-t border-slate-100 grid grid-cols-2 sm:grid-cols-4 gap-2 text-center text-[11px]">
-              <div class="p-2 bg-cyan-50/70 border border-cyan-100 rounded-xl text-cyan-800 font-bold">
-                <i data-lucide="graduation-cap" class="w-3.5 h-3.5 mx-auto mb-0.5 text-cyan-600"></i>
-                <span>Siswa</span>
+            <div id="landingPwaInstallCard" class="flex items-center justify-between gap-3 bg-white dark:bg-dark-surface-container-low rounded-2xl p-4 border border-light-outline-variant/60 dark:border-dark-outline-variant shadow-2xs">
+              <div class="flex items-center gap-3 min-w-0">
+                <img src="icons/icon-192.png" alt="SuperApp" class="w-9 h-9 rounded-xl object-contain flex-shrink-0 border border-slate-200 dark:border-dark-outline-variant p-0.5">
+                <div class="min-w-0">
+                  <h4 class="text-xs font-extrabold text-slate-900 dark:text-dark-on-surface truncate">Aplikasi Android / PWA</h4>
+                  <p class="text-[11px] text-slate-500 dark:text-dark-on-surface-variant truncate">Pasang ke layar utama HP</p>
+                </div>
               </div>
-              <div class="p-2 bg-indigo-50/70 border border-indigo-100 rounded-xl text-indigo-800 font-bold">
-                <i data-lucide="briefcase" class="w-3.5 h-3.5 mx-auto mb-0.5 text-indigo-600"></i>
-                <span>Guru & Pelatih</span>
+              <button type="button" onclick="triggerPwaInstall()" class="px-3 py-2 bg-light-primary dark:bg-dark-primary text-white dark:text-dark-on-primary font-bold rounded-xl text-[11px] transition cursor-pointer flex items-center gap-1 flex-shrink-0">
+                <i data-lucide="download" class="w-3.5 h-3.5"></i>
+                <span>Pasang</span>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- KOLOM KANAN (5/12): KARTU LOGIN TERPADU -->
+        <div class="lg:col-span-5 lg:sticky lg:top-24">
+          <div class="bg-white dark:bg-dark-surface-container-low rounded-3xl border border-light-outline-variant/70 dark:border-dark-outline-variant shadow-lg shadow-indigo-950/5 relative overflow-hidden group">
+            <div class="h-1.5 w-full bg-gradient-to-r from-light-primary via-blue-600 to-indigo-500 dark:from-dark-primary dark:to-indigo-400"></div>
+            <div class="p-6 sm:p-7 space-y-5">
+              <!-- Header Single Door -->
+              <div class="flex items-center justify-between pb-3 border-b border-slate-100 dark:border-dark-outline-variant">
+                <div>
+                  <span id="badgeLoginStatusIndicator" class="inline-flex items-center gap-1.5 px-2.5 py-0.5 bg-indigo-50 dark:bg-indigo-950/50 text-light-primary dark:text-dark-primary border border-indigo-200/70 dark:border-indigo-800 rounded-full text-[10px] font-extrabold mb-1.5">
+                    <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
+                    <span>Login Terpadu - Auto-Detect</span>
+                  </span>
+                  <h3 class="text-xl font-black text-slate-900 dark:text-dark-on-surface tracking-tight">Masuk ke Super App</h3>
+                  <p class="text-xs text-slate-500 dark:text-dark-on-surface-variant mt-0.5">Gunakan NISN (Siswa), NIP (Guru), ID Pelatih, atau ADMIN.</p>
+                </div>
               </div>
-              <div class="p-2 bg-emerald-50/70 border border-emerald-100 rounded-xl text-emerald-800 font-bold">
-                <i data-lucide="landmark" class="w-3.5 h-3.5 mx-auto mb-0.5 text-emerald-600"></i>
-                <span>Kepala Sekolah</span>
+
+              <!-- Single Form -->
+              <form id="formLoginUnified" onsubmit="handleLoginUnified(event)" class="space-y-4">
+                <div>
+                  <label class="block text-xs font-bold text-slate-700 dark:text-dark-on-surface-variant mb-1.5 flex items-center justify-between">
+                    <span>ID Pengguna (NISN / NIP / ID)</span>
+                  </label>
+                  <div class="relative">
+                    <input type="text" id="inputLoginUnifiedId" oninput="detectUserLevelLive()" required placeholder="Contoh: 0081234567 atau NIP Guru" autocomplete="username" class="w-full pl-10 pr-4 py-3 bg-light-surface-container-low dark:bg-dark-surface-container-high border border-slate-200 dark:border-dark-outline-variant rounded-xl text-sm font-semibold text-slate-900 dark:text-dark-on-surface focus:bg-white dark:focus:bg-dark-surface-container focus:border-light-primary dark:focus:border-dark-primary focus:outline-none transition">
+                    <i data-lucide="user" class="w-4 h-4 text-slate-400 absolute left-3.5 top-3.5"></i>
+                  </div>
+
+                  <!-- Live Auto-Detection Pill -->
+                  <div id="boxDetectedRole" class="mt-2 p-2.5 rounded-xl bg-light-surface-container-low dark:bg-dark-surface-container border border-slate-200/80 dark:border-dark-outline-variant text-xs transition flex items-center gap-2">
+                    <i id="iconDetectedRole" data-lucide="sparkles" class="w-4 h-4 text-light-primary dark:text-dark-primary flex-shrink-0"></i>
+                    <span id="textDetectedRole" class="text-slate-500 dark:text-dark-on-surface-variant font-medium">Ketik ID Pengguna untuk deteksi level otomatis...</span>
+                  </div>
+                </div>
+
+                <div>
+                  <label class="block text-xs font-bold text-slate-700 dark:text-dark-on-surface-variant mb-1.5 flex items-center justify-between">
+                    <span>PIN / Kata Sandi</span>
+                    <span class="text-[10px] text-slate-400 font-normal">Siswa: 4 digit akhir | Guru: 1234</span>
+                  </label>
+                  <div class="relative">
+                    <input type="password" id="inputLoginUnifiedPin" placeholder="Masukkan PIN atau kata sandi" autocomplete="current-password" class="w-full pl-10 pr-10 py-3 bg-light-surface-container-low dark:bg-dark-surface-container-high border border-slate-200 dark:border-dark-outline-variant rounded-xl text-sm font-semibold text-slate-900 dark:text-dark-on-surface focus:bg-white dark:focus:bg-dark-surface-container focus:border-light-primary dark:focus:border-dark-primary focus:outline-none transition">
+                    <i data-lucide="lock" class="w-4 h-4 text-slate-400 absolute left-3.5 top-3.5"></i>
+                    <button type="button" onclick="togglePasswordVisibility('inputLoginUnifiedPin', this)" class="absolute right-3 top-3 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 focus:outline-none cursor-pointer p-0.5">
+                      <i data-lucide="eye" class="w-4 h-4"></i>
+                    </button>
+                  </div>
+                </div>
+
+                <button type="submit" id="btnSubmitLoginUnified" class="w-full py-3.5 bg-light-primary hover:bg-light-primary-container dark:bg-dark-primary dark:text-dark-on-primary text-white font-extrabold rounded-xl shadow-md shadow-blue-900/15 transition flex items-center justify-center gap-2 cursor-pointer text-sm">
+                  <i data-lucide="log-in" class="w-4 h-4"></i>
+                  <span>Masuk ke Portal</span>
+                </button>
+              </form>
+
+              <!-- Compatibility Hidden Inputs -->
+              <div class="hidden">
+                <input type="text" id="inputNisnSiswa">
+                <input type="password" id="inputPinSiswa">
+                <input type="text" id="inputNipGuru">
+                <input type="password" id="inputPinGuru">
+                <input type="text" id="inputNipKepsek">
+                <input type="password" id="inputPinKepsek">
               </div>
-              <div class="p-2 bg-purple-50/70 border border-purple-100 rounded-xl text-purple-800 font-bold">
-                <i data-lucide="shield" class="w-3.5 h-3.5 mx-auto mb-0.5 text-purple-600"></i>
-                <span>Administrator</span>
+
+              <div class="pt-3 border-t border-slate-100 dark:border-dark-outline-variant flex items-center justify-between text-[11px] text-slate-500 dark:text-dark-on-surface-variant">
+                <span>Lupa PIN akses? Hubungi Operator Sekolah.</span>
+                <span class="font-mono font-bold text-emerald-600 dark:text-emerald-400">Akademika Terpadu</span>
               </div>
             </div>
           </div>
         </div>
-      </div>
 
+      </div>
       <!-- Showcase 6 Layanan Super App Canggih -->
       <div class="pt-6">
         <div class="text-center max-w-xl mx-auto mb-8">
@@ -579,7 +747,7 @@
       
       <!-- Kartu Profil & Sambutan Siswa -->
       <div class="bg-gradient-to-r from-blue-700 via-indigo-700 to-cyan-600 rounded-3xl p-6 text-white shadow-lg relative overflow-hidden">
-        <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 relative z-10">
+        <div class="flex flex-col sm:flex-row flex-wrap items-start sm:items-center justify-between gap-4 relative z-10">
           <div class="flex items-center gap-4">
             <div class="w-14 h-14 rounded-2xl bg-white/20 backdrop-blur-md flex items-center justify-center text-2xl font-bold shadow-inner">
               
@@ -616,27 +784,44 @@
           </div>
         </div>
       </div>
-      </div>
 
-      <!-- Navigasi Tab Khusus Siswa (Mobile Friendly) -->
-      <div class="flex items-center gap-2 overflow-x-auto pb-2 custom-scrollbar">
-        <button onclick="switchTabSiswa('beranda')" id="tabBtnSiswa_beranda" class="tab-siswa-btn px-4 py-2 bg-blue-700 text-white font-bold rounded-xl text-xs whitespace-nowrap shadow-xs">Beranda Siswa</button>
-        <button onclick="switchTabSiswa('kebiasaan')" id="tabBtnSiswa_kebiasaan" class="tab-siswa-btn px-4 py-2 bg-white text-slate-600 hover:bg-slate-100 font-semibold rounded-xl text-xs whitespace-nowrap border border-slate-200">7 Kebiasaan</button>
-        <button onclick="switchTabSiswa('presensi')" id="tabBtnSiswa_presensi" class="tab-siswa-btn px-4 py-2 bg-white text-slate-600 hover:bg-slate-100 font-semibold rounded-xl text-xs whitespace-nowrap border border-slate-200">Presensi Harian</button>
-        <button onclick="switchTabSiswa('ekskul')" id="tabBtnSiswa_ekskul" class="tab-siswa-btn px-4 py-2 bg-white text-slate-600 hover:bg-slate-100 font-semibold rounded-xl text-xs whitespace-nowrap border border-slate-200">Ekstrakurikuler Saya</button>
-        <button onclick="switchTabSiswa('nilai')" id="tabBtnSiswa_nilai" class="tab-siswa-btn px-4 py-2 bg-white text-slate-600 hover:bg-slate-100 font-semibold rounded-xl text-xs whitespace-nowrap border border-slate-200">Nilai Ulangan</button>
-        <button onclick="switchTabSiswa('kelulusan')" id="tabBtnSiswa_kelulusan" class="tab-siswa-btn px-4 py-2 bg-white text-slate-600 hover:bg-slate-100 font-semibold rounded-xl text-xs whitespace-nowrap border border-slate-200">Kelulusan (Kelas 9)</button>
-        <button onclick="switchTabSiswa('tatatertib')" id="tabBtnSiswa_tatatertib" class="tab-siswa-btn px-4 py-2 bg-white text-slate-600 hover:bg-slate-100 font-semibold rounded-xl text-xs whitespace-nowrap border border-slate-200"> Buku Saku Disiplin</button>
-        <button onclick="switchTabSiswa('pengumuman')" id="tabBtnSiswa_pengumuman" class="tab-siswa-btn px-4 py-2 bg-white text-slate-600 hover:bg-slate-100 font-semibold rounded-xl text-xs whitespace-nowrap border border-slate-200">Pengumuman</button>
-        <button onclick="switchTabSiswa('profil')" id="tabBtnSiswa_profil" class="tab-siswa-btn px-4 py-2 bg-white text-slate-600 hover:bg-slate-100 font-semibold rounded-xl text-xs whitespace-nowrap border border-slate-200">Profil Saya</button>
-      </div>
+      <!-- SHELL PORTAL SISWA: SIDEBAR KIRI (DESKTOP) + KONTEN UTAMA -->
+      <div class="flex flex-col lg:flex-row gap-6 items-start">
+        <aside class="hidden lg:flex lg:flex-col w-64 flex-shrink-0 bg-white dark:bg-dark-surface-container-low rounded-2xl border border-light-outline-variant/60 dark:border-dark-outline-variant p-3.5 space-y-4 sticky top-20 shadow-2xs">
+          <div>
+            <p class="px-3 text-[10px] font-extrabold uppercase tracking-wider text-slate-400 mb-1.5">Utama</p>
+            <div class="space-y-1">
+              <button onclick="switchTabSiswa('beranda')" id="tabBtnSiswa_beranda" class="tab-siswa-btn w-full text-left px-3 py-2 bg-blue-700 text-white font-bold rounded-xl text-xs flex items-center gap-2.5 transition cursor-pointer"><i data-lucide="layout-dashboard" class="w-4 h-4 flex-shrink-0"></i><span>Beranda Siswa</span></button>
+              <button onclick="switchTabSiswa('pengumuman')" id="tabBtnSiswa_pengumuman" class="tab-siswa-btn w-full text-left px-3 py-2 bg-white text-slate-600 hover:bg-slate-100 font-semibold rounded-xl text-xs border border-transparent flex items-center gap-2.5 transition cursor-pointer"><i data-lucide="megaphone" class="w-4 h-4 flex-shrink-0"></i><span>Pengumuman</span></button>
+              <button onclick="switchTabSiswa('profil')" id="tabBtnSiswa_profil" class="tab-siswa-btn w-full text-left px-3 py-2 bg-white text-slate-600 hover:bg-slate-100 font-semibold rounded-xl text-xs border border-transparent flex items-center gap-2.5 transition cursor-pointer"><i data-lucide="user-circle" class="w-4 h-4 flex-shrink-0"></i><span>Profil Saya</span></button>
+            </div>
+          </div>
+          <div>
+            <p class="px-3 text-[10px] font-extrabold uppercase tracking-wider text-slate-400 mb-1.5">Akademik &amp; Harian</p>
+            <div class="space-y-1">
+              <button onclick="switchTabSiswa('kebiasaan')" id="tabBtnSiswa_kebiasaan" class="tab-siswa-btn w-full text-left px-3 py-2 bg-white text-slate-600 hover:bg-slate-100 font-semibold rounded-xl text-xs border border-transparent flex items-center gap-2.5 transition cursor-pointer"><i data-lucide="sun" class="w-4 h-4 flex-shrink-0"></i><span>7 Kebiasaan</span></button>
+              <button onclick="switchTabSiswa('presensi')" id="tabBtnSiswa_presensi" class="tab-siswa-btn w-full text-left px-3 py-2 bg-white text-slate-600 hover:bg-slate-100 font-semibold rounded-xl text-xs border border-transparent flex items-center gap-2.5 transition cursor-pointer"><i data-lucide="calendar-check" class="w-4 h-4 flex-shrink-0"></i><span>Presensi Harian</span></button>
+              <button onclick="switchTabSiswa('nilai')" id="tabBtnSiswa_nilai" class="tab-siswa-btn w-full text-left px-3 py-2 bg-white text-slate-600 hover:bg-slate-100 font-semibold rounded-xl text-xs border border-transparent flex items-center gap-2.5 transition cursor-pointer"><i data-lucide="award" class="w-4 h-4 flex-shrink-0"></i><span>Nilai Ulangan</span></button>
+            </div>
+          </div>
+          <div>
+            <p class="px-3 text-[10px] font-extrabold uppercase tracking-wider text-slate-400 mb-1.5">Kesiswaan</p>
+            <div class="space-y-1">
+              <button onclick="switchTabSiswa('ekskul')" id="tabBtnSiswa_ekskul" class="tab-siswa-btn w-full text-left px-3 py-2 bg-white text-slate-600 hover:bg-slate-100 font-semibold rounded-xl text-xs border border-transparent flex items-center gap-2.5 transition cursor-pointer"><i data-lucide="trophy" class="w-4 h-4 flex-shrink-0"></i><span>Ekstrakurikuler Saya</span></button>
+              <button onclick="switchTabSiswa('tatatertib')" id="tabBtnSiswa_tatatertib" class="tab-siswa-btn w-full text-left px-3 py-2 bg-white text-slate-600 hover:bg-slate-100 font-semibold rounded-xl text-xs border border-transparent flex items-center gap-2.5 transition cursor-pointer"><i data-lucide="shield-alert" class="w-4 h-4 flex-shrink-0"></i><span>Buku Saku Disiplin</span></button>
+              <button onclick="switchTabSiswa('kelulusan')" id="tabBtnSiswa_kelulusan" class="tab-siswa-btn w-full text-left px-3 py-2 bg-white text-slate-600 hover:bg-slate-100 font-semibold rounded-xl text-xs border border-transparent flex items-center gap-2.5 transition cursor-pointer"><i data-lucide="graduation-cap" class="w-4 h-4 flex-shrink-0"></i><span>Kelulusan (Kelas 9)</span></button>
+            </div>
+          </div>
+        </aside>
+
+        <div class="flex-1 min-w-0 w-full space-y-6">
 
       <!-- KONTEN TAB 1 SISWA: BERANDA SNAPSHOT -->
       <div id="tabContentSiswa_beranda" class="tab-siswa-content space-y-6">
         
         <!-- POINT OF INTEREST: PUSAT PENGUMUMAN & INFORMASI RESMI SEKOLAH (DI BAWAH IDENTITAS USER) -->
         <div class="relative overflow-hidden rounded-3xl p-5 border-2 border-amber-400/60 bg-gradient-to-br from-amber-500/10 via-indigo-500/10 to-teal-500/10 backdrop-blur-md shadow-lg shadow-amber-500/5 space-y-4">
-          <div class="flex flex-col sm:flex-row sm:items-center justify-between pb-3 border-b border-amber-200/50 gap-3">
+          <div class="flex flex-col sm:flex-row flex-wrap sm:items-center justify-between pb-3 border-b border-amber-200/50 gap-3">
             <div class="flex items-center gap-3">
               <div class="relative flex items-center justify-center w-10 h-10 rounded-2xl bg-gradient-to-tr from-amber-500 to-orange-500 text-white shadow-md shadow-amber-500/20">
             <i data-lucide="calendar" class="w-5 h-5 text-amber-700"></i>
@@ -720,7 +905,7 @@
       <!-- KONTEN TAB 2 SISWA: 7 KEBIASAAN -->
       <div id="tabContentSiswa_kebiasaan" class="tab-siswa-content hidden space-y-6">
         <div class="bg-white p-6 rounded-3xl border border-slate-200 shadow-xs">
-          <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between pb-4 border-b border-slate-100 gap-3">
+          <div class="flex flex-col sm:flex-row flex-wrap items-start sm:items-center justify-between pb-4 border-b border-slate-100 gap-3">
             <div>
               <h3 class="font-extrabold text-lg text-slate-900">Jurnal Harian 7 Kebiasaan Anak Indonesia Hebat</h3>
               <p class="text-xs text-slate-500">Checklist 15 detik harian + Foto bukti kamera langsung dengan watermark otomatis.</p>
@@ -869,7 +1054,7 @@
 
         <!-- Rekapitulasi & Riwayat Jurnal 7 Kebiasaan Siswa -->
         <div class="bg-white p-6 rounded-3xl border border-slate-200 shadow-xs">
-          <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between pb-4 border-b border-slate-100 gap-3">
+          <div class="flex flex-col sm:flex-row flex-wrap items-start sm:items-center justify-between pb-4 border-b border-slate-100 gap-3">
             <div>
               <h3 class="font-extrabold text-base text-slate-900">Riwayat & Rekap Jurnal 7 Kebiasaan Saya</h3>
               <p class="text-xs text-slate-500">Daftar rekaman jurnal harian dan status verifikasi oleh Guru Wali.</p>
@@ -984,7 +1169,7 @@
       <!-- KONTEN TAB 5 SISWA: NILAI ULANGAN & ASESMEN -->
       <div id="tabContentSiswa_nilai" class="tab-siswa-content hidden space-y-6">
         <div class="bg-white p-6 rounded-3xl border border-slate-200 shadow-xs">
-          <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between pb-4 border-b border-slate-100 gap-3">
+          <div class="flex flex-col sm:flex-row flex-wrap items-start sm:items-center justify-between pb-4 border-b border-slate-100 gap-3">
             <div>
               <h3 class="font-extrabold text-lg text-slate-900">Lembar Capaian Nilai Asesmen Siswa</h3>
               <p class="text-xs text-slate-500">Hasil asesmen Penilaian Harian (PH), Sumatif Tengah Semester (STS), dan Akhir Semester (SAS/PAS).</p>
@@ -1177,6 +1362,9 @@
         </div>
       </div>
 
+        </div>
+      </div>
+
     </section>
 
     <!-- ========================================================================= -->
@@ -1186,10 +1374,10 @@
       
       <!-- Kartu Profil Guru & Role Switcher -->
       <div class="bg-gradient-to-r from-indigo-800 via-blue-800 to-slate-900 rounded-3xl p-6 text-white shadow-lg">
-        <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+        <div class="flex flex-col sm:flex-row flex-wrap items-start sm:items-center justify-between gap-4">
           <div class="flex items-center gap-4">
-            <div class="w-14 h-14 rounded-2xl bg-white/20 backdrop-blur-md flex items-center justify-center text-2xl font-bold">
-              
+            <div class="w-14 h-14 rounded-2xl bg-white/20 backdrop-blur-md flex items-center justify-center text-white">
+              <i data-lucide="user-check" class="w-7 h-7"></i>
             </div>
             <div>
               <div class="flex flex-wrap items-center gap-2">
@@ -1220,42 +1408,64 @@
           </div>
         </div>
       </div>
-      </div>
 
-      <!-- Navigasi Menu Guru -->
-      <div class="flex items-center gap-2 overflow-x-auto pb-2 custom-scrollbar">
-        <button onclick="switchTabGuru('beranda')" id="tabBtnGuru_beranda" class="tab-guru-btn px-4 py-2 bg-indigo-700 text-white font-bold rounded-xl text-xs whitespace-nowrap shadow-xs"> Beranda Kendali</button>
-        <button onclick="switchTabGuru('presensiKbm')" id="tabBtnGuru_presensiKbm" class="tab-guru-btn px-4 py-2 bg-white text-slate-600 hover:bg-slate-100 font-semibold rounded-xl text-xs whitespace-nowrap border border-slate-200"> Presensi KBM (Walas)</button>
-        <button onclick="switchTabGuru('absenEkskul')" id="tabBtnGuru_absenEkskul" class="tab-guru-btn px-4 py-2 bg-white text-slate-600 hover:bg-slate-100 font-semibold rounded-xl text-xs whitespace-nowrap border border-slate-200">Absensi Ekskul (Pelatih)</button>
-        <button onclick="switchTabGuru('rekapWalas')" id="tabBtnGuru_rekapWalas" class="tab-guru-btn px-4 py-2 bg-white text-slate-600 hover:bg-slate-100 font-semibold rounded-xl text-xs whitespace-nowrap border border-slate-200">Rekap Ekskul (Walas)</button>
-        <button onclick="switchTabGuru('nilaiUlangan')" id="tabBtnGuru_nilaiUlangan" class="tab-guru-btn px-4 py-2 bg-white text-slate-600 hover:bg-slate-100 font-semibold rounded-xl text-xs whitespace-nowrap border border-slate-200">Paste Leger Nilai</button>
-        <button onclick="switchTabGuru('penilaianTopik')" id="tabBtnGuru_penilaianTopik" class="tab-guru-btn px-4 py-2 bg-white text-slate-600 hover:bg-slate-100 font-semibold rounded-xl text-xs whitespace-nowrap border border-slate-200"> Nilai Topik & Rubrik</button>
-        <button onclick="switchTabGuru('guruWali')" id="tabBtnGuru_guruWali" class="tab-guru-btn px-4 py-2 bg-white text-slate-600 hover:bg-slate-100 font-semibold rounded-xl text-xs whitespace-nowrap border border-slate-200">Guru Wali (7 Kebiasaan & WA)</button>
-        <button onclick="switchTabGuru('koordinatorEkskul')" id="tabBtnGuru_koordinatorEkskul" class="tab-guru-btn hidden px-4 py-2 bg-white text-slate-600 hover:bg-slate-100 font-semibold rounded-xl text-xs whitespace-nowrap border border-slate-200 flex items-center gap-1.5 cursor-pointer">
-          <i data-lucide="award" class="w-4 h-4 text-purple-600"></i>
-          <span>Koordinator Ekstra</span>
-          <span id="badgeGuruKoordAlert" class="px-1.5 py-0.2 bg-purple-100 text-purple-800 rounded-full text-[10px] font-bold">Koordinator</span>
-        </button>
-        <button onclick="switchTabGuru('tibum')" id="tabBtnGuru_tibum" class="tab-guru-btn px-4 py-2 bg-white text-slate-600 hover:bg-slate-100 font-semibold rounded-xl text-xs whitespace-nowrap border border-slate-200"> Catat Pelanggaran / Scan QR</button>
-        <button onclick="switchTabGuru('layananBk')" id="tabBtnGuru_layananBk" class="tab-guru-btn hidden px-4 py-2 bg-white text-slate-600 hover:bg-slate-100 font-semibold rounded-xl text-xs whitespace-nowrap border border-slate-200 flex items-center gap-1.5 cursor-pointer">
-          <i data-lucide="heart-handshake" class="w-4 h-4 text-emerald-600"></i>
-          <span>Layanan Bimbingan Konseling (BK)</span>
-          <span id="badgeGuruTotalKasusBk" class="px-1.5 py-0.2 bg-emerald-100 text-emerald-800 rounded-full text-[10px] font-bold">0</span>
-        </button>
-        <button onclick="switchTabGuru('manajemenPelanggaran')" id="tabBtnGuru_manajemenPelanggaran" class="tab-guru-btn hidden px-4 py-2 bg-white text-slate-600 hover:bg-slate-100 font-semibold rounded-xl text-xs whitespace-nowrap border border-slate-200 flex items-center gap-1.5 cursor-pointer">
-          <i data-lucide="shield-alert" class="w-4 h-4 text-rose-600"></i>
-          <span>Manajemen Pelanggaran</span>
-          <span class="px-1.5 py-0.2 bg-rose-100 text-rose-800 rounded-full text-[10px] font-bold">Petugas</span>
-        </button>
-        <button onclick="switchTabGuru('pengumuman')" id="tabBtnGuru_pengumuman" class="tab-guru-btn px-4 py-2 bg-white text-slate-600 hover:bg-slate-100 font-semibold rounded-xl text-xs whitespace-nowrap border border-slate-200">Pengumuman Sekolah</button>
-        <button onclick="switchTabGuru('profil')" id="tabBtnGuru_profil" class="tab-guru-btn px-4 py-2 bg-white text-slate-600 hover:bg-slate-100 font-semibold rounded-xl text-xs whitespace-nowrap border border-slate-200"> Profil & PIN</button>
-      </div>
+      <!-- SHELL PORTAL GURU: SIDEBAR KIRI TERKELOMPOK (DESKTOP) + KONTEN UTAMA -->
+      <div class="flex flex-col lg:flex-row gap-6 items-start">
+        <aside class="hidden lg:flex lg:flex-col w-64 xl:w-72 flex-shrink-0 bg-white dark:bg-dark-surface-container-low rounded-2xl border border-light-outline-variant/60 dark:border-dark-outline-variant p-3.5 space-y-4 sticky top-20 shadow-2xs">
+          <div>
+            <p class="px-3 text-[10px] font-extrabold uppercase tracking-wider text-slate-400 mb-1.5">Utama</p>
+            <div class="space-y-1">
+              <button onclick="switchTabGuru('beranda')" id="tabBtnGuru_beranda" class="tab-guru-btn w-full text-left px-3 py-2 bg-indigo-700 text-white font-bold rounded-xl text-xs flex items-center gap-2.5 transition cursor-pointer"><i data-lucide="layout-dashboard" class="w-4 h-4 flex-shrink-0"></i><span>Beranda Kendali</span></button>
+              <button onclick="switchTabGuru('pengumuman')" id="tabBtnGuru_pengumuman" class="tab-guru-btn w-full text-left px-3 py-2 bg-white text-slate-600 hover:bg-slate-100 font-semibold rounded-xl text-xs border border-slate-200 flex items-center gap-2.5 transition cursor-pointer"><i data-lucide="megaphone" class="w-4 h-4 flex-shrink-0"></i><span>Pengumuman Sekolah</span></button>
+              <button onclick="switchTabGuru('profil')" id="tabBtnGuru_profil" class="tab-guru-btn w-full text-left px-3 py-2 bg-white text-slate-600 hover:bg-slate-100 font-semibold rounded-xl text-xs border border-slate-200 flex items-center gap-2.5 transition cursor-pointer"><i data-lucide="user-cog" class="w-4 h-4 flex-shrink-0"></i><span>Profil &amp; PIN</span></button>
+            </div>
+          </div>
+
+          <div>
+            <p class="px-3 text-[10px] font-extrabold uppercase tracking-wider text-slate-400 mb-1.5">KBM &amp; Penilaian</p>
+            <div class="space-y-1">
+              <button onclick="switchTabGuru('presensiKbm')" id="tabBtnGuru_presensiKbm" class="tab-guru-btn w-full text-left px-3 py-2 bg-white text-slate-600 hover:bg-slate-100 font-semibold rounded-xl text-xs border border-slate-200 flex items-center gap-2.5 transition cursor-pointer"><i data-lucide="clipboard-check" class="w-4 h-4 flex-shrink-0"></i><span>Presensi KBM &amp; Jurnal</span></button>
+              <button onclick="switchTabGuru('penilaianTopik')" id="tabBtnGuru_penilaianTopik" class="tab-guru-btn w-full text-left px-3 py-2 bg-white text-slate-600 hover:bg-slate-100 font-semibold rounded-xl text-xs border border-slate-200 flex items-center gap-2.5 transition cursor-pointer"><i data-lucide="file-check-2" class="w-4 h-4 flex-shrink-0"></i><span>Nilai Topik &amp; Rubrik</span></button>
+              <button onclick="switchTabGuru('nilaiUlangan')" id="tabBtnGuru_nilaiUlangan" class="tab-guru-btn w-full text-left px-3 py-2 bg-white text-slate-600 hover:bg-slate-100 font-semibold rounded-xl text-xs border border-slate-200 flex items-center gap-2.5 transition cursor-pointer"><i data-lucide="table" class="w-4 h-4 flex-shrink-0"></i><span>Paste Leger Nilai</span></button>
+            </div>
+          </div>
+
+          <div>
+            <p class="px-3 text-[10px] font-extrabold uppercase tracking-wider text-slate-400 mb-1.5">Wali &amp; Pembinaan</p>
+            <div class="space-y-1">
+              <button onclick="switchTabGuru('rekapWalas')" id="tabBtnGuru_rekapWalas" class="tab-guru-btn w-full text-left px-3 py-2 bg-white text-slate-600 hover:bg-slate-100 font-semibold rounded-xl text-xs border border-slate-200 flex items-center gap-2.5 transition cursor-pointer"><i data-lucide="users" class="w-4 h-4 flex-shrink-0"></i><span>Rekap Ekskul (Walas)</span></button>
+              <button onclick="switchTabGuru('guruWali')" id="tabBtnGuru_guruWali" class="tab-guru-btn w-full text-left px-3 py-2 bg-white text-slate-600 hover:bg-slate-100 font-semibold rounded-xl text-xs border border-slate-200 flex items-center gap-2.5 transition cursor-pointer"><i data-lucide="star" class="w-4 h-4 flex-shrink-0"></i><span>Guru Wali (7 Kebiasaan)</span></button>
+              <button onclick="switchTabGuru('tibum')" id="tabBtnGuru_tibum" class="tab-guru-btn w-full text-left px-3 py-2 bg-white text-slate-600 hover:bg-slate-100 font-semibold rounded-xl text-xs border border-slate-200 flex items-center gap-2.5 transition cursor-pointer"><i data-lucide="qr-code" class="w-4 h-4 flex-shrink-0"></i><span>Catat Pelanggaran / QR</span></button>
+            </div>
+          </div>
+
+          <div>
+            <p class="px-3 text-[10px] font-extrabold uppercase tracking-wider text-slate-400 mb-1.5">Tugas Khusus</p>
+            <div class="space-y-1">
+              <button onclick="switchTabGuru('absenEkskul')" id="tabBtnGuru_absenEkskul" class="tab-guru-btn w-full text-left px-3 py-2 bg-white text-slate-600 hover:bg-slate-100 font-semibold rounded-xl text-xs border border-slate-200 flex items-center gap-2.5 transition cursor-pointer"><i data-lucide="trophy" class="w-4 h-4 flex-shrink-0"></i><span>Absensi Ekskul (Pelatih)</span></button>
+              <button onclick="switchTabGuru('koordinatorEkskul')" id="tabBtnGuru_koordinatorEkskul" class="tab-guru-btn hidden w-full text-left px-3 py-2 bg-white text-slate-600 hover:bg-slate-100 font-semibold rounded-xl text-xs border border-slate-200 flex items-center justify-between gap-1.5 transition cursor-pointer">
+                <span class="flex items-center gap-2"><i data-lucide="award" class="w-4 h-4 text-purple-600 flex-shrink-0"></i><span>Koordinator Ekstra</span></span>
+                <span id="badgeGuruKoordAlert" class="px-1.5 py-0.5 bg-purple-100 text-purple-800 rounded-full text-[9px] font-bold">Koord</span>
+              </button>
+              <button onclick="switchTabGuru('layananBk')" id="tabBtnGuru_layananBk" class="tab-guru-btn hidden w-full text-left px-3 py-2 bg-white text-slate-600 hover:bg-slate-100 font-semibold rounded-xl text-xs border border-slate-200 flex items-center justify-between gap-1.5 transition cursor-pointer">
+                <span class="flex items-center gap-2"><i data-lucide="heart-handshake" class="w-4 h-4 text-emerald-600 flex-shrink-0"></i><span>Layanan BK</span></span>
+                <span id="badgeGuruTotalKasusBk" class="px-1.5 py-0.5 bg-emerald-100 text-emerald-800 rounded-full text-[9px] font-bold">0</span>
+              </button>
+              <button onclick="switchTabGuru('manajemenPelanggaran')" id="tabBtnGuru_manajemenPelanggaran" class="tab-guru-btn hidden w-full text-left px-3 py-2 bg-white text-slate-600 hover:bg-slate-100 font-semibold rounded-xl text-xs border border-slate-200 flex items-center justify-between gap-1.5 transition cursor-pointer">
+                <span class="flex items-center gap-2"><i data-lucide="shield-alert" class="w-4 h-4 text-rose-600 flex-shrink-0"></i><span>Manajemen Pelanggaran</span></span>
+                <span class="px-1.5 py-0.5 bg-rose-100 text-rose-800 rounded-full text-[9px] font-bold">Petugas</span>
+              </button>
+            </div>
+          </div>
+        </aside>
+
+        <div class="flex-1 min-w-0 w-full space-y-6">
 
       <!-- KONTEN TAB 1 GURU: BERANDA KENDALI -->
       <div id="tabContentGuru_beranda" class="tab-guru-content space-y-6">
         <!-- WIDGET KHUSUS GURU BK (MUNCUL JIKA USER ADALAH GURU BK) -->
 <div id="widgetGuruBkBeranda" class="hidden p-5 rounded-3xl bg-gradient-to-r from-emerald-950 via-teal-900 to-slate-900 text-white shadow-lg border-2 border-emerald-500/40 space-y-4">
-  <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-emerald-800/60">
+  <div class="flex flex-col sm:flex-row flex-wrap sm:items-center justify-between gap-3 pb-3 border-b border-emerald-800/60">
     <div class="flex items-center gap-3">
       <div class="w-12 h-12 rounded-2xl bg-emerald-500/20 text-emerald-300 flex items-center justify-center flex-shrink-0 border border-emerald-500/30 shadow-inner">
         <i data-lucide="heart-handshake" class="w-6 h-6"></i>
@@ -1296,7 +1506,7 @@
 
 <!-- WIDGET KHUSUS KOORDINATOR EKSTRAKURIKULER YANG DITUNJUK -->
 <div id="widgetGuruKoordinatorBeranda" class="hidden p-5 rounded-3xl bg-gradient-to-r from-purple-950 via-indigo-950 to-slate-900 text-white shadow-lg border-2 border-purple-500/40 space-y-4">
-  <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-purple-800/60">
+  <div class="flex flex-col sm:flex-row flex-wrap sm:items-center justify-between gap-3 pb-3 border-b border-purple-800/60">
     <div class="flex items-center gap-3">
       <div class="w-12 h-12 rounded-2xl bg-purple-500/20 text-purple-300 flex items-center justify-center flex-shrink-0 border border-purple-500/30 shadow-inner">
         <i data-lucide="award" class="w-6 h-6 text-amber-300"></i>
@@ -1337,7 +1547,7 @@
 
 <!-- WIDGET KHUSUS PETUGAS MANAJEMEN PELANGGARAN YANG DITUNJUK -->
 <div id="widgetGuruPetugasPelanggaranBeranda" class="hidden p-5 rounded-3xl bg-gradient-to-r from-rose-950 via-slate-900 to-indigo-950 text-white shadow-lg border-2 border-rose-500/40 space-y-3">
-  <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+  <div class="flex flex-col sm:flex-row flex-wrap sm:items-center justify-between gap-3">
     <div class="flex items-center gap-3">
       <div class="w-12 h-12 rounded-2xl bg-rose-500/20 text-rose-300 flex items-center justify-center flex-shrink-0 border border-rose-500/30 shadow-inner">
         <i data-lucide="shield-alert" class="w-6 h-6"></i>
@@ -1361,7 +1571,7 @@
         
         <!-- POINT OF INTEREST: PUSAT PENGUMUMAN & EDARAN KEDINASAN (DI BAWAH IDENTITAS USER) -->
         <div class="relative overflow-hidden rounded-3xl p-5 border-2 border-indigo-400/60 bg-gradient-to-br from-indigo-500/10 via-purple-500/10 to-blue-500/10 backdrop-blur-md shadow-lg shadow-indigo-500/5 space-y-4">
-          <div class="flex flex-col sm:flex-row sm:items-center justify-between pb-3 border-b border-indigo-200/50 gap-3">
+          <div class="flex flex-col sm:flex-row flex-wrap sm:items-center justify-between pb-3 border-b border-indigo-200/50 gap-3">
             <div class="flex items-center gap-3">
               <div class="relative flex items-center justify-center w-10 h-10 rounded-2xl bg-gradient-to-tr from-indigo-600 to-blue-600 text-white shadow-md shadow-indigo-500/20">
             <i data-lucide="calendar" class="w-5 h-5 text-amber-700"></i>
@@ -1423,7 +1633,7 @@
       <!-- KONTEN TAB 2 GURU: PRESENSI HARIAN KBM (WALI KELAS & REFLEKSI 4F) -->
       <div id="tabContentGuru_presensiKbm" class="tab-guru-content hidden space-y-6">
         <div class="bg-white p-6 rounded-3xl border border-slate-200 shadow-xs space-y-4">
-          <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between pb-4 border-b border-slate-100 gap-3">
+          <div class="flex flex-col sm:flex-row flex-wrap items-start sm:items-center justify-between pb-4 border-b border-slate-100 gap-3">
             <div>
               <h3 class="font-extrabold text-lg text-slate-900">Presensi Harian KBM Kelas & Jurnal Refleksi</h3>
               <p class="text-xs text-slate-500">Semua siswa otomatis HADIR. Sentuh tombol untuk siswa yang Sakit (S), Izin (I), Alpha (A), atau Terlambat (T).</p>
@@ -1491,7 +1701,7 @@
 
           <!-- Modul Refleksi Guru Metode 4F (Facts, Feelings, Findings, Future) -->
           <div id="containerPresensiKbmRefleksi4F" class="mt-6 p-5 bg-gradient-to-br from-indigo-50/70 via-white to-purple-50/50 rounded-3xl border border-indigo-200/80 shadow-xs space-y-4">
-            <div class="flex flex-col sm:flex-row sm:items-center justify-between pb-3 border-b border-indigo-100 gap-3">
+            <div class="flex flex-col sm:flex-row flex-wrap sm:items-center justify-between pb-3 border-b border-indigo-100 gap-3">
               <div class="flex items-center gap-2">
                 <span class="w-8 h-8 rounded-xl bg-indigo-600 text-white flex items-center justify-center font-bold text-sm">4F</span>
                 <div>
@@ -1558,7 +1768,7 @@
               </div>
             </div>
 
-            <div class="pt-2 flex flex-col sm:flex-row items-center justify-between gap-3">
+            <div class="pt-2 flex flex-col sm:flex-row flex-wrap items-center justify-between gap-3">
               <span class="text-[11px] text-slate-400 italic">Catatan refleksi 4F ini disimpan privat dan hanya dapat dilihat oleh akun Anda.</span>
               <button onclick="simpanPresensiKbmSekelas()" class="w-full sm:w-auto px-6 py-3 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-extrabold rounded-xl text-xs shadow-md shadow-blue-200 transition flex items-center justify-center gap-2 cursor-pointer">
                 <i data-lucide="save" class="w-4 h-4"></i>
@@ -1569,7 +1779,7 @@
 
           <!-- Histori Catatan Jurnal Mengajar Saya (Khusus Guru Bersangkutan) -->
           <div id="containerPresensiKbmRiwayatJurnal" class="mt-6 p-6 bg-white rounded-3xl border border-slate-200 shadow-xs space-y-4">
-            <div class="flex flex-col sm:flex-row sm:items-center justify-between pb-3 border-b border-slate-100 gap-3">
+            <div class="flex flex-col sm:flex-row flex-wrap sm:items-center justify-between pb-3 border-b border-slate-100 gap-3">
               <div class="flex items-center gap-2">
                 <span class="w-8 h-8 rounded-xl bg-teal-100 text-teal-700 flex items-center justify-center font-bold"></span>
                 <div>
@@ -1597,7 +1807,7 @@
       <!-- KONTEN TAB 3 GURU: PRESENSI EKSKUL (HANYA PELATIH) -->
       <div id="tabContentGuru_absenEkskul" class="tab-guru-content hidden space-y-6">
         <div class="bg-white p-6 rounded-3xl border border-slate-200 shadow-xs">
-          <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between pb-4 border-b border-slate-100 gap-3">
+          <div class="flex flex-col sm:flex-row flex-wrap items-start sm:items-center justify-between pb-4 border-b border-slate-100 gap-3">
             <div>
               <div class="flex items-center gap-2">
                 <span class="px-2 py-0.5 bg-emerald-100 text-emerald-800 rounded text-[10px] font-extrabold uppercase">Akses Khusus Pelatih</span>
@@ -1688,7 +1898,7 @@
             </table>
           </div>
 
-          <div class="mt-6 flex flex-col sm:flex-row items-center justify-between gap-3 pt-4 border-t border-slate-100">
+          <div class="mt-6 flex flex-col sm:flex-row flex-wrap items-center justify-between gap-3 pt-4 border-t border-slate-100">
             <div class="text-xs text-slate-500 font-medium flex items-center gap-1.5">
               <i data-lucide="info" class="w-4 h-4 text-emerald-600"></i>
               <span>Menyimpan akan mencatat presensi sekaligus membukukan Jurnal Sesi Latihan Pelatih.</span>
@@ -1702,7 +1912,7 @@
 
         <!-- SECTION RIWAYAT JURNAL SESI LATIHAN PELATIH (BISA EDIT & HAPUS) -->
         <div class="bg-white p-6 rounded-3xl border border-slate-200 shadow-xs space-y-4">
-          <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between pb-3 border-b border-slate-100 gap-2">
+          <div class="flex flex-col sm:flex-row flex-wrap items-start sm:items-center justify-between pb-3 border-b border-slate-100 gap-2">
             <div class="flex items-center gap-2.5">
               <div class="w-8 h-8 rounded-xl bg-indigo-50 text-indigo-600 flex items-center justify-center font-bold">
                 <i data-lucide="history" class="w-4 h-4"></i>
@@ -1726,25 +1936,25 @@
       <!-- KONTEN TAB 4 GURU: REKAP EKSKUL ROMBEL (WALI KELAS HANYA REKAP) -->
       <div id="tabContentGuru_rekapWalas" class="tab-guru-content hidden space-y-6">
         <div class="bg-white p-6 rounded-3xl border border-slate-200 shadow-xs">
-          <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between pb-4 border-b border-slate-100 gap-3">
-            <div>
-              <div class="flex items-center gap-2">
-                <span class="px-2 py-0.5 bg-blue-100 text-blue-800 rounded text-[10px] font-extrabold uppercase">Rekapitulasi Walas</span>
-                <h3 class="font-extrabold text-lg text-slate-900">Rekapitulasi Keikutsertaan & Presensi Ekskul Rombel</h3>
+          <div class="flex flex-col pb-4 border-b border-slate-100 gap-3.5">
+            <div class="w-full space-y-1">
+              <div class="flex flex-wrap items-center gap-2">
+                <span class="px-2 py-0.5 bg-blue-100 text-blue-800 rounded text-[10px] font-extrabold uppercase flex-shrink-0">Rekapitulasi Walas</span>
+                <h3 class="font-extrabold text-base sm:text-lg text-slate-900 leading-snug">Rekapitulasi Keikutsertaan &amp; Presensi Ekskul Rombel</h3>
               </div>
               <p class="text-xs text-slate-500">Wali Kelas memantau keaktifan siswa kelas binaan di seluruh cabang ekskul untuk nilai buku rapor.</p>
             </div>
-            <div class="flex items-center gap-2">
-              <select id="rekapWalasSelectKelas" onchange="renderRekapWalasEkskul()" class="modern-select px-3 py-1.5 text-xs font-bold text-slate-700 cursor-pointer">
+            <div class="flex flex-wrap items-center gap-2 w-full">
+              <select id="rekapWalasSelectKelas" onchange="renderRekapWalasEkskul()" class="modern-select px-3 py-2 text-xs font-bold text-slate-700 cursor-pointer w-full sm:w-auto">
                 <option value="8-A">Kelas 8-A</option>
               </select>
-              <select id="rekapWalasFilterKepatuhan" onchange="renderRekapWalasEkskul()" class="modern-select px-3 py-1.5 text-xs font-bold text-slate-700 cursor-pointer">
+              <select id="rekapWalasFilterKepatuhan" onchange="renderRekapWalasEkskul()" class="modern-select px-3 py-2 text-xs font-bold text-slate-700 cursor-pointer w-full sm:w-auto max-w-full">
                 <option value="SEMUA">Semua Status Siswa</option>
                 <option value="KURANG">[Belum Lengkap] Belum Memenuhi Syarat Ekstrakurikuler</option>
                 <option value="LENGKAP">[Lengkap] Sesuai Ketentuan Ekstrakurikuler</option>
               </select>
-              <button onclick="eksporCsvRekapWalas()" class="px-3.5 py-2 bg-emerald-50 hover:bg-emerald-100 text-emerald-700 font-bold rounded-xl text-xs border border-emerald-200 transition flex items-center gap-1.5 cursor-pointer">
-                <i data-lucide="download" class="w-4 h-4"></i>
+              <button onclick="eksporCsvRekapWalas()" class="px-3.5 py-2 bg-emerald-50 hover:bg-emerald-100 text-emerald-700 font-bold rounded-xl text-xs border border-emerald-200 transition flex items-center justify-center gap-1.5 cursor-pointer whitespace-nowrap flex-shrink-0 w-full sm:w-auto">
+                <i data-lucide="download" class="w-4 h-4 flex-shrink-0"></i>
                 <span>Ekspor ke CSV / Excel</span>
               </button>
             </div>
@@ -1781,6 +1991,53 @@
             </table>
           </div>
         </div>
+
+        <!-- HISTORI CATATAN PELANGGARAN SISWA KELAS BINAAN WALIKELAS -->
+        <div id="cardHistoriPelanggaranWalas" class="bg-white p-6 rounded-3xl border border-slate-200 shadow-xs space-y-4">
+          <div class="flex flex-col pb-4 border-b border-slate-100 gap-3.5">
+            <div class="w-full space-y-1">
+              <div class="flex flex-wrap items-center gap-2">
+                <span class="px-2 py-0.5 bg-rose-100 text-rose-800 rounded text-[10px] font-extrabold uppercase flex-shrink-0">Kedisiplinan Walas</span>
+                <h3 class="font-extrabold text-base sm:text-lg text-slate-900 leading-snug">Histori Catatan Pelanggaran Kelas <span id="walasPelanggaranRombelBadge" class="text-rose-700">-</span></h3>
+              </div>
+              <p class="text-xs text-slate-500">Rekam jejak seluruh pelanggaran tata tertib, poin, tugas edukatif, dan tindak lanjut BK untuk siswa di kelas binaan Anda.</p>
+            </div>
+            <div class="flex flex-wrap items-center gap-2 w-full">
+              <input type="text" id="filterWalasPelanggaranSearch" oninput="renderHistoriPelanggaranWalas()" placeholder="Cari nama / NISN siswa..." class="px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs font-semibold w-full sm:w-48">
+              <select id="filterWalasPelanggaranStatus" onchange="renderHistoriPelanggaranWalas()" class="modern-select px-3 py-2 text-xs font-bold text-slate-700 cursor-pointer w-full sm:w-auto">
+                <option value="">Semua Status</option>
+                <option value="Pending">Pending / Pembinaan</option>
+                <option value="Menjalani Tugas Edukatif">Menjalani Tugas Edukatif</option>
+                <option value="Panggilan BK">Panggilan BK</option>
+                <option value="Selesai">Selesai</option>
+              </select>
+            </div>
+          </div>
+
+          <!-- Ringkasan Metrik Pelanggaran Kelas -->
+          <div id="metrikHistoriPelanggaranWalas" class="grid grid-cols-2 sm:grid-cols-4 gap-3">
+            <!-- Diisi JS -->
+          </div>
+
+          <div class="overflow-x-auto">
+            <table class="w-full text-left text-xs">
+              <thead class="bg-slate-50 text-slate-600 font-bold border-b border-slate-200">
+                <tr>
+                  <th class="py-3 px-3 whitespace-nowrap">Tanggal</th>
+                  <th class="py-3 px-3 min-w-[150px]">Siswa</th>
+                  <th class="py-3 px-3 min-w-[180px]">Pelanggaran &amp; Poin</th>
+                  <th class="py-3 px-3 text-center whitespace-nowrap">Ke-n</th>
+                  <th class="py-3 px-3 min-w-[180px]">Tugas Edukatif &amp; Sanksi</th>
+                  <th class="py-3 px-3 whitespace-nowrap">Status BK</th>
+                  <th class="py-3 px-3 whitespace-nowrap">Pelapor</th>
+                </tr>
+              </thead>
+              <tbody id="tbodyHistoriPelanggaranWalas" class="divide-y divide-slate-100 font-medium">
+                <!-- Diisi oleh renderHistoriPelanggaranWalas() -->
+              </tbody>
+            </table>
+          </div>
+        </div>
       </div>
 
       <!-- KONTEN TAB 5 GURU: PASTE LEGER NILAI SEKELAS (<10 DETIK) -->
@@ -1792,7 +2049,7 @@
           </div>
 
           <!-- Pengaturan Hak Publikasi Nilai oleh Guru / Admin -->
-          <div class="mt-4 flex flex-col sm:flex-row items-start sm:items-center justify-between p-4 bg-slate-50 border border-slate-200 rounded-2xl gap-3">
+          <div class="mt-4 flex flex-col sm:flex-row flex-wrap items-start sm:items-center justify-between p-4 bg-slate-50 border border-slate-200 rounded-2xl gap-3">
             <div class="flex items-center gap-3">
               <div id="iconPublikasiNilai" class="w-10 h-10 rounded-xl bg-blue-100 text-blue-700 flex items-center justify-center flex-shrink-0">
                 <i data-lucide="eye" class="w-5 h-5"></i>
@@ -1883,7 +2140,7 @@
             </button>
 
             <!-- Cetak Rapor Nilai Peserta Didik oleh Guru / Wali Kelas -->
-            <div class="mt-6 pt-5 border-t border-slate-100 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 bg-slate-50 p-4 rounded-2xl">
+            <div class="mt-6 pt-5 border-t border-slate-100 flex flex-col sm:flex-row flex-wrap items-start sm:items-center justify-between gap-3 bg-slate-50 p-4 rounded-2xl">
               <div>
                 <h4 class="text-xs font-bold text-slate-800 uppercase tracking-wider flex items-center gap-1.5">
                   <i data-lucide="printer" class="w-4 h-4 text-indigo-600"></i>
@@ -1911,7 +2168,7 @@
       <div id="tabContentGuru_penilaianTopik" class="tab-guru-content hidden space-y-6">
         <!-- Banner Header -->
         <div class="bg-gradient-to-r from-teal-800 via-emerald-800 to-slate-900 rounded-3xl p-6 text-white shadow-md">
-          <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+          <div class="flex flex-col sm:flex-row flex-wrap items-start sm:items-center justify-between gap-4">
             <div>
               <div class="inline-flex items-center gap-1.5 px-3 py-1 bg-white/20 backdrop-blur-md rounded-full text-xs font-bold mb-2">
                 <i data-lucide="award" class="w-3.5 h-3.5 text-amber-300"></i>
@@ -2000,7 +2257,7 @@
 
         <!-- Pedoman Kriteria Rubrik Penilaian (Kurikulum Merdeka) - KKTP & Rentang Diisi Manual -->
         <div class="bg-gradient-to-br from-slate-50 to-teal-50/40 p-5 rounded-3xl border border-teal-200/70 shadow-xs space-y-3">
-          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+          <div class="flex flex-col sm:flex-row flex-wrap sm:items-center justify-between gap-3">
             <div class="flex items-center gap-2">
               <span id="pedomanKktpIcon" class="w-7 h-7 rounded-lg bg-teal-600 text-white flex items-center justify-center text-xs font-bold"><i data-lucide="layers" class="w-4 h-4"></i></span>
               <div>
@@ -2071,7 +2328,7 @@
 
         <!-- Tabel Siswa & Input Nilai Rubrik (Lengkap dengan Status Kehadiran) -->
         <div class="bg-white p-6 rounded-3xl border border-slate-200 shadow-xs space-y-4">
-          <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between pb-3 border-b border-slate-100 gap-3">
+          <div class="flex flex-col sm:flex-row flex-wrap items-start sm:items-center justify-between pb-3 border-b border-slate-100 gap-3">
             <div>
               <h4 class="font-extrabold text-base text-slate-900">Daftar Penilaian Siswa</h4>
               <p class="text-xs text-slate-400">Siswa yang tidak hadir (Sakit/Izin/Alpha) otomatis dikunci dari penilaian angka dan ditandai susulan.</p>
@@ -2107,7 +2364,7 @@
           </div>
 
           <!-- Summary & Simpan Card -->
-          <div class="pt-4 border-t border-slate-100 flex flex-col sm:flex-row items-center justify-between gap-4">
+          <div class="pt-4 border-t border-slate-100 flex flex-col sm:flex-row flex-wrap items-center justify-between gap-4">
             <div class="flex flex-wrap items-center gap-3 text-xs">
               <span class="text-slate-500">Total: <b id="statTopikTotal" class="text-slate-800 font-mono">0</b></span>
               <span class="text-slate-500">Hadir Dinilai: <b id="statTopikHadir" class="text-emerald-700 font-bold font-mono">0</b></span>
@@ -2126,7 +2383,7 @@
 
         <!-- KARTU RIWAYAT HASIL & DAFTAR PENILAIAN TOPIK / RUBRIK -->
         <div class="bg-white p-6 rounded-3xl border border-slate-200 shadow-xs space-y-4">
-          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-slate-100">
+          <div class="flex flex-col sm:flex-row flex-wrap sm:items-center justify-between gap-3 pb-3 border-b border-slate-100">
             <div>
               <div class="flex items-center gap-2">
                 <i data-lucide="history" class="w-4 h-4 text-teal-600"></i>
@@ -2184,7 +2441,7 @@
 
         <!-- 1. TABEL UTAMA: DAFTAR SISWA BINAAN GURU WALI & CETAK REKAP A4 -->
         <div class="bg-white p-6 rounded-3xl border border-slate-200 shadow-xs">
-          <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between pb-4 border-b border-slate-100 gap-3">
+          <div class="flex flex-col sm:flex-row flex-wrap items-start sm:items-center justify-between pb-4 border-b border-slate-100 gap-3">
             <div>
               <div class="flex items-center gap-2">
                 <span class="w-2.5 h-2.5 rounded-full bg-indigo-600"></span>
@@ -2241,7 +2498,7 @@
 
         <!-- 3. VALIDASI JURNAL MASUK & FOTO BUKTI KAMERA WATERMARK -->
         <div class="bg-white p-6 rounded-3xl border border-slate-200 shadow-xs">
-          <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between pb-4 border-b border-slate-100 gap-3">
+          <div class="flex flex-col sm:flex-row flex-wrap items-start sm:items-center justify-between pb-4 border-b border-slate-100 gap-3">
             <div>
               <div class="flex items-center gap-2">
                 <span class="w-2.5 h-2.5 rounded-full bg-emerald-600"></span>
@@ -2279,7 +2536,7 @@
       <!-- KONTEN TAB 7 GURU: PENCATATAN PELANGGARAN & SCAN QR KARTU PELAJAR -->
       <div id="tabContentGuru_tibum" class="tab-guru-content hidden space-y-6">
         <div class="bg-white p-6 rounded-3xl border border-slate-200 shadow-xs">
-          <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between pb-4 border-b border-slate-100 gap-3">
+          <div class="flex flex-col sm:flex-row flex-wrap items-start sm:items-center justify-between pb-4 border-b border-slate-100 gap-3">
             <div>
               <h3 class="font-extrabold text-lg text-slate-900">Buku Catatan Tata Tertib & Razia Pagi</h3>
               <p class="text-xs text-slate-500">Scan Kartu NFC / QR Code atau cari manual untuk mencatat pelanggaran dengan anti-duplikasi harian.</p>
@@ -2394,6 +2651,40 @@
               <i data-lucide="check" class="w-4 h-4"></i>
               <span>Simpan Catatan Pelanggaran Siswa</span>
             </button>
+          </div>
+        </div>
+
+        <!-- HISTORI CATATAN PELANGGARAN TERBARU (TIBUM / RAZIA) -->
+        <div class="bg-white p-6 rounded-3xl border border-slate-200 shadow-xs space-y-4">
+          <div class="flex flex-col xl:flex-row items-start xl:items-center justify-between pb-3 border-b border-slate-100 gap-3">
+            <div>
+              <h4 class="font-extrabold text-sm sm:text-base text-slate-900 flex items-center gap-2">
+                <i data-lucide="history" class="w-4 h-4 text-rose-600"></i>
+                <span>Histori Catatan Pelanggaran Siswa Terbaru</span>
+              </h4>
+              <p class="text-xs text-slate-500">Daftar log pelanggaran terbaru yang dicatat oleh guru piket dan petugas tata tertib.</p>
+            </div>
+            <div class="flex flex-wrap items-center gap-2 w-full xl:w-auto">
+              <input type="text" id="filterTibumHistoriSearch" oninput="renderHistoriPelanggaranTibum()" placeholder="Cari siswa / pelanggaran..." class="px-3 py-1.5 bg-slate-50 border border-slate-200 rounded-xl text-xs font-semibold w-full sm:w-48">
+            </div>
+          </div>
+          <div class="overflow-x-auto">
+            <table class="w-full text-left text-xs">
+              <thead class="bg-slate-50 text-slate-600 font-bold border-b border-slate-200">
+                <tr>
+                  <th class="py-2.5 px-3 whitespace-nowrap">Tanggal</th>
+                  <th class="py-2.5 px-3 min-w-[140px]">Siswa &amp; Kelas</th>
+                  <th class="py-2.5 px-3 min-w-[160px]">Pelanggaran &amp; Poin</th>
+                  <th class="py-2.5 px-3 text-center whitespace-nowrap">Ke-n</th>
+                  <th class="py-2.5 px-3 min-w-[160px]">Tugas Edukatif / Sanksi</th>
+                  <th class="py-2.5 px-3 whitespace-nowrap">Status</th>
+                  <th class="py-2.5 px-3 text-center whitespace-nowrap">Aksi</th>
+                </tr>
+              </thead>
+              <tbody id="tbodyHistoriPelanggaranTibum" class="divide-y divide-slate-100 font-medium">
+                <!-- Diisi JS -->
+              </tbody>
+            </table>
           </div>
         </div>
       </div>
@@ -2539,7 +2830,7 @@
 
                 <!-- 1. PENGATURAN MATRIKS KONSEKUENSI PELANGGARAN BERULANG (ESKALASI BERTINGKAT) -->
         <div class="bg-white p-6 rounded-3xl border border-slate-200 shadow-xs space-y-5">
-          <div class="flex flex-col sm:flex-row sm:items-center justify-between pb-3 border-b border-slate-100 gap-2">
+          <div class="flex flex-col sm:flex-row flex-wrap sm:items-center justify-between pb-3 border-b border-slate-100 gap-2">
             <div>
               <h4 class="font-black text-sm sm:text-base text-slate-900 flex items-center gap-2">
                 <i data-lucide="git-branch" class="w-4 h-4 text-indigo-600"></i>
@@ -2663,7 +2954,7 @@
 
         <!-- 2. KATALOG MASTER JENIS PELANGGARAN -->
         <div class="bg-white p-6 rounded-3xl border border-slate-200 shadow-xs space-y-4">
-          <div class="flex flex-col sm:flex-row sm:items-center justify-between pb-3 border-b border-slate-100 gap-2">
+          <div class="flex flex-col sm:flex-row flex-wrap sm:items-center justify-between pb-3 border-b border-slate-100 gap-2">
             <div>
               <h4 class="font-black text-sm sm:text-base text-slate-900 flex items-center gap-2">
                 <i data-lucide="list-checks" class="w-4 h-4 text-rose-600"></i>
@@ -2702,7 +2993,7 @@
 
         <!-- 3. BANK TUGAS KHUSUS KARAKTER EDUKATIF -->
         <div class="bg-white p-6 rounded-3xl border border-slate-200 shadow-xs space-y-4">
-          <div class="flex flex-col sm:flex-row sm:items-center justify-between pb-3 border-b border-slate-100 gap-2">
+          <div class="flex flex-col sm:flex-row flex-wrap sm:items-center justify-between pb-3 border-b border-slate-100 gap-2">
             <div>
               <h4 class="font-black text-sm sm:text-base text-slate-900 flex items-center gap-2">
                 <i data-lucide="sparkles" class="w-4 h-4 text-purple-600"></i>
@@ -2722,6 +3013,59 @@
 
           <div id="containerBankTugasEdukatifListGuru" class="grid grid-cols-1 md:grid-cols-2 gap-2.5 pt-2">
             <!-- Dirender via renderGuruManajemenPelanggaran() -->
+          </div>
+        </div>
+
+        <!-- 4. HISTORI CATATAN PELANGGARAN LENGKAP (PETUGAS TATA TERTIB & KEDISIPLINAN) -->
+        <div class="bg-white p-6 rounded-3xl border border-slate-200 shadow-xs space-y-4">
+          <div class="flex flex-col pb-4 border-b border-slate-100 gap-3.5">
+            <div class="w-full space-y-1">
+              <div class="flex flex-wrap items-center gap-2">
+                <span class="px-2 py-0.5 bg-rose-100 text-rose-800 rounded text-[10px] font-extrabold uppercase flex-shrink-0">Petugas Tata Tertib</span>
+                <h4 class="font-black text-sm sm:text-base text-slate-900 flex items-center gap-2">
+                  <i data-lucide="clipboard-list" class="w-4 h-4 text-rose-600"></i>
+                  <span>Histori Catatan Pelanggaran Siswa (Seluruh Sekolah)</span>
+                </h4>
+              </div>
+              <p class="text-xs text-slate-500">Pantau seluruh catatan pelanggaran siswa, tugas edukatif otomatis, status tindak lanjut BK, dan verifikasi penyelesaian tugas.</p>
+            </div>
+            <div class="flex flex-wrap items-center gap-2 w-full">
+              <input type="text" id="filterPetugasPelSearch" oninput="renderHistoriPelanggaranPetugas()" placeholder="Cari nama / NISN / pelanggaran..." class="px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs font-semibold w-full sm:w-48">
+              <select id="filterPetugasPelKelas" onchange="renderHistoriPelanggaranPetugas()" class="modern-select px-3 py-2 text-xs font-bold text-slate-700 cursor-pointer w-full sm:w-auto">
+                <option value="">Semua Kelas</option>
+              </select>
+              <select id="filterPetugasPelStatus" onchange="renderHistoriPelanggaranPetugas()" class="modern-select px-3 py-2 text-xs font-bold text-slate-700 cursor-pointer w-full sm:w-auto">
+                <option value="">Semua Status</option>
+                <option value="Pending">Pending / Pembinaan</option>
+                <option value="Menjalani Tugas Edukatif">Menjalani Tugas Edukatif</option>
+                <option value="Panggilan BK">Panggilan BK</option>
+                <option value="Selesai">Selesai</option>
+              </select>
+            </div>
+          </div>
+
+          <div id="metrikHistoriPelanggaranPetugas" class="grid grid-cols-2 sm:grid-cols-4 gap-3">
+            <!-- Diisi JS -->
+          </div>
+
+          <div class="overflow-x-auto">
+            <table class="w-full text-left text-xs">
+              <thead class="bg-slate-50 text-slate-600 font-bold border-b border-slate-200">
+                <tr>
+                  <th class="py-3 px-3 whitespace-nowrap">Tanggal</th>
+                  <th class="py-3 px-3 min-w-[150px]">Siswa &amp; Kelas</th>
+                  <th class="py-3 px-3 min-w-[180px]">Pelanggaran &amp; Poin</th>
+                  <th class="py-3 px-3 text-center whitespace-nowrap">Ke-n</th>
+                  <th class="py-3 px-3 min-w-[180px]">Tugas Edukatif &amp; Sanksi</th>
+                  <th class="py-3 px-3 whitespace-nowrap">Status BK</th>
+                  <th class="py-3 px-3 whitespace-nowrap">Pelapor</th>
+                  <th class="py-3 px-3 text-center whitespace-nowrap">Aksi Petugas</th>
+                </tr>
+              </thead>
+              <tbody id="tbodyHistoriPelanggaranPetugas" class="divide-y divide-slate-100 font-medium">
+                <!-- Diisi oleh renderHistoriPelanggaranPetugas() -->
+              </tbody>
+            </table>
           </div>
         </div>
       </div>
@@ -2944,7 +3288,7 @@
 
           <!-- TAMPILAN 1: MATRIKS KOMPARATIF PROGRES KEHADIRAN (P1 - P8) -->
           <div id="containerViewProgresMatriks" class="bg-white rounded-3xl border border-slate-200 shadow-xs overflow-hidden">
-            <div class="p-4 sm:p-5 border-b border-slate-100 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+            <div class="p-4 sm:p-5 border-b border-slate-100 flex flex-col sm:flex-row flex-wrap sm:items-center justify-between gap-3">
               <div class="flex items-center gap-2">
                 <div class="w-8 h-8 rounded-xl bg-blue-100 text-blue-700 flex items-center justify-center font-bold">
                   <i data-lucide="table" class="w-4 h-4"></i>
@@ -3087,7 +3431,7 @@
 
           <!-- Filter & Tabel Ketertiban Pelatih -->
           <div class="bg-white rounded-3xl border border-slate-200 shadow-xs overflow-hidden">
-            <div class="p-4 sm:p-5 border-b border-slate-100 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+            <div class="p-4 sm:p-5 border-b border-slate-100 flex flex-col sm:flex-row flex-wrap sm:items-center justify-between gap-3">
               <div class="flex items-center gap-2">
                 <div class="w-7 h-7 rounded-lg bg-rose-100 text-rose-700 flex items-center justify-center font-bold text-xs">
                   <i data-lucide="list-checks" class="w-4 h-4"></i>
@@ -3129,7 +3473,7 @@
         <div id="subViewKoord_manajemen" class="hidden space-y-6">
           <!-- Bagian 1: Usulan Anggota Latihan dari Pelatih -->
           <div class="bg-white rounded-3xl border border-slate-200 shadow-xs overflow-hidden">
-            <div class="p-5 bg-gradient-to-r from-amber-500/10 via-purple-500/10 to-indigo-500/10 border-b border-amber-200 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+            <div class="p-5 bg-gradient-to-r from-amber-500/10 via-purple-500/10 to-indigo-500/10 border-b border-amber-200 flex flex-col sm:flex-row flex-wrap sm:items-center justify-between gap-3">
               <div class="flex items-start gap-3">
                 <div class="w-9 h-9 rounded-xl bg-amber-500 text-white flex items-center justify-center font-bold flex-shrink-0 mt-0.5">
                   <i data-lucide="user-plus" class="w-5 h-5"></i>
@@ -3164,7 +3508,7 @@
 
           <!-- Bagian 2: Manajemen Cabang Ekstrakurikuler -->
           <div class="bg-white rounded-3xl border border-slate-200 shadow-xs p-5 sm:p-6 space-y-4">
-            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-slate-100">
+            <div class="flex flex-col sm:flex-row flex-wrap sm:items-center justify-between gap-3 pb-3 border-b border-slate-100">
               <div class="flex items-center gap-2">
                 <div class="w-8 h-8 rounded-xl bg-purple-100 text-purple-700 flex items-center justify-center font-bold">
                   <i data-lucide="award" class="w-4 h-4"></i>
@@ -3212,7 +3556,7 @@
         <div id="subViewKoord_cetak" class="hidden space-y-5">
           <!-- Pengaturan Cetak Lembar Presensi -->
           <div class="bg-white rounded-3xl border border-slate-200 shadow-xs p-5 sm:p-6 space-y-4">
-            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-slate-100">
+            <div class="flex flex-col sm:flex-row flex-wrap sm:items-center justify-between gap-3 pb-3 border-b border-slate-100">
               <div class="flex items-center gap-2">
                 <div class="w-8 h-8 rounded-xl bg-emerald-100 text-emerald-700 flex items-center justify-center font-bold">
                   <i data-lucide="printer" class="w-4 h-4"></i>
@@ -3263,7 +3607,7 @@
       <!-- KONTEN TAB KHUSUS GURU: PENGUMUMAN & EDARAN SEKOLAH -->
       <div id="tabContentGuru_pengumuman" class="tab-guru-content hidden space-y-6">
         <div class="bg-gradient-to-r from-indigo-800 via-blue-800 to-slate-900 rounded-3xl p-6 text-white shadow-md">
-          <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+          <div class="flex flex-col sm:flex-row flex-wrap items-start sm:items-center justify-between gap-4">
             <div>
               <div class="inline-flex items-center gap-1.5 px-3 py-1 bg-white/20 backdrop-blur-md rounded-full text-xs font-bold mb-2">
                 <i data-lucide="megaphone" class="w-3.5 h-3.5 text-amber-300"></i>
@@ -3293,7 +3637,7 @@
           <div class="bg-white p-6 rounded-3xl border border-slate-200 shadow-xs space-y-4">
             <div class="flex items-center gap-3 pb-3 border-b border-slate-100">
               <div class="w-12 h-12 rounded-2xl bg-indigo-100 text-indigo-700 flex items-center justify-center text-xl font-bold">
-                
+                <i data-lucide="user" class="w-6 h-6"></i>
               </div>
               <div>
                 <h3 id="profilDetailNamaGuru" class="font-black text-base text-slate-900">-</h3>
@@ -3388,13 +3732,16 @@
         </div>
       </div>
 
+        </div>
+      </div>
+
     </section>
 
     <!-- ========================================================================= -->
     <!-- VIEW 4: PANEL ADMINISTRATOR SEKOLAH -->
     <!-- ========================================================================= -->
     <section id="viewAdmin" class="hidden space-y-6 pb-28">
-      <div class="bg-gradient-to-r from-slate-900 via-blue-950 to-slate-900 rounded-3xl p-5 sm:p-6 text-white shadow-xl flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+      <div class="bg-gradient-to-r from-slate-900 via-blue-950 to-slate-900 rounded-3xl p-5 sm:p-6 text-white shadow-xl flex flex-col sm:flex-row flex-wrap sm:items-center justify-between gap-4">
         <div>
           <span class="px-2.5 py-0.5 bg-amber-400 text-slate-950 rounded text-[10px] font-black tracking-wider uppercase">Super Administrator</span>
           <h2 class="text-xl sm:text-2xl font-black mt-1">Panel Kendali Master Sekolah</h2>
@@ -5923,7 +6270,7 @@
       <div class="flex items-center justify-between pb-3 border-b border-slate-100 flex-shrink-0">
         <div class="flex items-center gap-3">
           <div class="w-10 h-10 rounded-xl bg-indigo-100 text-indigo-700 flex items-center justify-center font-bold text-lg">
-            
+            <i data-lucide="book-open" class="w-5 h-5"></i>
           </div>
           <div>
             <h3 class="font-extrabold text-base text-slate-900 leading-tight">Edit Catatan Jurnal & Refleksi 4F</h3>
@@ -7320,105 +7667,81 @@
       </form>
     </div>
   </div>
-  <!-- 1. BOTTOM NAV KHUSUS PORTAL SISWA -->
-  <nav id="mobileBottomNavSiswa" class="fixed bottom-0 left-0 right-0 z-40 bg-white/95 backdrop-blur-md border-t border-slate-200/80 px-2 py-1 shadow-[0_-4px_20px_rgba(0,0,0,0.06)] hidden">
-    <div class="flex items-center gap-1 overflow-x-auto no-scrollbar max-w-xl mx-auto py-0.5 justify-start sm:justify-around">
-      <button type="button" onclick="switchTabSiswa('beranda')" id="mobileNav_beranda" class="mobile-nav-btn flex flex-col items-center justify-center py-1 px-2.5 rounded-xl transition text-blue-700 font-bold min-w-[56px] flex-shrink-0">
-        <i data-lucide="home" class="w-4 h-4 mb-0.5"></i>
+  <!-- 1. BOTTOM NAV KHUSUS PORTAL SISWA (4 SHORTCUT + DRAWER SINKRON SIDEBAR) -->
+  <nav id="mobileBottomNavSiswa" class="lg:hidden fixed bottom-0 left-0 right-0 z-40 bg-white/95 dark:bg-dark-surface-container-low/95 backdrop-blur-md border-t border-slate-200/80 dark:border-dark-outline-variant px-2 py-1.5 shadow-[0_-4px_20px_rgba(0,0,0,0.06)] hidden">
+    <div class="grid grid-cols-5 gap-1 max-w-xl mx-auto">
+      <button type="button" onclick="switchTabSiswa('beranda')" id="mobileNav_beranda" class="mobile-nav-btn flex flex-col items-center justify-center py-1 px-1 rounded-xl transition text-blue-700 font-bold">
+        <i data-lucide="layout-dashboard" class="w-4 h-4 mb-0.5"></i>
         <span class="text-[10px] leading-tight">Beranda</span>
       </button>
-      <button type="button" onclick="switchTabSiswa('kebiasaan')" id="mobileNav_kebiasaan" class="mobile-nav-btn flex flex-col items-center justify-center py-1 px-2.5 rounded-xl transition text-slate-500 hover:text-blue-600 font-medium min-w-[56px] flex-shrink-0">
+      <button type="button" onclick="switchTabSiswa('kebiasaan')" id="mobileNav_kebiasaan" class="mobile-nav-btn flex flex-col items-center justify-center py-1 px-1 rounded-xl transition text-slate-500 hover:text-blue-600 font-medium">
         <i data-lucide="sun" class="w-4 h-4 mb-0.5"></i>
-        <span class="text-[10px] leading-tight">7 Kebiasaan</span>
+        <span class="text-[10px] leading-tight">7K</span>
       </button>
-      <button type="button" onclick="switchTabSiswa('presensi')" id="mobileNav_presensi" class="mobile-nav-btn flex flex-col items-center justify-center py-1 px-2.5 rounded-xl transition text-slate-500 hover:text-blue-600 font-medium min-w-[56px] flex-shrink-0">
-        <i data-lucide="calendar" class="w-4 h-4 mb-0.5"></i>
+      <button type="button" onclick="switchTabSiswa('presensi')" id="mobileNav_presensi" class="mobile-nav-btn flex flex-col items-center justify-center py-1 px-1 rounded-xl transition text-slate-500 hover:text-blue-600 font-medium">
+        <i data-lucide="calendar-check" class="w-4 h-4 mb-0.5"></i>
         <span class="text-[10px] leading-tight">Presensi</span>
       </button>
-      <button type="button" onclick="switchTabSiswa('nilai')" id="mobileNav_nilai" class="mobile-nav-btn flex flex-col items-center justify-center py-1 px-2.5 rounded-xl transition text-slate-500 hover:text-blue-600 font-medium min-w-[56px] flex-shrink-0">
-        <i data-lucide="bar-chart-2" class="w-4 h-4 mb-0.5"></i>
+      <button type="button" onclick="switchTabSiswa('nilai')" id="mobileNav_nilai" class="mobile-nav-btn flex flex-col items-center justify-center py-1 px-1 rounded-xl transition text-slate-500 hover:text-blue-600 font-medium">
+        <i data-lucide="award" class="w-4 h-4 mb-0.5"></i>
         <span class="text-[10px] leading-tight">Nilai</span>
       </button>
-      <button type="button" onclick="switchTabSiswa('ekskul')" id="mobileNav_ekskul" class="mobile-nav-btn flex flex-col items-center justify-center py-1 px-2.5 rounded-xl transition text-slate-500 hover:text-blue-600 font-medium min-w-[56px] flex-shrink-0">
-        <i data-lucide="activity" class="w-4 h-4 mb-0.5"></i>
-        <span class="text-[10px] leading-tight">Ekskul</span>
-      </button>
-      <button type="button" onclick="switchTabSiswa('tatatertib')" id="mobileNav_tatatertib" class="mobile-nav-btn flex flex-col items-center justify-center py-1 px-2.5 rounded-xl transition text-slate-500 hover:text-blue-600 font-medium min-w-[56px] flex-shrink-0">
-        <i data-lucide="shield" class="w-4 h-4 mb-0.5"></i>
-        <span class="text-[10px] leading-tight">Disiplin</span>
-      </button>
-      <button type="button" onclick="switchTabSiswa('pengumuman')" id="mobileNav_pengumuman" class="mobile-nav-btn flex flex-col items-center justify-center py-1 px-2.5 rounded-xl transition text-slate-500 hover:text-blue-600 font-medium min-w-[56px] flex-shrink-0">
-        <i data-lucide="megaphone" class="w-4 h-4 mb-0.5"></i>
-        <span class="text-[10px] leading-tight">Pengumuman</span>
-      </button>
-      <button type="button" onclick="switchTabSiswa('kelulusan')" id="mobileNav_kelulusan" class="mobile-nav-btn flex flex-col items-center justify-center py-1 px-2.5 rounded-xl transition text-slate-500 hover:text-blue-600 font-medium min-w-[56px] flex-shrink-0">
-        <i data-lucide="award" class="w-4 h-4 mb-0.5"></i>
-        <span class="text-[10px] leading-tight">Kelulusan</span>
-      </button>
-      <button type="button" onclick="switchTabSiswa('profil')" id="mobileNav_profil" class="mobile-nav-btn flex flex-col items-center justify-center py-1 px-2.5 rounded-xl transition text-slate-500 hover:text-blue-600 font-medium min-w-[56px] flex-shrink-0">
-        <i data-lucide="user" class="w-4 h-4 mb-0.5"></i>
-        <span class="text-[10px] leading-tight">Profil</span>
+      <button type="button" onclick="openMobileDrawer('siswa')" class="flex flex-col items-center justify-center py-1 px-1 rounded-xl transition text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-dark-surface-container-high font-bold">
+        <i data-lucide="layout-grid" class="w-4 h-4 mb-0.5 text-light-primary dark:text-dark-primary"></i>
+        <span class="text-[10px] leading-tight">Menu</span>
       </button>
     </div>
   </nav>
 
-  <!-- 2. BOTTOM NAV KHUSUS PORTAL GURU, WALAS & PELATIH -->
-  <nav id="mobileBottomNavGuru" class="fixed bottom-0 left-0 right-0 z-40 bg-white/95 backdrop-blur-md border-t border-slate-200/80 px-2 py-1 shadow-[0_-4px_20px_rgba(0,0,0,0.06)] hidden">
-    <div class="flex items-center gap-1 overflow-x-auto no-scrollbar max-w-xl mx-auto py-0.5 justify-start sm:justify-around">
-      <button type="button" onclick="switchTabGuru('beranda')" id="mobileNavGuru_beranda" class="mobile-nav-btn flex flex-col items-center justify-center py-1 px-2.5 rounded-xl transition text-indigo-700 font-bold min-w-[56px] flex-shrink-0">
+  <!-- 2. BOTTOM NAV KHUSUS PORTAL GURU, WALAS & PELATIH (4 SHORTCUT + DRAWER SINKRON SIDEBAR) -->
+  <nav id="mobileBottomNavGuru" class="lg:hidden fixed bottom-0 left-0 right-0 z-40 bg-white/95 dark:bg-dark-surface-container-low/95 backdrop-blur-md border-t border-slate-200/80 dark:border-dark-outline-variant px-2 py-1.5 shadow-[0_-4px_20px_rgba(0,0,0,0.06)] hidden">
+    <div class="grid grid-cols-5 gap-1 max-w-xl mx-auto">
+      <button type="button" onclick="switchTabGuru('beranda')" id="mobileNavGuru_beranda" class="mobile-nav-btn flex flex-col items-center justify-center py-1 px-1 rounded-xl transition text-indigo-700 font-bold">
         <i data-lucide="layout-dashboard" class="w-4 h-4 mb-0.5"></i>
         <span class="text-[10px] leading-tight">Beranda</span>
       </button>
-      <button type="button" onclick="switchTabGuru('presensiKbm')" id="mobileNavGuru_presensiKbm" class="mobile-nav-btn flex flex-col items-center justify-center py-1 px-2.5 rounded-xl transition text-slate-500 hover:text-indigo-600 font-medium min-w-[56px] flex-shrink-0">
-        <i data-lucide="calendar-check" class="w-4 h-4 mb-0.5"></i>
+      <button type="button" onclick="switchTabGuru('presensiKbm')" id="mobileNavGuru_presensiKbm" class="mobile-nav-btn flex flex-col items-center justify-center py-1 px-1 rounded-xl transition text-slate-500 hover:text-indigo-600 font-medium">
+        <i data-lucide="clipboard-check" class="w-4 h-4 mb-0.5"></i>
         <span class="text-[10px] leading-tight">KBM</span>
       </button>
-      <button type="button" onclick="switchTabGuru('rekapWalas')" id="mobileNavGuru_rekapWalas" class="mobile-nav-btn flex flex-col items-center justify-center py-1 px-2.5 rounded-xl transition text-slate-500 hover:text-indigo-600 font-medium min-w-[56px] flex-shrink-0">
-        <i data-lucide="clipboard-list" class="w-4 h-4 mb-0.5"></i>
-        <span class="text-[10px] leading-tight">Rekap Ekskul</span>
-      </button>
-      <button type="button" onclick="switchTabGuru('absenEkskul')" id="mobileNavGuru_absenEkskul" class="mobile-nav-btn flex flex-col items-center justify-center py-1 px-2.5 rounded-xl transition text-slate-500 hover:text-indigo-600 font-medium min-w-[56px] flex-shrink-0">
-        <i data-lucide="activity" class="w-4 h-4 mb-0.5"></i>
-        <span class="text-[10px] leading-tight">Pelatih</span>
-      </button>
-      <button type="button" onclick="switchTabGuru('nilaiUlangan')" id="mobileNavGuru_nilaiUlangan" class="mobile-nav-btn flex flex-col items-center justify-center py-1 px-2.5 rounded-xl transition text-slate-500 hover:text-indigo-600 font-medium min-w-[56px] flex-shrink-0">
-        <i data-lucide="bar-chart-3" class="w-4 h-4 mb-0.5"></i>
-        <span class="text-[10px] leading-tight">Leger Nilai</span>
-      </button>
-      <button type="button" onclick="switchTabGuru('penilaianTopik')" id="mobileNavGuru_penilaianTopik" class="mobile-nav-btn flex flex-col items-center justify-center py-1 px-2.5 rounded-xl transition text-slate-500 hover:text-indigo-600 font-medium min-w-[56px] flex-shrink-0">
-        <i data-lucide="award" class="w-4 h-4 mb-0.5"></i>
+      <button type="button" onclick="switchTabGuru('penilaianTopik')" id="mobileNavGuru_penilaianTopik" class="mobile-nav-btn flex flex-col items-center justify-center py-1 px-1 rounded-xl transition text-slate-500 hover:text-indigo-600 font-medium">
+        <i data-lucide="file-check-2" class="w-4 h-4 mb-0.5"></i>
         <span class="text-[10px] leading-tight">Nilai Topik</span>
       </button>
-      <button type="button" onclick="switchTabGuru('guruWali')" id="mobileNavGuru_guruWali" class="mobile-nav-btn flex flex-col items-center justify-center py-1 px-2.5 rounded-xl transition text-slate-500 hover:text-indigo-600 font-medium min-w-[56px] flex-shrink-0">
-        <i data-lucide="star" class="w-4 h-4 mb-0.5"></i>
-        <span class="text-[10px] leading-tight">Guru Wali</span>
-      </button>
-      <button type="button" onclick="switchTabGuru('koordinatorEkskul')" id="mobileNavGuru_koordinatorEkskul" class="mobile-nav-btn hidden flex flex-col items-center justify-center py-1 px-2.5 rounded-xl transition text-slate-500 hover:text-purple-600 font-medium min-w-[56px] flex-shrink-0">
-        <i data-lucide="award" class="w-5 h-5"></i>
-        <span class="text-[10px] mt-0.5">Koord Ekstra</span>
-      </button>
-      <button type="button" onclick="switchTabGuru('tibum')" id="mobileNavGuru_tibum" class="mobile-nav-btn flex flex-col items-center justify-center py-1 px-2.5 rounded-xl transition text-slate-500 hover:text-indigo-600 font-medium min-w-[56px] flex-shrink-0">
-        <i data-lucide="scale" class="w-4 h-4 mb-0.5"></i>
+      <button type="button" onclick="switchTabGuru('tibum')" id="mobileNavGuru_tibum" class="mobile-nav-btn flex flex-col items-center justify-center py-1 px-1 rounded-xl transition text-slate-500 hover:text-indigo-600 font-medium">
+        <i data-lucide="qr-code" class="w-4 h-4 mb-0.5"></i>
         <span class="text-[10px] leading-tight">Tata Tertib</span>
       </button>
-      <button type="button" onclick="switchTabGuru('layananBk')" id="mobileNavGuru_layananBk" class="mobile-nav-btn hidden flex flex-col items-center justify-center py-1 px-2.5 rounded-xl transition text-slate-500 hover:text-emerald-600 font-medium min-w-[56px] flex-shrink-0">
-        <i data-lucide="heart-handshake" class="w-4 h-4 mb-0.5"></i>
-        <span class="text-[10px] leading-tight">Layanan BK</span>
-      </button>
-      <button type="button" onclick="switchTabGuru('manajemenPelanggaran')" id="mobileNavGuru_manajemenPelanggaran" class="mobile-nav-btn hidden flex flex-col items-center justify-center py-1 px-2.5 rounded-xl transition text-slate-500 hover:text-rose-600 font-medium min-w-[56px] flex-shrink-0">
-        <i data-lucide="shield-alert" class="w-4 h-4 mb-0.5"></i>
-        <span class="text-[10px] leading-tight">Manajemen Tatib</span>
-      </button>
-      <button type="button" onclick="switchTabGuru('pengumuman')" id="mobileNavGuru_pengumuman" class="mobile-nav-btn flex flex-col items-center justify-center py-1 px-2.5 rounded-xl transition text-slate-500 hover:text-indigo-600 font-medium min-w-[56px] flex-shrink-0">
-        <i data-lucide="megaphone" class="w-4 h-4 mb-0.5"></i>
-        <span class="text-[10px] leading-tight">Pengumuman</span>
-      </button>
-      <button type="button" onclick="switchTabGuru('profil')" id="mobileNavGuru_profil" class="mobile-nav-btn flex flex-col items-center justify-center py-1 px-2.5 rounded-xl transition text-slate-500 hover:text-indigo-600 font-medium min-w-[56px] flex-shrink-0">
-        <i data-lucide="user" class="w-4 h-4 mb-0.5"></i>
-        <span class="text-[10px] leading-tight">Profil</span>
+      <button type="button" onclick="openMobileDrawer('guru')" class="flex flex-col items-center justify-center py-1 px-1 rounded-xl transition text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-dark-surface-container-high font-bold">
+        <i data-lucide="layout-grid" class="w-4 h-4 mb-0.5 text-light-primary dark:text-dark-primary"></i>
+        <span class="text-[10px] leading-tight">Menu</span>
       </button>
     </div>
   </nav>
+
+  <!-- SLIDE-UP MOBILE DRAWER (OTOMATIS TERSINKRON DENGAN NAVIGASI SIDEBAR DESKTOP) -->
+  <div id="mobileDrawerPortal" class="fixed inset-0 z-50 hidden">
+    <div onclick="closeMobileDrawer()" class="absolute inset-0 bg-slate-950/60 backdrop-blur-xs"></div>
+    <div class="absolute bottom-0 left-0 right-0 bg-white dark:bg-dark-surface-container-low rounded-t-3xl border-t border-slate-200 dark:border-dark-outline-variant shadow-2xl max-h-[82vh] flex flex-col">
+      <div class="flex items-center justify-between px-5 py-4 border-b border-slate-100 dark:border-dark-outline-variant flex-shrink-0">
+        <div class="flex items-center gap-2.5">
+          <div class="w-8 h-8 rounded-xl bg-indigo-50 dark:bg-indigo-950/50 text-light-primary dark:text-dark-primary flex items-center justify-center">
+            <i data-lucide="layout-grid" class="w-4 h-4"></i>
+          </div>
+          <div>
+            <h3 id="mobileDrawerTitle" class="font-extrabold text-sm text-slate-900 dark:text-dark-on-surface">Menu Navigasi</h3>
+            <p class="text-[11px] text-slate-500 dark:text-dark-on-surface-variant">Tersinkron otomatis dengan hak akses akun Anda</p>
+          </div>
+        </div>
+        <button type="button" onclick="closeMobileDrawer()" class="p-2 rounded-xl text-slate-400 hover:text-slate-700 hover:bg-slate-100 dark:hover:bg-dark-surface-container-high transition cursor-pointer">
+          <i data-lucide="x" class="w-5 h-5"></i>
+        </button>
+      </div>
+      <div id="mobileDrawerContent" class="p-4 overflow-y-auto custom-scrollbar space-y-4">
+        <!-- Diisi otomatis dari Sidebar Desktop oleh openMobileDrawer() -->
+      </div>
+    </div>
+  </div>
 
   <!-- 3. BOTTOM NAV KHUSUS PORTAL ADMIN -->
   <nav id="mobileBottomNavAdmin" class="fixed bottom-0 left-0 right-0 z-40 bg-white/95 backdrop-blur-md border-t border-slate-200/80 px-2 py-1 shadow-[0_-4px_20px_rgba(0,0,0,0.06)] hidden">
@@ -9372,7 +9695,7 @@ function renderBadgeStatusBk(statusBK) {
     function logoutSession() {
       if (typeof stopNfcTibumScan === 'function') stopNfcTibumScan();
       currentUser = null;
-      document.getElementById('userProfileArea').classList.add('hidden');
+      document.getElementById('userProfileArea').classList.add('hidden'); document.getElementById('userProfileArea').classList.remove('flex');
       document.getElementById('btnAdminAccess').classList.remove('hidden');
       
       const navSiswa = document.getElementById('mobileBottomNavSiswa');
@@ -10185,7 +10508,7 @@ function renderBadgeStatusBk(statusBK) {
     // LOGIKA PORTAL SISWA
     // -------------------------------------------------------------
     function setupSiswaUi() {
-      document.getElementById('userProfileArea').classList.remove('hidden');
+      document.getElementById('userProfileArea').classList.remove('hidden'); document.getElementById('userProfileArea').classList.add('flex');
       document.getElementById('userName').innerText = currentUser.nama;
       document.getElementById('userRoleBadge').innerText = `Siswa Kelas ${currentUser.kelas}`;
       document.getElementById('userAvatar').innerText = currentUser.nama.charAt(0);
@@ -11560,7 +11883,7 @@ function renderBadgeStatusBk(statusBK) {
     // LOGIKA PORTAL GURU, PELATIH & WALI KELAS
     // -------------------------------------------------------------
     function setupGuruUi() {
-      document.getElementById('userProfileArea').classList.remove('hidden');
+      document.getElementById('userProfileArea').classList.remove('hidden'); document.getElementById('userProfileArea').classList.add('flex');
       document.getElementById('userName').innerText = currentUser.nama;
       document.getElementById('userRoleBadge').innerText = currentUser.role || (currentUser.peran || "Guru Pengajar");
       document.getElementById('userAvatar').innerText = currentUser.nama.charAt(0);
@@ -11898,6 +12221,7 @@ function renderBadgeStatusBk(statusBK) {
         if (typeof renderBannerPeringatanAlpaGuru === 'function') renderBannerPeringatanAlpaGuru();
       } else if (tabName === 'tibum') {
         if (typeof renderCheckboxMasterTibum === 'function') renderCheckboxMasterTibum();
+        if (typeof renderHistoriPelanggaranTibum === 'function') renderHistoriPelanggaranTibum();
       } else if (tabName === 'pengumuman') {
         if (typeof renderPengumumanGuru === 'function') renderPengumumanGuru();
       } else if (tabName === 'nilaiUlangan') {
@@ -14448,29 +14772,37 @@ ATURAN KETAT:
             `;
           }
 
+          const ikutanPillsHtml = ikutanArr.length > 0
+            ? `<div class="flex flex-wrap gap-1 min-w-[150px]">${ikutanArr.map(a => `<span class="inline-block px-2 py-0.5 bg-blue-50 text-blue-700 border border-blue-200/60 rounded-md font-semibold text-[11px] whitespace-nowrap">${escapeHtml(a.namaEkskul)}</span>`).join('')}</div>`
+            : `<span class="inline-block px-2 py-0.5 bg-slate-100 text-slate-500 rounded-md font-semibold text-[11px] whitespace-nowrap">Belum ikut</span>`;
+
           return `
             <tr class="hover:bg-slate-50 transition ${alpha >= 5 ? 'bg-rose-50/50' : (!kepatuhan.isLengkap ? 'bg-amber-50/30' : '')}">
-              <td class="py-3 px-3">${idx + 1}</td>
-              <td class="py-3 px-3 font-mono font-bold text-slate-600">${s.nisn}</td>
-              <td class="py-3 px-3 font-bold text-slate-800">
-                <span>${s.nama}</span>
-                ${alpha >= 5 ? '<span class="ml-1.5 px-1.5 py-0.5 bg-rose-600 text-white rounded text-[9px] font-black">SP ALPHA</span>' : ''}
+              <td class="py-3 px-3 text-slate-500">${idx + 1}</td>
+              <td class="py-3 px-3 font-mono font-bold text-slate-600 whitespace-nowrap">${s.nisn}</td>
+              <td class="py-3 px-3 font-bold text-slate-800 min-w-[150px]">
+                <div class="flex flex-wrap items-center gap-1.5">
+                  <span>${escapeHtml(s.nama)}</span>
+                  ${alpha >= 5 ? '<span class="px-1.5 py-0.5 bg-rose-600 text-white rounded text-[9px] font-black whitespace-nowrap">SP ALPHA</span>' : ''}
+                </div>
               </td>
-              <td class="py-3 px-3">
-                <span class="px-2.5 py-1 rounded-full text-[10px] font-black border ${kepatuhan.badgeColor}" title="${escapeHtml(kepatuhan.keterangan)}">
+              <td class="py-3 px-3 whitespace-nowrap">
+                <span class="inline-flex items-center whitespace-nowrap px-2.5 py-1 rounded-full text-[10px] font-black border ${kepatuhan.badgeColor}" title="${escapeHtml(kepatuhan.keterangan)}">
                   ${escapeHtml(kepatuhan.statusText)}
                 </span>
               </td>
-              <td class="py-3 px-3"><span class="px-2 py-0.5 bg-blue-50 text-blue-700 rounded font-semibold text-xs">${ikutanStr}</span></td>
-              <td class="py-3 px-3 text-center font-bold text-emerald-700">${hadir}</td>
-              <td class="py-3 px-3 text-center font-bold ${sakit > 0 ? 'text-amber-700 bg-amber-50 rounded-lg' : 'text-slate-400'}">${sakit}</td>
-              <td class="py-3 px-3 text-center font-bold ${izin > 0 ? 'text-blue-700 bg-blue-50 rounded-lg' : 'text-slate-400'}">${izin}</td>
-              <td class="py-3 px-3 text-center font-bold ${alpha > 0 ? (alpha >= 5 ? 'text-white bg-rose-600 rounded-lg px-2 py-1' : 'text-rose-700 bg-rose-50 rounded-lg') : 'text-slate-400'}">${alpha}</td>
-              <td class="py-3 px-3">${rincianHtml}</td>
+              <td class="py-3 px-3">${ikutanPillsHtml}</td>
+              <td class="py-3 px-3 text-center font-bold text-emerald-700 whitespace-nowrap">${hadir}</td>
+              <td class="py-3 px-3 text-center font-bold whitespace-nowrap ${sakit > 0 ? 'text-amber-700 bg-amber-50 rounded-lg' : 'text-slate-400'}">${sakit}</td>
+              <td class="py-3 px-3 text-center font-bold whitespace-nowrap ${izin > 0 ? 'text-blue-700 bg-blue-50 rounded-lg' : 'text-slate-400'}">${izin}</td>
+              <td class="py-3 px-3 text-center font-bold whitespace-nowrap ${alpha > 0 ? (alpha >= 5 ? 'text-white bg-rose-600 rounded-lg px-2 py-1' : 'text-rose-700 bg-rose-50 rounded-lg') : 'text-slate-400'}">${alpha}</td>
+              <td class="py-3 px-3 whitespace-nowrap">${rincianHtml}</td>
             </tr>
           `;
         }).join('');
       }
+
+      if (typeof renderHistoriPelanggaranWalas === 'function') renderHistoriPelanggaranWalas(rombel);
 
       const warningTextElem = document.getElementById('walasEarlyWarningText');
       const warningBoxElem = document.getElementById('walasEarlyWarningBox');
@@ -17061,7 +17393,7 @@ ATURAN KETAT:
     function setupAdminUi() {
       const badgeEksNav = document.getElementById('badgeAdminTotalEkskul');
       if (badgeEksNav) badgeEksNav.innerText = (masterEkskul ? masterEkskul.length : 0) + ' Cabang';
-      document.getElementById('userProfileArea').classList.remove('hidden');
+      document.getElementById('userProfileArea').classList.remove('hidden'); document.getElementById('userProfileArea').classList.add('flex');
       document.getElementById('userName').innerText = "Administrator";
       document.getElementById('userRoleBadge').innerText = "Super Admin";
       document.getElementById('userAvatar').innerText = "A";
@@ -23104,7 +23436,7 @@ ATURAN KETAT:
       const activeNipKepsek = String(rawNip).startsWith("NIP") ? rawNip : `NIP. ${rawNip}`;
       const activeSekolah = (typeof appConfig !== 'undefined' && appConfig.NAMA_SEKOLAH) ? appConfig.NAMA_SEKOLAH : "SMP Negeri Indonesia Hebat";
 
-      if (document.getElementById('userProfileArea')) document.getElementById('userProfileArea').classList.remove('hidden');
+      if (document.getElementById('userProfileArea')) document.getElementById('userProfileArea').classList.remove('hidden'); document.getElementById('userProfileArea').classList.add('flex');
       if (document.getElementById('userName')) document.getElementById('userName').innerText = activeNamaKepsek;
       if (document.getElementById('userRoleBadge')) document.getElementById('userRoleBadge').innerText = "Kepala Sekolah";
       if (document.getElementById('userAvatar')) document.getElementById('userAvatar').innerText = "KS";
@@ -23732,6 +24064,72 @@ ATURAN KETAT:
     // -------------------------------------------------------------
     // FITUR FONT SCALER APLIKASI (WCAG 2.1 COMPLIANT)
     // -------------------------------------------------------------
+    // TOGGLE LIGHT / DARK MODE (AKADEMIKA TERPADU)
+    function toggleDarkMode() {
+      const root = document.documentElement;
+      const isDark = root.classList.toggle('dark');
+      try {
+        localStorage.setItem('SUPERAPP_THEME', isDark ? 'dark' : 'light');
+      } catch (e) {}
+      if (typeof safeCreateIcons === 'function') safeCreateIcons();
+    }
+
+    // MOBILE DRAWER DINAMIS: OTOMATIS MENYINKRONKAN GRUP & ITEM DARI SIDEBAR DESKTOP
+    function openMobileDrawer(portal) {
+      const drawer = document.getElementById('mobileDrawerPortal');
+      const titleEl = document.getElementById('mobileDrawerTitle');
+      const bodyEl = document.getElementById('mobileDrawerContent');
+      if (!drawer || !bodyEl) return;
+
+      const sidebarSelector = portal === 'siswa' ? '#viewSiswa aside' : '#viewGuru aside';
+      const sidebar = document.querySelector(sidebarSelector);
+      if (titleEl) {
+        titleEl.innerText = portal === 'siswa' ? 'Menu Portal Siswa' : 'Menu Portal Guru & Staff';
+      }
+
+      bodyEl.innerHTML = '';
+      if (sidebar) {
+        const groups = sidebar.querySelectorAll(':scope > div');
+        groups.forEach(group => {
+          const groupTitle = group.querySelector('p') ? group.querySelector('p').innerText : '';
+          const visibleBtns = Array.from(group.querySelectorAll('button')).filter(b => !b.classList.contains('hidden'));
+          if (visibleBtns.length === 0) return;
+
+          const sec = document.createElement('div');
+          sec.className = 'space-y-1.5';
+          if (groupTitle) {
+            const h = document.createElement('p');
+            h.className = 'px-2 text-[10px] font-extrabold uppercase tracking-wider text-slate-400';
+            h.innerText = groupTitle;
+            sec.appendChild(h);
+          }
+
+          const grid = document.createElement('div');
+          grid.className = 'grid grid-cols-1 sm:grid-cols-2 gap-1.5';
+          visibleBtns.forEach(srcBtn => {
+            const cloneBtn = srcBtn.cloneNode(true);
+            cloneBtn.removeAttribute('id');
+            cloneBtn.className = srcBtn.className.replace('w-full', 'w-full') + ' border';
+            cloneBtn.onclick = function() {
+              closeMobileDrawer();
+              srcBtn.click();
+            };
+            grid.appendChild(cloneBtn);
+          });
+          sec.appendChild(grid);
+          bodyEl.appendChild(sec);
+        });
+      }
+
+      drawer.classList.remove('hidden');
+      if (typeof safeCreateIcons === 'function') safeCreateIcons();
+    }
+
+    function closeMobileDrawer() {
+      const drawer = document.getElementById('mobileDrawerPortal');
+      if (drawer) drawer.classList.add('hidden');
+    }
+
     function setFontScale(size) {
       const validSizes = ["small", "medium", "big"];
       if (!validSizes.includes(size)) size = "medium";
@@ -26922,6 +27320,430 @@ async function simpanPetugasPelanggaranAdmin() {
 }
 
 // -------------------------------------------------------------------------
+// HISTORI CATATAN PELANGGARAN WALIKELAS & PETUGAS TATA TERTIB
+// -------------------------------------------------------------------------
+function getStatusBadgePelanggaranHtml(t) {
+  const st = String(t.statusBK || 'Pending');
+  if (t.tugasSelesai || st.toLowerCase().includes('selesai')) {
+    return '<span class="inline-flex items-center whitespace-nowrap px-2 py-0.5 bg-emerald-100 text-emerald-800 rounded-md text-[10px] font-bold">Selesai</span>';
+  }
+  if (st.toLowerCase().includes('panggilan') || st.toLowerCase().includes('rujuk')) {
+    return `<span class="inline-flex items-center whitespace-nowrap px-2 py-0.5 bg-rose-100 text-rose-800 rounded-md text-[10px] font-bold">${escapeHtml(st)}</span>`;
+  }
+  if (st.toLowerCase().includes('tugas')) {
+    return `<span class="inline-flex items-center whitespace-nowrap px-2 py-0.5 bg-amber-100 text-amber-800 rounded-md text-[10px] font-bold">${escapeHtml(st)}</span>`;
+  }
+  return `<span class="inline-flex items-center whitespace-nowrap px-2 py-0.5 bg-slate-100 text-slate-700 rounded-md text-[10px] font-bold">${escapeHtml(st)}</span>`;
+}
+
+function renderHistoriPelanggaranWalas(rombelOverride) {
+  const tbody = document.getElementById('tbodyHistoriPelanggaranWalas');
+  const metrikBox = document.getElementById('metrikHistoriPelanggaranWalas');
+  const badgeRombel = document.getElementById('walasPelanggaranRombelBadge');
+  if (!tbody) return;
+
+  const rombel = rombelOverride || (currentUser && currentUser.rombelWali) || document.getElementById('rekapWalasSelectKelas')?.value || '';
+  if (badgeRombel) badgeRombel.innerText = rombel ? `Kelas ${rombel}` : 'Semua Kelas';
+
+  const rombelSiswaSet = new Set((masterSiswa || []).filter(s => !rombel || s.kelas === rombel).map(s => String(s.nisn).padStart(10, '0')));
+  const rawLogs = (logTibum || []).filter(t => {
+    if (!rombel) return true;
+    const tKelas = String(t.kelas || '').trim();
+    const tNisn = String(t.nisn || '').padStart(10, '0');
+    return tKelas === rombel || rombelSiswaSet.has(tNisn);
+  }).sort((a, b) => String(b.tanggal || '').localeCompare(String(a.tanggal || '')));
+
+  const q = (document.getElementById('filterWalasPelanggaranSearch')?.value || '').trim().toLowerCase();
+  const fStatus = document.getElementById('filterWalasPelanggaranStatus')?.value || '';
+
+  const filtered = rawLogs.filter(t => {
+    if (q) {
+      const hay = `${t.nama || ''} ${t.nisn || ''} ${t.namaPelanggaran || ''}`.toLowerCase();
+      if (!hay.includes(q)) return false;
+    }
+    if (fStatus) {
+      const st = String(t.statusBK || 'Pending');
+      if (fStatus === 'Selesai') {
+        if (!t.tugasSelesai && !st.toLowerCase().includes('selesai')) return false;
+      } else if (!st.toLowerCase().includes(fStatus.toLowerCase())) {
+        return false;
+      }
+    }
+    return true;
+  });
+
+  if (metrikBox) {
+    const totalPoin = rawLogs.reduce((acc, x) => acc + (Number(x.poin) || 0), 0);
+    const belumSelesai = rawLogs.filter(x => !x.tugasSelesai && !String(x.statusBK || '').toLowerCase().includes('selesai')).length;
+    const rujukBk = rawLogs.filter(x => String(x.statusBK || '').toLowerCase().includes('panggilan')).length;
+    metrikBox.innerHTML = `
+      <div class="p-3 bg-slate-50 border border-slate-200 rounded-2xl">
+        <span class="text-[10px] font-bold text-slate-500 uppercase">Total Catatan</span>
+        <p class="text-lg font-black text-slate-900 mt-0.5">${rawLogs.length} Kasus</p>
+      </div>
+      <div class="p-3 bg-rose-50 border border-rose-200 rounded-2xl">
+        <span class="text-[10px] font-bold text-rose-700 uppercase">Akumulasi Poin</span>
+        <p class="text-lg font-black text-rose-700 mt-0.5">+${totalPoin} Poin</p>
+      </div>
+      <div class="p-3 bg-amber-50 border border-amber-200 rounded-2xl">
+        <span class="text-[10px] font-bold text-amber-700 uppercase">Perlu Pembinaan</span>
+        <p class="text-lg font-black text-amber-800 mt-0.5">${belumSelesai} Kasus</p>
+      </div>
+      <div class="p-3 bg-indigo-50 border border-indigo-200 rounded-2xl">
+        <span class="text-[10px] font-bold text-indigo-700 uppercase">Rujukan BK</span>
+        <p class="text-lg font-black text-indigo-800 mt-0.5">${rujukBk} Kasus</p>
+      </div>
+    `;
+  }
+
+  if (filtered.length === 0) {
+    tbody.innerHTML = `<tr><td colspan="7" class="py-6 text-center text-slate-400">Tidak ada catatan pelanggaran pada kelas ${escapeHtml(rombel || 'ini')}.</td></tr>`;
+    return;
+  }
+
+  tbody.innerHTML = filtered.map(t => `
+    <tr class="hover:bg-slate-50 transition">
+      <td class="py-3 px-3 whitespace-nowrap">
+        <div class="font-mono font-bold text-slate-700">${escapeHtml(t.tanggal || '-')}</div>
+        <div class="text-[10px] text-slate-400">${escapeHtml(t.waktu || '')}</div>
+      </td>
+      <td class="py-3 px-3">
+        <div class="font-bold text-slate-900">${escapeHtml(t.nama || '-')}</div>
+        <div class="text-[10px] font-mono text-slate-500">NISN: ${escapeHtml(t.nisn || '-')}</div>
+      </td>
+      <td class="py-3 px-3">
+        <div class="font-semibold text-slate-800">${escapeHtml(t.namaPelanggaran || t.kodePelanggaran || '-')}</div>
+        <span class="inline-block mt-0.5 px-1.5 py-0.5 bg-rose-50 text-rose-700 rounded text-[10px] font-black">+${t.poin || 0} Poin</span>
+      </td>
+      <td class="py-3 px-3 text-center whitespace-nowrap">
+        <span class="px-2 py-0.5 bg-slate-100 text-slate-800 rounded font-bold text-[10px]">ke-${t.frekuensiKe || 1}</span>
+      </td>
+      <td class="py-3 px-3 text-slate-600">
+        ${t.tugasKhusus ? `<div class="font-semibold text-purple-800">${escapeHtml(t.tugasKhusus)}</div>` : ''}
+        ${t.sanksi ? `<div class="text-[10px] text-slate-500 mt-0.5">${escapeHtml(t.sanksi)}</div>` : (!t.tugasKhusus ? '-' : '')}
+      </td>
+      <td class="py-3 px-3 whitespace-nowrap">${getStatusBadgePelanggaranHtml(t)}</td>
+      <td class="py-3 px-3 text-slate-600 whitespace-nowrap">${escapeHtml(t.guruPelapor || '-')}</td>
+    </tr>
+  `).join('');
+}
+
+function renderHistoriPelanggaranPetugas() {
+  const tbody = document.getElementById('tbodyHistoriPelanggaranPetugas');
+  const metrikBox = document.getElementById('metrikHistoriPelanggaranPetugas');
+  const selKelas = document.getElementById('filterPetugasPelKelas');
+  if (!tbody) return;
+
+  const allLogs = (logTibum || []).slice().sort((a, b) => String(b.tanggal || '').localeCompare(String(a.tanggal || '')));
+
+  if (selKelas && selKelas.options.length <= 1) {
+    const kelasList = Array.from(new Set(allLogs.map(t => t.kelas).concat((masterSiswa || []).map(s => s.kelas)))).filter(Boolean).sort();
+    kelasList.forEach(k => {
+      const opt = document.createElement('option');
+      opt.value = k;
+      opt.textContent = `Kelas ${k}`;
+      selKelas.appendChild(opt);
+    });
+  }
+
+  const q = (document.getElementById('filterPetugasPelSearch')?.value || '').trim().toLowerCase();
+  const fKelas = selKelas ? selKelas.value : '';
+  const fStatus = document.getElementById('filterPetugasPelStatus')?.value || '';
+
+  const filtered = allLogs.filter(t => {
+    if (fKelas && String(t.kelas || '').trim() !== fKelas) return false;
+    if (q) {
+      const hay = `${t.nama || ''} ${t.nisn || ''} ${t.namaPelanggaran || ''} ${t.guruPelapor || ''}`.toLowerCase();
+      if (!hay.includes(q)) return false;
+    }
+    if (fStatus) {
+      const st = String(t.statusBK || 'Pending');
+      if (fStatus === 'Selesai') {
+        if (!t.tugasSelesai && !st.toLowerCase().includes('selesai')) return false;
+      } else if (!st.toLowerCase().includes(fStatus.toLowerCase())) {
+        return false;
+      }
+    }
+    return true;
+  });
+
+  if (metrikBox) {
+    const todayStr = new Date().toISOString().split('T')[0];
+    const todayCnt = allLogs.filter(t => t.tanggal === todayStr).length;
+    const tugasAktif = allLogs.filter(t => t.tugasKhusus && !t.tugasSelesai).length;
+    const panggilanBk = allLogs.filter(t => String(t.statusBK || '').toLowerCase().includes('panggilan')).length;
+    metrikBox.innerHTML = `
+      <div class="p-3 bg-slate-50 border border-slate-200 rounded-2xl">
+        <span class="text-[10px] font-bold text-slate-500 uppercase">Total Log Pelanggaran</span>
+        <p class="text-lg font-black text-slate-900 mt-0.5">${allLogs.length} Kasus</p>
+      </div>
+      <div class="p-3 bg-rose-50 border border-rose-200 rounded-2xl">
+        <span class="text-[10px] font-bold text-rose-700 uppercase">Tercatat Hari Ini</span>
+        <p class="text-lg font-black text-rose-700 mt-0.5">${todayCnt} Kasus</p>
+      </div>
+      <div class="p-3 bg-amber-50 border border-amber-200 rounded-2xl">
+        <span class="text-[10px] font-bold text-amber-700 uppercase">Tugas Edukatif Aktif</span>
+        <p class="text-lg font-black text-amber-800 mt-0.5">${tugasAktif} Siswa</p>
+      </div>
+      <div class="p-3 bg-indigo-50 border border-indigo-200 rounded-2xl">
+        <span class="text-[10px] font-bold text-indigo-700 uppercase">Panggilan BK</span>
+        <p class="text-lg font-black text-indigo-800 mt-0.5">${panggilanBk} Kasus</p>
+      </div>
+    `;
+  }
+
+  if (filtered.length === 0) {
+    tbody.innerHTML = `<tr><td colspan="8" class="py-6 text-center text-slate-400">Belum ada histori catatan pelanggaran sesuai filter.</td></tr>`;
+    return;
+  }
+
+  tbody.innerHTML = filtered.map(t => `
+    <tr class="hover:bg-slate-50 transition">
+      <td class="py-3 px-3 whitespace-nowrap">
+        <div class="font-mono font-bold text-slate-700">${escapeHtml(t.tanggal || '-')}</div>
+        <div class="text-[10px] text-slate-400">${escapeHtml(t.waktu || '')}</div>
+      </td>
+      <td class="py-3 px-3">
+        <div class="font-bold text-slate-900">${escapeHtml(t.nama || '-')}</div>
+        <div class="text-[10px] text-slate-500 font-mono">${escapeHtml(t.kelas || '-')} | ${escapeHtml(t.nisn || '-')}</div>
+      </td>
+      <td class="py-3 px-3">
+        <div class="font-semibold text-slate-800">${escapeHtml(t.namaPelanggaran || t.kodePelanggaran || '-')}</div>
+        <span class="inline-block mt-0.5 px-1.5 py-0.5 bg-rose-50 text-rose-700 rounded text-[10px] font-black">+${t.poin || 0} Poin</span>
+      </td>
+      <td class="py-3 px-3 text-center whitespace-nowrap">
+        <span class="px-2 py-0.5 bg-slate-100 text-slate-800 rounded font-bold text-[10px]">ke-${t.frekuensiKe || 1}</span>
+      </td>
+      <td class="py-3 px-3 text-slate-600">
+        ${t.tugasKhusus ? `<div class="font-semibold text-purple-800">${escapeHtml(t.tugasKhusus)}</div>` : ''}
+        ${t.sanksi ? `<div class="text-[10px] text-slate-500 mt-0.5">${escapeHtml(t.sanksi)}</div>` : (!t.tugasKhusus ? '-' : '')}
+      </td>
+      <td class="py-3 px-3 whitespace-nowrap">${getStatusBadgePelanggaranHtml(t)}</td>
+      <td class="py-3 px-3 text-slate-600 whitespace-nowrap">${escapeHtml(t.guruPelapor || '-')}</td>
+      <td class="py-3 px-3 text-center whitespace-nowrap">
+        <div class="inline-flex items-center gap-1">
+          <button type="button" onclick="bukaModalEditLogPelanggaranPetugas('${escapeHtml(t.idLog || '')}')" class="px-2 py-1 bg-amber-50 hover:bg-amber-100 text-amber-700 border border-amber-200 rounded-lg text-[11px] font-bold transition cursor-pointer">
+            Update
+          </button>
+          <button type="button" onclick="konfirmasiHapusLogPelanggaranPetugas('${escapeHtml(t.idLog || '')}')" class="px-2 py-1 bg-rose-50 hover:bg-rose-100 text-rose-700 border border-rose-200 rounded-lg text-[11px] font-bold transition cursor-pointer">
+            Hapus
+          </button>
+          ${!t.tugasSelesai ? `
+            <button type="button" onclick="tandaiTugasPelanggaranSelesai('${escapeHtml(t.idLog || '')}')" class="px-2 py-1 bg-emerald-50 hover:bg-emerald-100 text-emerald-700 border border-emerald-200 rounded-lg text-[11px] font-bold transition cursor-pointer">
+              Selesai
+            </button>
+          ` : `<span class="px-1.5 py-0.5 text-[10px] font-bold text-emerald-600">Tuntas</span>`}
+        </div>
+      </td>
+    </tr>
+  `).join('');
+}
+
+function renderHistoriPelanggaranTibum() {
+  const tbody = document.getElementById('tbodyHistoriPelanggaranTibum');
+  if (!tbody) return;
+
+  const isPetugas = typeof isCurrentUserPetugasPelanggaran === 'function' && isCurrentUserPetugasPelanggaran();
+  const q = (document.getElementById('filterTibumHistoriSearch')?.value || '').trim().toLowerCase();
+  const filtered = (logTibum || []).filter(t => {
+    if (!q) return true;
+    return `${t.nama || ''} ${t.nisn || ''} ${t.kelas || ''} ${t.namaPelanggaran || ''}`.toLowerCase().includes(q);
+  }).sort((a, b) => String(b.tanggal || '').localeCompare(String(a.tanggal || ''))).slice(0, 30);
+
+  if (filtered.length === 0) {
+    tbody.innerHTML = `<tr><td colspan="7" class="py-6 text-center text-slate-400">Belum ada catatan pelanggaran terbaru.</td></tr>`;
+    return;
+  }
+
+  tbody.innerHTML = filtered.map(t => `
+    <tr class="hover:bg-slate-50 transition">
+      <td class="py-2.5 px-3 whitespace-nowrap font-mono text-slate-700 font-bold">${escapeHtml(t.tanggal || '-')}</td>
+      <td class="py-2.5 px-3">
+        <div class="font-bold text-slate-900">${escapeHtml(t.nama || '-')}</div>
+        <div class="text-[10px] text-slate-500">${escapeHtml(t.kelas || '-')} | ${escapeHtml(t.nisn || '-')}</div>
+      </td>
+      <td class="py-2.5 px-3">
+        <div class="font-semibold text-slate-800">${escapeHtml(t.namaPelanggaran || '-')}</div>
+        <span class="text-[10px] font-black text-rose-600">+${t.poin || 0} Poin</span>
+      </td>
+      <td class="py-2.5 px-3 text-center whitespace-nowrap"><span class="px-2 py-0.5 bg-slate-100 rounded text-[10px] font-bold">ke-${t.frekuensiKe || 1}</span></td>
+      <td class="py-2.5 px-3 text-slate-600">${escapeHtml(t.tugasKhusus || t.sanksi || '-')}</td>
+      <td class="py-2.5 px-3 whitespace-nowrap">${getStatusBadgePelanggaranHtml(t)}</td>
+      <td class="py-2.5 px-3 text-center whitespace-nowrap">
+        ${isPetugas ? `
+          <div class="inline-flex items-center gap-1">
+            <button type="button" onclick="bukaModalEditLogPelanggaranPetugas('${escapeHtml(t.idLog || '')}')" class="px-2 py-1 bg-amber-50 hover:bg-amber-100 text-amber-700 border border-amber-200 rounded-lg text-[10px] font-bold transition cursor-pointer">Update</button>
+            <button type="button" onclick="konfirmasiHapusLogPelanggaranPetugas('${escapeHtml(t.idLog || '')}')" class="px-2 py-1 bg-rose-50 hover:bg-rose-100 text-rose-700 border border-rose-200 rounded-lg text-[10px] font-bold transition cursor-pointer">Hapus</button>
+          </div>
+        ` : `<span class="text-[10px] text-slate-400">-</span>`}
+      </td>
+    </tr>
+  `).join('');
+}
+
+function bukaModalEditLogPelanggaranPetugas(idLog) {
+  const item = (logTibum || []).find(t => String(t.idLog) === String(idLog));
+  if (!item) return;
+
+  document.getElementById('editLogPelId').value = item.idLog || '';
+  const sub = document.getElementById('editLogPelSubtitle');
+  if (sub) sub.innerText = `${item.nama || '-'} (${item.kelas || '-'}) - ${item.tanggal || '-'}`;
+
+  const selKode = document.getElementById('editLogPelKode');
+  if (selKode) {
+    const list = Array.isArray(masterTibum) ? masterTibum : [];
+    selKode.innerHTML = list.map(t => `<option value="${escapeHtml(t.kode)}">${escapeHtml(t.kode)} - ${escapeHtml(t.nama)} (+${t.poin})</option>`).join('');
+    if (item.kodePelanggaran && list.some(t => t.kode === item.kodePelanggaran)) {
+      selKode.value = item.kodePelanggaran;
+    } else if (item.namaPelanggaran) {
+      const opt = document.createElement('option');
+      opt.value = item.kodePelanggaran || item.namaPelanggaran;
+      opt.textContent = item.namaPelanggaran;
+      selKode.appendChild(opt);
+      selKode.value = opt.value;
+    }
+  }
+
+  document.getElementById('editLogPelPoin').value = Number(item.poin) || 0;
+  document.getElementById('editLogPelStatusBk').value = item.statusBK || (item.tugasSelesai ? 'Selesai' : 'Pending');
+  document.getElementById('editLogPelTugas').value = item.tugasKhusus || '';
+  document.getElementById('editLogPelSanksi').value = item.sanksi || '';
+  document.getElementById('editLogPelCatatan').value = item.catatanKasus || item.catatan || '';
+
+  document.getElementById('modalEditLogPelanggaranPetugas').classList.remove('hidden');
+  if (typeof safeCreateIcons === 'function') safeCreateIcons();
+}
+
+function tutupModalEditLogPelanggaranPetugas() {
+  document.getElementById('modalEditLogPelanggaranPetugas').classList.add('hidden');
+}
+
+function onSelectJenisEditLogPel() {
+  const sel = document.getElementById('editLogPelKode');
+  const poinInp = document.getElementById('editLogPelPoin');
+  if (!sel || !poinInp) return;
+  const rule = (masterTibum || []).find(t => t.kode === sel.value);
+  if (rule) poinInp.value = Number(rule.poin) || 0;
+}
+
+async function handleSimpanEditLogPelanggaranPetugas(e) {
+  e.preventDefault();
+  const idLog = document.getElementById('editLogPelId').value;
+  const item = (logTibum || []).find(t => String(t.idLog) === String(idLog));
+  if (!item) return;
+
+  const kode = document.getElementById('editLogPelKode').value;
+  const rule = (masterTibum || []).find(t => t.kode === kode);
+
+  item.kodePelanggaran = kode;
+  item.namaPelanggaran = rule ? rule.nama : (item.namaPelanggaran || kode);
+  item.poin = Number(document.getElementById('editLogPelPoin').value) || 0;
+  item.statusBK = document.getElementById('editLogPelStatusBk').value;
+  item.tugasSelesai = item.statusBK === 'Selesai';
+  item.tugasKhusus = document.getElementById('editLogPelTugas').value.trim();
+  item.sanksi = document.getElementById('editLogPelSanksi').value.trim();
+  item.catatanKasus = document.getElementById('editLogPelCatatan').value.trim();
+
+  if (typeof saveLocalCache === 'function') saveLocalCache();
+  tutupModalEditLogPelanggaranPetugas();
+  renderHistoriPelanggaranPetugas();
+  renderHistoriPelanggaranTibum();
+  if (typeof renderHistoriPelanggaranWalas === 'function') renderHistoriPelanggaranWalas();
+  if (typeof renderWidgetKhususGuruBeranda === 'function') renderWidgetKhususGuruBeranda();
+
+  Swal.fire({
+    toast: true,
+    position: 'top-end',
+    icon: 'success',
+    title: 'Catatan pelanggaran berhasil diperbarui.',
+    showConfirmButton: false,
+    timer: 1800
+  });
+
+  try {
+    await callBackendPost({
+      action: 'updateLogPelanggaran',
+      pelanggaran: item
+    });
+  } catch (err) {
+    console.warn('Gagal update log pelanggaran ke server:', err);
+  }
+}
+
+async function konfirmasiHapusLogPelanggaranPetugas(idLog) {
+  const item = (logTibum || []).find(t => String(t.idLog) === String(idLog));
+  if (!item) return;
+
+  const res = await Swal.fire({
+    title: 'Hapus Catatan Pelanggaran?',
+    html: `Anda akan menghapus catatan pelanggaran <b>${escapeHtml(item.nama || '-')}</b>:<br><span class="text-xs text-rose-600 font-bold">${escapeHtml(item.namaPelanggaran || '-')} (+${item.poin || 0} Poin)</span>`,
+    icon: 'warning',
+    showCancelButton: true,
+    confirmButtonColor: '#e11d48',
+    confirmButtonText: 'Ya, Hapus Permanen',
+    cancelButtonText: 'Batal'
+  });
+
+  if (!res.isConfirmed) return;
+
+  logTibum = (logTibum || []).filter(t => String(t.idLog) !== String(idLog));
+  if (typeof saveLocalCache === 'function') saveLocalCache();
+  renderHistoriPelanggaranPetugas();
+  renderHistoriPelanggaranTibum();
+  if (typeof renderHistoriPelanggaranWalas === 'function') renderHistoriPelanggaranWalas();
+  if (typeof renderWidgetKhususGuruBeranda === 'function') renderWidgetKhususGuruBeranda();
+
+  Swal.fire({
+    toast: true,
+    position: 'top-end',
+    icon: 'success',
+    title: 'Catatan pelanggaran berhasil dihapus.',
+    showConfirmButton: false,
+    timer: 1800
+  });
+
+  try {
+    await callBackendPost({
+      action: 'hapusLogPelanggaran',
+      idLog: idLog
+    });
+  } catch (err) {
+    console.warn('Gagal hapus log pelanggaran di server:', err);
+  }
+}
+
+async function tandaiTugasPelanggaranSelesai(idLog) {
+  const item = (logTibum || []).find(t => String(t.idLog) === String(idLog));
+  if (!item) return;
+
+  item.tugasSelesai = true;
+  item.statusBK = 'Selesai';
+  if (typeof saveLocalCache === 'function') saveLocalCache();
+  renderHistoriPelanggaranPetugas();
+  renderHistoriPelanggaranTibum();
+  if (typeof renderHistoriPelanggaranWalas === 'function') renderHistoriPelanggaranWalas();
+
+  try {
+    await callBackendPost({
+      action: 'updateStatusBK',
+      idLog: item.idLog,
+      statusBK: 'Selesai',
+      catatanKasus: item.catatanKasus || 'Tugas edukatif diselesaikan siswa',
+      sanksi: item.sanksi || ''
+    });
+  } catch (e) {}
+
+  Swal.fire({
+    toast: true,
+    position: 'top-end',
+    icon: 'success',
+    title: 'Tugas pelanggaran ditandai selesai.',
+    showConfirmButton: false,
+    timer: 1800
+  });
+}
+
+// -------------------------------------------------------------------------
 // WIDGET RINGKASAN DI BERANDA GURU (BK & PETUGAS TIBUM)
 // -------------------------------------------------------------------------
 function renderWidgetKhususGuruBeranda() {
@@ -27049,6 +27871,8 @@ function renderGuruManajemenPelanggaran() {
       if (document.getElementById('eskalasiSanksi4_guru')) document.getElementById('eskalasiSanksi4_guru').value = esc.tingkat4.sanksi || "Konferensi Kasus Terpadu & SP Tertulis";
     }
   }
+
+  if (typeof renderHistoriPelanggaranPetugas === 'function') renderHistoriPelanggaranPetugas();
 
   // 2. Render Tabel Master Pelanggaran di Portal Guru
   const tbody = document.getElementById('tbodyMasterPelanggaranGuru');
@@ -29476,5 +30300,74 @@ function hapusTugasEdukatifBankGuru(idx) {
     </div>
   </div>
 
+  <!-- MODAL EDIT CATATAN PELANGGARAN SISWA (PETUGAS TATA TERTIB) -->
+  <div id="modalEditLogPelanggaranPetugas" class="fixed inset-0 bg-slate-950/70 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
+    <div class="bg-white dark:bg-dark-surface-container-low rounded-3xl max-w-lg w-full shadow-2xl border border-slate-200 dark:border-dark-outline-variant max-h-[90vh] flex flex-col overflow-hidden">
+      <div class="flex items-center justify-between px-6 py-4 border-b border-slate-100 dark:border-dark-outline-variant flex-shrink-0">
+        <div class="flex items-center gap-3">
+          <div class="w-10 h-10 rounded-xl bg-rose-100 text-rose-700 flex items-center justify-center flex-shrink-0">
+            <i data-lucide="edit-3" class="w-5 h-5"></i>
+          </div>
+          <div>
+            <h3 class="font-black text-slate-900 text-base">Update Catatan Pelanggaran Siswa</h3>
+            <p id="editLogPelSubtitle" class="text-xs text-slate-500">-</p>
+          </div>
+        </div>
+        <button type="button" onclick="tutupModalEditLogPelanggaranPetugas()" class="p-2 text-slate-400 hover:text-slate-600 rounded-full hover:bg-slate-100 transition cursor-pointer">
+          <i data-lucide="x" class="w-5 h-5"></i>
+        </button>
+      </div>
+
+      <form id="formEditLogPelanggaranPetugas" onsubmit="handleSimpanEditLogPelanggaranPetugas(event)" class="p-6 overflow-y-auto custom-scrollbar flex-1 space-y-3.5 text-xs">
+        <input type="hidden" id="editLogPelId">
+
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+          <div class="sm:col-span-2">
+            <label class="block font-bold text-slate-700 uppercase mb-1">Jenis Pelanggaran</label>
+            <select id="editLogPelKode" onchange="onSelectJenisEditLogPel()" class="modern-select w-full px-3 py-2 text-xs font-bold">
+              <!-- Diisi JS dari masterTibum -->
+            </select>
+          </div>
+          <div>
+            <label class="block font-bold text-slate-700 uppercase mb-1">Poin</label>
+            <input type="number" id="editLogPelPoin" min="0" max="200" required class="w-full px-3 py-2 bg-slate-50 border border-slate-300 rounded-xl text-xs font-black text-rose-600">
+          </div>
+        </div>
+
+        <div>
+          <label class="block font-bold text-slate-700 uppercase mb-1">Status Penanganan / BK</label>
+          <select id="editLogPelStatusBk" class="modern-select w-full px-3 py-2 text-xs font-bold">
+            <option value="Pending">Pending / Pembinaan</option>
+            <option value="Menjalani Tugas Edukatif">Menjalani Tugas Edukatif</option>
+            <option value="Panggilan BK">Panggilan BK</option>
+            <option value="Selesai">Selesai</option>
+          </select>
+        </div>
+
+        <div>
+          <label class="block font-bold text-slate-700 uppercase mb-1">Tugas Edukatif Khusus</label>
+          <input type="text" id="editLogPelTugas" placeholder="Misal: Merangkum buku budi pekerti..." class="w-full px-3 py-2 bg-slate-50 border border-slate-300 rounded-xl text-xs font-medium">
+        </div>
+
+        <div>
+          <label class="block font-bold text-slate-700 uppercase mb-1">Sanksi / Tindak Lanjut</label>
+          <input type="text" id="editLogPelSanksi" placeholder="Keterangan sanksi..." class="w-full px-3 py-2 bg-slate-50 border border-slate-300 rounded-xl text-xs font-medium">
+        </div>
+
+        <div>
+          <label class="block font-bold text-slate-700 uppercase mb-1">Catatan Kasus / Pembinaan</label>
+          <textarea id="editLogPelCatatan" rows="2" placeholder="Catatan kronologi atau hasil pembinaan..." class="w-full px-3 py-2 bg-slate-50 border border-slate-300 rounded-xl text-xs font-medium"></textarea>
+        </div>
+
+        <div class="flex items-center justify-end gap-2 pt-3 border-t border-slate-100">
+          <button type="button" onclick="tutupModalEditLogPelanggaranPetugas()" class="px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold rounded-xl transition cursor-pointer">Batal</button>
+          <button type="submit" class="px-5 py-2 bg-rose-600 hover:bg-rose-700 text-white font-bold rounded-xl transition flex items-center gap-1.5 shadow-sm cursor-pointer">
+            <i data-lucide="save" class="w-4 h-4"></i>
+            <span>Simpan Perubahan</span>
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
 </body>
 </html>
