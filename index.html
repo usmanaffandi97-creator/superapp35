@@ -427,8 +427,8 @@
       <!-- Grid 2 Kolom Seimbang (Kiri: Identitas Sekolah & 4 Portal | Kanan: Pintu Masuk Terpadu) -->
       <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
 
-        <!-- KOLOM KIRI (7/12): IDENTITAS SEKOLAH EDIT MANDIRI + RINGKASAN EKOSISTEM -->
-        <div class="lg:col-span-7 space-y-5">
+        <!-- KOLOM KIRI ATAS (7/12): IDENTITAS SEKOLAH EDIT MANDIRI -->
+        <div class="order-1 lg:col-span-7 lg:col-start-1 lg:row-start-1">
 
           <!-- =================================================================== -->
           <!-- [EDIT MANDIRI IDENTITAS SEKOLAH - HALAMAN AWAL]                     -->
@@ -436,7 +436,7 @@
           <!-- Sekolah di bawah ini sesuai profil sekolah Anda.                    -->
           <!-- PENTING: Jangan ubah atribut id="..." agar tetap sinkron.           -->
           <!-- =================================================================== -->
-          <div class="bg-white dark:bg-dark-surface-container-low rounded-3xl p-5 sm:p-6 border border-light-outline-variant/60 dark:border-dark-outline-variant shadow-sm space-y-5">
+          <div class="bg-white dark:bg-dark-surface-container-low rounded-3xl p-5 sm:p-6 border border-light-outline-variant/60 dark:border-dark-outline-variant shadow-sm space-y-4">
             <!-- Header Dual-Logo & Identitas Sekolah -->
             <div class="flex items-center justify-between gap-3 sm:gap-4 pb-5 border-b border-slate-100 dark:border-dark-outline-variant">
               <!-- Logo Kiri: Pemda / Tut Wuri Handayani -->
@@ -468,7 +468,7 @@
             </div>
 
             <!-- [EDIT MANDIRI KONTAK, TELEPON & SOSIAL MEDIA SEKOLAH] -->
-            <div class="flex flex-wrap items-center gap-2 pb-4 border-b border-slate-100 dark:border-dark-outline-variant text-[11px] font-semibold">
+            <div class="flex flex-wrap items-center gap-2 text-[11px] font-semibold">
               <a id="landingTelp" href="tel:02476680596" class="inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-xl bg-slate-50 dark:bg-dark-surface-container-high text-slate-700 dark:text-slate-200 border border-slate-200/80 dark:border-dark-outline-variant hover:border-indigo-300 hover:text-indigo-700 dark:hover:text-indigo-300 transition">
                 <i data-lucide="phone" class="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400"></i>
                 <span>024-76680596</span>
@@ -497,7 +497,12 @@
             <!-- =================================================================== -->
             <!-- [AKHIR BLOK EDIT MANDIRI IDENTITAS SEKOLAH]                         -->
             <!-- =================================================================== -->
+          </div>
+        </div>
 
+        <!-- KOLOM KIRI BAWAH (7/12): RINGKASAN EKOSISTEM, COUNTDOWN, DATABASE & PWA (DI BAWAH LOGIN SAAT MOBILE) -->
+        <div class="order-3 lg:col-span-7 lg:col-start-1 lg:row-start-2 space-y-5">
+          <div class="bg-white dark:bg-dark-surface-container-low rounded-3xl p-5 sm:p-6 border border-light-outline-variant/60 dark:border-dark-outline-variant shadow-sm space-y-5">
             <!-- Intro Satu Pintu -->
             <div class="space-y-2">
               <h3 class="text-base sm:text-lg font-extrabold text-slate-900 dark:text-dark-on-surface">
@@ -609,8 +614,8 @@
           </div>
         </div>
 
-        <!-- KOLOM KANAN (5/12): KARTU LOGIN TERPADU -->
-        <div class="lg:col-span-5 lg:sticky lg:top-24">
+        <!-- KOLOM KANAN (5/12): KARTU LOGIN TERPADU (DI BAWAH PERSIS IDENTITAS SEKOLAH SAAT MOBILE) -->
+        <div class="order-2 lg:col-span-5 lg:col-start-8 lg:row-start-1 lg:row-span-2 lg:sticky lg:top-24">
           <div class="bg-white dark:bg-dark-surface-container-low rounded-3xl border border-light-outline-variant/70 dark:border-dark-outline-variant shadow-lg shadow-indigo-950/5 relative overflow-hidden group">
             <div class="h-1.5 w-full bg-gradient-to-r from-light-primary via-blue-600 to-indigo-500 dark:from-dark-primary dark:to-indigo-400"></div>
             <div class="p-6 sm:p-7 space-y-5">
@@ -30404,5 +30409,31 @@ function hapusTugasEdukatifBankGuru(idx) {
       </form>
     </div>
   </div>
+  <!-- TOMBOL MENGAMBANG KEMBALI KE ATAS HALAMAN -->
+  <button type="button" id="btnScrollToTop" onclick="scrollToTopPage()" title="Kembali ke atas halaman" aria-label="Kembali ke atas halaman" class="fixed bottom-5 right-5 z-40 w-11 h-11 rounded-2xl bg-light-primary dark:bg-dark-primary text-white dark:text-dark-on-primary shadow-lg shadow-indigo-950/20 border border-white/20 hover:scale-105 active:scale-95 transition-all duration-200 flex items-center justify-center cursor-pointer opacity-0 pointer-events-none translate-y-3">
+    <i data-lucide="arrow-up" class="w-5 h-5"></i>
+  </button>
+
+  <script>
+    function scrollToTopPage() {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+    (function initScrollToTopBtn() {
+      const btn = document.getElementById('btnScrollToTop');
+      if (!btn) return;
+      function updateScrollBtn() {
+        const y = window.scrollY || document.documentElement.scrollTop || 0;
+        if (y > 220) {
+          btn.classList.remove('opacity-0', 'pointer-events-none', 'translate-y-3');
+          btn.classList.add('opacity-100', 'translate-y-0');
+        } else {
+          btn.classList.add('opacity-0', 'pointer-events-none', 'translate-y-3');
+          btn.classList.remove('opacity-100', 'translate-y-0');
+        }
+      }
+      window.addEventListener('scroll', updateScrollBtn, { passive: true });
+      updateScrollBtn();
+    })();
+  </script>
 </body>
 </html>
