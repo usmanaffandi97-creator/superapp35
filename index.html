@@ -201,6 +201,14 @@
     html.font-size-small, html.font-size-small body { font-size: 14px !important; }
     html.font-size-medium, html.font-size-medium body { font-size: 16px !important; }
     html.font-size-big, html.font-size-big body { font-size: 18px !important; }
+    html.font-size-xlarge, html.font-size-xlarge body { font-size: 20px !important; }
+    html.font-size-xxlarge, html.font-size-xxlarge body { font-size: 22px !important; }
+    html.font-size-xlarge main .text-\[10px\], html.font-size-xlarge main .text-\[11px\] { font-size: 0.78rem !important; line-height: 1.35 !important; }
+    html.font-size-xlarge main .text-\[12px\] { font-size: 0.85rem !important; line-height: 1.4 !important; }
+    html.font-size-xxlarge main .text-\[10px\], html.font-size-xxlarge main .text-\[11px\] { font-size: 0.82rem !important; line-height: 1.4 !important; }
+    html.font-size-xxlarge main .text-\[12px\] { font-size: 0.88rem !important; line-height: 1.45 !important; }
+    #fontSizeControlGroup button { font-size: 10px !important; }
+    header #backendBadge { font-size: 9px !important; line-height: 1.2 !important; }
 
     /* Mobile Viewport Bound & Prevent Horizontal Overflow */
     html, body {
@@ -329,11 +337,13 @@
             <i data-lucide="sun" id="iconDarkModeSun" class="w-4 h-4 hidden dark:inline"></i>
           </button>
 
-          <!-- Font Scaler Kontrol (small, medium, big) -->
+          <!-- Font Scaler Kontrol (small, medium, big, xlarge, xxlarge 50+) -->
           <div id="fontSizeControlGroup" class="inline-flex items-center bg-slate-100 p-0.5 rounded-xl border border-slate-200 shadow-2xs flex-shrink-0" title="Pengatur Ukuran Huruf Aplikasi">
-            <button type="button" onclick="setFontScale('small')" id="btnFontSmall" class="px-1.5 py-0.5 sm:py-1 text-[10px] font-bold rounded-lg text-slate-600 hover:text-indigo-700 hover:bg-white transition cursor-pointer" title="Ukuran Font Kecil (14px)">A-</button>
-            <button type="button" onclick="setFontScale('medium')" id="btnFontMedium" class="px-1.5 py-0.5 sm:py-1 text-[11px] font-extrabold rounded-lg text-indigo-700 bg-white shadow-xs transition cursor-pointer" title="Ukuran Font Sedang / Standar (16px)">A</button>
-            <button type="button" onclick="setFontScale('big')" id="btnFontBig" class="px-1.5 py-0.5 sm:py-1 text-[12px] font-black rounded-lg text-slate-600 hover:text-indigo-700 hover:bg-white transition cursor-pointer" title="Ukuran Font Besar (18px)">A+</button>
+            <button type="button" onclick="setFontScale('small')" id="btnFontSmall" class="px-1 sm:px-1.5 py-0.5 sm:py-1 text-[10px] font-bold rounded-lg text-slate-600 hover:text-indigo-700 hover:bg-white transition cursor-pointer" title="Ukuran Font Kecil (14px)">A-</button>
+            <button type="button" onclick="setFontScale('medium')" id="btnFontMedium" class="px-1 sm:px-1.5 py-0.5 sm:py-1 text-[11px] font-extrabold rounded-lg text-indigo-700 bg-white shadow-xs transition cursor-pointer" title="Ukuran Font Sedang / Standar (16px)">A</button>
+            <button type="button" onclick="setFontScale('big')" id="btnFontBig" class="px-1 sm:px-1.5 py-0.5 sm:py-1 text-[11px] font-black rounded-lg text-slate-600 hover:text-indigo-700 hover:bg-white transition cursor-pointer" title="Ukuran Font Besar (18px)">A+</button>
+            <button type="button" onclick="setFontScale('xlarge')" id="btnFontXlarge" class="px-1 sm:px-1.5 py-0.5 sm:py-1 text-[11px] font-black rounded-lg text-slate-600 hover:text-indigo-700 hover:bg-white transition cursor-pointer" title="Ukuran Font Ekstra Besar (20px)">A++</button>
+            <button type="button" onclick="setFontScale('xxlarge')" id="btnFontXxlarge" class="px-1 sm:px-1.5 py-0.5 sm:py-1 text-[11px] font-black rounded-lg text-slate-600 hover:text-indigo-700 hover:bg-white transition cursor-pointer" title="Ukuran Font Paling Besar / Ramah Usia 50+ (22px)">A+++</button>
           </div>
 
           <!-- Tombol Segarkan Data dari Spreadsheet (di mobile disembunyikan karena sudah ada di setiap hero card) -->
@@ -24171,19 +24181,19 @@ ATURAN KETAT:
     }
 
     function setFontScale(size) {
-      const validSizes = ["small", "medium", "big"];
+      const validSizes = ["small", "medium", "big", "xlarge", "xxlarge"];
       if (!validSizes.includes(size)) size = "medium";
       validSizes.forEach(s => document.documentElement.classList.remove(`font-size-${s}`));
       document.documentElement.classList.add(`font-size-${size}`);
       try { localStorage.setItem("SUPERAPP_FONT_SIZE", size); } catch (e) {}
 
-      ["small", "medium", "big"].forEach(s => {
+      validSizes.forEach(s => {
         const btn = document.getElementById(`btnFont${s.charAt(0).toUpperCase() + s.slice(1)}`);
         if (btn) {
           if (s === size) {
-            btn.className = "px-1.5 py-1 text-[11px] font-black rounded-lg text-indigo-700 bg-white shadow-xs transition cursor-pointer";
+            btn.className = "px-1 sm:px-1.5 py-0.5 sm:py-1 text-[11px] font-black rounded-lg text-indigo-700 bg-white shadow-xs transition cursor-pointer";
           } else {
-            btn.className = "px-1.5 py-1 text-[11px] font-bold rounded-lg text-slate-600 hover:text-indigo-700 hover:bg-white transition cursor-pointer";
+            btn.className = "px-1 sm:px-1.5 py-0.5 sm:py-1 text-[11px] font-bold rounded-lg text-slate-600 hover:text-indigo-700 hover:bg-white transition cursor-pointer";
           }
         }
       });
