@@ -226,80 +226,151 @@
     /* ===================================================================== */
     html.dark body {
       background-color: #12131A !important;
-      color: #E3E1EB !important;
+      color: #E8EAF2 !important;
     }
     html.dark header,
+    html.dark footer,
+    html.dark aside,
     html.dark #mobileBottomNavSiswa,
     html.dark #mobileBottomNavGuru,
     html.dark #mobileBottomNavKepsek,
     html.dark #mobileBottomNavAdmin {
-      background-color: rgba(26, 27, 34, 0.94) !important;
+      background-color: rgba(24, 25, 33, 0.96) !important;
       border-color: #2E313D !important;
-      color: #E3E1EB !important;
+      color: #E8EAF2 !important;
     }
-    html.dark main .bg-white:not(#printArea):not(#printArea *),
-    html.dark .fixed .bg-white {
-      background-color: #1A1B22 !important;
-      color: #E3E1EB;
-      border-color: #2E313D !important;
-    }
-    html.dark main .bg-slate-50:not(#printArea):not(#printArea *),
-    html.dark .fixed .bg-slate-50,
-    html.dark main .bg-slate-50\/70:not(#printArea):not(#printArea *),
-    html.dark main .bg-slate-50\/50:not(#printArea):not(#printArea *) {
-      background-color: #1E1F26 !important;
+    html.dark :is(main, header, footer, aside, .fixed):not(#printArea):not(#printArea *) .bg-white,
+    html.dark :is(main, header, footer, aside, .fixed):not(#printArea):not(#printArea *) .bg-white\/95,
+    html.dark :is(main, header, footer, aside, .fixed):not(#printArea):not(#printArea *) .bg-white\/90,
+    html.dark :is(main, header, footer, aside, .fixed):not(#printArea):not(#printArea *) .bg-white\/80 {
+      background-color: #1A1B23 !important;
+      color: #E8EAF2;
       border-color: #2E313D !important;
     }
-    html.dark main .bg-slate-100:not(#printArea):not(#printArea *),
-    html.dark .fixed .bg-slate-100 {
-      background-color: #282A31 !important;
-      border-color: #363844 !important;
-    }
-    html.dark main .text-slate-900:not(#printArea):not(#printArea *),
-    html.dark .fixed .text-slate-900,
-    html.dark main .text-slate-800:not(#printArea):not(#printArea *),
-    html.dark .fixed .text-slate-800,
-    html.dark header .text-slate-900,
-    html.dark header .text-slate-800 {
-      color: #E3E1EB !important;
-    }
-    html.dark main .text-slate-700:not(#printArea):not(#printArea *),
-    html.dark .fixed .text-slate-700,
-    html.dark main .text-slate-600:not(#printArea):not(#printArea *),
-    html.dark .fixed .text-slate-600 {
-      color: #C4C5D5 !important;
-    }
-    html.dark main .text-slate-500:not(#printArea):not(#printArea *),
-    html.dark main .text-slate-400:not(#printArea):not(#printArea *),
-    html.dark header .text-slate-500 {
-      color: #9699AD !important;
-    }
-    html.dark main .border-slate-200:not(#printArea):not(#printArea *),
-    html.dark main .border-slate-100:not(#printArea):not(#printArea *),
-    html.dark .fixed .border-slate-200,
-    html.dark .fixed .border-slate-100 {
+    html.dark :is(main, header, footer, aside, .fixed):not(#printArea):not(#printArea *) :is(.bg-slate-50, .bg-slate-50\/70, .bg-slate-50\/50, .bg-slate-50\/80, .bg-gray-50) {
+      background-color: #20222C !important;
       border-color: #2E313D !important;
+    }
+    html.dark :is(main, header, footer, aside, .fixed):not(#printArea):not(#printArea *) :is(.bg-slate-100, .bg-slate-100\/80, .bg-gray-100, .bg-slate-200) {
+      background-color: #282A36 !important;
+      border-color: #383B4A !important;
+    }
+    /* Dark mode untuk kartu/badge warna pastel */
+    html.dark main:not(#printArea) :is(.bg-indigo-50, .bg-indigo-50\/70, .bg-indigo-100) {
+      background-color: rgba(99, 102, 241, 0.16) !important;
+      border-color: rgba(129, 140, 248, 0.28) !important;
+    }
+    html.dark main:not(#printArea) :is(.bg-blue-50, .bg-blue-50\/80, .bg-blue-100) {
+      background-color: rgba(59, 130, 246, 0.16) !important;
+      border-color: rgba(96, 165, 250, 0.28) !important;
+    }
+    html.dark main:not(#printArea) :is(.bg-sky-50, .bg-sky-50\/70, .bg-sky-100) {
+      background-color: rgba(14, 165, 233, 0.16) !important;
+      border-color: rgba(56, 189, 248, 0.28) !important;
+    }
+    html.dark main:not(#printArea) :is(.bg-emerald-50, .bg-emerald-50\/70, .bg-emerald-100, .bg-green-50, .bg-green-100) {
+      background-color: rgba(16, 185, 129, 0.16) !important;
+      border-color: rgba(52, 211, 153, 0.28) !important;
+    }
+    html.dark main:not(#printArea) :is(.bg-teal-50, .bg-teal-100, .bg-cyan-50, .bg-cyan-100) {
+      background-color: rgba(20, 184, 166, 0.16) !important;
+      border-color: rgba(45, 212, 191, 0.28) !important;
+    }
+    html.dark main:not(#printArea) :is(.bg-amber-50, .bg-amber-50\/70, .bg-amber-100, .bg-yellow-50, .bg-yellow-100, .bg-orange-50, .bg-orange-100) {
+      background-color: rgba(245, 158, 11, 0.16) !important;
+      border-color: rgba(251, 191, 36, 0.28) !important;
+    }
+    html.dark main:not(#printArea) :is(.bg-rose-50, .bg-rose-50\/70, .bg-rose-100, .bg-red-50, .bg-red-50\/70, .bg-red-100) {
+      background-color: rgba(244, 63, 94, 0.16) !important;
+      border-color: rgba(251, 113, 133, 0.28) !important;
+    }
+    html.dark main:not(#printArea) :is(.bg-purple-50, .bg-purple-100, .bg-violet-50, .bg-violet-100) {
+      background-color: rgba(168, 85, 247, 0.16) !important;
+      border-color: rgba(192, 132, 252, 0.28) !important;
+    }
+    /* Dark mode untuk container bergradasi terang (bg-gradient-to-* from-*-50/100/white) */
+    html.dark :is(main, .fixed):not(#printArea):not(#printArea *) :is(
+      [class*="from-slate-50"], [class*="from-white"], [class*="from-gray-50"],
+      [class*="from-indigo-50"], [class*="from-blue-50"], [class*="from-sky-50"],
+      [class*="from-emerald-50"], [class*="from-teal-50"], [class*="from-amber-50"],
+      [class*="from-rose-50"], [class*="from-purple-50"], [class*="from-slate-100"],
+      [class*="from-indigo-100"], [class*="from-blue-100"], [class*="from-emerald-100"]
+    ) {
+      background-image: none !important;
+      background-color: #1F2230 !important;
+      border-color: #32364A !important;
+    }
+    /* Teks gelap -> terang kontras tinggi */
+    html.dark :is(main, header, footer, aside, .fixed):not(#printArea):not(#printArea *) :is(.text-black, .text-slate-950, .text-slate-900, .text-slate-800, .text-gray-900, .text-gray-800) {
+      color: #F1F5F9 !important;
+    }
+    html.dark :is(main, header, footer, aside, .fixed):not(#printArea):not(#printArea *) :is(.text-slate-700, .text-slate-600, .text-gray-700, .text-gray-600) {
+      color: #CBD5E1 !important;
+    }
+    html.dark :is(main, header, footer, aside, .fixed):not(#printArea):not(#printArea *) :is(.text-slate-500, .text-slate-400, .text-gray-500, .text-gray-400) {
+      color: #94A3B8 !important;
+    }
+    /* Teks berwarna gelap -> pastel terang agar terbaca di mode gelap */
+    html.dark main:not(#printArea) :is(.text-indigo-900, .text-indigo-800, .text-indigo-700, .text-indigo-600),
+    html.dark header :is(.text-indigo-700, .text-indigo-600) {
+      color: #A5B4FC !important;
+    }
+    html.dark main:not(#printArea) :is(.text-blue-900, .text-blue-800, .text-blue-700, .text-blue-600) {
+      color: #93C5FD !important;
+    }
+    html.dark main:not(#printArea) :is(.text-sky-900, .text-sky-800, .text-sky-700, .text-sky-600) {
+      color: #7DD3FC !important;
+    }
+    html.dark main:not(#printArea) :is(.text-emerald-900, .text-emerald-800, .text-emerald-700, .text-emerald-600, .text-green-800, .text-green-700) {
+      color: #6EE7B7 !important;
+    }
+    html.dark main:not(#printArea) :is(.text-teal-900, .text-teal-800, .text-teal-700) {
+      color: #5EEAD4 !important;
+    }
+    html.dark main:not(#printArea) :is(.text-amber-900, .text-amber-800, .text-amber-700, .text-yellow-800, .text-orange-800) {
+      color: #FCD34D !important;
+    }
+    html.dark main:not(#printArea) :is(.text-rose-900, .text-rose-800, .text-rose-700, .text-rose-600, .text-red-800, .text-red-700) {
+      color: #FDA4AF !important;
+    }
+    html.dark main:not(#printArea) :is(.text-purple-900, .text-purple-800, .text-purple-700, .text-purple-600) {
+      color: #D8B4FE !important;
+    }
+    /* Border, divider, hover tabel & tombol */
+    html.dark :is(main, header, footer, aside, .fixed):not(#printArea):not(#printArea *) :is(.border-slate-200, .border-slate-100, .border-slate-300, .border-gray-200, .divide-slate-100 > *, .divide-slate-200 > *) {
+      border-color: #2E313D !important;
+    }
+    html.dark main:not(#printArea) :is(.hover\:bg-slate-50:hover, .hover\:bg-slate-100:hover, .hover\:bg-indigo-50:hover, .hover\:bg-blue-50:hover) {
+      background-color: #272A36 !important;
+    }
+    html.dark #fontSizeControlGroup {
+      background-color: #232530 !important;
+      border-color: #36394A !important;
+    }
+    html.dark #fontSizeControlGroup button.bg-white {
+      background-color: #3B3F54 !important;
+      color: #FFFFFF !important;
     }
     html.dark input:not([type="checkbox"]):not([type="radio"]),
     html.dark select,
     html.dark textarea,
     html.dark .modern-select {
       background-color: #22242E !important;
-      color: #E3E1EB !important;
+      color: #F1F5F9 !important;
       border-color: #3A3D4D !important;
     }
     html.dark input::placeholder,
     html.dark textarea::placeholder {
-      color: #7D8094 !important;
+      color: #94A3B8 !important;
     }
     html.dark .swal2-popup {
-      background-color: #1A1B22 !important;
-      color: #E3E1EB !important;
+      background-color: #1A1B23 !important;
+      color: #F1F5F9 !important;
       border: 1px solid #2E313D !important;
     }
     html.dark .swal2-title,
     html.dark .swal2-html-container {
-      color: #E3E1EB !important;
+      color: #F1F5F9 !important;
     }
   </style>
 </head>
@@ -308,20 +379,20 @@
   <!-- TOP BAR / HEADER UTAMA -->
   <header class="bg-white/95 backdrop-blur-md border-b border-slate-200/80 sticky top-0 z-40 shadow-xs transition-all">
     <div class="max-w-7xl mx-auto px-2.5 sm:px-6 lg:px-8">
-      <div class="flex items-center justify-between h-14 sm:h-16 gap-1.5 sm:gap-2">
+      <div class="flex flex-wrap sm:flex-nowrap items-center justify-between min-h-[3.5rem] sm:h-16 py-1.5 sm:py-0 gap-x-1.5 gap-y-1.5 sm:gap-2">
         
         <!-- Logo & Identitas Sekolah -->
-        <div class="flex items-center gap-1.5 sm:gap-3 cursor-pointer group select-none min-w-0 flex-1 mr-1" onclick="navigateHome()" title="Kembali ke Beranda">
+        <div class="flex items-center gap-2 sm:gap-3 cursor-pointer group select-none min-w-0 flex-1 mr-1" onclick="navigateHome()" title="Kembali ke Beranda">
           <div class="w-8 h-8 sm:w-10 sm:h-10 rounded-xl sm:rounded-2xl bg-gradient-to-tr from-blue-700 via-indigo-600 to-sky-500 flex items-center justify-center text-white shadow-sm ring-2 ring-indigo-50/80 flex-shrink-0 group-hover:scale-105 transition-transform">
             <i data-lucide="shield-check" class="w-4 h-4 sm:w-6 sm:h-6"></i>
           </div>
           <div class="min-w-0 flex-1">
             <!-- [EDIT MANDIRI IDENTITAS SEKOLAH - HEADER ATAS] -->
-            <h1 id="navSchoolName" class="font-black text-xs sm:text-sm md:text-base text-slate-900 dark:text-slate-100 leading-tight tracking-tight truncate max-w-[120px] sm:max-w-none group-hover:text-light-primary dark:group-hover:text-dark-primary transition-colors">SMP NEGERI 35 SEMARANG</h1>
+            <h1 id="navSchoolName" class="font-black text-xs sm:text-sm md:text-base text-slate-900 dark:text-slate-100 leading-tight tracking-tight whitespace-normal break-words group-hover:text-light-primary dark:group-hover:text-dark-primary transition-colors">SMP NEGERI 35 SEMARANG</h1>
             <div class="flex items-center gap-1.5 mt-0.5">
               <span class="text-[10px] sm:text-[11px] font-semibold text-slate-500 hidden sm:inline">SuperApp</span>
               <span class="text-slate-300 hidden sm:inline">-</span>
-              <button id="backendBadge" onclick="openModalSetelBackend(event)" title="Koneksi Google Spreadsheet (Akses Kelola: Khusus Admin)" class="inline-flex items-center gap-1 px-1.5 sm:px-2 py-0.5 bg-amber-100 text-amber-800 rounded-full text-[9px] sm:text-[10px] font-extrabold border border-amber-300 hover:bg-amber-200 transition cursor-pointer flex-shrink-0 max-w-[100px] sm:max-w-[130px] truncate">
+              <button id="backendBadge" onclick="openModalSetelBackend(event)" title="Koneksi Google Spreadsheet (Akses Kelola: Khusus Admin)" class="inline-flex items-center gap-1 px-1.5 sm:px-2 py-0.5 bg-amber-100 text-amber-800 rounded-full text-[9px] sm:text-[10px] font-extrabold border border-amber-300 hover:bg-amber-200 transition cursor-pointer flex-shrink-0">
                 <span class="w-1.5 h-1.5 rounded-full bg-amber-500 animate-pulse"></span>
                 <span>Hubungkan</span>
               </button>
@@ -329,7 +400,7 @@
           </div>
         </div>
 
-        <!-- Tombol Aksi Kanan, Font Scaler & Akun (Mobile-First & Responsif Tanpa Overflow) -->
+        <!-- Tombol Aksi Kanan, Font Scaler & Akun (Mobile-First & Responsif Tanpa Terpotong) -->
         <div class="flex items-center gap-1 sm:gap-1.5 flex-shrink-0">
           <!-- Dark Mode Toggle (Light / Dark Mode) -->
           <button type="button" id="btnToggleDarkMode" onclick="toggleDarkMode()" title="Ganti Mode Tampilan (Terang / Gelap)" class="h-8 w-8 sm:h-9 sm:w-9 flex items-center justify-center rounded-xl bg-slate-100 dark:bg-dark-surface-container-high hover:bg-indigo-50 dark:hover:bg-slate-700 border border-slate-200 dark:border-dark-outline-variant text-slate-700 dark:text-amber-300 transition shadow-2xs cursor-pointer flex-shrink-0" aria-label="Toggle Dark Mode">
@@ -337,8 +408,8 @@
             <i data-lucide="sun" id="iconDarkModeSun" class="w-4 h-4 hidden dark:inline"></i>
           </button>
 
-          <!-- Font Scaler Kontrol (small, medium, big, xlarge, xxlarge 50+) -->
-          <div id="fontSizeControlGroup" class="inline-flex items-center bg-slate-100 p-0.5 rounded-xl border border-slate-200 shadow-2xs flex-shrink-0" title="Pengatur Ukuran Huruf Aplikasi">
+          <!-- Font Scaler Kontrol (Desktop/Tablet inline, Mobile baris ke-2 agar nama sekolah utuh) -->
+          <div id="fontSizeControlGroup" class="hidden sm:inline-flex items-center bg-slate-100 p-0.5 rounded-xl border border-slate-200 shadow-2xs flex-shrink-0" title="Pengatur Ukuran Huruf Aplikasi">
             <button type="button" onclick="setFontScale('small')" id="btnFontSmall" class="px-1 sm:px-1.5 py-0.5 sm:py-1 text-[10px] font-bold rounded-lg text-slate-600 hover:text-indigo-700 hover:bg-white transition cursor-pointer" title="Ukuran Font Kecil (14px)">A-</button>
             <button type="button" onclick="setFontScale('medium')" id="btnFontMedium" class="px-1 sm:px-1.5 py-0.5 sm:py-1 text-[11px] font-extrabold rounded-lg text-indigo-700 bg-white shadow-xs transition cursor-pointer" title="Ukuran Font Sedang / Standar (16px)">A</button>
             <button type="button" onclick="setFontScale('big')" id="btnFontBig" class="px-1 sm:px-1.5 py-0.5 sm:py-1 text-[11px] font-black rounded-lg text-slate-600 hover:text-indigo-700 hover:bg-white transition cursor-pointer" title="Ukuran Font Besar (18px)">A+</button>
@@ -382,6 +453,17 @@
           <button id="btnAdminAccess" onclick="openAdminPinModal()" title="Panel Administrator (Gembok)" class="h-8 w-8 sm:h-9 sm:w-9 flex items-center justify-center rounded-xl bg-slate-50 hover:bg-indigo-50 border border-slate-200 hover:border-indigo-300 text-slate-600 hover:text-indigo-600 transition shadow-2xs cursor-pointer flex-shrink-0" aria-label="Akses Admin">
             <i data-lucide="lock" class="w-3.5 h-3.5 sm:w-4 sm:h-4"></i>
           </button>
+        </div>
+      </div>
+      <!-- Baris Kontrol Ukuran Font Khusus Mobile (agar nama sekolah di atas tampil utuh tanpa terpotong) -->
+      <div class="sm:hidden flex items-center justify-between pb-1.5 pt-0.5 border-t border-slate-100 dark:border-dark-outline-variant/60">
+        <span class="text-[10px] font-bold text-slate-500">Ukuran Teks:</span>
+        <div class="inline-flex items-center bg-slate-100 dark:bg-dark-surface-container-high p-0.5 rounded-lg border border-slate-200 dark:border-dark-outline-variant">
+          <button type="button" onclick="setFontScale('small')" class="px-1.5 py-0.5 text-[10px] font-bold rounded text-slate-600 hover:bg-white transition cursor-pointer">A-</button>
+          <button type="button" onclick="setFontScale('medium')" class="px-1.5 py-0.5 text-[10px] font-bold rounded text-slate-600 hover:bg-white transition cursor-pointer">A</button>
+          <button type="button" onclick="setFontScale('big')" class="px-1.5 py-0.5 text-[10px] font-bold rounded text-slate-600 hover:bg-white transition cursor-pointer">A+</button>
+          <button type="button" onclick="setFontScale('xlarge')" class="px-1.5 py-0.5 text-[10px] font-bold rounded text-slate-600 hover:bg-white transition cursor-pointer">A++</button>
+          <button type="button" onclick="setFontScale('xxlarge')" class="px-1.5 py-0.5 text-[10px] font-bold rounded text-slate-600 hover:bg-white transition cursor-pointer">A+++</button>
         </div>
       </div>
     </div>
@@ -448,60 +530,58 @@
           <!-- =================================================================== -->
           <div class="bg-white dark:bg-dark-surface-container-low rounded-3xl p-5 sm:p-6 border border-light-outline-variant/60 dark:border-dark-outline-variant shadow-sm space-y-4">
             <!-- Header Dual-Logo & Identitas Sekolah -->
-            <div class="flex items-center justify-between gap-3 sm:gap-4 pb-5 border-b border-slate-100 dark:border-dark-outline-variant">
+            <div class="grid grid-cols-[auto_1fr_auto] items-center gap-x-2.5 gap-y-2 sm:flex sm:items-center sm:justify-between sm:gap-4 pb-4 sm:pb-5 border-b border-slate-100 dark:border-dark-outline-variant">
               <!-- Logo Kiri: Pemda / Tut Wuri Handayani -->
-              <div class="w-12 h-12 sm:w-16 sm:h-16 rounded-2xl bg-light-surface-container-low dark:bg-dark-surface-container-high p-2 flex items-center justify-center border border-light-outline-variant/60 dark:border-dark-outline-variant flex-shrink-0">
+              <div class="col-start-1 row-start-1 sm:order-1 w-12 h-12 sm:w-16 sm:h-16 rounded-2xl bg-light-surface-container-low dark:bg-dark-surface-container-high p-2 flex items-center justify-center border border-light-outline-variant/60 dark:border-dark-outline-variant flex-shrink-0">
                 <img id="landingLogoPemda" src="https://upload.wikimedia.org/wikipedia/commons/thumb/b/be/Coat_of_arms_of_Indonesia.svg/200px-Coat_of_arms_of_Indonesia.svg.png" alt="Logo Pemda" class="max-w-full max-h-full object-contain">
               </div>
 
               <!-- Teks Identitas Sekolah -->
-              <div class="flex-1 min-w-0">
-                <p id="landingInstansi" class="text-[10px] sm:text-xs font-bold tracking-wider uppercase text-light-primary dark:text-dark-primary break-words">
-                  PEMERINTAH KOTA SEMARANG
-                </p>
-                <p id="landingDinas" class="text-[10px] sm:text-xs font-bold tracking-wider uppercase text-light-primary dark:text-dark-primary break-words">
-                  DINAS PENDIDIKAN
-                </p>
-                <h2 id="landingSchoolTitle" class="text-lg sm:text-2xl font-extrabold text-slate-900 dark:text-dark-on-surface tracking-tight leading-snug break-words mt-0.5">
-                  SMP NEGERI 35 SEMARANG
-                </h2>
-                <div class="flex items-start gap-1.5 mt-1 text-xs text-slate-500 dark:text-dark-on-surface-variant">
-                  <i data-lucide="map-pin" class="w-3.5 h-3.5 mt-0.5 text-light-primary dark:text-dark-primary flex-shrink-0"></i>
-                  <span id="landingAlamat" class="break-words">Jl R Soebagyono, Kelurahan Bubakan, Kecamatan Mijen, Kota Semarang</span>
+              <div class="contents sm:block sm:order-2 sm:flex-1 sm:min-w-0 sm:text-center">
+                <div class="col-start-2 row-start-1 text-center min-w-0">
+                  <p id="landingInstansi" class="text-[10px] sm:text-xs font-bold tracking-wider uppercase text-light-primary dark:text-dark-primary break-words">
+                    PEMERINTAH KOTA SEMARANG
+                  </p>
+                  <p id="landingDinas" class="text-[10px] sm:text-xs font-bold tracking-wider uppercase text-light-primary dark:text-dark-primary break-words">
+                    DINAS PENDIDIKAN
+                  </p>
+                </div>
+                <div class="col-span-3 row-start-2 text-center">
+                  <h2 id="landingSchoolTitle" class="text-lg sm:text-2xl font-extrabold text-slate-900 dark:text-dark-on-surface tracking-tight leading-snug break-words mt-0.5">
+                    SMP NEGERI 35 SEMARANG
+                  </h2>
+                  <div class="flex items-start justify-center gap-1.5 mt-1 text-xs text-slate-500 dark:text-dark-on-surface-variant">
+                    <i data-lucide="map-pin" class="w-3.5 h-3.5 mt-0.5 text-light-primary dark:text-dark-primary flex-shrink-0"></i>
+                    <span id="landingAlamat" class="break-words">Jl R Soebagyono, Kelurahan Bubakan, Kecamatan Mijen, Kota Semarang</span>
+                  </div>
                 </div>
               </div>
 
               <!-- Logo Kanan: Sekolah -->
-              <div class="w-12 h-12 sm:w-16 sm:h-16 rounded-2xl bg-light-surface-container-low dark:bg-dark-surface-container-high p-2 flex items-center justify-center border border-light-outline-variant/60 dark:border-dark-outline-variant flex-shrink-0">
+              <div class="col-start-3 row-start-1 sm:order-3 w-12 h-12 sm:w-16 sm:h-16 rounded-2xl bg-light-surface-container-low dark:bg-dark-surface-container-high p-2 flex items-center justify-center border border-light-outline-variant/60 dark:border-dark-outline-variant flex-shrink-0">
                 <img id="landingLogoSekolah" src="https://upload.wikimedia.org/wikipedia/commons/thumb/9/9c/Logo_of_Ministry_of_Education_and_Culture_of_Republic_of_Indonesia.svg/200px-Logo_of_Ministry_of_Education_and_Culture_of_Republic_of_Indonesia.svg.png" alt="Logo Sekolah" class="max-w-full max-h-full object-contain">
               </div>
             </div>
 
-            <!-- [EDIT MANDIRI KONTAK, TELEPON & SOSIAL MEDIA SEKOLAH] -->
-            <div class="flex flex-wrap items-center gap-2 text-[11px] font-semibold">
-              <a id="landingTelp" href="tel:02476680596" class="inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-xl bg-slate-50 dark:bg-dark-surface-container-high text-slate-700 dark:text-slate-200 border border-slate-200/80 dark:border-dark-outline-variant hover:border-indigo-300 hover:text-indigo-700 dark:hover:text-indigo-300 transition">
-                <i data-lucide="phone" class="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400"></i>
-                <span>024-76680596</span>
+            <!-- [EDIT MANDIRI KONTAK, TELEPON & SOSIAL MEDIA SEKOLAH - IKON SAJA] -->
+            <div class="flex flex-wrap items-center justify-center gap-2.5">
+              <a id="landingTelp" href="tel:02476680596" title="Telepon: 024-76680596" aria-label="Telepon: 024-76680596" class="w-10 h-10 rounded-xl inline-flex items-center justify-center bg-slate-50 dark:bg-dark-surface-container-high text-emerald-600 dark:text-emerald-400 border border-slate-200/80 dark:border-dark-outline-variant hover:border-emerald-300 hover:scale-105 transition">
+                <i data-lucide="phone" class="w-4 h-4"></i>
               </a>
-              <a id="landingEmail" href="mailto:smpn35semarang@gmail.com" class="inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-xl bg-slate-50 dark:bg-dark-surface-container-high text-slate-700 dark:text-slate-200 border border-slate-200/80 dark:border-dark-outline-variant hover:border-indigo-300 hover:text-indigo-700 dark:hover:text-indigo-300 transition">
-                <i data-lucide="mail" class="w-3.5 h-3.5 text-blue-600 dark:text-blue-400"></i>
-                <span>smpn35semarang@gmail.com</span>
+              <a id="landingEmail" href="mailto:smpn35semarang@gmail.com" title="Email: smpn35semarang@gmail.com" aria-label="Email: smpn35semarang@gmail.com" class="w-10 h-10 rounded-xl inline-flex items-center justify-center bg-slate-50 dark:bg-dark-surface-container-high text-blue-600 dark:text-blue-400 border border-slate-200/80 dark:border-dark-outline-variant hover:border-blue-300 hover:scale-105 transition">
+                <i data-lucide="mail" class="w-4 h-4"></i>
               </a>
-              <a id="landingWebsite" href="https://smpn35.semarangkota.go.id" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-xl bg-slate-50 dark:bg-dark-surface-container-high text-slate-700 dark:text-slate-200 border border-slate-200/80 dark:border-dark-outline-variant hover:border-indigo-300 hover:text-indigo-700 dark:hover:text-indigo-300 transition">
-                <i data-lucide="globe" class="w-3.5 h-3.5 text-indigo-600 dark:text-indigo-400"></i>
-                <span>smpn35.semarangkota.go.id</span>
+              <a id="landingWebsite" href="https://smpn35.semarangkota.go.id" target="_blank" rel="noopener noreferrer" title="Website: smpn35.semarangkota.go.id" aria-label="Website: smpn35.semarangkota.go.id" class="w-10 h-10 rounded-xl inline-flex items-center justify-center bg-slate-50 dark:bg-dark-surface-container-high text-indigo-600 dark:text-indigo-400 border border-slate-200/80 dark:border-dark-outline-variant hover:border-indigo-300 hover:scale-105 transition">
+                <i data-lucide="globe" class="w-4 h-4"></i>
               </a>
-              <a id="landingInstagram" href="https://instagram.com/smpn35_semarang" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-xl bg-rose-50/70 dark:bg-rose-950/30 text-rose-700 dark:text-rose-300 border border-rose-200/80 dark:border-rose-800/60 hover:bg-rose-100/80 transition">
-                <i data-lucide="camera" class="w-3.5 h-3.5"></i>
-                <span>Instagram</span>
+              <a id="landingInstagram" href="https://instagram.com/smpn35_semarang" target="_blank" rel="noopener noreferrer" title="Instagram: @smpn35_semarang" aria-label="Instagram: @smpn35_semarang" class="w-10 h-10 rounded-xl inline-flex items-center justify-center bg-rose-50/70 dark:bg-rose-950/30 text-rose-700 dark:text-rose-300 border border-rose-200/80 dark:border-rose-800/60 hover:bg-rose-100/80 hover:scale-105 transition">
+                <i data-lucide="camera" class="w-4 h-4"></i>
               </a>
-              <a id="landingYoutube" href="http://www.youtube.com/@smpn35semarang69" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-xl bg-red-50/70 dark:bg-red-950/30 text-red-700 dark:text-red-300 border border-red-200/80 dark:border-red-800/60 hover:bg-red-100/80 transition">
-                <i data-lucide="play-circle" class="w-3.5 h-3.5"></i>
-                <span>YouTube</span>
+              <a id="landingYoutube" href="http://www.youtube.com/@smpn35semarang69" target="_blank" rel="noopener noreferrer" title="YouTube: @smpn35semarang69" aria-label="YouTube: @smpn35semarang69" class="w-10 h-10 rounded-xl inline-flex items-center justify-center bg-red-50/70 dark:bg-red-950/30 text-red-700 dark:text-red-300 border border-red-200/80 dark:border-red-800/60 hover:bg-red-100/80 hover:scale-105 transition">
+                <i data-lucide="play-circle" class="w-4 h-4"></i>
               </a>
-              <a id="landingFacebook" href="https://facebook.com/smpn35semarang" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-xl bg-sky-50/70 dark:bg-sky-950/30 text-sky-700 dark:text-sky-300 border border-sky-200/80 dark:border-sky-800/60 hover:bg-sky-100/80 transition">
-                <i data-lucide="share-2" class="w-3.5 h-3.5"></i>
-                <span>Facebook</span>
+              <a id="landingFacebook" href="https://facebook.com/smpn35semarang" target="_blank" rel="noopener noreferrer" title="Facebook: SMPN 35 Semarang" aria-label="Facebook: SMPN 35 Semarang" class="w-10 h-10 rounded-xl inline-flex items-center justify-center bg-sky-50/70 dark:bg-sky-950/30 text-sky-700 dark:text-sky-300 border border-sky-200/80 dark:border-sky-800/60 hover:bg-sky-100/80 hover:scale-105 transition">
+                <i data-lucide="share-2" class="w-4 h-4"></i>
               </a>
             </div>
             <!-- =================================================================== -->
@@ -1719,6 +1799,8 @@
             </div>
             <div id="metricSiswaRombel" class="text-xs font-bold text-slate-500">0 Siswa</div>
           </div>
+
+          <div id="bannerStatusPresensiKbm" class="hidden mt-2 p-3 rounded-2xl border text-xs flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2"></div>
 
           <div class="overflow-x-auto mt-2">
             <table class="w-full text-left text-xs">
@@ -12328,6 +12410,77 @@ function renderBadgeStatusBk(statusBK) {
       });
     }
 
+    function getInfoPencatatPresensiKbm(kelas, tgl) {
+      const kls = String(kelas || '').trim();
+      const targetTgl = String(tgl || '').trim();
+      const recs = (logPresensiHarian || []).filter(p => p && String(p.tanggal || '').trim() === targetTgl && String(p.kelas || '').trim() === kls);
+      if (recs.length === 0) {
+        return { ada: false, dicatatOleh: '', olehWalas: false, walasNama: '', nonHadir: [] };
+      }
+      const lastRec = recs[recs.length - 1];
+      const dicatatOleh = String(lastRec.dicatatOleh || 'Guru / Wali Kelas').trim();
+      let walasNama = '';
+      if (typeof appConfig !== 'undefined' && appConfig && appConfig.PLOTTING_WALAS && appConfig.PLOTTING_WALAS[kls]) {
+        const walasEntry = appConfig.PLOTTING_WALAS[kls];
+        if (typeof walasEntry === 'object' && walasEntry !== null) {
+          if (walasEntry.nama) walasNama = String(walasEntry.nama).trim();
+          if (!walasNama && walasEntry.nip && typeof masterGuru !== 'undefined') {
+            const gW = masterGuru.find(g => String(g.nip || g.id || '').trim() === String(walasEntry.nip).trim());
+            if (gW && gW.nama) walasNama = String(gW.nama).trim();
+          }
+        } else {
+          const walasKey = String(walasEntry).trim();
+          const gWalas = (typeof masterGuru !== 'undefined' ? masterGuru : []).find(g => String(g.nip || g.id || '').trim() === walasKey || String(g.nama || '').trim().toLowerCase() === walasKey.toLowerCase());
+          walasNama = (gWalas && gWalas.nama) ? String(gWalas.nama).trim() : walasKey;
+        }
+      }
+      if (!walasNama && typeof masterGuru !== 'undefined') {
+        const gWalas2 = masterGuru.find(g => g && g.isWalas && String(g.kelasWalas || '').trim() === kls);
+        if (gWalas2 && gWalas2.nama) walasNama = String(gWalas2.nama).trim();
+      }
+      const olehWalas = Boolean(
+        (walasNama && dicatatOleh.toLowerCase() === walasNama.toLowerCase()) ||
+        dicatatOleh.toLowerCase() === 'wali kelas'
+      );
+      const nonHadir = recs
+        .filter(r => r && String(r.status || 'HADIR').toUpperCase() !== 'HADIR')
+        .map(r => ({ nama: r.nama || r.nisn, status: String(r.status || '').toUpperCase() }));
+      return { ada: true, dicatatOleh: dicatatOleh, olehWalas: olehWalas, walasNama: walasNama, nonHadir: nonHadir };
+    }
+
+    function renderBannerStatusPresensiKbm(kelas, tgl) {
+      const banner = document.getElementById('bannerStatusPresensiKbm');
+      if (!banner) return;
+      const info = getInfoPencatatPresensiKbm(kelas, tgl);
+      if (!info.ada) {
+        banner.classList.add('hidden');
+        banner.innerHTML = '';
+        return;
+      }
+      const ringkasan = info.nonHadir.length > 0
+        ? `Tidak hadir/terlambat: ${info.nonHadir.map(x => `${escapeHtml(x.nama)} (${escapeHtml(x.status)})`).slice(0, 5).join(', ')}${info.nonHadir.length > 5 ? ', ...' : ''}`
+        : 'Seluruh siswa tercatat HADIR.';
+      if (info.olehWalas) {
+        banner.className = 'mt-2 p-3 rounded-2xl border bg-emerald-50 border-emerald-200 text-emerald-900 text-xs flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2';
+        banner.innerHTML = `
+          <div>
+            <span class="font-extrabold">Tervalidasi Wali Kelas (${escapeHtml(info.dicatatOleh)})</span>
+            <span class="block text-[11px] text-emerald-700 mt-0.5">${ringkasan}</span>
+          </div>
+          <span class="px-2.5 py-1 bg-white border border-emerald-200 text-emerald-800 rounded-xl text-[10px] font-extrabold whitespace-nowrap self-start sm:self-center">Data Resmi Rapor</span>
+        `;
+      } else {
+        banner.className = 'mt-2 p-3 rounded-2xl border bg-amber-50 border-amber-200 text-amber-900 text-xs flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2';
+        banner.innerHTML = `
+          <div>
+            <span class="font-extrabold">Sudah dicatat oleh ${escapeHtml(info.dicatatOleh)}</span>
+            <span class="block text-[11px] text-amber-700 mt-0.5">${ringkasan}</span>
+          </div>
+          <span class="px-2.5 py-1 bg-white border border-amber-200 text-amber-800 rounded-xl text-[10px] font-extrabold whitespace-nowrap self-start sm:self-center">Menunggu Validasi Walas</span>
+        `;
+      }
+    }
+
     function renderFormPresensiKbm() {
       const kelasSelect = document.getElementById('guruPresensiKbmKelas');
       const kelas = kelasSelect ? kelasSelect.value : '';
@@ -12372,6 +12525,7 @@ function renderBadgeStatusBk(statusBK) {
       if (!tbody) return;
 
       document.getElementById('metricSiswaRombel').innerText = `${siswaKelas.length} Siswa`;
+      renderBannerStatusPresensiKbm(kelas, tgl);
       updateSemuaReminderMingguKe();
 
       const colorMap = {
@@ -12423,8 +12577,9 @@ function renderBadgeStatusBk(statusBK) {
       const findingsInp = document.getElementById('refleksi4fFindings');
       const futureInp = document.getElementById('refleksi4fFuture');
 
+      const myNip = currentUser ? String(currentUser.nip || currentUser.id || '').trim() : '';
       const existingJurnal = (logJurnalGuru || []).find(j => 
-        j && j.tanggal === tgl && String(j.kelas).trim() === String(kelas).trim()
+        j && j.tanggal === tgl && String(j.kelas).trim() === String(kelas).trim() && (!myNip || String(j.nip || '').trim() === myNip)
       );
 
       if (existingJurnal) {
@@ -12558,6 +12713,28 @@ function renderBadgeStatusBk(statusBK) {
         });
       });
 
+      // 2b. KONFIRMASI ANTI-TIMPA: Cegah penimpaan presensi oleh guru lain tanpa sadar
+      const prevInfo = getInfoPencatatPresensiKbm(kelas, tgl);
+      const curNama = currentUser ? String(currentUser.nama || '').trim() : '';
+      if (prevInfo.ada && prevInfo.dicatatOleh && curNama && prevInfo.dicatatOleh.toLowerCase() !== curNama.toLowerCase()) {
+        const curIsWalasKelasIni = Boolean(currentUser && currentUser.isWalas && String(currentUser.kelasWalas || '').trim() === String(kelas).trim());
+        if (!curIsWalasKelasIni || prevInfo.olehWalas) {
+          const prevNonHadirHtml = prevInfo.nonHadir.length > 0
+            ? `<div class="mt-2 p-2.5 bg-slate-50 rounded-xl border border-slate-200 text-left text-[11px]"><b>Status tidak hadir sebelumnya:</b><br>${prevInfo.nonHadir.map(x => `- ${escapeHtml(x.nama)} (<b>${escapeHtml(x.status)}</b>)`).slice(0, 6).join('<br>')}</div>`
+            : '';
+          const konfirmasiTimpa = await Swal.fire({
+            icon: prevInfo.olehWalas ? 'warning' : 'question',
+            title: prevInfo.olehWalas ? 'Presensi Sudah Divalidasi Wali Kelas' : 'Presensi Sudah Dicatat Guru Lain',
+            html: `Presensi kelas <b>${escapeHtml(kelas)}</b> tanggal <b>${escapeHtml(tgl)}</b> sebelumnya sudah dicatat oleh <b>${escapeHtml(prevInfo.dicatatOleh)}</b>.${prevNonHadirHtml}<p class="mt-2 text-xs text-slate-600">Apakah Anda yakin ingin memperbarui data presensi hari ini?</p>`,
+            showCancelButton: true,
+            confirmButtonText: 'Ya, Perbarui Presensi',
+            cancelButtonText: 'Batal',
+            confirmButtonColor: '#2563eb'
+          });
+          if (!konfirmasiTimpa || !konfirmasiTimpa.isConfirmed) return;
+        }
+      }
+
       // 3. DEDUPLIKASI LOKAL: Ganti/perbarui data presensi untuk tanggal & kelas ini (tidak mendobel)
       const nonCurrentRecords = (logPresensiHarian || []).filter(p => !(p.tanggal === tgl && String(p.kelas).trim() === String(kelas).trim()));
       const updatedCurrentRecords = dataAbsen.map(item => ({
@@ -12652,6 +12829,7 @@ function renderBadgeStatusBk(statusBK) {
       if (typeof renderJurnalGuruSaya === 'function') {
         renderJurnalGuruSaya();
       }
+      renderBannerStatusPresensiKbm(kelas, tgl);
     }
     // HELPER KONTROL AKTIVASI & VISIBILITAS FITUR REFLEKSI 4F & JURNAL GURU (PER GURU ATAU BANYAK GURU)
     function saveAppConfigToLocalStorage() {
