@@ -340,7 +340,19 @@
     html.dark :is(main, header, footer, aside, .fixed):not(#printArea):not(#printArea *) :is(.border-slate-200, .border-slate-100, .border-slate-300, .border-gray-200, .divide-slate-100 > *, .divide-slate-200 > *) {
       border-color: #2E313D !important;
     }
-    html.dark main:not(#printArea) :is(.hover\:bg-slate-50:hover, .hover\:bg-slate-100:hover, .hover\:bg-indigo-50:hover, .hover\:bg-blue-50:hover) {
+    html.dark main:not(#printArea) tbody tr:hover {
+      background-color: #252836 !important;
+    }
+    html.dark :is(main, header, footer, aside, .fixed):not(#printArea):not(#printArea *) :is(
+      [class*="hover:bg-slate-50"], [class*="hover:bg-slate-100"], [class*="hover:bg-slate-200"],
+      [class*="hover:bg-gray-50"], [class*="hover:bg-gray-100"], [class*="hover:bg-white"],
+      [class*="hover:bg-indigo-50"], [class*="hover:bg-indigo-100"],
+      [class*="hover:bg-blue-50"], [class*="hover:bg-blue-100"],
+      [class*="hover:bg-sky-50"], [class*="hover:bg-emerald-50"], [class*="hover:bg-emerald-100"],
+      [class*="hover:bg-amber-50"], [class*="hover:bg-amber-100"],
+      [class*="hover:bg-rose-50"], [class*="hover:bg-rose-100"],
+      [class*="hover:bg-purple-50"], [class*="hover:bg-teal-50"]
+    ):hover {
       background-color: #272A36 !important;
     }
     html.dark #fontSizeControlGroup {
@@ -1556,10 +1568,22 @@
             </div>
           </div>
 
-          <div>
-            <p class="px-3 text-[10px] font-extrabold uppercase tracking-wider text-slate-400 mb-1.5">Wali &amp; Pembinaan</p>
+          <div id="sidebarGroupWalas" class="hidden">
+            <p class="px-3 text-[10px] font-extrabold uppercase tracking-wider text-indigo-600 dark:text-indigo-400 mb-1.5 flex items-center justify-between">
+              <span>Wali Kelas</span>
+              <span id="badgeSidebarKelasWalas" class="px-1.5 py-0.5 bg-indigo-50 text-indigo-700 rounded text-[9px] font-black">-</span>
+            </p>
             <div class="space-y-1">
-              <button onclick="switchTabGuru('rekapWalas')" id="tabBtnGuru_rekapWalas" class="tab-guru-btn w-full text-left px-3 py-2 bg-white text-slate-600 hover:bg-slate-100 font-semibold rounded-xl text-xs border border-slate-200 flex items-center gap-2.5 transition cursor-pointer"><i data-lucide="users" class="w-4 h-4 flex-shrink-0"></i><span>Rekap Ekskul (Walas)</span></button>
+              <button onclick="switchTabGuru('rekapWalas')" id="tabBtnGuru_rekapWalas" class="tab-guru-btn w-full text-left px-3 py-2 bg-white text-slate-600 hover:bg-slate-100 font-semibold rounded-xl text-xs border border-slate-200 flex items-center justify-between gap-2 transition cursor-pointer">
+                <span class="flex items-center gap-2.5"><i data-lucide="users" class="w-4 h-4 text-indigo-600 flex-shrink-0"></i><span>Portal Wali Kelas</span></span>
+                <span class="px-1.5 py-0.5 bg-indigo-100 text-indigo-800 rounded-full text-[9px] font-bold">Walas</span>
+              </button>
+            </div>
+          </div>
+
+          <div>
+            <p class="px-3 text-[10px] font-extrabold uppercase tracking-wider text-slate-400 mb-1.5">Pembinaan &amp; Karakter</p>
+            <div class="space-y-1">
               <button onclick="switchTabGuru('guruWali')" id="tabBtnGuru_guruWali" class="tab-guru-btn w-full text-left px-3 py-2 bg-white text-slate-600 hover:bg-slate-100 font-semibold rounded-xl text-xs border border-slate-200 flex items-center gap-2.5 transition cursor-pointer"><i data-lucide="star" class="w-4 h-4 flex-shrink-0"></i><span>Guru Wali (7 Kebiasaan)</span></button>
               <button onclick="switchTabGuru('tibum')" id="tabBtnGuru_tibum" class="tab-guru-btn w-full text-left px-3 py-2 bg-white text-slate-600 hover:bg-slate-100 font-semibold rounded-xl text-xs border border-slate-200 flex items-center gap-2.5 transition cursor-pointer"><i data-lucide="qr-code" class="w-4 h-4 flex-shrink-0"></i><span>Catat Pelanggaran / QR</span></button>
             </div>
@@ -2063,7 +2087,111 @@
 
       <!-- KONTEN TAB 4 GURU: REKAP EKSKUL ROMBEL (WALI KELAS HANYA REKAP) -->
       <div id="tabContentGuru_rekapWalas" class="tab-guru-content hidden space-y-6">
-        <div class="bg-white p-6 rounded-3xl border border-slate-200 shadow-xs">
+        <!-- HEADER PORTAL WALI KELAS + NAVIGASI SUB-TAB -->
+        <div class="bg-white p-5 sm:p-6 rounded-3xl border border-slate-200 shadow-xs space-y-4">
+          <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+            <div>
+              <div class="flex flex-wrap items-center gap-2">
+                <span class="px-2.5 py-0.5 bg-indigo-100 text-indigo-800 rounded-lg text-[10px] font-extrabold uppercase">Menu Khusus Wali Kelas</span>
+                <span id="badgePortalWalasKelas" class="px-2.5 py-0.5 bg-emerald-100 text-emerald-800 rounded-lg text-[10px] font-black">Kelas -</span>
+              </div>
+              <h3 class="font-extrabold text-base sm:text-lg text-slate-900 mt-1">Portal Kendali Wali Kelas</h3>
+              <p class="text-xs text-slate-500">Validasi presensi harian, rekap absensi rapor (S/I/A), keaktifan ekskul, dan histori pelanggaran kelas binaan Anda.</p>
+            </div>
+          </div>
+          <div class="flex flex-wrap items-center gap-2 pt-2 border-t border-slate-100">
+            <button type="button" id="subTabBtnWalas_presensi" onclick="switchSubTabWalas('presensi')" class="px-3.5 py-2 rounded-xl text-xs font-bold bg-indigo-700 text-white shadow-xs transition cursor-pointer flex items-center gap-1.5">
+              <i data-lucide="clipboard-check" class="w-4 h-4"></i>
+              <span>Validasi Presensi &amp; Rapor</span>
+            </button>
+            <button type="button" id="subTabBtnWalas_ekskul" onclick="switchSubTabWalas('ekskul')" class="px-3.5 py-2 rounded-xl text-xs font-bold bg-slate-100 text-slate-700 hover:bg-slate-200 transition cursor-pointer flex items-center gap-1.5">
+              <i data-lucide="trophy" class="w-4 h-4"></i>
+              <span>Rekap Ekskul Rombel</span>
+            </button>
+            <button type="button" id="subTabBtnWalas_pelanggaran" onclick="switchSubTabWalas('pelanggaran')" class="px-3.5 py-2 rounded-xl text-xs font-bold bg-slate-100 text-slate-700 hover:bg-slate-200 transition cursor-pointer flex items-center gap-1.5">
+              <i data-lucide="shield-alert" class="w-4 h-4"></i>
+              <span>Histori Pelanggaran Kelas</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- SUB-TAB 1 WALAS: VALIDASI PRESENSI HARIAN & REKAP ABSENSI RAPOR -->
+        <div id="subTabWalas_presensi" class="space-y-6">
+          <!-- Panel Validasi Harian -->
+          <div class="bg-white p-6 rounded-3xl border border-slate-200 shadow-xs space-y-4">
+            <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 pb-4 border-b border-slate-100">
+              <div>
+                <h4 class="font-extrabold text-sm sm:text-base text-slate-900">Validasi Presensi Harian Kelas Binaan</h4>
+                <p class="text-xs text-slate-500">Tinjau atau perbarui catatan kehadiran siswa dari Guru Mapel (misal konfirmasi Alpha menjadi Sakit) sebelum menjadi data resmi rapor.</p>
+              </div>
+              <div class="flex flex-wrap items-center gap-2">
+                <input type="date" id="walasValidasiTgl" onchange="renderPanelValidasiPresensiWalas()" class="px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs font-bold cursor-pointer">
+                <button type="button" onclick="simpanValidasiPresensiWalas()" class="px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white font-bold rounded-xl text-xs shadow-xs transition flex items-center gap-1.5 cursor-pointer">
+                  <i data-lucide="check-circle-2" class="w-4 h-4"></i>
+                  <span>Sahkan Presensi Walas</span>
+                </button>
+              </div>
+            </div>
+
+            <div id="walasValidasiBanner" class="hidden p-3 rounded-2xl border text-xs flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2"></div>
+
+            <div class="overflow-x-auto">
+              <table class="w-full text-left text-xs">
+                <thead class="bg-slate-50 text-slate-600 font-bold border-b border-slate-200">
+                  <tr>
+                    <th class="py-3 px-3 w-10">No</th>
+                    <th class="py-3 px-3 w-28">NISN</th>
+                    <th class="py-3 px-3 min-w-[160px]">Nama Siswa</th>
+                    <th class="py-3 px-3 text-center w-52">Status Kehadiran</th>
+                    <th class="py-3 px-3 min-w-[180px]">Keterangan / Konfirmasi Ortu</th>
+                  </tr>
+                </thead>
+                <tbody id="tbodyWalasValidasiPresensi" class="divide-y divide-slate-100 font-medium"></tbody>
+              </table>
+            </div>
+          </div>
+
+          <!-- Panel Rekap Absensi Rapor (S/I/A/T) -->
+          <div class="bg-white p-6 rounded-3xl border border-slate-200 shadow-xs space-y-4">
+            <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 pb-4 border-b border-slate-100">
+              <div>
+                <h4 class="font-extrabold text-sm sm:text-base text-slate-900">Rekapitulasi Ketidakhadiran Siswa untuk Buku Rapor</h4>
+                <p class="text-xs text-slate-500">Total akumulasi Hadir, Sakit (S), Izin (I), Alpha (A), dan Terlambat per siswa pada rentang tanggal terpilih.</p>
+              </div>
+              <div class="flex flex-wrap items-center gap-2">
+                <input type="date" id="walasRaporStartTgl" onchange="renderRekapPresensiRaporWalas()" class="px-3 py-1.5 bg-slate-50 border border-slate-200 rounded-xl text-xs font-bold cursor-pointer">
+                <span class="text-xs text-slate-400 font-bold">s/d</span>
+                <input type="date" id="walasRaporEndTgl" onchange="renderRekapPresensiRaporWalas()" class="px-3 py-1.5 bg-slate-50 border border-slate-200 rounded-xl text-xs font-bold cursor-pointer">
+                <button type="button" onclick="eksporCsvPresensiRaporWalas()" class="px-3.5 py-2 bg-indigo-50 hover:bg-indigo-100 text-indigo-700 font-bold rounded-xl text-xs border border-indigo-200 transition flex items-center gap-1.5 cursor-pointer">
+                  <i data-lucide="download" class="w-4 h-4"></i>
+                  <span>Ekspor CSV Rapor</span>
+                </button>
+              </div>
+            </div>
+
+            <div class="overflow-x-auto">
+              <table class="w-full text-left text-xs">
+                <thead class="bg-slate-50 text-slate-600 font-bold border-b border-slate-200">
+                  <tr>
+                    <th class="py-3 px-3 w-10">No</th>
+                    <th class="py-3 px-3 w-28">NISN</th>
+                    <th class="py-3 px-3 min-w-[160px]">Nama Siswa</th>
+                    <th class="py-3 px-3 text-center">Hadir</th>
+                    <th class="py-3 px-3 text-center text-amber-700">Sakit (S)</th>
+                    <th class="py-3 px-3 text-center text-blue-700">Izin (I)</th>
+                    <th class="py-3 px-3 text-center text-rose-700">Alpha (A)</th>
+                    <th class="py-3 px-3 text-center text-purple-700">Terlambat</th>
+                    <th class="py-3 px-3 text-center">% Hadir</th>
+                  </tr>
+                </thead>
+                <tbody id="tbodyWalasRekapRapor" class="divide-y divide-slate-100 font-medium"></tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <!-- SUB-TAB 2 WALAS: REKAP EKSKUL ROMBEL -->
+        <div id="subTabWalas_ekskul" class="hidden bg-white p-6 rounded-3xl border border-slate-200 shadow-xs">
           <div class="flex flex-col pb-4 border-b border-slate-100 gap-3.5">
             <div class="w-full space-y-1">
               <div class="flex flex-wrap items-center gap-2">
@@ -2120,7 +2248,8 @@
           </div>
         </div>
 
-        <!-- HISTORI CATATAN PELANGGARAN SISWA KELAS BINAAN WALIKELAS -->
+        <!-- SUB-TAB 3 WALAS: HISTORI CATATAN PELANGGARAN SISWA KELAS BINAAN WALIKELAS -->
+        <div id="subTabWalas_pelanggaran" class="hidden">
         <div id="cardHistoriPelanggaranWalas" class="bg-white p-6 rounded-3xl border border-slate-200 shadow-xs space-y-4">
           <div class="flex flex-col pb-4 border-b border-slate-100 gap-3.5">
             <div class="w-full space-y-1">
@@ -2165,6 +2294,7 @@
               </tbody>
             </table>
           </div>
+        </div>
         </div>
       </div>
 
@@ -9112,6 +9242,7 @@ function renderBadgeStatusBk(statusBK) {
         if (btnKoordSync) { if (isKoordNow) btnKoordSync.classList.remove('hidden'); else btnKoordSync.classList.add('hidden'); }
         if (mobKoordSync) { if (isKoordNow) mobKoordSync.classList.remove('hidden'); else mobKoordSync.classList.add('hidden'); }
 
+        if (typeof updateAksesMenuWalas === 'function') updateAksesMenuWalas();
         if (typeof renderWidgetKhususGuruBeranda === 'function') renderWidgetKhususGuruBeranda();
       }
 
@@ -12033,7 +12164,6 @@ function renderBadgeStatusBk(statusBK) {
       const allGuruTabs = [
         'tabBtnGuru_beranda',
         'tabBtnGuru_presensiKbm',
-        'tabBtnGuru_rekapWalas',
         'tabBtnGuru_nilaiUlangan',
         'tabBtnGuru_penilaianTopik',
         'tabBtnGuru_guruWali',
@@ -12208,6 +12338,7 @@ function renderBadgeStatusBk(statusBK) {
       if (typeof renderCheckboxMasterTibum === 'function') renderCheckboxMasterTibum();
       if (typeof loadValidasi7Kebiasaan === 'function') loadValidasi7Kebiasaan();
       if (typeof applyRefleksiVisibility === 'function') applyRefleksiVisibility();
+      if (typeof updateAksesMenuWalas === 'function') updateAksesMenuWalas();
       if (typeof renderWidgetKhususGuruBeranda === 'function') renderWidgetKhususGuruBeranda();
 
       // Masuk ke tab default: Pelatih masuk ke absenEkskul, Guru & Guru BK masuk ke Beranda!
@@ -12216,6 +12347,326 @@ function renderBadgeStatusBk(statusBK) {
       } else {
         switchTabGuru('beranda');
       }
+    }
+
+    function getKelasWalasCurrentUser() {
+      if (typeof currentUser === 'undefined' || !currentUser || currentUser.role === 'SISWA' || currentUser.role === 'ADMIN') return '';
+      if (currentUser.rombelWali && String(currentUser.rombelWali).trim()) return String(currentUser.rombelWali).trim();
+      if (currentUser.kelasWalas && String(currentUser.kelasWalas).trim()) return String(currentUser.kelasWalas).trim();
+      const myNip = String(currentUser.nip || currentUser.id || '').trim();
+      const myNama = String(currentUser.nama || '').trim().toLowerCase();
+      if (typeof appConfig !== 'undefined' && appConfig && appConfig.PLOTTING_WALAS) {
+        for (const kls of Object.keys(appConfig.PLOTTING_WALAS)) {
+          const entry = appConfig.PLOTTING_WALAS[kls];
+          if (typeof entry === 'object' && entry !== null) {
+            if ((myNip && String(entry.nip || '').trim() === myNip) || (myNama && String(entry.nama || '').trim().toLowerCase() === myNama)) {
+              return String(kls).trim();
+            }
+          } else if (entry) {
+            const val = String(entry).trim();
+            if ((myNip && val === myNip) || (myNama && val.toLowerCase() === myNama)) {
+              return String(kls).trim();
+            }
+          }
+        }
+      }
+      if (typeof masterGuru !== 'undefined' && Array.isArray(masterGuru) && myNip) {
+        const g = masterGuru.find(x => x && String(x.nip || x.id || '').trim() === myNip && (x.isWalas || x.rombelWali || x.kelasWalas));
+        if (g) return String(g.rombelWali || g.kelasWalas || '').trim();
+      }
+      return '';
+    }
+
+    function isCurrentUserWalas() {
+      return Boolean(getKelasWalasCurrentUser());
+    }
+
+    function updateAksesMenuWalas() {
+      const grp = document.getElementById('sidebarGroupWalas');
+      const badgeSide = document.getElementById('badgeSidebarKelasWalas');
+      const badgePortal = document.getElementById('badgePortalWalasKelas');
+      const kls = getKelasWalasCurrentUser();
+      if (kls) {
+        if (grp) grp.classList.remove('hidden');
+        if (badgeSide) badgeSide.innerText = kls;
+        if (badgePortal) badgePortal.innerText = 'Kelas ' + kls;
+      } else {
+        if (grp) grp.classList.add('hidden');
+        if (badgeSide) badgeSide.innerText = '-';
+      }
+    }
+
+    function switchSubTabWalas(subName) {
+      const tabs = ['presensi', 'ekskul', 'pelanggaran'];
+      tabs.forEach(t => {
+        const panel = document.getElementById('subTabWalas_' + t);
+        const btn = document.getElementById('subTabBtnWalas_' + t);
+        if (panel) {
+          if (t === subName) panel.classList.remove('hidden');
+          else panel.classList.add('hidden');
+        }
+        if (btn) {
+          if (t === subName) {
+            btn.className = 'px-3.5 py-2 rounded-xl text-xs font-bold bg-indigo-700 text-white shadow-xs transition cursor-pointer flex items-center gap-1.5';
+          } else {
+            btn.className = 'px-3.5 py-2 rounded-xl text-xs font-bold bg-slate-100 text-slate-700 hover:bg-slate-200 transition cursor-pointer flex items-center gap-1.5';
+          }
+        }
+      });
+      if (subName === 'presensi') {
+        renderPanelValidasiPresensiWalas();
+        renderRekapPresensiRaporWalas();
+      } else if (subName === 'ekskul' && typeof renderRekapWalasEkskul === 'function') {
+        renderRekapWalasEkskul();
+      } else if (subName === 'pelanggaran' && typeof renderHistoriPelanggaranWalas === 'function') {
+        renderHistoriPelanggaranWalas();
+      }
+      if (typeof safeCreateIcons === 'function') safeCreateIcons();
+    }
+
+    function renderPortalWalasTerpadu() {
+      const kls = getKelasWalasCurrentUser();
+      const badgePortal = document.getElementById('badgePortalWalasKelas');
+      if (badgePortal) badgePortal.innerText = kls ? ('Kelas ' + kls) : 'Kelas -';
+
+      const todayStr = new Date().toISOString().split('T')[0];
+      const tglVal = document.getElementById('walasValidasiTgl');
+      if (tglVal) {
+        tglVal.max = todayStr;
+        if (!tglVal.value) tglVal.value = todayStr;
+      }
+      const startInp = document.getElementById('walasRaporStartTgl');
+      const endInp = document.getElementById('walasRaporEndTgl');
+      if (startInp && !startInp.value) {
+        const d = new Date();
+        startInp.value = d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-01';
+      }
+      if (endInp && !endInp.value) endInp.value = todayStr;
+
+      const selEkskul = document.getElementById('rekapWalasSelectKelas');
+      if (selEkskul && kls) {
+        if (!Array.from(selEkskul.options).some(o => o.value === kls)) {
+          const opt = document.createElement('option');
+          opt.value = kls;
+          opt.text = 'Kelas ' + kls;
+          selEkskul.appendChild(opt);
+        }
+        selEkskul.value = kls;
+      }
+
+      renderPanelValidasiPresensiWalas();
+      renderRekapPresensiRaporWalas();
+      if (typeof renderRekapWalasEkskul === 'function') renderRekapWalasEkskul();
+      if (typeof renderHistoriPelanggaranWalas === 'function') renderHistoriPelanggaranWalas();
+    }
+
+    function renderPanelValidasiPresensiWalas() {
+      const tbody = document.getElementById('tbodyWalasValidasiPresensi');
+      if (!tbody) return;
+      const kls = getKelasWalasCurrentUser();
+      const todayStr = new Date().toISOString().split('T')[0];
+      const tglInp = document.getElementById('walasValidasiTgl');
+      const tgl = (tglInp && tglInp.value) || todayStr;
+
+      const banner = document.getElementById('walasValidasiBanner');
+      const info = typeof getInfoPencatatPresensiKbm === 'function' ? getInfoPencatatPresensiKbm(kls, tgl) : { ada: false };
+      if (banner) {
+        if (!info.ada) {
+          banner.className = 'p-3 rounded-2xl border bg-slate-50 border-slate-200 text-slate-700 text-xs flex items-center justify-between';
+          banner.innerHTML = '<span>Belum ada catatan presensi dari Guru Mapel maupun Wali Kelas pada tanggal ini.</span>';
+          banner.classList.remove('hidden');
+        } else if (info.olehWalas) {
+          banner.className = 'p-3 rounded-2xl border bg-emerald-50 border-emerald-200 text-emerald-900 text-xs flex items-center justify-between';
+          banner.innerHTML = `<span><b>Tervalidasi Wali Kelas (${escapeHtml(info.dicatatOleh)})</b> - Data sudah disahkan untuk rekap rapor.</span>`;
+          banner.classList.remove('hidden');
+        } else {
+          banner.className = 'p-3 rounded-2xl border bg-amber-50 border-amber-200 text-amber-900 text-xs flex items-center justify-between';
+          banner.innerHTML = `<span><b>Dicatat oleh ${escapeHtml(info.dicatatOleh)}</b> - Silakan tinjau lalu klik <b>Sahkan Presensi Walas</b> untuk mengesahkan.</span>`;
+          banner.classList.remove('hidden');
+        }
+      }
+
+      const siswaKelas = (masterSiswa || []).filter(s => String(s.kelas || '').trim() === kls);
+      if (siswaKelas.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="5" class="py-6 text-center text-slate-400">Belum ada daftar siswa untuk kelas ${escapeHtml(kls || '-')}.</td></tr>`;
+        return;
+      }
+
+      const colorMap = {
+        'HADIR': 'bg-emerald-600 text-white shadow-xs',
+        'SAKIT': 'bg-amber-500 text-white shadow-xs',
+        'IZIN': 'bg-blue-600 text-white shadow-xs',
+        'ALPHA': 'bg-rose-600 text-white shadow-xs',
+        'TERLAMBAT': 'bg-purple-600 text-white shadow-xs'
+      };
+
+      tbody.innerHTML = siswaKelas.map((s, idx) => {
+        const logSaved = (logPresensiHarian || []).slice().reverse().find(p => p && p.tanggal === tgl && isSameNisn(p.nisn, s.nisn));
+        const curStatus = logSaved ? String(logSaved.status || 'HADIR').toUpperCase() : 'HADIR';
+        const curKet = logSaved ? (logSaved.keterangan || '') : '';
+        return `
+          <tr data-walas-nisn="${escapeHtml(s.nisn)}" data-walas-nama="${escapeHtml(s.nama)}">
+            <td class="py-2.5 px-3">${idx + 1}</td>
+            <td class="py-2.5 px-3 font-mono font-bold text-slate-600">${escapeHtml(s.nisn)}</td>
+            <td class="py-2.5 px-3 font-bold text-slate-800">${escapeHtml(s.nama)}</td>
+            <td class="py-2.5 px-3 text-center">
+              <div class="inline-flex rounded-lg border border-slate-200 p-0.5 bg-slate-50 gap-1 text-[11px]" data-walas-st="${escapeHtml(curStatus)}">
+                ${['HADIR', 'SAKIT', 'IZIN', 'ALPHA', 'TERLAMBAT'].map(st => {
+                  const lbl = st === 'HADIR' ? 'H' : (st === 'SAKIT' ? 'S' : (st === 'IZIN' ? 'I' : (st === 'ALPHA' ? 'A' : 'T')));
+                  const cls = curStatus === st ? colorMap[st] : 'text-slate-600 hover:bg-slate-200';
+                  return `<button type="button" onclick="setWalasValidasiStatus(this, '${st}')" data-val="${st}" class="btn-walas-st cursor-pointer px-2 py-1 rounded transition font-bold text-[11px] ${cls}">${lbl}</button>`;
+                }).join('')}
+              </div>
+            </td>
+            <td class="py-2.5 px-3">
+              <input type="text" value="${escapeHtml(curKet)}" placeholder="Catatan konfirmasi orang tua..." class="input-walas-ket w-full px-2.5 py-1 bg-white border border-slate-200 rounded text-xs">
+            </td>
+          </tr>
+        `;
+      }).join('');
+    }
+
+    function setWalasValidasiStatus(btn, status) {
+      const box = btn.closest('[data-walas-st]');
+      if (!box) return;
+      box.setAttribute('data-walas-st', status);
+      const colorMap = {
+        'HADIR': 'bg-emerald-600 text-white shadow-xs',
+        'SAKIT': 'bg-amber-500 text-white shadow-xs',
+        'IZIN': 'bg-blue-600 text-white shadow-xs',
+        'ALPHA': 'bg-rose-600 text-white shadow-xs',
+        'TERLAMBAT': 'bg-purple-600 text-white shadow-xs'
+      };
+      box.querySelectorAll('.btn-walas-st').forEach(b => {
+        const v = b.getAttribute('data-val');
+        b.className = 'btn-walas-st cursor-pointer px-2 py-1 rounded transition font-bold text-[11px] ' + (v === status ? colorMap[v] : 'text-slate-600 hover:bg-slate-200');
+      });
+    }
+
+    async function simpanValidasiPresensiWalas() {
+      const kls = getKelasWalasCurrentUser();
+      if (!kls) return;
+      const tglInp = document.getElementById('walasValidasiTgl');
+      const todayStr = new Date().toISOString().split('T')[0];
+      const tgl = (tglInp && tglInp.value) || todayStr;
+      if (tgl > todayStr) {
+        Swal.fire('Tanggal Tidak Valid', 'Validasi presensi maksimal untuk tanggal hari ini.', 'warning');
+        return;
+      }
+      const rows = document.querySelectorAll('#tbodyWalasValidasiPresensi tr[data-walas-nisn]');
+      if (!rows || rows.length === 0) return;
+
+      const dataAbsen = [];
+      rows.forEach(r => {
+        const nisn = r.getAttribute('data-walas-nisn');
+        const nama = r.getAttribute('data-walas-nama');
+        const stBox = r.querySelector('[data-walas-st]');
+        const status = stBox ? stBox.getAttribute('data-walas-st') : 'HADIR';
+        const ketInp = r.querySelector('.input-walas-ket');
+        const ket = ketInp ? ketInp.value.trim() : '';
+        dataAbsen.push({ nisn: nisn, nama: nama, status: status, keterangan: ket });
+      });
+
+      const recorderName = (currentUser && currentUser.nama) ? currentUser.nama : 'Wali Kelas';
+      const nonCurrent = (logPresensiHarian || []).filter(p => !(p && p.tanggal === tgl && String(p.kelas || '').trim() === kls));
+      const updated = dataAbsen.map(item => ({
+        tanggal: tgl,
+        kelas: kls,
+        nisn: item.nisn,
+        nama: item.nama,
+        status: item.status,
+        keterangan: item.keterangan,
+        dicatatOleh: recorderName
+      }));
+      logPresensiHarian = nonCurrent.concat(updated);
+      if (typeof saveLocalCache === 'function') saveLocalCache();
+
+      renderPanelValidasiPresensiWalas();
+      renderRekapPresensiRaporWalas();
+
+      try {
+        const res = await callBackendPost({
+          action: 'simpanPresensiHarian',
+          tanggal: tgl,
+          kelas: kls,
+          dataAbsen: dataAbsen,
+          dicatatOleh: recorderName
+        });
+        if (res && res.success) {
+          Swal.fire('Presensi Disahkan', `Presensi kelas ${kls} tanggal ${tgl} berhasil divalidasi oleh Wali Kelas (${recorderName}).`, 'success');
+        } else {
+          Swal.fire('Tersimpan Lokal', `Validasi presensi kelas ${kls} disimpan di sesi lokal.`, 'info');
+        }
+      } catch (e) {
+        Swal.fire('Tersimpan Lokal', `Validasi presensi kelas ${kls} disimpan di sesi lokal.`, 'info');
+      }
+    }
+
+    function renderRekapPresensiRaporWalas() {
+      const tbody = document.getElementById('tbodyWalasRekapRapor');
+      if (!tbody) return;
+      const kls = getKelasWalasCurrentUser();
+      const startTgl = document.getElementById('walasRaporStartTgl')?.value || '';
+      const endTgl = document.getElementById('walasRaporEndTgl')?.value || '';
+      const siswaKelas = (masterSiswa || []).filter(s => String(s.kelas || '').trim() === kls);
+      if (siswaKelas.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="9" class="py-6 text-center text-slate-400">Belum ada data siswa kelas ${escapeHtml(kls || '-')}.</td></tr>`;
+        return;
+      }
+
+      const filteredLogs = (logPresensiHarian || []).filter(p => {
+        if (!p || String(p.kelas || '').trim() !== kls) return false;
+        if (startTgl && p.tanggal < startTgl) return false;
+        if (endTgl && p.tanggal > endTgl) return false;
+        return true;
+      });
+
+      tbody.innerHTML = siswaKelas.map((s, idx) => {
+        const myLogs = filteredLogs.filter(p => isSameNisn(p.nisn, s.nisn));
+        let h = 0, sk = 0, iz = 0, al = 0, tr = 0;
+        myLogs.forEach(p => {
+          const st = String(p.status || 'HADIR').toUpperCase();
+          if (st === 'HADIR') h++;
+          else if (st === 'SAKIT') sk++;
+          else if (st === 'IZIN') iz++;
+          else if (st === 'ALPHA') al++;
+          else if (st === 'TERLAMBAT') { h++; tr++; }
+        });
+        const total = myLogs.length;
+        const pct = total > 0 ? Math.round((h / total) * 100) : 100;
+        return `
+          <tr class="hover:bg-slate-50 transition">
+            <td class="py-2.5 px-3">${idx + 1}</td>
+            <td class="py-2.5 px-3 font-mono font-bold text-slate-600">${escapeHtml(s.nisn)}</td>
+            <td class="py-2.5 px-3 font-bold text-slate-800">${escapeHtml(s.nama)}</td>
+            <td class="py-2.5 px-3 text-center font-bold text-emerald-700">${h}</td>
+            <td class="py-2.5 px-3 text-center font-bold text-amber-700">${sk}</td>
+            <td class="py-2.5 px-3 text-center font-bold text-blue-700">${iz}</td>
+            <td class="py-2.5 px-3 text-center font-bold text-rose-700">${al}</td>
+            <td class="py-2.5 px-3 text-center font-bold text-purple-700">${tr}</td>
+            <td class="py-2.5 px-3 text-center font-black">${pct}%</td>
+          </tr>
+        `;
+      }).join('');
+    }
+
+    function eksporCsvPresensiRaporWalas() {
+      const kls = getKelasWalasCurrentUser();
+      if (!kls) return;
+      const rows = Array.from(document.querySelectorAll('#tbodyWalasRekapRapor tr'));
+      if (rows.length === 0) return;
+      const lines = ['No,NISN,Nama Siswa,Hadir,Sakit,Izin,Alpha,Terlambat,Persentase Hadir'];
+      rows.forEach(r => {
+        const cols = Array.from(r.querySelectorAll('td')).map(td => `"${td.innerText.trim().replace(/"/g, '""')}"`);
+        if (cols.length >= 9) lines.push(cols.join(','));
+      });
+      const blob = new Blob([lines.join('\n')], { type: 'text/csv;charset=utf-8;' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `Rekap_Presensi_Rapor_${kls}.csv`;
+      a.click();
+      URL.revokeObjectURL(url);
     }
 
     function switchTabGuru(tabName) {
@@ -12263,6 +12714,19 @@ function renderBadgeStatusBk(statusBK) {
             title: 'Akses Khusus Petugas Tata Tertib',
             text: 'Menu Manajemen Pelanggaran hanya dapat diakses oleh Guru yang ditunjuk oleh Manajemen Sekolah.',
             confirmButtonColor: '#e11d48'
+          });
+        }
+        tabName = 'beranda';
+      }
+
+      // Proteksi Portal Wali Kelas: Hanya untuk Guru yang menjabat Wali Kelas
+      if (tabName === 'rekapWalas' && !isCurrentUserWalas()) {
+        if (typeof Swal !== 'undefined') {
+          Swal.fire({
+            icon: 'warning',
+            title: 'Akses Khusus Wali Kelas',
+            text: 'Menu Portal Wali Kelas hanya dapat diakses oleh Guru yang ditugaskan sebagai Wali Kelas.',
+            confirmButtonColor: '#4f46e5'
           });
         }
         tabName = 'beranda';
@@ -12321,6 +12785,7 @@ function renderBadgeStatusBk(statusBK) {
       if (tabName === 'beranda') {
         if (typeof renderBannerPeringatanAlpaGuru === 'function') renderBannerPeringatanAlpaGuru();
         if (typeof renderPengumumanGuru === 'function') renderPengumumanGuru();
+        if (typeof updateAksesMenuWalas === 'function') updateAksesMenuWalas();
         if (typeof renderWidgetKhususGuruBeranda === 'function') renderWidgetKhususGuruBeranda();
       } else if (tabName === 'koordinatorEkskul') {
         if (!isCurrentUserKoordinatorEkskul()) {
@@ -12333,6 +12798,8 @@ function renderBadgeStatusBk(statusBK) {
         if (typeof renderLayananBkGuru === 'function') renderLayananBkGuru();
       } else if (tabName === 'manajemenPelanggaran') {
         if (typeof renderGuruManajemenPelanggaran === 'function') renderGuruManajemenPelanggaran();
+      } else if (tabName === 'rekapWalas') {
+        if (typeof renderPortalWalasTerpadu === 'function') renderPortalWalasTerpadu();
       } else if (tabName === 'penilaianTopik' || tabName === 'penilaian-topik') {
         if (typeof renderFormPenilaianTopik === 'function') renderFormPenilaianTopik();
         if (typeof renderRiwayatNilaiTopik === 'function') renderRiwayatNilaiTopik();
@@ -12419,28 +12886,41 @@ function renderBadgeStatusBk(statusBK) {
       }
       const lastRec = recs[recs.length - 1];
       const dicatatOleh = String(lastRec.dicatatOleh || 'Guru / Wali Kelas').trim();
+      const normStr = s => String(s || '').replace(/[\.\s,]+/g, '').toLowerCase();
+      const klsNorm = kls.replace(/[-\s]/g, '').toUpperCase();
       let walasNama = '';
-      if (typeof appConfig !== 'undefined' && appConfig && appConfig.PLOTTING_WALAS && appConfig.PLOTTING_WALAS[kls]) {
-        const walasEntry = appConfig.PLOTTING_WALAS[kls];
-        if (typeof walasEntry === 'object' && walasEntry !== null) {
-          if (walasEntry.nama) walasNama = String(walasEntry.nama).trim();
-          if (!walasNama && walasEntry.nip && typeof masterGuru !== 'undefined') {
-            const gW = masterGuru.find(g => String(g.nip || g.id || '').trim() === String(walasEntry.nip).trim());
-            if (gW && gW.nama) walasNama = String(gW.nama).trim();
+      if (typeof appConfig !== 'undefined' && appConfig && appConfig.PLOTTING_WALAS) {
+        const walasKeyMatch = Object.keys(appConfig.PLOTTING_WALAS).find(k => String(k).replace(/[-\s]/g, '').toUpperCase() === klsNorm);
+        const walasEntry = walasKeyMatch ? appConfig.PLOTTING_WALAS[walasKeyMatch] : null;
+        if (walasEntry) {
+          if (typeof walasEntry === 'object') {
+            if (walasEntry.nama) walasNama = String(walasEntry.nama).trim();
+            if (!walasNama && walasEntry.nip && typeof masterGuru !== 'undefined') {
+              const gW = masterGuru.find(g => String(g.nip || g.id || '').trim() === String(walasEntry.nip).trim());
+              if (gW && gW.nama) walasNama = String(gW.nama).trim();
+            }
+          } else {
+            const walasKey = String(walasEntry).trim();
+            const gWalas = (typeof masterGuru !== 'undefined' ? masterGuru : []).find(g => String(g.nip || g.id || '').trim() === walasKey || normStr(g.nama) === normStr(walasKey));
+            walasNama = (gWalas && gWalas.nama) ? String(gWalas.nama).trim() : walasKey;
           }
-        } else {
-          const walasKey = String(walasEntry).trim();
-          const gWalas = (typeof masterGuru !== 'undefined' ? masterGuru : []).find(g => String(g.nip || g.id || '').trim() === walasKey || String(g.nama || '').trim().toLowerCase() === walasKey.toLowerCase());
-          walasNama = (gWalas && gWalas.nama) ? String(gWalas.nama).trim() : walasKey;
         }
       }
       if (!walasNama && typeof masterGuru !== 'undefined') {
-        const gWalas2 = masterGuru.find(g => g && g.isWalas && String(g.kelasWalas || '').trim() === kls);
+        const gWalas2 = masterGuru.find(g => g && String(g.rombelWali || g.kelasWalas || '').replace(/[-\s]/g, '').toUpperCase() === klsNorm);
         if (gWalas2 && gWalas2.nama) walasNama = String(gWalas2.nama).trim();
       }
+      if (!walasNama && typeof getKelasWalasCurrentUser === 'function') {
+        const curWalasKls = getKelasWalasCurrentUser();
+        if (curWalasKls && curWalasKls.replace(/[-\s]/g, '').toUpperCase() === klsNorm && typeof currentUser !== 'undefined' && currentUser && currentUser.nama) {
+          walasNama = String(currentUser.nama).trim();
+        }
+      }
+      const dicatatNorm = normStr(dicatatOleh);
       const olehWalas = Boolean(
-        (walasNama && dicatatOleh.toLowerCase() === walasNama.toLowerCase()) ||
-        dicatatOleh.toLowerCase() === 'wali kelas'
+        (walasNama && dicatatNorm === normStr(walasNama)) ||
+        dicatatNorm === 'wali kelas' ||
+        (typeof masterGuru !== 'undefined' && masterGuru.some(g => g && normStr(g.nama) === dicatatNorm && String(g.rombelWali || g.kelasWalas || '').replace(/[-\s]/g, '').toUpperCase() === klsNorm))
       );
       const nonHadir = recs
         .filter(r => r && String(r.status || 'HADIR').toUpperCase() !== 'HADIR')
